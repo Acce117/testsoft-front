@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import VHome from '@/modules/home/VHome.vue'
+import VLogin from '@/modules/login/VLogin.vue';
 </script>
 
 <template>
   <main>
-    <VHome/>
+    <VLogin/>
   </main>
 </template>
