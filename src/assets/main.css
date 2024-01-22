@@ -1,3 +1,5 @@
+@import url(./animations.css);
+ 
 *,
 *::before,
 *::after {
@@ -15,7 +17,16 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
+main{
+  width: 100%;
+  height: 100%;
+}
+
 
 html {
   background-image: linear-gradient(to right, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
@@ -29,15 +40,33 @@ html {
 }
 button {
   background-color: black;
+  
   border: none;
   color: white;
   border-radius: 1.5rem;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   font-weight: bold;
   padding: 1rem;
   transition: all ease 0.2s;
   width: 40%;
   margin: 0 auto;
+}
+button *{
+  user-select: none;
+}
+.white-button{
+  color: black;
+  background-color: white;
+}
+.white-button:active{
+  background-color: black;
+  color: white;
+}
+label, img{
+  user-select: none;
+}
+img {
+  pointer-events: none;
 }
 button:hover {
   transform: scale(1.1);
@@ -50,3 +79,9 @@ button:active {
   background-color: white;
 
 }
+@media (min-width:768px) {
+  button{
+    font-size: 1.5rem;
+  }
+}
+

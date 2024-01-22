@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import VHome from '@/modules/home/VHome.vue'
+import VHome from "@/modules/general/home/VHome.vue";
+import GeneralView from "./GeneralView.vue";
 </script>
 
 <template>
-  <main>
-    <VHome/>
-  </main>
+  <GeneralView>
+      <VHome/>
+  </GeneralView>
 </template>
+

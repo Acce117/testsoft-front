@@ -1,31 +1,33 @@
 <template>
   <div class="login">
     <span class="screen__background"></span>
-    <img src="/img/logo.png" />
+    <img src="/img/logo.png" class="login__logo" />
     <h2>Bienvenido a Testsoft</h2>
-    <form action="" @submit="login()"  >
+    <form action="" @submit="login()">
       <div class="login__input">
         <input id="user-input" type="text" required />
-        <label for="user-input"><img src="/img/user.svg">Usuario</label>
+        <label for="user-input"><img src="/img/user.svg" />Usuario</label>
       </div>
       <div class="login__input">
         <input id="password-input" type="password" required />
-        <label for="password-input"><img src="/img/password.svg">Contraseña</label>
+        <label for="password-input"
+          ><img src="/img/password.svg" />Contraseña</label
+        >
       </div>
       <label for="remember" class="login__remember">
         <input id="remember" type="checkbox" />
         <span></span>Recordarme</label
       >
-      <button type="submit" >Iniciar sesión</button>
+      <button type="submit">Iniciar sesión</button>
     </form>
   </div>
 </template>
 <script setup lang="ts">
-import { useRouter } from 'vue-router'
-const router = useRouter()
+import { useRouter } from "vue-router";
+const router = useRouter();
 const login = () => {
-  router.push('/')
-}
+  router.push("/");
+};
 </script>
 <style>
 .login {
@@ -33,7 +35,7 @@ const login = () => {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  width: 40rem;
+  width: 30rem;
   height: 50rem;
   padding: 2rem;
   background-color: white;
@@ -45,24 +47,27 @@ const login = () => {
 .login__input {
   position: relative;
 }
+.screen__background ~ * {
+  position: relative;
+  z-index: 1;
+}
 .login__input input {
-  width: 25rem;
+  width: 70%;
   outline: none;
   border: none;
   border-radius: 1.5rem;
-  height: 4rem;
-
+  height: 3rem;
   background-repeat: no-repeat;
   background-size: cover;
   background-position: 50%;
-  font-size: 2rem;
+  font-size: 1.5rem;
   padding: 1rem;
 }
 .login__input label {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  font-size: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 1.5rem;
 
   position: absolute;
   top: 0.2rem;
@@ -72,26 +77,24 @@ const login = () => {
   user-select: none;
   pointer-events: none;
 }
-.login__input label img{
-    width: 2rem;
+.login__input label img {
+  width: 2rem;
 }
 .login__input input:valid ~ label,
 .login__input input:focus ~ label {
   color: white;
   top: -2.8rem;
-  left: 2rem;
-  font-size: 1.5rem;
+  font-size: 1rem;
 }
 .login form {
   display: flex;
   gap: 3rem;
   flex-direction: column;
-  z-index: 1;
 }
 .login__remember {
   display: flex;
   align-items: center;
-  font-size: 2rem;
+  font-size: 1.5rem;
   gap: 1rem;
   cursor: pointer;
   width: 15rem;
@@ -137,20 +140,14 @@ const login = () => {
   transition: 0.3s ease;
 }
 
-.login__remember label {
-  color: white;
-  font-size: 2rem;
-}
-.login img {
+.login__logo {
+  margin-top: 2rem;
   width: 30%;
-  z-index: 1;
 }
 .login h2 {
-  font-size: 2.7rem;
-  z-index: 1;
+  font-size: 2rem;
 }
 .login button {
-  z-index: 1;
   margin: 0 60%;
 }
 
@@ -159,8 +156,32 @@ const login = () => {
   position: absolute;
   height: 50rem;
   width: 50rem;
-  left: -22rem;
+  left: -28rem;
+  
   background: rgba(0, 0, 0);
-  border-radius: 0 7rem 0 0;
+  border-radius: 8rem;
+}
+@media (min-width: 768px) {
+  .login {
+    width: 40rem;
+  }
+  .screen__background {
+    left: -22rem;
+  }
+  .login h2 {
+    font-size: 2.7rem;
+  }
+  .login__remember,
+  .login__input label,
+  .login__input {
+    font-size: 2rem;
+  }
+  .login__input input {
+    height: 4rem;
+  }
+  .login__input input:valid ~ label,
+  .login__input input:focus ~ label {
+    font-size: 1.5rem;
+  }
 }
 </style>
