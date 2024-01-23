@@ -1,26 +1,28 @@
 <template>
-  <div class="login">
-    <span class="screen__background"></span>
-    <img src="/img/logo.png" class="login__logo" />
-    <h2>Bienvenido a Testsoft</h2>
-    <form action="" @submit="login()">
-      <div class="login__input">
-        <input id="user-input" type="text" required />
-        <label for="user-input"><img src="/img/user.svg" />Usuario</label>
-      </div>
-      <div class="login__input">
-        <input id="password-input" type="password" required />
-        <label for="password-input"
-          ><img src="/img/password.svg" />Contraseña</label
+  <main>
+    <div class="login">
+      <span class="screen__background"></span>
+      <img src="/img/logo.png" class="login__logo" />
+      <h2>Bienvenido a Testsoft</h2>
+      <form action="" @submit="login()">
+        <div class="login__input">
+          <input id="user-input" type="text" required />
+          <label for="user-input"><img src="/img/user.svg" />Usuario</label>
+        </div>
+        <div class="login__input">
+          <input id="password-input" type="password" required />
+          <label for="password-input"
+            ><img src="/img/password.svg" />Contraseña</label
+          >
+        </div>
+        <label for="remember" class="login__remember">
+          <input id="remember" type="checkbox" />
+          <span></span>Recordarme</label
         >
-      </div>
-      <label for="remember" class="login__remember">
-        <input id="remember" type="checkbox" />
-        <span></span>Recordarme</label
-      >
-      <button type="submit">Iniciar sesión</button>
-    </form>
-  </div>
+        <button type="submit">Iniciar sesión</button>
+      </form>
+    </div>
+  </main>
 </template>
 <script setup lang="ts">
 import { useRouter } from "vue-router";
@@ -68,7 +70,6 @@ const login = () => {
   align-items: center;
   gap: 1rem;
   font-size: 1.5rem;
-
   position: absolute;
   top: 0.2rem;
   left: 1rem;
@@ -157,7 +158,7 @@ const login = () => {
   height: 50rem;
   width: 50rem;
   left: -28rem;
-  
+
   background: rgba(0, 0, 0);
   border-radius: 8rem;
 }
@@ -185,3 +186,4 @@ const login = () => {
   }
 }
 </style>
+@/layouts/login/classes/login

@@ -8,7 +8,6 @@ router.push('/login')
 <template>
   <Transition name="fade">
     <RouterView />
-
   </Transition>
 </template>
 

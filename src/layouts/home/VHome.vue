@@ -1,28 +1,33 @@
+
 <template>
-  <div class="home">
-    <span class="home__background"></span>
-    <div class="home__left">
-      <h1>Testsoft</h1>
-      <h2>
-        Herramienta para la ejecución de test psicológicos y psicométricos
-      </h2>
-      <button class="white-button">Ejecutar Test</button>
+  <VGeneral>
+    <div class="home">
+      <span class="home__background"></span>
+      <div class="home__left">
+        <h1>Testsoft</h1>
+        <h2>
+          Herramienta para la ejecución de test psicológicos y psicométricos
+        </h2>
+      </div>
+      <div class="home__right">
+        <VPresentation />
+      </div>
     </div>
-    <div class="home__right">
-      <VPresentation />
-    </div>
-  </div>
+  </VGeneral>
 </template>
+
 <script setup lang="ts">
-import VPresentation from "./VPresentation.vue";
+import VPresentation from "./components/VPresentation.vue";
+import VGeneral from '@/layouts/general/VGeneral.vue'
 </script>
+
 <style>
 .home {
   display: flex;
   align-items: center;
   flex-direction: column;
-
   position: relative;
+  height: 70rem;
 }
 .home__left {
   display: flex;
@@ -31,6 +36,7 @@ import VPresentation from "./VPresentation.vue";
   justify-content: center;
   text-align: center;
   z-index: 3;
+  margin-top: 10rem;
 }
 .home__left button {
   margin-top: 2rem;
@@ -51,7 +57,7 @@ import VPresentation from "./VPresentation.vue";
   height: 70rem;
   width: 50rem;
   left: 0rem;
-  top: -35rem;
+  top: -40rem;
   background: rgba(0, 0, 0);
   border-radius: 20rem;
   z-index: 2;
@@ -60,7 +66,6 @@ import VPresentation from "./VPresentation.vue";
   position: relative;
 }
 .home__left h1 {
-  margin-top: 10rem;
   color: white;
   font-size: 4rem;
   width: 100%;
@@ -72,11 +77,15 @@ import VPresentation from "./VPresentation.vue";
 }
 @media (min-width: 480px) {
   .home__background {
-    height: 80rem;
+    transform: rotate(40deg);
+    height: 90rem;
     width: 70rem;
-    left: -5rem;
-    top: -45rem;
-    border-radius: 25rem;
+    left: -2rem;
+    top: -60rem;
+    border-radius: 40rem;
+  }
+  .home__left {
+    margin-top: 5rem;
   }
   .home__left h1 {
     font-size: 5rem;
@@ -90,14 +99,15 @@ import VPresentation from "./VPresentation.vue";
 }
 @media (min-width: 768px) {
   .home__background {
-    transform: rotate(10deg);
-    width: 100rem;
-    left: -15rem;
-    top: -48rem;
-    border-radius: 35rem;
+    
+    width: 110rem;
+    height: 140rem;
+    left: -5rem;
+    top: -100rem;
+    border-radius: 60rem;
   }
   .home__left button {
-   width: 20rem;
+    width: 20rem;
   }
 }
 @media (min-width: 1024px) {
@@ -114,6 +124,7 @@ import VPresentation from "./VPresentation.vue";
   }
   .home__left {
     width: 40rem;
+    margin-top: 0;
   }
   .home__right {
     width: 50rem;

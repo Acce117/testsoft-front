@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Swiper, SwiperSlide } from 'swiper/vue'
-import VTestCard from './VTestCard.vue'
+import VTestCard from './components/VTestCard.vue'
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";

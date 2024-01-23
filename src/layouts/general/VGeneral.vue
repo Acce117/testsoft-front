@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import VNavbar from "@/modules/general/VNavbar.vue";
+import VNavbar from "@/components/navbar/VNavbar.vue";
 </script>
 
 <template>
@@ -29,6 +29,7 @@ import VNavbar from "@/modules/general/VNavbar.vue";
   border-radius: 1.5rem;
   box-shadow: 0 0 0.5rem 0.5rem rgba(0, 0, 0, 0.3);
 }
+
 @media (min-width: 480px) {
   .general-view{
     width: 450px;

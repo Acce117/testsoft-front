@@ -1,5 +1,5 @@
 @import url(./animations.css);
- 
+
 *,
 *::before,
 *::after {
@@ -13,7 +13,7 @@ body {
   min-height: 100vh;
   transition: color 0.5s, background-color 0.5s;
   line-height: 1.6;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -22,15 +22,18 @@ body {
   align-items: center;
   justify-content: center;
 }
-main{
+main {
   width: 100%;
   height: 100%;
 }
 
-
 html {
-  background-image: linear-gradient(to right, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
-    url('/img/test.png');
+  background-image: linear-gradient(
+      to right,
+      rgba(0, 0, 0, 0.7),
+      rgba(0, 0, 0, 0.7)
+    ),
+    url("/img/test.png");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: 50%;
@@ -39,30 +42,16 @@ html {
   overflow-x: hidden;
 }
 button {
-  background-color: black;
-  
   border: none;
-  color: white;
   border-radius: 1.5rem;
-  font-size: 1.2rem;
-  font-weight: bold;
-  padding: 1rem;
   transition: all ease 0.2s;
-  width: 40%;
-  margin: 0 auto;
+  text-align: center;
 }
-button *{
+button * {
   user-select: none;
 }
-.white-button{
-  color: black;
-  background-color: white;
-}
-.white-button:active{
-  background-color: black;
-  color: white;
-}
-label, img{
+label,
+img {
   user-select: none;
 }
 img {
@@ -70,18 +59,7 @@ img {
 }
 button:hover {
   transform: scale(1.1);
-  box-shadow: 0rem .6rem 1rem -0.2rem rgb(0, 0, 0);
- 
 }
 button:active {
-  transform: scale(1.2);
-  color: black;
-  background-color: white;
-
+  transform: scale(1.1);
 }
-@media (min-width:768px) {
-  button{
-    font-size: 1.5rem;
-  }
-}
-
