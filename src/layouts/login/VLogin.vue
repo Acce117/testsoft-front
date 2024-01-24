@@ -1,28 +1,30 @@
 <template>
-  <main>
-    <div class="login">
-      <span class="screen__background"></span>
-      <img src="/img/logo.png" class="login__logo" />
-      <h2>Bienvenido a Testsoft</h2>
-      <form action="" @submit="login()">
-        <div class="login__input">
-          <input id="user-input" type="text" required />
-          <label for="user-input"><img src="/img/user.svg" />Usuario</label>
-        </div>
-        <div class="login__input">
-          <input id="password-input" type="password" required />
-          <label for="password-input"
-            ><img src="/img/password.svg" />Contraseña</label
+  
+    <main>
+      <div class="login">
+        <span class="screen__background"></span>
+        <img src="/img/logo.png" class="login__logo" />
+        <h2>Bienvenido a Testsoft</h2>
+        <form action="" @submit="login()">
+          <div class="login__input">
+            <input id="user-input" type="text" required />
+            <label for="user-input"><img src="/img/user.svg" />Usuario</label>
+          </div>
+          <div class="login__input">
+            <input id="password-input" type="password" required />
+            <label for="password-input"
+              ><img src="/img/password.svg" />Contraseña</label
+            >
+          </div>
+          <label for="remember" class="login__remember">
+            <input id="remember" type="checkbox" />
+            <span></span>Recordarme</label
           >
-        </div>
-        <label for="remember" class="login__remember">
-          <input id="remember" type="checkbox" />
-          <span></span>Recordarme</label
-        >
-        <button type="submit">Iniciar sesión</button>
-      </form>
-    </div>
-  </main>
+          <button class="black-button" type="submit">Iniciar sesión</button>
+        </form>
+      </div>
+    </main>
+
 </template>
 <script setup lang="ts">
 import { useRouter } from "vue-router";
@@ -30,6 +32,7 @@ const router = useRouter();
 const login = () => {
   router.push("/");
 };
+window.scrollTo(0,0)
 </script>
 <style>
 .login {
@@ -79,6 +82,7 @@ const login = () => {
   pointer-events: none;
 }
 .login__input label img {
+  transition: all ease 0.2s;
   width: 2rem;
 }
 .login__input input:valid ~ label,
@@ -86,6 +90,11 @@ const login = () => {
   color: white;
   top: -2.8rem;
   font-size: 1rem;
+}
+.login__input input:valid ~ label img,
+.login__input input:focus ~ label img {
+  filter: invert();
+  transform: scale(0.8);
 }
 .login form {
   display: flex;
@@ -149,7 +158,9 @@ const login = () => {
   font-size: 2rem;
 }
 .login button {
-  margin: 0 60%;
+  width: 12rem;
+  margin-left: 15rem;
+  font-size: 1.6rem;
 }
 
 .screen__background {
@@ -183,6 +194,11 @@ const login = () => {
   .login__input input:valid ~ label,
   .login__input input:focus ~ label {
     font-size: 1.5rem;
+  }
+  .login button {
+    width: 15rem;
+    margin-left: 22rem;
+    font-size: 1.8rem;
   }
 }
 </style>

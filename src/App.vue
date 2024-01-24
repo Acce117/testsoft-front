@@ -1,13 +1,11 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from "vue-router";
-import { useRouter } from 'vue-router'
-const router = useRouter()
-router.push('/login')
+import { useRouter } from "vue-router";
+const router = useRouter();
 </script>
 
 <template>
   <Transition name="fade">
-    <RouterView />
+    <router-view />
   </Transition>
 </template>
-
