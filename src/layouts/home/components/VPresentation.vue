@@ -1,9 +1,9 @@
-<script setup lang="ts"></script>
+
 <template>
   <div class="presentation">
-    <button class="presentation__button">
-      <img src="/img/leadership.svg" />
-      Mide las capacidades de liderazgo
+    <button class="presentation__button" @click="goTests()">
+      <img src="/img/test_icon.svg" />
+      Realiza un test
     </button>
 
     <button class="presentation__button">
@@ -13,7 +13,7 @@
 
     <button class="presentation__button">
       <img src="/img/equality.svg" />
-      Descubre compatibilidades
+      Descubre compatibilidades y líderes
     </button>
 
     <button class="presentation__button">
@@ -22,6 +22,13 @@
     </button>
   </div>
 </template>
+<script setup lang="ts">
+import { useRouter } from "vue-router";
+const router = useRouter();
+const goTests = () => {
+  router.push("/select-test");
+};
+</script>
 <style>
 .presentation {
   display: flex;
@@ -42,13 +49,8 @@
   font-size: 1.4rem;
   width: 12rem;
   height: 12rem;
-  box-shadow: 0 0 0.3rem 0.3rem #00000030;
-}
-.presentation__button:hover {
-  transform: scale(1.1);
 }
 .presentation__button:active {
-  transform: scale(1);
   background-color: black;
   color: white;
 }
@@ -56,6 +58,7 @@
   filter: invert();
 }
 .presentation__button img {
+  transition: all ease .2s;
   width: 3rem;
 }
 
@@ -70,6 +73,18 @@
   }
 }
 @media (min-width: 768px) {
+  .presentation {
+    width: 50rem;
+    gap: 3rem;
+  }
+  .presentation__button {
+    width: 18rem;
+    height: 18rem;
+    font-size: 1.8rem;
+  }
+  .presentation__button img {
+    width: 5rem;
+  }
 }
 @media (min-width: 1024px) {
   .presentation {
@@ -80,9 +95,6 @@
     width: 20rem;
     height: 20rem;
     font-size: 2rem;
-  }
-  .presentation__button img {
-    width: 5rem;
   }
 }
 </style>

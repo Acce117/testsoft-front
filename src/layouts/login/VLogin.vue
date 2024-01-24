@@ -14,15 +14,12 @@
           <label for="password-input"
             ><img src="/img/password.svg" />Contraseña</label
           >
-        </div>
-        <label for="remember" class="login__remember">
-          <input id="remember" type="checkbox" />
-          <span></span>Recordarme</label
-        >
-        <button type="submit">Iniciar sesión</button>
-      </form>
-    </div>
-  </main>
+          </div>
+          <button class="black-button" type="submit">Iniciar sesión</button>
+        </form>
+      </div>
+    </main>
+
 </template>
 
 <script setup lang="ts">
@@ -37,6 +34,9 @@ function login(){
   user.login();
   //router.push('/')
 }
+
+window.scrollTo(0,0)
+
 </script>
 
 <style>
@@ -87,6 +87,7 @@ function login(){
   pointer-events: none;
 }
 .login__input label img {
+  transition: all ease 0.2s;
   width: 2rem;
 }
 .login__input input:valid ~ label,
@@ -94,6 +95,11 @@ function login(){
   color: white;
   top: -2.8rem;
   font-size: 1rem;
+}
+.login__input input:valid ~ label img,
+.login__input input:focus ~ label img {
+  filter: invert();
+  transform: scale(0.8);
 }
 .login form {
   display: flex;
@@ -157,7 +163,9 @@ function login(){
   font-size: 2rem;
 }
 .login button {
-  margin: 0 60%;
+  width: 12rem;
+  margin-left: 15rem;
+  font-size: 1.6rem;
 }
 
 .screen__background {
@@ -191,6 +199,11 @@ function login(){
   .login__input input:valid ~ label,
   .login__input input:focus ~ label {
     font-size: 1.5rem;
+  }
+  .login button {
+    width: 15rem;
+    margin-left: 22rem;
+    font-size: 1.8rem;
   }
 }
 </style>

@@ -43,12 +43,25 @@ html {
 }
 button {
   border: none;
+  color: black;
   border-radius: 1.5rem;
   transition: all ease 0.2s;
   text-align: center;
+  box-shadow: 0 0 0.3rem 0.3rem #00000030;
+  user-select: none;
 }
+
 button * {
   user-select: none;
+}
+.black-button{
+  background-color: black;
+  color: white;
+  padding: 1rem;
+}
+.black-button:active{
+  background-color: white;
+  color: black;
 }
 label,
 img {
@@ -61,5 +74,6 @@ button:hover {
   transform: scale(1.1);
 }
 button:active {
-  transform: scale(1.1);
+  transform: scale(1);
 }
+

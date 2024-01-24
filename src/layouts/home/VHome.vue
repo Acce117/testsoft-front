@@ -35,7 +35,7 @@ import VGeneral from '@/layouts/general/VGeneral.vue'
   align-items: center;
   justify-content: center;
   text-align: center;
-  z-index: 3;
+  z-index: 2;
   margin-top: 10rem;
 }
 .home__left button {
@@ -50,6 +50,7 @@ import VGeneral from '@/layouts/general/VGeneral.vue'
   justify-content: center;
   flex: 1;
   width: 30rem;
+  z-index: 2;
 }
 .home__background {
   transform: rotate(45deg);
@@ -61,10 +62,10 @@ import VGeneral from '@/layouts/general/VGeneral.vue'
   background: rgba(0, 0, 0);
   border-radius: 20rem;
   z-index: 2;
+  transition: all ease .2s;
 }
-.home__background ~ * {
-  position: relative;
-}
+
+
 .home__left h1 {
   color: white;
   font-size: 4rem;
@@ -85,30 +86,32 @@ import VGeneral from '@/layouts/general/VGeneral.vue'
     border-radius: 40rem;
   }
   .home__left {
-    margin-top: 5rem;
-  }
-  .home__left h1 {
-    font-size: 5rem;
+    margin: 6rem 0;
   }
   .home__left h2 {
-    font-size: 2.4rem;
+    font-size: 1.8rem;
+    width: 30rem;
   }
-  .home__left button {
-    font-size: 2rem;
-  }
+  
 }
 @media (min-width: 768px) {
   .home__background {
-    
-    width: 110rem;
-    height: 140rem;
-    left: -5rem;
-    top: -100rem;
-    border-radius: 60rem;
+    transform: rotate(3deg);
+    height: 90rem;
+    width: 100rem;
+    left: -8rem;
+    top: -68rem;
+    border-radius: 25rem;
   }
-  .home__left button {
-    width: 20rem;
+  
+  .home__left h1 {
+    font-size: 4rem;
   }
+  .home__left h2 {
+    font-size: 1.8rem;
+    width: 50rem;
+  }
+  
 }
 @media (min-width: 1024px) {
   .home__background {
@@ -130,14 +133,12 @@ import VGeneral from '@/layouts/general/VGeneral.vue'
     width: 50rem;
   }
   .home__left h1 {
-    width: 100%;
+    font-size: 5rem;
   }
   .home__left h2 {
     font-size: 2.2rem;
+    width: 100%;
   }
-  .home__left button {
-    margin-top: 5rem;
-    font-size: 2rem;
-  }
+
 }
 </style>
