@@ -47,8 +47,7 @@ const toggleMenu = () => {
 };
 
 const handleOutsideClick = (event: { target: any; }) => {
-  if (menu.value && !(menu.value.contains(event.target)||menuIcon.value.contains(event.target))) {
-    console.log('yes')
+  if (window.innerWidth < 1024 && !(menu.value.contains(event.target)||menuIcon.value.contains(event.target))) {
     let classList = menu.value.classList;
     classList.remove("visible");
     classList.add("not-visible");
