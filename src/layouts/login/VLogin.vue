@@ -4,13 +4,13 @@
       <span class="screen__background"></span>
       <img src="/img/logo.png" class="login__logo" />
       <h2>Bienvenido a Testsoft</h2>
-      <form action="" @submit="login()">
+      <form action="" @submit.prevent="login()">
         <div class="login__input">
-          <input id="user-input" type="text" required />
+          <input id="user-input" type="text" required v-model="user.username"/>
           <label for="user-input"><img src="/img/user.svg" />Usuario</label>
         </div>
         <div class="login__input">
-          <input id="password-input" type="password" required />
+          <input id="password-input" type="password" required v-model="user.password"/>
           <label for="password-input"
             ><img src="/img/password.svg" />Contraseña</label
           >
@@ -24,13 +24,21 @@
     </div>
   </main>
 </template>
+
 <script setup lang="ts">
 import { useRouter } from "vue-router";
+
+import { useUser } from '../../modules/security/classes/user';
 const router = useRouter();
-const login = () => {
-  router.push("/");
-};
+
+const user = useUser();
+
+function login(){
+  user.login();
+  //router.push('/')
+}
 </script>
+
 <style>
 .login {
   position: relative;
