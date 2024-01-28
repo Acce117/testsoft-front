@@ -6,11 +6,11 @@
       <h2>Bienvenido a Testsoft</h2>
       <form action="" @submit.prevent="login()">
         <div class="login__input">
-          <input id="user-input" type="text" required v-model="user.username"/>
+          <input id="user-input" type="text" required v-model="credentials.username"/>
           <label for="user-input"><img src="/img/user.svg" />Usuario</label>
         </div>
         <div class="login__input">
-          <input id="password-input" type="password" required v-model="user.password"/>
+          <input id="password-input" type="password" required v-model="credentials.password"/>
           <label for="password-input"
             ><img src="/img/password.svg" />Contraseña</label
           >
@@ -23,16 +23,26 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue';
 import { useRouter } from "vue-router";
 
-import { useUser } from '../../modules/security/classes/user';
+import { User } from '../../modules/security/classes/user';
+import type { LoginForm } from "@/modules/security/interfaces/loginForm";
 const router = useRouter();
 
-const user = useUser();
+const credentials = ref<LoginForm>({
+  username: '',
+  password: ''
+})
 
-function login(){
-  user.login();
-  //router.push('/')
+async function login(){
+  try{
+    const user = await User.login(credentials.value);
+    
+    router.push('/')
+  }catch(err){
+    console.log(err);
+  }
 }
 
 window.scrollTo(0,0)
@@ -208,3 +218,4 @@ window.scrollTo(0,0)
 }
 </style>
 @/layouts/login/classes/login
+@/modules/security/interfaces/loginForm

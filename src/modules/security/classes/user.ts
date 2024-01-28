@@ -1,25 +1,26 @@
 import { sendRequest } from "@/common/utils/fetch";
-import { reactive } from "vue";
-import { type UserInterface } from "../interfaces/user";
+import { reactive, ref } from "vue";
+import { type LoginForm } from "../interfaces/loginForm";
+import type { UserInterface } from "../interfaces/user-interface";
 
-class User implements UserInterface{
-    username: string;
-    password: string;
+export class User{
     
-    login(){
-        if(this.username.trim() === '')
+    static async login(credentials: LoginForm){
+
+        if(credentials.username.trim() === '')
             throw new Error('The user name must be provided')
-        if(this.password.trim() === '')
+        if(credentials.password.trim() === '')
             throw new Error('The password must be provided ')
         
-        sendRequest('http://localhost/testsoft/api/web/site/login', this as UserInterface, 'POST');
+        const response = await sendRequest('http://localhost/testsoft/api/web/site/login', credentials, 'POST');
+            
+        if(response.status === 401)
+            throw new Error('Unouthorized');
 
-        console.log(this);
+        return response;
     }
 }
 
-const user: User = new User();
+let user = reactive({});
 
-export function useUser(){
-    return  reactive(user);;
-}
+export default user;

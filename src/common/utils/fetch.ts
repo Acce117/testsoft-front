@@ -7,16 +7,11 @@ export async function sendRequest(
         const options: RequestInit = {
             mode: 'cors',
             method: method,
-            headers: {
-                'Content-Type': 'application/json'
-            }
         }
 
         if(data) options.body = JSON.stringify(data);
 
-        const response = await fetch(url, options);
-
-        console.log(await response.json());
+        return await fetch(url, options);
     }catch(err){
         console.log(err);
     }
