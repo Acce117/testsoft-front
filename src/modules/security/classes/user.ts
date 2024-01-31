@@ -3,24 +3,28 @@ import { reactive, ref } from "vue";
 import { type LoginForm } from "../interfaces/loginForm";
 import type { UserInterface } from "../interfaces/user-interface";
 
-export class User{
-    
-    static async login(credentials: LoginForm){
+export class User implements UserInterface {
+    ci: number;
+    username: string;
+    role: string;
+    userType: string;
+    group: number;
 
-        if(credentials.username.trim() === '')
+    static async login(credentials: LoginForm) {
+        if (credentials.username.trim() === '')
             throw new Error('The user name must be provided')
-        if(credentials.password.trim() === '')
+        if (credentials.password.trim() === '')
             throw new Error('The password must be provided ')
-        
-        const response = await sendRequest('http://localhost/testsoft/api/web/site/login', credentials, 'POST');
-            
-        if(response.status === 401)
-            throw new Error('Unouthorized');
 
-        return response;
+        const response = await sendRequest<User>('http://localhost/testsoft/api/web/site/login', credentials, 'POST');
+
+        if (response?.status === 401)
+            throw new Error('Unauthorized');
+
+        user = reactive<UserInterface>(response.data);
+
+        return true;
     }
 }
 
-let user = reactive({});
-
-export default user;
+export let user: UserInterface;

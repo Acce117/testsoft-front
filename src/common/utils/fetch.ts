@@ -1,18 +1,21 @@
-export async function sendRequest(
+import axios, { type AxiosRequestConfig } from "axios";
+
+export async function sendRequest<T>(
     url: string,
     data?: Object,
-    method: 'GET'|'POST'|'DELETE'|'PATCH' ='GET'
-    ){
-    try{
-        const options: RequestInit = {
-            mode: 'cors',
-            method: method,
-        }
+    method: 'GET' | 'POST' | 'DELETE' | 'PATCH' = 'GET'
+) {
 
-        if(data) options.body = JSON.stringify(data);
-
-        return await fetch(url, options);
-    }catch(err){
-        console.log(err);
+    const config: AxiosRequestConfig = {
+        method: method,
+        url,
     }
+
+    if (data)
+        method === 'GET' ?
+            config.params = data :
+            config.data = JSON.stringify(data);
+
+    return (await axios<T>(config));
+
 }

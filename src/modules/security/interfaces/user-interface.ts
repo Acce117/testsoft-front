@@ -1,5 +1,7 @@
 export interface UserInterface {
-    ci: number,
-    username: string,
-    role: string
+    ci: number;
+    username: string;
+    role: string;
+    userType: string;
+    group: number;
 }
