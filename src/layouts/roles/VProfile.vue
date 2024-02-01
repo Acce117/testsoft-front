@@ -17,7 +17,7 @@ const modules = [Pagination, Navigation];
 </script>
 <template>
   <VGeneral>
-    <h2 class="page-title">Seleccione un test</h2>
+    <h2 class="select-test__title">Seleccione un test</h2>
     <Swiper :spaceBetween="30" :slidesPerView="1" :loop="true" :pagination="{
       clickable: true,
     }" :navigation="true" :modules="modules"
@@ -29,7 +29,11 @@ const modules = [Pagination, Navigation];
   </VGeneral>
 </template>
 <style>
-
+.select-test__title {
+  margin-top: 10rem;
+  text-align: center;
+  font-size: 2rem;
+}
 
 .swiper {
   width: 100%;
@@ -48,6 +52,7 @@ const modules = [Pagination, Navigation];
 .swiper-pagination {
   background-color: white;
   border-radius: 1.5rem;
+  box-shadow: 1.5rem;
   height: 3rem;
   box-shadow: 0 0 0.6rem 0.6rem #00000030;
 }
@@ -88,7 +93,11 @@ const modules = [Pagination, Navigation];
   display: flex;
 }
 
-
+@media (min-width: 480px) {
+  .select-test__title {
+    font-size: 2.5rem;
+  }
+}
 
 @media (min-width: 768px) {
   .swiper-pagination {
@@ -98,6 +107,12 @@ const modules = [Pagination, Navigation];
   .swiper-pagination-bullet {
     height: 2rem;
     width: 2rem;
+  }
+
+  .select-test__title {
+    text-align: left;
+    margin: 10rem 0 0 10rem;
+    font-size: 3.5rem;
   }
 }
 </style>
