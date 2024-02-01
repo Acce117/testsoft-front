@@ -49,7 +49,7 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 
 import { User } from "../../modules/security/classes/user";
-import type { LoginForm } from "@/modules/security/interfaces/loginForm";
+import type { LoginForm } from "@/modules/security/types/loginForm";
 
 import Dialog from "primevue/dialog";
 const visible = ref(false);
