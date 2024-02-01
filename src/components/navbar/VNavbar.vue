@@ -22,8 +22,8 @@
           Resultados
         </li>
         <li class="navbar__option navbar__black-option">Info</li>
-        <li class="navbar__option navbar__black-option" @click="logout()">
-          Usuario
+        <li class="navbar__option navbar__black-option" @click="goProfile()">
+          Perfil
         </li>
       </ul>
     </li>
@@ -69,6 +69,9 @@ const goHome = () => {
 };
 const goTests = () => {
   router.push("/select-test");
+};
+const goProfile = () => {
+  router.push("/profile");
 };
 </script>
 <style>

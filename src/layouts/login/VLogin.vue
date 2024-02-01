@@ -3,50 +3,75 @@
     <div class="login">
       <span class="screen__background"></span>
       <img src="/img/logo.png" class="login__logo" />
-      <h2>Bienvenido a Testsoft</h2>
+      
       <form action="" @submit.prevent="login()">
+        <h2>Bienvenido a Testsoft</h2>
         <div class="login__input">
-          <input id="user-input" type="text" required v-model="credentials.username"/>
+          <input
+            id="user-input"
+            type="text"
+            required
+            v-model="credentials.username"
+          />
           <label for="user-input"><img src="/img/user.svg" />Usuario</label>
         </div>
         <div class="login__input">
-          <input id="password-input" type="password" required v-model="credentials.password"/>
+          <input
+            id="password-input"
+            type="password"
+            required
+            v-model="credentials.password"
+          />
           <label for="password-input"
             ><img src="/img/password.svg" />Contraseña</label
           >
-          </div>
-          <button class="black-button" type="submit">Iniciar sesión</button>
-        </form>
-      </div>
-    </main>
+        </div>
+        <button class="black-button" type="submit">Iniciar sesión</button>
+      </form>
+    </div>
 
+    <Dialog
+      v-model:visible="visible"
+      modal
+      header="Error"
+      class="modal box-shadow-box"
+      ><span class="modal__background-shape"></span>
+      <span class="modal__message">Inicio de sesión inválido</span>
+      <div class="modal__buttons">
+        <button class="black-button" @click="visible=false">Aceptar</button>
+      </div>
+    </Dialog>
+  </main>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref } from "vue";
 import { useRouter } from "vue-router";
 
-import { User } from '../../modules/security/classes/user';
+import { User } from "../../modules/security/classes/user";
 import type { LoginForm } from "@/modules/security/interfaces/loginForm";
+
+import Dialog from "primevue/dialog";
+const visible = ref(false);
 const router = useRouter();
 
 const credentials = ref<LoginForm>({
-  username: '',
-  password: ''
-})
+  username: "",
+  password: "",
+});
 
-async function login(){
-  try{
+async function login() {
+  try {
     const user = await User.login(credentials.value);
-    
-    router.push('/')
-  }catch(err){
+
+    router.push("/");
+  } catch (err) {
+    visible.value = true;
     console.log(err);
   }
 }
 
-window.scrollTo(0,0)
-
+window.scrollTo(0, 0);
 </script>
 
 <style>
@@ -54,10 +79,10 @@ window.scrollTo(0,0)
   position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   width: 30rem;
   height: 50rem;
   padding: 2rem;
+  gap: 6rem;
   background-color: white;
   border-radius: 1.5rem;
   overflow: hidden;
@@ -116,53 +141,11 @@ window.scrollTo(0,0)
   gap: 3rem;
   flex-direction: column;
 }
-.login__remember {
-  display: flex;
-  align-items: center;
-  font-size: 1.5rem;
-  gap: 1rem;
-  cursor: pointer;
-  width: 15rem;
-}
-
-.login__remember input {
-  display: none;
-}
-
-.login__remember span {
-  display: inline-block;
-  position: relative;
-  font-size: 1rem;
-  height: 3rem;
-  width: 3rem;
-  background: black;
-  border-radius: 100%;
-  transition: all 0.2s;
-}
-
-.login__remember span {
-  border: solid white;
-}
-
-.login__remember input:checked ~ span {
-  box-shadow: 0 0 1.5rem 0 white;
-}
-
-.login__remember input:checked ~ span:after {
-  opacity: 1;
-}
-
-.login__remember span:after {
-  content: "";
-  position: absolute;
-  border: solid white;
-  border-width: 0 0.3rem 0.3rem 0;
-  transform: rotate(45deg);
-  width: 1rem;
-  height: 2rem;
-  left: 1rem;
-  opacity: 0;
-  transition: 0.3s ease;
+.login form button {
+  width: 11rem;
+  margin-left: 15rem;
+  font-size: 1.4rem;
+  margin-top: 8rem;
 }
 
 .login__logo {
@@ -171,11 +154,6 @@ window.scrollTo(0,0)
 }
 .login h2 {
   font-size: 2rem;
-}
-.login button {
-  width: 12rem;
-  margin-left: 15rem;
-  font-size: 1.6rem;
 }
 
 .screen__background {
@@ -191,6 +169,7 @@ window.scrollTo(0,0)
 @media (min-width: 768px) {
   .login {
     width: 40rem;
+    gap: 3rem;
   }
   .screen__background {
     left: -22rem;
@@ -210,12 +189,11 @@ window.scrollTo(0,0)
   .login__input input:focus ~ label {
     font-size: 1.5rem;
   }
-  .login button {
-    width: 15rem;
-    margin-left: 22rem;
-    font-size: 1.8rem;
+  .login form button {
+    width: 12rem;
+    margin-left: 23rem;
+    font-size: 1.6rem;
+    margin-top: 4rem;
   }
 }
 </style>
-@/layouts/login/classes/login
-@/modules/security/interfaces/loginForm@/modules/security/types/loginForm
