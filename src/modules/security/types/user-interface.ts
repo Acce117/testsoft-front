@@ -1,3 +1,6 @@
+/**
+ * basic user structure
+ */
 export interface UserInterface {
     ci: number;
     username: string;

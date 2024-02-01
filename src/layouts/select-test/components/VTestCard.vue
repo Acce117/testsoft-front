@@ -1,9 +1,15 @@
 <script setup lang="ts">
+import { Test } from '@/modules/test/classes/test';
+
 const props = defineProps({
+  id: Number,
   title: String,
   duration: Number,
   description: String,
 });
+
+if(props.id) Test.getTest(props.id);
+
 </script>
 <template>
   <div class="test-card">

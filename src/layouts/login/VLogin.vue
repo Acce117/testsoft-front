@@ -218,4 +218,4 @@ window.scrollTo(0,0)
 }
 </style>
 @/layouts/login/classes/login
-@/modules/security/interfaces/loginForm
+@/modules/security/interfaces/loginForm@/modules/security/types/loginForm

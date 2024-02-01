@@ -1,9 +1,13 @@
 import { sendRequest } from "@/common/utils/fetch";
-import type { TestInterface } from "./interfaces/test-interface";
+import type { TestInterface } from "./types/test-interface";
 import { ref } from "vue";
 
 import { user } from '../security/classes/user';
 
+/**
+ * retrieve available tests for user
+ * @returns reactive TestInterface array
+ */
 export function useTests(){
     let tests = ref<TestInterface[]>([]);
 

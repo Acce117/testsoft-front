@@ -8,7 +8,6 @@ import "swiper/css/navigation";
 import { Pagination, Navigation } from "swiper/modules";
 
 import { useTests } from '@/modules/test/useTests';
-import type { TestInterface } from "@/modules/test/interfaces/test-interface";
 
 const { tests } = useTests();
 
@@ -22,7 +21,7 @@ const modules = [Pagination, Navigation];
     }" :navigation="true" :modules="modules"
       :breakpoints="{ 768: { slidesPerView: 2 }, 1024: { slidesPerView: 3 } }">
       <swiper-slide class="swiper-slide" v-for="test in tests" :key="test.id">
-        <VTestCard :title="test.name" :description="test.description" :duration="test.durationTime" />
+        <VTestCard :id="test.id" :title="test.name" :description="test.description" :duration="test.durationTime" />
       </swiper-slide>
     </Swiper>
   </VGeneral>
@@ -115,3 +114,4 @@ const modules = [Pagination, Navigation];
   }
 }
 </style>
+@/modules/test/types/test-interface
