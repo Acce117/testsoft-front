@@ -7,30 +7,45 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { Pagination, Navigation } from "swiper/modules";
 
-import { useTests } from '@/modules/test/useTests';
+import { useTests } from "@/modules/test/useTests";
 import type { TestInterface } from "@/modules/test/interfaces/test-interface";
 
 const { tests } = useTests();
-console.log(tests)
 
 const modules = [Pagination, Navigation];
+const pagination = {
+  clickable: true,
+  renderBullet: function (index:number, className:string) {
+    return '<span class="' + className + '">' + (index + 1) + "</span>";
+  },
+};
+
+
 </script>
 <template>
   <VGeneral>
     <h2 class="page-title">Seleccione un test</h2>
-    <Swiper :spaceBetween="30" :slidesPerView="1" :loop="true" :pagination="{
-      clickable: true,
-    }" :navigation="true" :modules="modules"
-      :breakpoints="{ 768: { slidesPerView: 2 }, 1024: { slidesPerView: 3 } }">
+    <Swiper
+      :spaceBetween="30"
+      :slidesPerView="1"
+      :loop="true"
+      :pagination="pagination"
+      :navigation="true"
+      :modules="modules"
+      :breakpoints="{ 768: { slidesPerView: 2 }, 1024: { slidesPerView: 3 } }"
+    >
       <swiper-slide class="swiper-slide" v-for="test in tests" :key="test.id">
-        <VTestCard :title="test.name" :description="test.description" :duration="test.durationTime" />
+        <VTestCard
+          :id="test.id"
+          :title="test.name"
+          :description="test.description"
+          :duration="test.durationTime"
+        />
       </swiper-slide>
     </Swiper>
   </VGeneral>
 </template>
 <style>
-
-
 .swiper {
   width: 100%;
   display: flex;
@@ -38,18 +53,12 @@ const modules = [Pagination, Navigation];
   height: 50rem;
 }
 
+
 .swiper-slide {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 42rem;
-}
-
-.swiper-pagination {
-  background-color: white;
-  border-radius: 1.5rem;
-  height: 3rem;
-  box-shadow: 0 0 0.6rem 0.6rem #00000030;
 }
 
 .swiper-button-next,
@@ -70,34 +79,17 @@ const modules = [Pagination, Navigation];
 }
 
 .swiper-pagination-bullet {
-  height: 1rem;
-  width: 1rem;
+  height: 1.8rem;
+  width: 1.8rem;
+  transition: all ease 0.3s;
+  background: gray;
+  color: black;
+  opacity: 1;
 }
 
 .swiper-pagination-bullet-active {
   background: black;
+  color: white;
 }
 
-.swiper-pagination-fraction,
-.swiper-pagination-custom,
-.swiper-horizontal>.swiper-pagination-bullets,
-.swiper-pagination-bullets.swiper-pagination-horizontal {
-  width: auto;
-  left: auto;
-  align-items: center;
-  display: flex;
-}
-
-
-
-@media (min-width: 768px) {
-  .swiper-pagination {
-    height: 4rem;
-  }
-
-  .swiper-pagination-bullet {
-    height: 2rem;
-    width: 2rem;
-  }
-}
 </style>

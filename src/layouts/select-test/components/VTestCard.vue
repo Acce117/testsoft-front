@@ -1,9 +1,16 @@
 <script setup lang="ts">
+import { useRouter } from "vue-router";
+const router = useRouter();
 const props = defineProps({
+  id:Number,
   title: String,
   duration: Number,
   description: String,
 });
+const executeTest = (test:number|undefined) => {
+  router.push("/execute-test");
+  //REQUEST TEST
+};
 </script>
 <template>
   <div class="test-card">
@@ -19,7 +26,7 @@ const props = defineProps({
       </p>
     </div>
 
-    <button>Ejecutar</button>
+    <button @click="executeTest(props.id)">Ejecutar</button>
   </div>
 </template>
 <style>
