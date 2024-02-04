@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, type PropType } from "vue";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import "swiper/css";
 import "swiper/css/free-mode";
@@ -7,10 +7,10 @@ import "swiper/css/scrollbar";
 import { FreeMode, Scrollbar, Mousewheel, Pagination } from "swiper/modules";
 
 import VSingleOptionQuestion from "./question-components/VSingleOptionQuestion.vue";
-import { Serie } from "../classes";
+import { type SerieInterface } from "../types";
 
 const props = defineProps({
-  serie: Serie
+  serie: Object as PropType<SerieInterface>
 })
 
 const modules = [FreeMode, Scrollbar, Mousewheel, Pagination];

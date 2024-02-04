@@ -5,7 +5,7 @@ import { useRouter } from "vue-router";
 import Dialog from "primevue/dialog";
 import {areRadioGroupsChecked} from '@/common/utils/radioGroupsValidation'
 import { ref } from "vue";
-import { Test } from "@/modules/test/classes/test";
+import { getTest } from '@/modules/test/test';
 const router = useRouter();
 
 const saveTestVisible = ref(false);
@@ -18,7 +18,7 @@ const validateAnswers = () => {
 
 }
 
-const { test, loading } = Test.getTest(router.currentRoute.value.params.id_test as string);
+const { test, loading } = getTest(router.currentRoute.value.params.id_test as string);
 
 </script>
 <template>

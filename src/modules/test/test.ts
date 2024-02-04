@@ -3,6 +3,7 @@ import type { TestInterface } from "./types/test-interface";
 import { ref } from "vue";
 
 import { user } from '../security/classes/user';
+import type { SerieInterface, TestExecutionInterface } from "./types";
 
 /**
  * retrieve available tests for user
@@ -24,5 +25,29 @@ export function useTests(){
     
     return {
         tests
+    };
+}
+
+export function getTest(idTest: number | string){
+    let test = ref<TestExecutionInterface>();
+    let loading = ref<boolean>(true);
+
+    const url = `http://localhost/testsoft/api/web/gestion/serie`;
+
+    sendRequest<SerieInterface[]>(url,{
+        attr: {
+            fk_id_test: idTest
+        }
+    }).then(res=>{
+        loading.value = false;
+        test.value = {
+            series: res.data
+        };
+        console.log(test.value);
+    })
+
+    return {
+        test,
+        loading
     };
 }

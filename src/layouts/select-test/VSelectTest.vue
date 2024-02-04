@@ -7,8 +7,7 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { Pagination, Navigation } from "swiper/modules";
 
-import { useTests } from "@/modules/test/useTests";
-import type { TestInterface } from "@/modules/test/interfaces/test-interface";
+import { useTests } from "@/modules/test/test";
 
 const { tests } = useTests();
 
@@ -93,4 +92,4 @@ const pagination = {
 }
 
 </style>
-@/modules/test/types/test-interface
+@/modules/test/types/test-interface@/modules/test/test
