@@ -4,7 +4,7 @@ import { ref } from "vue";
 const props = defineProps({
   id: String,
   title: String,
-  answers: [],
+  answers: Array,
 });
 const checkedAnswer = ref("");
 const question = ref();

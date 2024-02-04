@@ -1,17 +1,17 @@
 import { ref, type Ref } from "vue";
-import type { TestExecution } from "../types/testExecution";
+import type { TestExecutionInterface } from "../types/testExecution-interface";
 import { sendRequest } from "@/common/utils/fetch";
-import type { Serie } from "../types/serie";
+import type { SerieInterface } from "../types/serie-interface";
 
 //TODO define the response's objects structure in API
 export class Test{
-    static getTest(idTest: number){
-        let test = ref<TestExecution>();
+    static getTest(idTest: number | string){
+        let test = ref<TestExecutionInterface>();
         let loading = ref<boolean>(true);
 
         const url = `http://localhost/testsoft/api/web/gestion/serie`;
 
-        sendRequest<Serie[]>(url,{
+        sendRequest<SerieInterface[]>(url,{
             attr: {
                 fk_id_test: idTest
             }

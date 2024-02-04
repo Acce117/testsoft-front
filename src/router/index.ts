@@ -24,7 +24,7 @@ const router = createRouter({
       component: VSelecTest
     },
     {
-      path: '/execute-test',
+      path: '/execute-test/:id_test',
       name: 'execute-test',
       component: VExecuteTest
     },
