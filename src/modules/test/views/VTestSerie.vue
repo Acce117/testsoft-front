@@ -6,7 +6,8 @@ import "swiper/css/free-mode";
 import "swiper/css/scrollbar";
 import { FreeMode, Scrollbar, Mousewheel, Pagination } from "swiper/modules";
 
-import VSingleOptionQuestion from "./question-components/VSingleOptionQuestion.vue";
+import VQuestion from "./question-components/VQuestion.vue";
+import VCheckboxAnswerVue from "./question-components/VCheckboxAnswer.vue";
 import { type SerieInterface } from "../types";
 
 const props = defineProps({
@@ -43,10 +44,23 @@ const results = ref([]);
   >
     <swiper-slide v-for="question in props.serie?.questions">
       <!--TODO fix the property fk_id_type_question-->
-      <VSingleOptionQuestion v-if="question.fk_id_type_question === 2"
+      <!--VSingleOptionQuestion v-if="question.fk_id_type_question === 2"
         :title="question.statement"
         :answers="answers"
-      />
+      /-->
+      <VQuestion :title="question.statement">
+        <VCheckboxAnswerVue
+        v-for="answer in answers"
+        :id="answer.id_answer"
+        :text="answer.text"
+        >
+        <input
+          type="radio"
+          :name="question.id_question + ''"
+          :value="answer.id_answer"  
+        >
+      </VCheckboxAnswerVue>
+      </VQuestion>
     </swiper-slide>
   </swiper>
 </template>

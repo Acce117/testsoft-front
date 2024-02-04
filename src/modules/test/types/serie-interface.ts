@@ -1,5 +1,5 @@
-import type { Question } from "../classes/question";
+import type { QuestionInterface } from ".";
 
 export interface SerieInterface {
-    questions: Question[],
+    questions: QuestionInterface[],
 }
