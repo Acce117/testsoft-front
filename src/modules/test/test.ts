@@ -44,6 +44,9 @@ export function getTest(idTest: number | string){
             series: res.data
         };
         console.log(test.value);
+    }).catch(err=>{
+        console.log(err);
+        loading.value = false;
     })
 
     return {

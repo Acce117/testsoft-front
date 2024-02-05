@@ -7,11 +7,11 @@ const props = defineProps({
   duration: Number,
   description: String,
 });
-const executeTest = (test:number|undefined) => {
-  router.push("/execute-test");
-  //REQUEST TEST
+const executeTest = () => {
+  router.push(`/execute-test/${props.id}`);
 };
 </script>
+
 <template>
   <div class="test-card">
     <div class="test-card__header">
@@ -26,9 +26,10 @@ const executeTest = (test:number|undefined) => {
       </p>
     </div>
 
-    <button @click="executeTest(props.id)">Ejecutar</button>
+    <button @click="executeTest()">Ejecutar</button>
   </div>
 </template>
+
 <style>
 .test-card {
   width: 20rem;
