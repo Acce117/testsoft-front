@@ -31,7 +31,6 @@ export function useTests(){
 export function getTest(idTest: number | string){
     let test = ref<TestExecutionInterface>();
     let loading = ref<boolean>(true);
-    let actualSerie = ref<SerieInterface>();
     //let questions = Array()
 
     const url = `http://localhost/testsoft/api/web/gestion/serie`;
@@ -62,6 +61,5 @@ export function getTest(idTest: number | string){
     return {
         test,
         loading,
-        actualSerie
     };
 }

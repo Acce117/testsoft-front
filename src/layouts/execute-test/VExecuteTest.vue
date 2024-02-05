@@ -10,17 +10,10 @@ import { getTest } from "@/modules/test/test";
 const router = useRouter();
 const serieIndex = ref(0);
 
-const { test, loading, actualSerie } = getTest(
+const { test, loading } = getTest(
   router.currentRoute.value.params.id_test as string
 );
 
-const updateSerie = () => {
-  actualSerie.value=null
-  setTimeout(() => {
-    actualSerie.value = test.value?.series[serieIndex.value]
-  },1);
-  
-};
 
 const saveTestVisible = ref(false);
 const errorVisible = ref(false);
@@ -33,17 +26,15 @@ const validateAnswers = () => {
 
 const nextSerie = () => {
   serieIndex.value += 1;
-  updateSerie()
 };
 const prevSerie = () => {
   serieIndex.value -= 1;
-  updateSerie()
 };
 </script>
 <template>
   <VGeneral>
     <div class="test__buttons">
-      <h2 class="page-title">Test : {{ actualSerie?.name }}</h2>
+      <h2 class="page-title">Test : {{ test?.series[serieIndex].name }}</h2>
 
       <button
         class="black-button"
@@ -82,7 +73,7 @@ const prevSerie = () => {
         <span>00:00</span>
         <img src="/img/timer.svg" alt="tiempo restante" />
       </div>
-      <VTestSerie v-if="!loading" :serie="actualSerie" />
+      <VTestSerie v-if="!loading" :serie="test?.series[serieIndex]" />
       <!--TODO some kind of cool loading message-->
       <h1 v-else>Loading</h1>
     </div>
