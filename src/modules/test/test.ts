@@ -45,7 +45,6 @@ export function getTest(idTest: number | string){
         test.value = {
             series: res.data
         };
-        
         actualSerie.value=test.value.series[0]
         /*test.value.series.forEach((serie)=>{
             serie.questions.forEach((question)=>{
@@ -53,6 +52,10 @@ export function getTest(idTest: number | string){
             })
             
         })*/
+        console.log(test.value);
+    }).catch(err=>{
+        console.log(err);
+        loading.value = false;
 
     })
 
