@@ -26,13 +26,18 @@ const pagination = {
 };
 
 const results = ref([]);
+const getSlidesPerView = ()=>{
+  if(props.serie?.questions[0].type==2)
+  return 3
+else return 1
+}
 
 </script>
 <template>
   <swiper
     :direction="'vertical'"
     :spaceBetween="10"
-    :slidesPerView="3"
+    :slidesPerView="getSlidesPerView()"
     :freeMode="true"
     :mousewheel="true"
     :pagination="pagination"
