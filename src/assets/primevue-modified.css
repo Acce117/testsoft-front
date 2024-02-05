@@ -1,0 +1,14 @@
+ .p-radiobutton, .p-radiobutton-box  {
+    width: 2rem;
+    height: 2rem;
+  }
+  .p-radiobutton-box{
+    border: solid black .1rem;
+  }
+  .p-radiobutton .p-radiobutton-box .p-radiobutton-icon
+  {
+      width: 1.2rem;
+      height: 1.2rem;
+      transition-duration: 0.2s;
+      background-color: black;
+  }

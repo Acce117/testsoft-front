@@ -1,5 +1,7 @@
 @import url(./animations.css);
 @import url(./modal.css);
+@layer reset, primevue;
+@import url(./primevue-modified.css);
 
 *,
 *::before,
@@ -115,3 +117,4 @@ button:active {
     font-size: 3.5rem;
   }
 }
+
