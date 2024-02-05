@@ -1,72 +1,70 @@
 <script setup lang="ts">
-    
 const props = defineProps({
   text: String,
 });
 </script>
 <template>
-  <label class="checkbox-answer">
+  <label class="radio-button-answer">
     <slot></slot>
+    
     <span></span>{{ props.text }}</label
   >
 </template>
 <style>
-.checkbox-answer input {
+.radio-button-answer input {
   display: none;
 }
-.checkbox-answer {
-  width: fit-content;
-  cursor: pointer;
+.radio-button-answer {
+  width: 100%;
   display: flex;
   align-items: center;
   gap: 1rem;
   font-size: 1.2rem;
+  border-radius: 1.5rem;
+  padding: .5rem;
   transition: all ease 0.2s;
 }
 
-.checkbox-answer input:valid ~ label,
-.checkbox-answer input:focus ~ label {
-  color: white;
-  top: -2.8rem;
-  font-size: 1rem;
+.radio-button-answer:has(input[type="radio"]:not(:checked)):hover {
+  box-shadow: 0 0 0.5rem 0 black;
+  cursor: pointer;
 }
 
-.checkbox-answer span {
+.radio-button-answer span {
   display: inline-block;
   font-size: 1rem;
   height: 2.5rem;
   width: 2.5rem;
-  background: white;
   border: 0.2rem solid black;
   border-radius: 100%;
   transition: all 0.4s;
-  color: white;
+  position: relative;
 }
 
-.checkbox-answer input:checked ~ span {
-  background-color: black;
-  position: relative;
+.radio-button-answer input:checked ~ span {
   box-shadow: 0 0 0.5rem 0 black;
 }
 
-.checkbox-answer input:checked ~ span:after {
+.radio-button-answer input:checked ~ span:after {
+  transform: scale(1);
   opacity: 1;
 }
 
-.checkbox-answer span:after {
+.radio-button-answer span:after {
   content: "";
+  border-radius: 100%;
   position: absolute;
-  border: solid white;
-  border-width: 0 0.3rem 0.3rem 0;
-  transform: rotate(45deg);
-  width: 1rem;
-  height: 1.7rem;
-  left: 0.7rem;
+  background-color: black;
+  top: 20%;
+	left: 20%;
+	width: 60%;
+	height: 60%;
   opacity: 0;
   transition: 0.3s ease;
+  transform: scale(0);
 }
 @media (min-width: 768px) {
-  .checkbox-answer{
+  .radio-button-answer{
     font-size: 1.5rem;
   }
 }

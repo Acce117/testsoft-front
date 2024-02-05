@@ -81,7 +81,8 @@ const pagination = {
   height: 1.8rem;
   width: 1.8rem;
   transition: all ease 0.3s;
-  background: gray;
+  background: rgb(194, 194, 194);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   color: black;
   opacity: 1;
 }

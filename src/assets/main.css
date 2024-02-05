@@ -9,6 +9,9 @@
   font-weight: normal;
   padding: 0;
 }
+:root {
+	--shadow:0 0 0.3rem 0.3rem #00000030;
+}
 
 body {
   min-height: 100vh;
@@ -43,14 +46,25 @@ html {
   overflow-x: hidden;
 }
 button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border: none;
+  position: relative;
   color: black;
   border-radius: 1.5rem;
   transition: all ease 0.2s;
   text-align: center;
-  box-shadow: 0 0 0.3rem 0.3rem #00000030;
+  box-shadow: var(--shadow);
   user-select: none;
   cursor: pointer;
+}
+button img{
+  width: 2rem;
+  transition: all ease .2s;
+}
+button:active img{
+  filter: invert();
 }
 
 button * {
@@ -82,7 +96,7 @@ button:active {
 .box-shadow-box {
   background-color: white;
   border-radius: 1.5rem;
-  box-shadow: 0 0 0.6rem 0.6rem #00000030;
+  box-shadow: var(--shadow);
 }
 .page-title{
     margin-top: 8rem;
