@@ -89,6 +89,9 @@ const executeTest = () => {
 }
 .test-card__header {
   background-color: black;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
   transition: all ease 0.2s;
   width: 100%;
 }
@@ -101,6 +104,7 @@ const executeTest = () => {
   font-weight: bold;
   color: white;
   font-size: 1.5rem;
+  width: 90%;
   margin-bottom: 1rem;
 }
 @media (min-width: 480px) {

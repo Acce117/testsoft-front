@@ -70,9 +70,4 @@ const props = defineProps({
     font-size: 1.5rem;
   }
 }
-@media (min-width: 1024px) {
-  .checkbox-answer{
-    font-size: 2rem;
-  }
-}
 </style>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import VCheckboxAnswer from "./VCheckboxAnswer.vue";
 import { ref } from "vue";
+import VRadioButton from "./VRadioButton.vue";
 const props = defineProps({
   id: String,
   title: String,
@@ -18,7 +18,7 @@ const answerChecked = () => {
   <div class="single-option-question" ref="question">
     <h4 class="single-option-question__title">{{ props.title }}</h4>
     <div class="single-option-question__content">
-      <VCheckboxAnswer
+      <VRadioButton
         v-for="answer in props.answers"
         :id="answer.id_answer"
         :text="answer.text"
@@ -29,7 +29,7 @@ const answerChecked = () => {
           :value="answer.id_answer"
           v-model="checkedAnswer"
           @change="answerChecked()"
-      /></VCheckboxAnswer>
+      /></VRadioButton>
     </div>
   </div>
 </template>

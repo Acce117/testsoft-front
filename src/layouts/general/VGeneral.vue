@@ -30,7 +30,7 @@ window.scrollTo(0,0)
   overflow: hidden;
   border-radius: 1.5rem;
   box-shadow: 0 0 0.5rem 0.5rem rgba(0, 0, 0, 0.3);
-  margin: 5rem 0;
+  margin: .5rem 0;
 }
 .background__shape{
   background-color: black;

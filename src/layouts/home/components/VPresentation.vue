@@ -54,11 +54,8 @@ const goTests = () => {
   background-color: black;
   color: white;
 }
-.presentation__button:active img {
-  filter: invert();
-}
+
 .presentation__button img {
-  transition: all ease .2s;
   width: 3rem;
 }
 

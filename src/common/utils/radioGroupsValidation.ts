@@ -20,6 +20,6 @@ function isRadioGroupChecked(groupName: string) {
             return true;
     }
 
-    radios[0].parentElement?.parentElement?.parentElement?.classList.add('question-not-responded')
+    radios[0].parentElement?.parentElement?.parentElement?.parentElement?.classList.add('question-not-responded')
     return false;
 }
