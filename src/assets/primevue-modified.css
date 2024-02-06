@@ -1,14 +1,63 @@
- .p-radiobutton, .p-radiobutton-box  {
-    width: 2rem;
-    height: 2rem;
+.p-radiobutton,
+.p-radiobutton-box {
+  width: 2rem;
+  height: 2rem;
+}
+.p-radiobutton-box {
+  border: solid black 0.1rem;
+}
+.p-radiobutton .p-radiobutton-box .p-radiobutton-icon {
+  width: 1.2rem;
+  height: 1.2rem;
+  transition-duration: 0.2s;
+  background-color: black;
+}
+.p-steps{
+    margin-bottom: 1rem ;
+}
+.p-steps-number {
+  width: 2.5rem;
+  height: 2.5rem;
+  font-size: 1.5rem;
+  background-color: white;
+  color: gray;
+}
+.p-steps-title {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: gray;
+  font-size: 1.5rem;
+  display: none;
+}
+.p-steps .p-steps-item.p-highlight .p-steps-title {
+  color: black;
+}
+.p-steps .p-steps-item.p-highlight .p-steps-number {
+  background-color: black;
+  color: white;
+}
+.p-scrollpanel .p-scrollpanel-bar {
+  transition: all ease 0.2s;
+  background-color: black;
+}
+
+.p-tooltip .p-tooltip-text{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-align: center;
+    color: black;
+    background-color: white;
+    box-shadow: var(--shadow);
+    font-size: 1.5rem;
+    padding: .5rem;
+    border-radius: 1.5rem;
+    
+}
+@media (min-width: 1024px) {
+  .p-steps-number {
+    width: 3rem;
+    height: 3rem;
+    font-size: 2rem;
   }
-  .p-radiobutton-box{
-    border: solid black .1rem;
+  .p-steps-title {
+    display: block;
   }
-  .p-radiobutton .p-radiobutton-box .p-radiobutton-icon
-  {
-      width: 1.2rem;
-      height: 1.2rem;
-      transition-duration: 0.2s;
-      background-color: black;
-  }
+}

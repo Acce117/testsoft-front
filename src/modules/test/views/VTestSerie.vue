@@ -1,10 +1,8 @@
 <script setup lang="ts">
-import { ref, type PropType, watch } from "vue";
-import { Swiper, SwiperSlide } from "swiper/vue";
-import "swiper/css";
-import "swiper/css/free-mode";
-import "swiper/css/scrollbar";
-import { FreeMode, Scrollbar, Mousewheel, Pagination } from "swiper/modules";
+import { ref, type PropType } from "vue";
+
+
+import ScrollPanel from "primevue/scrollpanel";
 
 import VQuestion from "./question-components/VQuestion.vue";
 import { type SerieInterface } from "../types";
@@ -17,44 +15,14 @@ const props = defineProps({
   serie: Object as PropType<SerieInterface>,
 });
 
-const modules = [FreeMode, Scrollbar, Mousewheel, Pagination];
+const selectedAnswers = ref(Array());
 
-const pagination = {
-  clickable: true,
-  renderBullet: function (index: number, className: string) {
-    return '<span class="' + className + '">' + (index + 1) + "</span>";
-  },
-};
-
-const results = ref([]);
-const getSlidesPerView = () => {
-  if (props.serie?.questions[0].type == 2) return 3;
-  else return 1;
-};
-const selectedAnswers = ref(Array())
-watch(selectedAnswers,(newValue)=>{
-  console.log(newValue)
-})
 </script>
 <template>
-  <swiper
-    :direction="'vertical'"
-    :spaceBetween="10"
-    :slidesPerView="getSlidesPerView()"
-    :freeMode="true"
-    :mousewheel="true"
-    :pagination="pagination"
-    :modules="modules"
-    class="scroll-container"
-  >
-    <swiper-slide v-for="(question, index) in props.serie?.questions">
-      <!--TODO fix the property fk_id_type_question-->
-      <!--VSingleOptionQuestion v-if="question.fk_id_type_question === 2"
-        :title="question.statement"
-        :answers="answers"
-      /-->
 
+    <ScrollPanel style="width: 100%; height: 46rem;">
       <VQuestion
+        v-for="(question, index) in props.serie?.questions"
         :id_question="question.id_question"
         :index="index + 1"
         :title="question.statement"
@@ -81,31 +49,9 @@ watch(selectedAnswers,(newValue)=>{
           {{ answer.text }}
         </VMultipleOptionValueSetted>
       </VQuestion>
-    </swiper-slide>
-  </swiper>
+    </ScrollPanel>
+
 </template>
 <style>
-.scroll-container {
-  height: 53rem;
-}
 
-.swiper-vertical > .swiper-pagination-bullets,
-.swiper-pagination-vertical.swiper-pagination-bullets {
-  right: -12rem;
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  position: absolute;
-  width: 15rem;
-  height: 45rem;
-  background-color: white;
-  border-radius: 1.5rem;
-  box-shadow: 0rem 0rem 0.6rem 0.6rem #00000030;
-  transition: all ease 0.5s;
-  padding: 1rem;
-}
-.swiper-vertical > .swiper-pagination-bullets:hover,
-.swiper-pagination-vertical.swiper-pagination-bullets:hover {
-  right: -2rem;
-}
 </style>

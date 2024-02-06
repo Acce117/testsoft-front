@@ -3,6 +3,7 @@ import VGeneral from "@/layouts/general/VGeneral.vue";
 import VTestSerie from "@/modules/test/views/VTestSerie.vue";
 import { useRouter } from "vue-router";
 import Dialog from "primevue/dialog";
+import Steps from "primevue/steps";
 import { areRadioGroupsChecked } from "@/common/utils/radioGroupsValidation";
 import { ref } from "vue";
 import { getTest } from "@/modules/test/test";
@@ -13,7 +14,6 @@ const serieIndex = ref(0);
 const { test, loading } = getTest(
   router.currentRoute.value.params.id_test as string
 );
-
 
 const saveTestVisible = ref(false);
 const errorVisible = ref(false);
@@ -30,11 +30,22 @@ const nextSerie = () => {
 const prevSerie = () => {
   serieIndex.value -= 1;
 };
+
+const getSeriesNames = () => {
+  let names = Array();
+  if (test.value) {
+    test.value.series.forEach((serie) => {
+      names.push({ label: serie.name });
+    });
+  }
+  return names;
+};
 </script>
 <template>
   <VGeneral>
+    <h2 class="page-title">Test : {{ test?.series[serieIndex].name }}</h2>
     <div class="test__buttons">
-      <h2 class="page-title">Test : {{ test?.series[serieIndex].name }}</h2>
+      
 
       <button
         class="black-button"
@@ -67,6 +78,11 @@ const prevSerie = () => {
         <img src="/img/arrow.svg" alt="siguiente serie" />
       </button>
     </div>
+    <Steps
+      :model="getSeriesNames()"
+      v-model:activeStep="serieIndex"
+      :readonly="false"
+    />
 
     <div class="test">
       <div class="test__timer">
@@ -128,13 +144,14 @@ const prevSerie = () => {
   position: absolute;
   justify-content: center;
   align-items: center;
-  gap: 0.5rem;
+  gap: 1rem;
   font-size: 2rem;
   width: 10rem;
   height: 6rem;
-  top: -6rem;
-  left: -5.8rem;
+  top: 6rem;
+  left: -6rem;
   transition: all ease 0.3s;
+  z-index: 2;
 }
 .test__timer img {
   filter: invert();

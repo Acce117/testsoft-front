@@ -29,7 +29,7 @@ const emit = defineEmits(["emit_answer_id"]);
   border-radius: 1.5rem;
   overflow: hidden;
   box-shadow: var(--shadow);
-  margin-top: 1rem;
+  margin:2rem auto;
 }
 
 .question__title {
