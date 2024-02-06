@@ -22,7 +22,7 @@ const pagination = {
 
 </script>
 <template>
-  <VGeneral>
+  
     <h2 class="page-title">Seleccione un test</h2>
     <Swiper
       :spaceBetween="30"
@@ -43,7 +43,7 @@ const pagination = {
       </swiper-slide>
       <h1 v-else>Loading</h1>
     </Swiper>
-  </VGeneral>
+  
 </template>
 <style>
 .swiper {

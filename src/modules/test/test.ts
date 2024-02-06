@@ -1,7 +1,6 @@
 import { sendRequest } from "@/common/utils/fetch";
 import { ref } from "vue";
-
-import { user } from '../security/classes/user';
+import { userStore } from "../security/store/user-store";
 
 function testRequest(queryParams: Object, url: string) {
     let result = ref();
@@ -32,8 +31,8 @@ export function useTests() {
 
     return testRequest({
         attr: {
-            fk_id_group: user?.group,
-            group_type: user?.userType
+            fk_id_group: userStore().group,
+            group_type: userStore().userType
         }
     }, url);
 }

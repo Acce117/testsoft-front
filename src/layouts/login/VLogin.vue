@@ -4,7 +4,7 @@
       <span class="screen__background"></span>
       <img src="/img/logo.png" class="login__logo" />
       
-      <form action="" @submit.prevent="login()">
+      <form action="" @submit.prevent="sendCredentials()">
         <h2>Bienvenido a Testsoft</h2>
         <div class="login__input">
           <input
@@ -48,22 +48,19 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 
-import { User } from "../../modules/security/classes/user";
-import type { LoginForm } from "@/modules/security/types/loginForm";
-
 import Dialog from "primevue/dialog";
+import { login } from "@/common/login";
 const visible = ref(false);
 const router = useRouter();
 
-const credentials = ref<LoginForm>({
+const credentials = ref({
   username: "",
   password: "",
 });
 
-async function login() {
+async function sendCredentials() {
   try {
-    const user = await User.login(credentials.value);
-
+    await login(credentials.value);
     router.push("/");
   } catch (err) {
     visible.value = true;

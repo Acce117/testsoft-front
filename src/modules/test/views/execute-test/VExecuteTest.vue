@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import VGeneral from "@/layouts/general/VGeneral.vue";
-import VTestSerie from "@/modules/test/views/VTestSerie.vue";
+import VTestSerie from "./VTestSerie.vue";
 import { useRouter } from "vue-router";
 import Dialog from "primevue/dialog";
 import Steps from "primevue/steps";
@@ -34,7 +33,7 @@ const prevSerie = () => {
 const getSeriesNames = () => {
   let names = Array();
   if (result.value) {
-    result.value.series.forEach((serie) => {
+    result.value.forEach(serie => {
       names.push({ label: serie.name });
     });
   }
@@ -42,63 +41,35 @@ const getSeriesNames = () => {
 };
 </script>
 <template>
-  <VGeneral>
+  <!--TODO some kind of cool loading message-->
+  <div v-if="!loading">
     <h2 class="page-title">Test : {{ result[serieIndex].name }}</h2>
     <div class="test__buttons">
-      
 
-      <button
-        class="black-button"
-        v-if="serieIndex > 0"
-        @click="prevSerie()"
-        v-tooltip.bottom="'Serie Anterior'"
-        placeholder="Bottom"
-      >
-        <img
-          src="/img/arrow.svg"
-          alt="serie anterior"
-          style="transform: rotate(180deg)"
-        />
+
+      <button class="black-button" v-if="serieIndex > 0" @click="prevSerie()" v-tooltip.bottom="'Serie Anterior'"
+        placeholder="Bottom">
+        <img src="/img/arrow.svg" alt="serie anterior" style="transform: rotate(180deg)" />
       </button>
-      <button
-        class="black-button"
-        @click="validateAnswers()"
-        v-tooltip.bottom="'Terminar Test'"
-        placeholder="Bottom"
-      >
+      <button class="black-button" @click="validateAnswers()" v-tooltip.bottom="'Terminar Test'" placeholder="Bottom">
         <img src="/img/test_completed.svg" alt="terminar test" />
       </button>
-      <button
-        v-if="serieIndex < result.length - 1"
-        class="black-button"
-        @click="nextSerie()"
-        v-tooltip.bottom="'Siguiente Serie'"
-        placeholder="Bottom"
-      >
+      <button v-if="serieIndex < result.length - 1" class="black-button" @click="nextSerie()"
+        v-tooltip.bottom="'Siguiente Serie'" placeholder="Bottom">
         <img src="/img/arrow.svg" alt="siguiente serie" />
       </button>
     </div>
-    <Steps
-      :model="getSeriesNames()"
-      v-model:activeStep="serieIndex"
-      :readonly="false"
-    />
+    <Steps :model="getSeriesNames()" v-model:activeStep="serieIndex" :readonly="false" />
 
     <div class="test">
       <div class="test__timer">
         <span>00:00</span>
         <img src="/img/timer.svg" alt="tiempo restante" />
       </div>
-      <VTestSerie v-if="!loading" :serie="result[serieIndex]" />
-      <!--TODO some kind of cool loading message-->
-      <h1 v-else>Loading</h1>
+      <VTestSerie :serie="result[serieIndex]" />
     </div>
-    <Dialog
-      v-model:visible="saveTestVisible"
-      modal
-      header="Test"
-      class="modal box-shadow-box"
-      ><span class="modal__background-shape"></span>
+    <Dialog v-model:visible="saveTestVisible" modal header="Test" class="modal box-shadow-box"><span
+        class="modal__background-shape"></span>
       <span class="modal__message">Desea guardar los resultados del test?</span>
       <div class="modal__buttons">
         <button class="black-button" @click="router.push('/')">Aceptar</button>
@@ -107,27 +78,23 @@ const getSeriesNames = () => {
         </button>
       </div>
     </Dialog>
-    <Dialog
-      v-model:visible="errorVisible"
-      modal
-      header="Error"
-      class="modal box-shadow-box"
-      ><span class="modal__background-shape"></span>
-      <span class="modal__message"
-        >Todos las preguntas deben ser respondidas</span
-      >
+    <Dialog v-model:visible="errorVisible" modal header="Error" class="modal box-shadow-box"><span
+        class="modal__background-shape"></span>
+      <span class="modal__message">Todos las preguntas deben ser respondidas</span>
       <div class="modal__buttons">
         <button class="black-button" @click="errorVisible = false">
           Aceptar
         </button>
       </div>
     </Dialog>
-  </VGeneral>
+  </div>
 </template>
+
 <style>
 .test {
   position: relative;
 }
+
 .test__buttons {
   display: flex;
   gap: 1rem;
@@ -135,6 +102,7 @@ const getSeriesNames = () => {
   justify-content: center;
   padding: 0.5rem;
 }
+
 .test__timer {
   background-color: white;
   border-radius: 1.5rem;
@@ -152,17 +120,18 @@ const getSeriesNames = () => {
   transition: all ease 0.3s;
   z-index: 2;
 }
+
 .test__timer img {
   filter: invert();
   width: 3rem;
 }
+
 .test__timer:hover {
   left: -0.5rem;
   cursor: pointer;
 }
-@media (min-width: 480px) {
-}
 
-@media (min-width: 768px) {
-}
+@media (min-width: 480px) {}
+
+@media (min-width: 768px) {}
 </style>

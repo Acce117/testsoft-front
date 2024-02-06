@@ -1,6 +1,5 @@
 
 <template>
-  <VGeneral>
     <div class="home">
       <span class="home__background"></span>
       <div class="home__left">
@@ -13,7 +12,6 @@
         <VPresentation />
       </div>
     </div>
-  </VGeneral>
 </template>
 
 <script setup lang="ts">

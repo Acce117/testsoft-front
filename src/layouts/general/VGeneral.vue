@@ -12,7 +12,7 @@ window.scrollTo(0,0)
     </header>
     <main>
       <span class="background__shape"></span>
-      <slot> </slot>
+      <RouterView></RouterView>
     </main>
   </div>
 </template>

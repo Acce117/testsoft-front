@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 const props = defineProps({
-  id_question: Number,
+  id_question: String,
   index:Number,
   title: String,
 });
