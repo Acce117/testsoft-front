@@ -19,6 +19,7 @@ const saveTestVisible = ref(false);
 const errorVisible = ref(false);
 const testEndedVisible = ref(false);
 const testEnded2ndVisible = ref(false);
+const infoVisible = ref(false)
 
 const validateAnswers = () => {
   if (areRadioGroupsChecked()) {
@@ -64,7 +65,8 @@ const testEnded2nd = () => {
 <template>
   <!--TODO some kind of cool loading message-->
   <div v-if="!loading">
-    <h2 class="page-title">Test : {{ result[serieIndex].name }}</h2>
+    <h2 class="page-title">Test : {{ result[serieIndex].name }} </h2>
+    <h3 class="page-subtitle">{{ result[serieIndex].description }}</h3>
     <div class="test__buttons">
       <button
         class="black-button"
@@ -86,6 +88,14 @@ const testEnded2nd = () => {
         placeholder="Bottom"
       >
         <img src="/img/test_completed.svg" alt="terminar test" />
+      </button>
+      <button
+        class="black-button"
+        @click="infoVisible = true"
+        v-tooltip.bottom="'Información'"
+        placeholder="Bottom"
+      >
+        <img src="/img/info.svg" alt="info" />
       </button>
       <button
         v-if="serieIndex < result.length - 1"
@@ -169,6 +179,17 @@ const testEnded2nd = () => {
       <span class="modal__message">El tiempo del test ha terminado</span>
       <div class="modal__buttons">
         <button class="black-button" @click="testEnded2nd()">Aceptar</button>
+      </div>
+    </Dialog>
+    <Dialog
+      v-model:visible="infoVisible"
+      modal
+      header="Test"
+      class="modal box-shadow-box"
+      ><span class="modal__background-shape"></span>
+      <span class="modal__message">descripcion</span>
+      <div class="modal__buttons">
+        <button class="black-button" @click="infoVisible = false">Aceptar</button>
       </div>
     </Dialog>
   </div>

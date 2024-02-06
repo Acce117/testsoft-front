@@ -100,15 +100,23 @@ button:active {
   border-radius: 1.5rem;
   box-shadow: var(--shadow);
 }
-.page-title{
-    margin-top: 6rem;
+.page-title, .page-subtitle{
     text-align: center;
-    font-size: 2rem;
+}
+.page-title{
+  margin-top: 6rem;
+  font-size: 2rem;
+}
+.page-subtitle{
+  font-size: 1.5rem;
 }
 
 @media (min-width: 768px) {
   .page-title {
     font-size: 3rem;
+  }
+  .page-subtitle{
+    font-size: 1.8rem;
   }
 }
 
