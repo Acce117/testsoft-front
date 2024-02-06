@@ -9,7 +9,7 @@ import { Pagination, Navigation } from "swiper/modules";
 
 import { useTests } from "@/modules/test/test";
 
-const { tests } = useTests();
+const { result, loading } = useTests();
 
 const modules = [Pagination, Navigation];
 const pagination = {
@@ -33,7 +33,7 @@ const pagination = {
       :modules="modules"
       :breakpoints="{ 768: { slidesPerView: 2 }, 1024: { slidesPerView: 3 } }"
     >
-      <swiper-slide class="swiper-slide" v-for="test in tests" :key="test.id">
+      <swiper-slide class="swiper-slide" v-if="!loading" v-for="test in result" :key="test.id">
         <VTestCard
           :id="test.id"
           :title="test.name"
@@ -41,6 +41,7 @@ const pagination = {
           :duration="test.durationTime"
         />
       </swiper-slide>
+      <h1 v-else>Loading</h1>
     </Swiper>
   </VGeneral>
 </template>
@@ -92,4 +93,3 @@ const pagination = {
 }
 
 </style>
-@/modules/test/types/test-interface@/modules/test/test

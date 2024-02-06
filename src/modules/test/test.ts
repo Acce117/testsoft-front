@@ -1,56 +1,51 @@
 import { sendRequest } from "@/common/utils/fetch";
-import type { TestInterface } from "./types/test-interface";
 import { ref } from "vue";
 
 import { user } from '../security/classes/user';
-import type { SerieInterface, TestExecutionInterface } from "./types";
+
+function testRequest(queryParams: Object, url: string) {
+    let result = ref();
+    let loading = ref(true);
+
+    sendRequest(url, queryParams)
+        .then(res => {
+            loading.value = false;
+            result.value = res.data
+        }).catch(err => {
+            console.log(err);
+            loading.value = false;
+        })
+
+    return {
+        result,
+        loading
+    };
+}
 
 /**
  * retrieve available tests for user
- * @returns reactive TestInterface array
+ * @returns reactive tests array
  */
-export function useTests(){
-    let tests = ref<TestInterface[]>([]);
 
+export function useTests() {
     const url = `http://localhost/testsoft/api/web/gestion/group_for_test`;
 
-    sendRequest<TestInterface[]>(url, {
+    return testRequest({
         attr: {
             fk_id_group: user?.group,
             group_type: user?.userType
         }
-    }).then(res=>{
-        tests.value = res.data;
-    });
-    
-    return {
-        tests
-    };
+    }, url);
 }
 
-export function getTest(idTest: number | string){
-    let test = ref<TestExecutionInterface>();
-    let loading = ref<boolean>(true);
-
+export function getTest(idTest: number | string) {
     const url = `http://localhost/testsoft/api/web/gestion/serie`;
 
-    sendRequest<SerieInterface[]>(url,{
+    return testRequest({
         attr: {
             fk_id_test: idTest
-        }
-    }).then(res=>{
-        loading.value = false;
-        test.value = {
-            series: res.data
-        };
-        console.log(test.value);
-    }).catch(err=>{
-        console.log(err);
-        loading.value = false;
-    })
-
-    return {
-        test,
-        loading
-    };
+        },
+        relations: ['arrayquestion.arrayanswer']
+    }, url);
 }
+

@@ -18,21 +18,22 @@ const validateAnswers = () => {
 
 }
 
-const { test, loading } = getTest(router.currentRoute.value.params.id_test as string);
+const i = ref(0);
+const { result, loading } = getTest(router.currentRoute.value.params.id_test as string);
 
 </script>
 <template>
   <VGeneral>
     <h2 class="page-title">Test</h2>
+    <button @click ="()=>i++"> Click </button>
     <button class="black-button" @click="validateAnswers()">
         Terminar Test
       </button>
     <div class="test">
-      <VTestSerie v-if="!loading" :serie="test?.series[0]"/>
+      <VTestSerie v-if="!loading" :serie="result[i]"/>
       <!--TODO some kind of cool loading message-->
       <h1 v-else>Loading</h1>
     </div>
-
     <Dialog
       v-model:visible="saveTestVisible"
       modal

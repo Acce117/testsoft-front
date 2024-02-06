@@ -12,15 +12,10 @@ import { type SerieInterface } from "../types";
 import VMultipleOptionValueSetted from "./question-components/VMultipleOptionValueSetted.vue";
 
 const props = defineProps({
-  serie: Object as PropType<SerieInterface>
+  serie: Object
 })
 
 const modules = [FreeMode, Scrollbar, Mousewheel, Pagination];
-
-const answers = [
-  { id_answer: 1, text: "respuesta 1" },
-  { id_answer: 2, text: "respuesta 2" },
-];
 
 const pagination = {
   clickable: true,
@@ -35,7 +30,7 @@ const results = ref([]);
 <template>
   <swiper :direction="'vertical'" :spaceBetween="10" :slidesPerView="3" :freeMode="true" :mousewheel="true"
     :pagination="pagination" :modules="modules" class="scroll-container">
-    <swiper-slide v-for="question in props.serie?.questions">
+    <swiper-slide v-for="question in props.serie?.arrayquestion">
       <!--TODO fix the property fk_id_type_question-->
       <!--VSingleOptionQuestion v-if="question.fk_id_type_question === 2"
         :title="question.statement"
@@ -43,12 +38,12 @@ const results = ref([]);
       /-->
       <VQuestion :title="question.statement">
 
-        <VCheckboxAnswerVue v-if="question.type == 2" v-for="answer in question.arrayanswer" :id="answer.id_answer"
+        <VCheckboxAnswerVue v-if="question.fk_id_type_question == 2" v-for="answer in question.arrayanswer" :id="answer.id_answer"
           :text="answer.text">
           <input type="radio" :name="question.id_question + ''" :value="answer.id_answer">
         </VCheckboxAnswerVue>
 
-        <VMultipleOptionValueSetted v-else-if="question.type == 5" v-for="answer in question.arrayanswer">
+        <VMultipleOptionValueSetted v-else-if="question.fk_id_type_question == 5" v-for="answer in question.arrayanswer">
           {{ answer.text }}
         </VMultipleOptionValueSetted>
 
