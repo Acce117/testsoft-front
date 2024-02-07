@@ -1,21 +1,24 @@
 <script setup lang="ts">
 import VTestSerie from "./VTestSerie.vue";
-import { useRouter } from "vue-router";
+import { useRouter  } from "vue-router";
 import Dialog from "primevue/dialog";
 import Steps from "primevue/steps";
-import { provide, reactive, ref } from "vue";
+import { provide, reactive, ref , watch} from "vue";
 import { getTest } from "@/modules/test/test";
 import { Test } from "../../classes/test-class";
 import { isTestValid } from "@/common/utils/validateAnswers";
 
 const router = useRouter();
 const serieIndex = ref(0);
-let timeCountdown = 70 * 1000;
 
 const { result, loading, questions } = getTest(
   router.currentRoute.value.params.id_test as string
 );
-
+let timeCountdown:number 
+watch(result,(newValue)=>{
+    timeCountdown = newValue.time_duration* 60 * 1000;
+})
+if (result.value) timeCountdown = result.value.time_duration;
 const saveTestVisible = ref(false);
 const errorVisible = ref(false);
 const testEndedVisible = ref(false);
@@ -24,7 +27,6 @@ const infoVisible = ref(false);
 const validatedTestFirstTime = ref(false);
 
 provide("validatedTestFirstTime", validatedTestFirstTime);
-const validateAnswers = () => {};
 
 const endTest = () => {
   if (isTestValid("2", test.answers, questions.value)) {
@@ -45,7 +47,7 @@ const prevSerie = () => {
 const getSeriesNames = () => {
   let names = Array();
   if (result.value) {
-    result.value.arrayserie.forEach((serie: {name:string}) => {
+    result.value.arrayserie.forEach((serie: { name: string }) => {
       names.push({ label: serie.name });
     });
   }
@@ -54,16 +56,16 @@ const getSeriesNames = () => {
 let firtsTimeEnd = true;
 let timeOutId: number;
 const testEnded = () => {
-  /*if (firtsTimeEnd) {
+  if (firtsTimeEnd) {
     testEndedVisible.value = true;
-    timeCountdown = 30 * 1000;
+    timeCountdown = 5*60 * 1000;
     firtsTimeEnd = false;
   } else {
     timeOutId = setTimeout(() => {
       router.push("/");
     }, 5000);
     testEnded2ndVisible.value = true;
-  }*/
+  }
 };
 const testEnded2nd = () => {
   clearTimeout(timeOutId);
@@ -77,8 +79,12 @@ provide<{ [key: string]: any }>("answers", test.answers);
 <template>
   <!--TODO some kind of cool loading message-->
   <div v-if="!loading">
-    <h2 class="page-title">Test : {{ result.arrayserie[serieIndex].name }} </h2>
-    <h3 class="page-subtitle">{{ result.arrayserie[serieIndex].description }}</h3>
+    <h2 class="page-title">
+      {{ result.name }} : {{ result.arrayserie[serieIndex].name }}
+    </h2>
+    <h3 class="page-subtitle">
+      {{ result.arrayserie[serieIndex].description }}
+    </h3>
     <div class="test__buttons">
       <button
         class="black-button"
@@ -128,7 +134,7 @@ provide<{ [key: string]: any }>("answers", test.answers);
     <div class="test">
       <div class="test__timer">
         <vue-countdown
-          :time="timeCountdown"
+          :time="timeCountdown "
           v-slot="{ minutes, seconds }"
           @end="testEnded()"
         >
@@ -138,7 +144,10 @@ provide<{ [key: string]: any }>("answers", test.answers);
         </vue-countdown>
         <img src="/img/timer.svg" alt="tiempo restante" />
       </div>
-      <VTestSerie :serie="result.arrayserie[serieIndex]" :answers="test.answers"/>
+      <VTestSerie
+        :serie="result.arrayserie[serieIndex]"
+        :answers="test.answers"
+      />
     </div>
     <Dialog
       v-model:visible="saveTestVisible"
@@ -198,10 +207,12 @@ provide<{ [key: string]: any }>("answers", test.answers);
     <Dialog
       v-model:visible="infoVisible"
       modal
-      header="Test"
+      header="Descripción"
       class="modal box-shadow-box"
       ><span class="modal__background-shape"></span>
-      <span class="modal__message">descripcion</span>
+      <span class="modal__message modal__long-message">{{
+        result.description
+      }}</span>
       <div class="modal__buttons">
         <button class="black-button" @click="infoVisible = false">
           Aceptar

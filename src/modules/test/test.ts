@@ -11,12 +11,14 @@ function testRequest(queryParams: Object, url: string) {
         .then(res => {
             loading.value = false;
             result.value = res.data
-            result.value.forEach((serie) => {
-                serie.questions.forEach((question) => {
+            //THIS IS SOME BULLSHIT THAT I HAVE TO REFACTOR
+            result.value.arrayserie.forEach((serie) => {
+                serie.arrayquestion.forEach((question) => {
                     questions.value.push(question)
                 })
                 
             })
+            
         }).catch(err => {
             console.log(err);
             loading.value = false;
