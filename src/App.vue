@@ -5,7 +5,9 @@ const router = useRouter();
 </script>
 
 <template>
-  <Transition name="fade">
-    <router-view />
-  </Transition>
+  <router-view v-slot="{ Component }">
+    <Transition name="fade">
+      <component :is="Component"/>
+    </Transition>
+  </router-view>
 </template>

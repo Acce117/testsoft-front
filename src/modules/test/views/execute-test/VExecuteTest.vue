@@ -4,8 +4,9 @@ import { useRouter } from "vue-router";
 import Dialog from "primevue/dialog";
 import Steps from "primevue/steps";
 import { areRadioGroupsChecked } from "@/common/utils/radioGroupsValidation";
-import { ref } from "vue";
+import { provide, reactive, ref } from "vue";
 import { getTest } from "@/modules/test/test";
+import { Test } from '../../classes/test-class';
 
 const router = useRouter();
 const serieIndex = ref(0);
@@ -27,6 +28,11 @@ const validateAnswers = () => {
   } else errorVisible.value = true;
 };
 
+const endTest = ()=>{
+  //validateAnswers();
+  test.sendTest();
+}
+
 const nextSerie = () => {
   serieIndex.value += 1;
 };
@@ -37,7 +43,7 @@ const prevSerie = () => {
 const getSeriesNames = () => {
   let names = Array();
   if (result.value) {
-    result.value.forEach((serie) => {
+    result.value.forEach((serie: {name:string}) => {
       names.push({ label: serie.name });
     });
   }
@@ -46,7 +52,7 @@ const getSeriesNames = () => {
 let firtsTimeEnd = true;
 let timeOutId: number;
 const testEnded = () => {
-  if (firtsTimeEnd) {
+  /*if (firtsTimeEnd) {
     testEndedVisible.value = true;
     timeCountdown = 30 * 1000;
     firtsTimeEnd = false;
@@ -55,12 +61,16 @@ const testEnded = () => {
       router.push("/");
     }, 5000);
     testEnded2ndVisible.value = true;
-  }
+  }*/
 };
 const testEnded2nd = () => {
   clearTimeout(timeOutId);
   router.push("/");
 };
+
+const test = reactive(new Test())
+
+provide<{[key: string]: any}>('answers', test.answers);
 </script>
 <template>
   <!--TODO some kind of cool loading message-->
@@ -83,7 +93,7 @@ const testEnded2nd = () => {
       </button>
       <button
         class="black-button"
-        @click="validateAnswers()"
+        @click="endTest()"
         v-tooltip.bottom="'Terminar Test'"
         placeholder="Bottom"
       >
@@ -124,7 +134,7 @@ const testEnded2nd = () => {
         </vue-countdown>
         <img src="/img/timer.svg" alt="tiempo restante" />
       </div>
-      <VTestSerie :serie="result[serieIndex]" />
+      <VTestSerie :serie="result[serieIndex]" :answers="test.answers"/>
     </div>
     <Dialog
       v-model:visible="saveTestVisible"
