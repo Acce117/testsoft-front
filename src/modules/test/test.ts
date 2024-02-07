@@ -5,19 +5,27 @@ import { userStore } from "../security/store/user-store";
 function testRequest(queryParams: Object, url: string) {
     let result = ref();
     let loading = ref(true);
+    let questions = ref(Array())
 
     sendRequest(url, queryParams)
         .then(res => {
             loading.value = false;
             result.value = res.data
+            result.value.forEach((serie) => {
+                serie.questions.forEach((question) => {
+                    questions.value.push(question)
+                })
+                
+            })
         }).catch(err => {
             console.log(err);
             loading.value = false;
         })
-
+    
     return {
         result,
-        loading
+        loading,
+        questions
     };
 }
 

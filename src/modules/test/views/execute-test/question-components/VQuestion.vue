@@ -1,20 +1,12 @@
 <script setup lang="ts">
-import { ref } from "vue";
 const props = defineProps({
   id_question: String,
   index: Number,
   title: String,
 });
-//const checkedAnswer = ref("");
-const question = ref();
-const emit = defineEmits(["emit_answer_id"]);
-/*const answerChecked = () => {
-  emit("emit_answer_id", checkedAnswer);
-  question.value.classList.remove("question-not-responded");
-};*/
 </script>
 <template>
-  <div class="question" ref="question">
+  <div class="question" :id="props.id_question">
     <h4 class="question__title">{{ props.index + `-` + props.title }}</h4>
     <div class="question__content">
       <slot></slot>

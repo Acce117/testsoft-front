@@ -3,16 +3,16 @@ import VTestSerie from "./VTestSerie.vue";
 import { useRouter } from "vue-router";
 import Dialog from "primevue/dialog";
 import Steps from "primevue/steps";
-import { areRadioGroupsChecked } from "@/common/utils/radioGroupsValidation";
 import { provide, reactive, ref } from "vue";
 import { getTest } from "@/modules/test/test";
-import { Test } from '../../classes/test-class';
+import { Test } from "../../classes/test-class";
+import { isTestValid } from "@/common/utils/validateAnswers";
 
 const router = useRouter();
 const serieIndex = ref(0);
 let timeCountdown = 70 * 1000;
 
-const { result, loading } = getTest(
+const { result, loading, questions } = getTest(
   router.currentRoute.value.params.id_test as string
 );
 
@@ -20,18 +20,20 @@ const saveTestVisible = ref(false);
 const errorVisible = ref(false);
 const testEndedVisible = ref(false);
 const testEnded2ndVisible = ref(false);
-const infoVisible = ref(false)
+const infoVisible = ref(false);
+const validatedTestFirstTime = ref(false);
 
-const validateAnswers = () => {
-  if (areRadioGroupsChecked()) {
-    saveTestVisible.value = true;
-  } else errorVisible.value = true;
+provide("validatedTestFirstTime", validatedTestFirstTime);
+const validateAnswers = () => {};
+
+const endTest = () => {
+  if (isTestValid("2", test.answers, questions.value)) {
+    test.sendTest();
+  } else {
+    errorVisible.value = true;
+    validatedTestFirstTime.value = true;
+  }
 };
-
-const endTest = ()=>{
-  //validateAnswers();
-  test.sendTest();
-}
 
 const nextSerie = () => {
   serieIndex.value += 1;
@@ -43,7 +45,7 @@ const prevSerie = () => {
 const getSeriesNames = () => {
   let names = Array();
   if (result.value) {
-    result.value.forEach((serie: {name:string}) => {
+    result.value.forEach((serie: { name: string }) => {
       names.push({ label: serie.name });
     });
   }
@@ -68,14 +70,14 @@ const testEnded2nd = () => {
   router.push("/");
 };
 
-const test = reactive(new Test())
+const test = reactive(new Test());
 
-provide<{[key: string]: any}>('answers', test.answers);
+provide<{ [key: string]: any }>("answers", test.answers);
 </script>
 <template>
   <!--TODO some kind of cool loading message-->
   <div v-if="!loading">
-    <h2 class="page-title">Test : {{ result[serieIndex].name }} </h2>
+    <h2 class="page-title">Test : {{ result[serieIndex].name }}</h2>
     <h3 class="page-subtitle">{{ result[serieIndex].description }}</h3>
     <div class="test__buttons">
       <button
@@ -130,11 +132,13 @@ provide<{[key: string]: any}>('answers', test.answers);
           v-slot="{ minutes, seconds }"
           @end="testEnded()"
         >
-          {{ (minutes>9)?minutes:`0`+minutes }}:{{ (seconds>9)?seconds:`0`+seconds }}
+          {{ minutes > 9 ? minutes : `0` + minutes }}:{{
+            seconds > 9 ? seconds : `0` + seconds
+          }}
         </vue-countdown>
         <img src="/img/timer.svg" alt="tiempo restante" />
       </div>
-      <VTestSerie :serie="result[serieIndex]" :answers="test.answers"/>
+      <VTestSerie :serie="result[serieIndex]" :answers="test.answers" />
     </div>
     <Dialog
       v-model:visible="saveTestVisible"
@@ -199,7 +203,9 @@ provide<{[key: string]: any}>('answers', test.answers);
       ><span class="modal__background-shape"></span>
       <span class="modal__message">descripcion</span>
       <div class="modal__buttons">
-        <button class="black-button" @click="infoVisible = false">Aceptar</button>
+        <button class="black-button" @click="infoVisible = false">
+          Aceptar
+        </button>
       </div>
     </Dialog>
   </div>
@@ -226,7 +232,7 @@ provide<{[key: string]: any}>('answers', test.answers);
   position: absolute;
   justify-content: space-between;
   align-items: center;
-  padding: .5rem;
+  padding: 0.5rem;
   font-size: 2rem;
   width: 11rem;
   height: 6rem;
@@ -252,3 +258,4 @@ provide<{[key: string]: any}>('answers', test.answers);
 @media (min-width: 768px) {
 }
 </style>
+@/common/utils/validateAnswers
