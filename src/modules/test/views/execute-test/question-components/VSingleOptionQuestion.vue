@@ -7,7 +7,7 @@ const props = defineProps({
 });
 
 const answers = inject<{[key: string]: any}>('answers') || {};
-answers[`${props.id_question}`] = {};
+
 </script>
 <template>
   <div class="radio-button-answer answer" v-for="answer in props.possible_answers" :key="answer.id_answer">

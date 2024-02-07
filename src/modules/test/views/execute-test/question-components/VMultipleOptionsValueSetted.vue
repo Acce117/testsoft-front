@@ -15,7 +15,14 @@ answers[`${props.id_question}`] = {};
     <div class="answer" v-for="answer in props.possible_answers" :key="answer.id_answer">
         <label for="">
             {{ answer.text }}
-            <InputNumber v-model="answers[`${props.id_question}`][`${answer.id_answer}`]" input-id="integeronly" :use-grouping="false"/>
+            <InputNumber 
+                @vue:mounted="answers[`${props.id_question}`][`${answer.id_answer}`]=0"
+                v-model="answers[`${props.id_question}`][`${answer.id_answer}`]"
+                :min="0"
+                :allow-empty="false"
+                input-id="integeronly"
+                :use-grouping="false"
+            />
         </label>
     </div>
 </template>

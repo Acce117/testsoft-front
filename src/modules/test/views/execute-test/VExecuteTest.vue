@@ -43,7 +43,7 @@ const prevSerie = () => {
 const getSeriesNames = () => {
   let names = Array();
   if (result.value) {
-    result.value.forEach((serie: {name:string}) => {
+    result.value.arrayserie.forEach((serie: {name:string}) => {
       names.push({ label: serie.name });
     });
   }
@@ -75,8 +75,8 @@ provide<{[key: string]: any}>('answers', test.answers);
 <template>
   <!--TODO some kind of cool loading message-->
   <div v-if="!loading">
-    <h2 class="page-title">Test : {{ result[serieIndex].name }} </h2>
-    <h3 class="page-subtitle">{{ result[serieIndex].description }}</h3>
+    <h2 class="page-title">Test : {{ result.arrayserie[serieIndex].name }} </h2>
+    <h3 class="page-subtitle">{{ result.arrayserie[serieIndex].description }}</h3>
     <div class="test__buttons">
       <button
         class="black-button"
@@ -108,7 +108,7 @@ provide<{[key: string]: any}>('answers', test.answers);
         <img src="/img/info.svg" alt="info" />
       </button>
       <button
-        v-if="serieIndex < result.length - 1"
+        v-if="serieIndex < result.arrayserie.length - 1"
         class="black-button"
         @click="nextSerie()"
         v-tooltip.bottom="'Siguiente Serie'"
@@ -134,7 +134,7 @@ provide<{[key: string]: any}>('answers', test.answers);
         </vue-countdown>
         <img src="/img/timer.svg" alt="tiempo restante" />
       </div>
-      <VTestSerie :serie="result[serieIndex]" :answers="test.answers"/>
+      <VTestSerie :serie="result.arrayserie[serieIndex]" :answers="test.answers"/>
     </div>
     <Dialog
       v-model:visible="saveTestVisible"
