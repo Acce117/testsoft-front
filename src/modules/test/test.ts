@@ -46,13 +46,13 @@ export function useTests() {
 }
 
 export function getTest(idTest: number | string) {
-    const url = `http://localhost/testsoft/api/web/gestion/serie`;
+    const url = `http://localhost/testsoft/api/web/gestion/test/view/${idTest}`;
 
     return testRequest({
-        attr: {
-            fk_id_test: idTest
+        attr:{
+            id_test: idTest
         },
-        relations: ['arrayquestion.arrayanswer']
+        relations: ["arrayserie.arrayquestion.arrayanswer"]
     }, url);
 }
 
