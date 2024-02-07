@@ -2,7 +2,7 @@
 import { ref } from "vue";
 const props = defineProps({
   id_question: String,
-  index:Number,
+  index: Number,
   title: String,
 });
 //const checkedAnswer = ref("");
@@ -15,7 +15,7 @@ const emit = defineEmits(["emit_answer_id"]);
 </script>
 <template>
   <div class="question" ref="question">
-    <h4 class="question__title">{{props.index +`-`+ props.title }}</h4>
+    <h4 class="question__title">{{ props.index + `-` + props.title }}</h4>
     <div class="question__content">
       <slot></slot>
     </div>
@@ -23,13 +23,13 @@ const emit = defineEmits(["emit_answer_id"]);
 </template>
 <style>
 .question {
-  width: 20rem;
+  width: 25rem;
   display: flex;
   flex-direction: column;
   border-radius: 1.5rem;
   overflow: hidden;
   box-shadow: var(--shadow);
-  margin:2rem auto;
+  margin: 2rem auto;
 }
 
 .question__title {
@@ -47,25 +47,30 @@ const emit = defineEmits(["emit_answer_id"]);
 }
 .question-not-responded {
   transition: all ease 0.5s;
-  box-shadow: 0 0 .3rem .3rem rgba(255, 0, 0, 0.7);
+  box-shadow: 0 0 0.3rem 0.3rem rgba(255, 0, 0, 0.7);
+}
+.answer {
+  font-size: 1.2rem;
 }
 @media (min-width: 480px) {
   .question {
-    width: 30rem;
+    width: 40rem;
   }
-  
 }
 @media (min-width: 768px) {
   .question {
-    width: 50rem;
+    width: 70rem;
   }
   .question__title {
+    font-size: 1.5rem;
+  }
+  .answer {
     font-size: 1.5rem;
   }
 }
 @media (min-width: 1024px) {
   .question {
-    width: 60rem;
+    width: 80%;
   }
 }
 </style>

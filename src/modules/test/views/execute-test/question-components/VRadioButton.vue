@@ -13,12 +13,12 @@ const props = defineProps({
   </div>
 </template>
 <style>
+
 .radio-button-answer {
   width: 100%;
   display: flex;
   align-items: center;
   gap: 1rem;
-  font-size: 1.2rem;
   border-radius: 1.5rem;
   padding: 0.5rem;
   transition: all ease 0.2s;
@@ -31,9 +31,5 @@ const props = defineProps({
   box-shadow: 0 0 0.5rem 0 black;
 }
 
-@media (min-width: 768px) {
-  .radio-button-answer {
-    font-size: 1.5rem;
-  }
-}
+
 </style>
