@@ -18,7 +18,6 @@ window.scrollTo(0,0)
 </template>
 <style>
 .general-view {
-  height: 100%;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -42,12 +41,12 @@ window.scrollTo(0,0)
 
 @media (min-width: 480px) {
   .general-view{
-    width: 450px;
+    width: 45rem;
   }
 }
 @media (min-width: 768px) {
   .general-view{
-    width: 750px;
+    width: 75rem;
   }
 }
 @media (min-width: 1024px) {

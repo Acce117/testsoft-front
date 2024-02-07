@@ -4,10 +4,9 @@ import { inject } from "vue";
 import ScrollPanel from "primevue/scrollpanel";
 
 import VQuestion from "./question-components/VQuestion.vue";
-import VRadioButton from "./question-components/VRadioButton.vue";
 
-import RadioButton from "primevue/radiobutton";
 import VMultipleOptionsValueSetted from "./question-components/VMultipleOptionsValueSetted.vue";
+import VSingleOptionQuestion from "./question-components/VSingleOptionQuestion.vue";
 
 const props = defineProps({
   serie: Object,
@@ -24,24 +23,13 @@ const answers = inject<{ [key: string]: any }>("answers") || {};
       :index="index + 1"
       :title="question.statement"
     >
-      <VRadioButton
-        class="answer"
+      <VSingleOptionQuestion
         v-if="question.fk_id_type_question == 2"
-        v-for="answer in question.arrayanswer"
-        :key="answer.id_answer"
-        :id_answer="answer.id_answer"
-        :text="answer.text"
-      >
-        <RadioButton
-          v-model="answers[`${question.id_question}`]"
-          :inputId="answer.id_answer"
-          :name="question.id_question + ''"
-          :value="answer.id_answer"
-        />
-      </VRadioButton>
+        :possible_answers="question.arrayanswer"
+        :id_question="question.id_question"
+      />
 
       <VMultipleOptionsValueSetted
-        class="answer"
         v-else-if="question.fk_id_type_question == 5"
         :possible_answers="question.arrayanswer"
         :id_question="question.id_question"

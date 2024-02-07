@@ -12,7 +12,7 @@ answers[`${props.id_question}`] = {};
 </script>
 
 <template>
-    <div v-for="answer in props.possible_answers" :key="answer.id_answer">
+    <div class="answer" v-for="answer in props.possible_answers" :key="answer.id_answer">
         <label for="">
             {{ answer.text }}
             <InputNumber v-model="answers[`${props.id_question}`][`${answer.id_answer}`]" input-id="integeronly" :use-grouping="false"/>
