@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import VGeneral from "@/layouts/general/VGeneral.vue";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import VTestCard from "./components/VTestCard.vue";
 import "swiper/css";
@@ -25,6 +24,7 @@ const pagination = {
   
     <h2 class="page-title">Seleccione un test</h2>
     <Swiper
+      v-if="!loading"
       :spaceBetween="30"
       :slidesPerView="1"
       :loop="true"
@@ -33,7 +33,7 @@ const pagination = {
       :modules="modules"
       :breakpoints="{ 768: { slidesPerView: 2 }, 1024: { slidesPerView: 3 } }"
     >
-      <swiper-slide class="swiper-slide" v-if="!loading" v-for="test in result" :key="test.id">
+      <swiper-slide class="swiper-slide" v-for="test in result" :key="test.id">
         <VTestCard
           :id="test.id"
           :title="test.name"
@@ -41,9 +41,8 @@ const pagination = {
           :duration="test.durationTime"
         />
       </swiper-slide>
-      <h1 v-else>Loading</h1>
     </Swiper>
-  
+    <h1 v-else>Loading</h1>
 </template>
 <style>
 .swiper {
