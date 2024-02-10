@@ -84,7 +84,8 @@ window.scrollTo(0, 0);
   border-radius: 1.5rem;
   overflow: hidden;
   color: white;
-  box-shadow: 0 0 0.5rem 0.5rem rgba(0, 0, 0, 0.3);
+  box-shadow: var(--shadow);
+  animation: .5s fade-in;
 }
 .login__input {
   position: relative;
@@ -117,6 +118,7 @@ window.scrollTo(0, 0);
   color: black;
   user-select: none;
   pointer-events: none;
+  animation: 1s slide-in;
 }
 .login__input label img {
   transition: all ease 0.2s;
@@ -151,6 +153,7 @@ window.scrollTo(0, 0);
 }
 .login h2 {
   font-size: 2rem;
+  animation: 1s slide-in;
 }
 
 .screen__background {

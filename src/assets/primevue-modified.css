@@ -1,3 +1,7 @@
+.p-component  *{
+  outline: none;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
 .p-radiobutton,
 .p-radiobutton-box {
   width: 2rem;
@@ -23,8 +27,7 @@
   color: gray;
 }
 .p-steps-title {
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  color: gray;
+    color: gray;
   font-size: 1.5rem;
   display: none;
 }
@@ -35,13 +38,15 @@
   background-color: black;
   color: white;
 }
+.p-scrollpanel{
+  height: 42rem;
+}
 .p-scrollpanel .p-scrollpanel-bar {
   transition: all ease 0.2s;
   background-color: black;
 }
 
 .p-tooltip .p-tooltip-text{
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     text-align: center;
     color: black;
     background-color: white;
@@ -59,5 +64,8 @@
   }
   .p-steps-title {
     display: block;
+  }
+  .p-scrollpanel{
+    height: 43rem;
   }
 }

@@ -44,6 +44,7 @@ const executeTest = () => {
   margin: 0 auto;
   transition: all ease 0.2s;
   overflow: hidden;
+  animation: .3s scale;
 }
 
 .test-card:hover {

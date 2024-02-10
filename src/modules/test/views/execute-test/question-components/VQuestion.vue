@@ -6,12 +6,14 @@ const props = defineProps({
 });
 </script>
 <template>
-  <div class="question" :id="props.id_question">
-    <h4 class="question__title">{{ props.index + `-` + props.title }}</h4>
-    <div class="question__content">
-      <slot></slot>
+  <Transition name="fade">
+    <div class="question" :id="props.id_question">
+      <h4 class="question__title">{{ props.index + `-` + props.title }}</h4>
+      <div class="question__content">
+        <slot></slot>
+      </div>
     </div>
-  </div>
+  </Transition>
 </template>
 <style>
 .question {

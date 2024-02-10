@@ -26,6 +26,3 @@ app.use(createPinia());
 app.mount('#app')
 app.directive('tooltip', Tooltip);
 
-/*app.use(PrimeVue, {
-    unstyled: true
-});*/

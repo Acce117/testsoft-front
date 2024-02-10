@@ -60,6 +60,7 @@ button {
   box-shadow: var(--shadow);
   user-select: none;
   cursor: pointer;
+  animation: .3s scale;
 }
 button img{
   width: 2rem;
@@ -102,10 +103,12 @@ button:active {
 }
 .page-title, .page-subtitle{
     text-align: center;
+    animation: .8s fade-in;
 }
 .page-title{
   margin-top: 6rem;
   font-size: 2rem;
+  
 }
 .page-subtitle{
   font-size: 1.5rem;

@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import VNavbar from "@/components/navbar/VNavbar.vue";
 window.scrollTo(0,0)
+import {ref, watch} from 'vue'
+const width = ref(window.innerWidth)
+
 </script>
 
 <template>
@@ -30,6 +33,7 @@ window.scrollTo(0,0)
   border-radius: 1.5rem;
   box-shadow: 0 0 0.5rem 0.5rem rgba(0, 0, 0, 0.3);
   margin: .5rem 0;
+  animation: 1s fade-in;
 }
 .background__shape{
   background-color: black;

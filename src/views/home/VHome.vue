@@ -16,7 +16,6 @@
 
 <script setup lang="ts">
 import VPresentation from "./components/VPresentation.vue";
-import VGeneral from '@/layouts/general/VGeneral.vue'
 </script>
 
 <style>
@@ -35,6 +34,7 @@ import VGeneral from '@/layouts/general/VGeneral.vue'
   text-align: center;
   z-index: 2;
   margin-top: 10rem;
+  animation: .5s scale;
 }
 .home__left button {
   margin-top: 2rem;

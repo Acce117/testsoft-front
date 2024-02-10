@@ -21,7 +21,7 @@ const validatedTestFirstTime = inject("validatedTestFirstTime")
 </script>
 @vue:before-mount="answers[`${question.id_question}`]={}"
 <template>
-  <ScrollPanel style="width: 100%; height: 46rem">
+  <ScrollPanel style="width: 100%;">
     <VQuestion
       v-for="(question, index) in props.serie?.arrayquestion"
       :id_question="question.id_question"

@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import VTestSerie from "./VTestSerie.vue";
-import { useRouter  } from "vue-router";
+import { useRouter } from "vue-router";
 import Dialog from "primevue/dialog";
 import Steps from "primevue/steps";
-import { provide, reactive, ref , watch} from "vue";
+import { provide, reactive, ref, watch } from "vue";
 import { getTest } from "@/modules/test/test";
 import { Test } from "../../classes/test-class";
 import { isTestValid } from "@/common/utils/validateAnswers";
@@ -11,14 +11,21 @@ import { isTestValid } from "@/common/utils/validateAnswers";
 const router = useRouter();
 const serieIndex = ref(0);
 
-const { result, loading, questions } = getTest(
+const { result, loading } = getTest(
   router.currentRoute.value.params.id_test as string
 );
-let timeCountdown:number 
-watch(result,(newValue)=>{
-    timeCountdown = newValue.time_duration* 60 * 1000;
-})
-if (result.value) timeCountdown = result.value.time_duration;
+let timeCountdown: number;
+let questions = Array()
+  
+watch(result, (newValue) => {
+  timeCountdown = newValue.time_duration * 60 * 1000;
+  newValue.arrayserie.forEach((serie) => {
+    serie.arrayquestion.forEach((question) => {
+      questions.push(question);
+        });
+  });
+});
+
 const saveTestVisible = ref(false);
 const errorVisible = ref(false);
 const testEndedVisible = ref(false);
@@ -29,7 +36,7 @@ const validatedTestFirstTime = ref(false);
 provide("validatedTestFirstTime", validatedTestFirstTime);
 
 const endTest = () => {
-  if (isTestValid("2", test.answers, questions.value)) {
+  if (isTestValid("2", test.answers, questions)) {
     test.sendTest();
   } else {
     errorVisible.value = true;
@@ -58,7 +65,7 @@ let timeOutId: number;
 const testEnded = () => {
   if (firtsTimeEnd) {
     testEndedVisible.value = true;
-    timeCountdown = 5*60 * 1000;
+    timeCountdown = 5 * 60 * 1000;
     firtsTimeEnd = false;
   } else {
     timeOutId = setTimeout(() => {
@@ -88,7 +95,7 @@ provide<{ [key: string]: any }>("answers", test.answers);
     <div class="test__buttons">
       <button
         class="black-button"
-        v-if="serieIndex > 0"
+        v-if="serieIndex > 0 && result.navigable == 1"
         @click="prevSerie()"
         v-tooltip.bottom="'Serie Anterior'"
         placeholder="Bottom"
@@ -128,13 +135,13 @@ provide<{ [key: string]: any }>("answers", test.answers);
     <Steps
       :model="getSeriesNames()"
       v-model:activeStep="serieIndex"
-      :readonly="false"
+      :readonly="result.navigable != 1"
     />
 
     <div class="test">
       <div class="test__timer">
         <vue-countdown
-          :time="timeCountdown "
+          :time="timeCountdown"
           v-slot="{ minutes, seconds }"
           @end="testEnded()"
         >

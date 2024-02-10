@@ -5,20 +5,11 @@ import { userStore } from "../security/store/user-store";
 function testRequest(queryParams: Object, url: string) {
     let result = ref();
     let loading = ref(true);
-    let questions = ref(Array())
 
     sendRequest(url, queryParams)
         .then(res => {
             loading.value = false;
             result.value = res.data
-            //THIS IS SOME BULLSHIT THAT I HAVE TO REFACTOR
-            result.value.arrayserie.forEach((serie) => {
-                serie.arrayquestion.forEach((question) => {
-                    questions.value.push(question)
-                })
-                
-            })
-            
         }).catch(err => {
             console.log(err);
             loading.value = false;
@@ -27,7 +18,6 @@ function testRequest(queryParams: Object, url: string) {
     return {
         result,
         loading,
-        questions
     };
 }
 
