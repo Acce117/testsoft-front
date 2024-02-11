@@ -81,7 +81,7 @@ const testEnded2nd = () => {
 
 const test = reactive(new Test());
 
-provide<{ [key: string]: any }>("answers", test.answers);
+provide<Test>("test", test);
 </script>
 <template>
   <!--TODO some kind of cool loading message-->
