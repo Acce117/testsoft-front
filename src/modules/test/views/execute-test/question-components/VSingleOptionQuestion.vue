@@ -1,12 +1,16 @@
 <script setup lang="ts">
-import RadioButton from "primevue/radiobutton";
 import { inject } from "vue";
+
+import RadioButton from "primevue/radiobutton";
+
+import type { Test } from "@/modules/test/classes/test-class";
+
 const props = defineProps({
   id_question: String,
   possible_answers: Array<{ text: string; id_answer: string }>,
 });
 
-const answers = inject<{ [key: string]: any }>("answers") || {};
+const test = inject<Test>("test");
 </script>
 <template>
   <div
@@ -16,7 +20,7 @@ const answers = inject<{ [key: string]: any }>("answers") || {};
   >
     <label :for="answer.id_answer">
       <RadioButton
-        v-model="answers[`${props.id_question}`]"
+        v-model="test.answers[`${props.id_question}`]"
         :inputId="answer.id_answer"
         :name="props.id_question + ''"
         :value="answer.id_answer"

@@ -80,7 +80,7 @@ const testEnded2nd = () => {
 
 const test = reactive(new Test());
 
-provide<{ [key: string]: any }>("answers", test.answers);
+provide<Test>("test", test);
 </script>
 <template>
   <div v-if="!loading">

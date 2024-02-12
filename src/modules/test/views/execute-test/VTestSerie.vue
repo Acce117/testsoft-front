@@ -7,16 +7,15 @@ import VQuestion from "./question-components/VQuestion.vue";
 
 import VMultipleOptionsValueSetted from "./question-components/VMultipleOptionsValueSetted.vue";
 import VSingleOptionQuestion from "./question-components/VSingleOptionQuestion.vue";
-import { validateComponent } from "@/common/utils/validateAnswers";
+import type { Test } from "../../classes/test-class";
 
 
 const props = defineProps({
   serie: Object,
 });
 
-const answers: { [key: string]: any } = inject("answers") || {};
 const validatedTestFirstTime = inject("validatedTestFirstTime")
-
+const test = inject<Test>('test');
 //
 </script>
 @vue:before-mount="answers[`${question.id_question}`]={}"
@@ -27,7 +26,7 @@ const validatedTestFirstTime = inject("validatedTestFirstTime")
       :id_question="question.id_question"
       :index="index + 1"
       :title="question.statement"
-      :class="{'question-not-responded': validatedTestFirstTime? !validateComponent(question.fk_id_type_question, question.id_question, answers):false}"
+      :class="{'question-not-responded': validatedTestFirstTime? !test?.validateComponent(question.fk_id_type_question, question.id_question):false}"
   >
       <VSingleOptionQuestion
         v-if="question.fk_id_type_question == 2"
