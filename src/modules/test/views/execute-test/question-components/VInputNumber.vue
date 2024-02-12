@@ -31,29 +31,3 @@ watch(
      :use-grouping="false">
     </InputNumber>
 </template>
-<style>
-.p-inputwrapper{
-    display: flex;
-    align-items: center;
-    
-    border-radius: 1.5rem;
-    transition: all ease .2s;
-}
-
-.p-inputnumber-input {
-    text-align: center;
-    font-size: 1.8rem;
-    width: 3rem;
-    border:none;
-}
-.p-button.p-button-icon-only{
-    width: 2rem;
-    height: 1.5rem;
-    background-color: transparent;
-    box-shadow: none;
-}
-.p-disabled, .p-component:disabled{
-    opacity: 0.3;
-}
-
-</style>
