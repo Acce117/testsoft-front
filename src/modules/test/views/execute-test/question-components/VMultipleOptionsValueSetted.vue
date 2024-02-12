@@ -1,24 +1,21 @@
 <script setup lang="ts">
 import type { Test } from '@/modules/test/classes/test-class';
-import InputNumber from 'primevue/inputnumber';
 import { computed, inject, ref } from 'vue';
 import VInputNumber from './VInputNumber.vue';
 
 const props = defineProps({
     id_question: String,
-    possible_answers: Array<{text: string, id_answer: string}>
+    possible_answers: Array<{text: string, id_answer: string}>,
+    maxPoints: Number
 });
 
 const test = inject<Test>('test');
 test.answers[`${props.id_question}`] = {};
 
-//TODO verify from where this value comes
-const maxPoints = 10
-
 //TODO validate asignation
 const distributedPoints = ref(0);
 
-const points = ref(maxPoints);
+const points = ref(props.maxPoints);
 
 const actualPoints = computed(()=>points.value - distributedPoints.value);
 

@@ -18,7 +18,7 @@ const validatedTestFirstTime = inject("validatedTestFirstTime")
 const test = inject<Test>('test');
 //
 </script>
-@vue:before-mount="answers[`${question.id_question}`]={}"
+
 <template>
   <ScrollPanel style="width: 100%;">
     <VQuestion
@@ -39,6 +39,7 @@ const test = inject<Test>('test');
         v-else-if="question.fk_id_type_question == 5"
         :possible_answers="question.arrayanswer"
         :id_question="question.id_question"
+        :maxPoints="question.arrayquestion_top_value[0]?.top_value"
       />
     </VQuestion>
   </ScrollPanel>
