@@ -34,6 +34,7 @@ const props = defineProps({
   color: white;
 }
 .question__content {
+  position: relative;
   display: flex;
   margin: 1rem;
   flex-direction: column;
@@ -45,6 +46,12 @@ const props = defineProps({
 }
 .answer {
   font-size: 1.2rem;
+  transition: all ease 0.2s;
+  border-radius: 1.5rem;
+  padding: 0.4rem;
+}
+.answer:has(input:not(:checked)):hover {
+  box-shadow: 0 0 0.5rem 0 black;
 }
 @media (min-width: 480px) {
   .question {

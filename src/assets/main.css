@@ -102,10 +102,12 @@ button:active {
   box-shadow: var(--shadow);
 }
 .page-title, .page-subtitle{
+  color: black;
     text-align: center;
     animation: .8s fade-in;
 }
 .page-title{
+  
   margin-top: 6rem;
   font-size: 2rem;
   

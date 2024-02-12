@@ -3,6 +3,7 @@ import VTestSerie from "./VTestSerie.vue";
 import { useRouter } from "vue-router";
 import Dialog from "primevue/dialog";
 import Steps from "primevue/steps";
+import Sidebar from "primevue/sidebar";
 import { provide, reactive, ref, watch } from "vue";
 import { getTest } from "@/modules/test/test";
 import { Test } from "../../classes/test-class";
@@ -14,17 +15,18 @@ const { result, loading } = getTest(
   router.currentRoute.value.params.id_test as string
 );
 let timeCountdown: number;
-let questions = Array()
-  
+let questions = Array();
+
 watch(result, (newValue) => {
   timeCountdown = newValue.time_duration * 60 * 1000;
   newValue.arrayserie.forEach((serie) => {
     serie.arrayquestion.forEach((question) => {
       questions.push(question);
-        });
+    });
   });
 });
-
+const topBarVisible = ref(false);
+const exitTestVisible = ref(false);
 const saveTestVisible = ref(false);
 const errorVisible = ref(false);
 const testEndedVisible = ref(false);
@@ -41,6 +43,7 @@ const endTest = () => {
     errorVisible.value = true;
     validatedTestFirstTime.value = true;
   }
+  topBarVisible.value = false
 };
 
 const nextSerie = () => {
@@ -84,59 +87,80 @@ provide<Test>("test", test);
 </script>
 <template>
   <div v-if="!loading">
-    <h2 class="page-title">
-      {{ result.name }} : {{ result.arrayserie[serieIndex].name }}
-    </h2>
-    <h3 class="page-subtitle">
-      {{ result.arrayserie[serieIndex].description }}
-    </h3>
-    <div class="test__buttons">
-      <button
-        class="black-button"
-        v-if="serieIndex > 0 && result.navigable == 1"
-        @click="prevSerie()"
-        v-tooltip.bottom="'Serie Anterior'"
-        placeholder="Bottom"
-      >
-        <img
-          src="/img/arrow.svg"
-          alt="serie anterior"
-          style="transform: rotate(180deg)"
-        />
-      </button>
-      <button
-        class="black-button"
-        @click="endTest()"
-        v-tooltip.bottom="'Terminar Test'"
-        placeholder="Bottom"
-      >
-        <img src="/img/test_completed.svg" alt="terminar test" />
-      </button>
-      <button
-        class="black-button"
-        @click="infoVisible = true"
-        v-tooltip.bottom="'Información'"
-        placeholder="Bottom"
-      >
-        <img src="/img/info.svg" alt="info" />
-      </button>
-      <button
-        v-if="serieIndex < result.arrayserie.length - 1"
-        class="black-button"
-        @click="nextSerie()"
-        v-tooltip.bottom="'Siguiente Serie'"
-        placeholder="Bottom"
-      >
-        <img src="/img/arrow.svg" alt="siguiente serie" />
-      </button>
-    </div>
-    <Steps
-      :model="getSeriesNames()"
-      v-model:activeStep="serieIndex"
-      :readonly="result.navigable != 1"
-    />
+    <Sidebar v-model:visible="topBarVisible" position="top">
+      <h2 class="page-title">
+        {{ result.name }} : {{ result.arrayserie[serieIndex].name }}
+      </h2>
+      <h3 class="page-subtitle">
+        {{ result.arrayserie[serieIndex].description }}
+      </h3>
+      
+      <div class="test__buttons">
+        <button
+          class="black-button"
+          @click="endTest()"
+          v-tooltip.bottom="'Terminar Test'"
+          placeholder="Bottom"
+        >
+          <img src="/img/test_completed.svg" alt="terminar test" />
+        </button>
+        <button
+          class="black-button"
+          @click="infoVisible = true"
+          v-tooltip.bottom="'Información'"
+          placeholder="Bottom"
+        >
+          <img src="/img/info.svg" alt="info" />
+        </button>
+        <button
+          class="black-button"
+          @click="exitTestVisible = true"
+          v-tooltip.bottom="'Salir'"
+          placeholder="Bottom"
+        >
+          <img src="/img/cancel.svg" alt="salir" />
+        </button>
+      </div>
+    </Sidebar>
 
     <div class="test">
+      <button
+        class="topbar-button"
+        @click="topBarVisible = true"
+        v-tooltip.bottom="'Opciones'"
+        placeholder="Bottom"
+      >
+        <img src="/img/arrow.svg" alt="opciones" />
+      </button>
+      <div class="test__buttons">
+        <button
+          class="black-button"
+          :class="{'p-disabled':!(serieIndex > 0 && result.navigable == 1)}"
+          @click="prevSerie()"
+          v-tooltip.bottom="'Serie Anterior'"
+          placeholder="Bottom"
+        >
+          <img
+            src="/img/arrow.svg"
+            alt="serie anterior"
+            style="transform: rotate(180deg)"
+          />
+        </button>
+        <Steps
+          :model="getSeriesNames()"
+          v-model:activeStep="serieIndex"
+          :readonly="result.navigable != 1"
+        />
+        <button
+          :class="{'p-disabled':!(serieIndex < result.arrayserie.length - 1)}"
+          class="black-button"
+          @click="nextSerie()"
+          v-tooltip.bottom="'Siguiente Serie'"
+          placeholder="Bottom"
+        >
+          <img src="/img/arrow.svg" alt="siguiente serie" />
+        </button>
+      </div>
       <div class="test__timer">
         <vue-countdown
           :time="timeCountdown"
@@ -149,10 +173,12 @@ provide<Test>("test", test);
         </vue-countdown>
         <img src="/img/timer.svg" alt="tiempo restante" />
       </div>
+
       <VTestSerie
         :serie="result.arrayserie[serieIndex]"
         :answers="test.answers"
       />
+      
     </div>
     <Dialog
       v-model:visible="saveTestVisible"
@@ -164,6 +190,20 @@ provide<Test>("test", test);
       <div class="modal__buttons">
         <button class="black-button" @click="router.push('/')">Aceptar</button>
         <button class="black-button" @click="saveTestVisible = false">
+          Cancelar
+        </button>
+      </div>
+    </Dialog>
+    <Dialog
+      v-model:visible="exitTestVisible"
+      modal
+      header="Test"
+      class="modal box-shadow-box"
+      ><span class="modal__background-shape"></span>
+      <span class="modal__message">Desea salir del test?</span>
+      <div class="modal__buttons">
+        <button class="black-button" @click="router.push('/')">Aceptar</button>
+        <button class="black-button" @click="exitTestVisible = false">
           Cancelar
         </button>
       </div>
@@ -230,7 +270,22 @@ provide<Test>("test", test);
 
 <style>
 .test {
+  margin-top: 6rem;
   position: relative;
+}
+.topbar-button{
+  position: absolute;
+  z-index: 1000;
+  top: -4rem;
+  margin: 0 50% ;
+  box-shadow: none;
+  background-color: transparent;
+}
+.topbar-button img{
+  transform: rotate(90deg);
+}
+.p-sidebar {
+  height: 30rem;
 }
 
 .test__buttons {
@@ -272,7 +327,10 @@ provide<Test>("test", test);
 @media (min-width: 480px) {
 }
 
-@media (min-width: 768px) {
+@media (min-width: 1024px) {
+  .topbar-button img{
+    filter: invert();
+  }
 }
 </style>
 @/common/utils/validateAnswers

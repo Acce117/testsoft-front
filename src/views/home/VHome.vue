@@ -126,6 +126,7 @@ import VPresentation from "./components/VPresentation.vue";
   .home__left {
     width: 40rem;
     margin-top: 0;
+    margin-left: 1rem;
   }
   .home__right {
     width: 50rem;

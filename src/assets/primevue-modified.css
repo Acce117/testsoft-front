@@ -1,4 +1,4 @@
-.p-component  *{
+.p-component * {
   outline: none;
 }
 .p-radiobutton,
@@ -15,9 +15,7 @@
   transition-duration: 0.2s;
   background-color: black;
 }
-.p-steps{
-    margin-bottom: 1rem ;
-}
+
 .p-steps-number {
   width: 2.5rem;
   height: 2.5rem;
@@ -26,7 +24,7 @@
   color: gray;
 }
 .p-steps-title {
-    color: gray;
+  color: gray;
   font-size: 1.5rem;
   display: none;
 }
@@ -37,23 +35,22 @@
   background-color: black;
   color: white;
 }
-.p-scrollpanel{
-  height: 42rem;
+.p-scrollpanel {
+  height: 57rem;
 }
 .p-scrollpanel .p-scrollpanel-bar {
   transition: all ease 0.2s;
   background-color: black;
 }
 
-.p-tooltip .p-tooltip-text{
-    text-align: center;
-    color: black;
-    background-color: white;
-    box-shadow: var(--shadow);
-    font-size: 1.5rem;
-    padding: .5rem;
-    border-radius: 1.5rem;
-    
+.p-tooltip .p-tooltip-text {
+  text-align: center;
+  color: black;
+  background-color: white;
+  box-shadow: var(--shadow);
+  font-size: 1.5rem;
+  padding: 0.5rem;
+  border-radius: 1.5rem;
 }
 .p-menubar {
   width: 100%;
@@ -139,10 +136,9 @@
   overflow: hidden;
   animation: scale 0.3s ease-in-out;
 }
-.p-menubar:not(.p-menubar-mobile)
-  .p-menubar-root-list{
-    gap: 2rem;
-  }
+.p-menubar:not(.p-menubar-mobile) .p-menubar-root-list {
+  gap: 2rem;
+}
 .p-menubar:not(.p-menubar-mobile)
   .p-menubar-root-list
   > .p-menuitem
@@ -193,9 +189,15 @@
 .p-menubar .p-menuitem.p-highlight > .p-menuitem-content:hover {
   background: #e2e8f0;
 }
- .p-submenu-icon {
-  transition: all ease .1s;
+.p-submenu-icon {
+  transition: all ease 0.1s;
   transform: rotate(-180deg);
+}
+.p-sidebar-header{
+  justify-content: end;
+}
+.p-sidebar-close{
+  box-shadow: none;
 }
 
 @media (min-width: 1024px) {
@@ -207,7 +209,7 @@
   .p-steps-title {
     display: block;
   }
-  .p-scrollpanel{
-    height: 43rem;
+  .p-scrollpanel {
+    height: 54rem;
   }
 }
