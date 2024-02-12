@@ -219,8 +219,9 @@
 .p-inputnumber-input {
   text-align: center;
   font-size: 1.8rem;
-  width: 3rem;
-  border:none;
+  width: 5rem;
+  border-radius: 1.5rem;
+
 }
 .p-button.p-button-icon-only{
   width: 2rem;
