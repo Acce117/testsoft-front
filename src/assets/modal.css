@@ -63,6 +63,7 @@
   align-items: center;
   justify-content: center;
   gap: 30%;
+  margin-bottom: 1rem;
 }
 @media (min-width:768px) {
     .modal {

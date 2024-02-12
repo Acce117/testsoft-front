@@ -22,7 +22,7 @@ const pagination = {
 </script>
 <template>
   
-    <h2 class="page-title">Seleccione un test</h2>
+    <h2 v-if="!loading" class="page-title">Seleccione un test</h2>
     <Swiper
       v-if="!loading"
       :spaceBetween="30"
@@ -42,9 +42,10 @@ const pagination = {
         />
       </swiper-slide>
     </Swiper>
-    <h1 v-else>Loading</h1>
+    <VLoading v-else/>
 </template>
 <style>
+
 .swiper {
   width: 100%;
   display: flex;

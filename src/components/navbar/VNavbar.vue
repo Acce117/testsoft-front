@@ -56,56 +56,7 @@ const goHome = () => {
   left: 0;
   list-style: none;
 }
-.p-menubar {
-  width: 100%;
-  font-size: 2rem;
-  background-color: transparent;
-  border: none;
-  justify-content: end;
-  
-}
-.p-menubar.p-menubar-mobile .p-menubar-button {
-  color: white;
-  height: 3rem;
-  width: 3rem;
-  transition: all ease 0.3s;
-}
-.p-menubar.p-menubar-mobile .p-menubar-button:hover {
-  background-color: transparent;
-  scale: 1.2;
-}
-.p-menubar.p-menubar-mobile .p-menubar-button:active {
-  opacity: 0.5;
-  scale: 1;
-}
-.p-menubar-root-list {
-  border-radius: 1.5rem;
-  animation: scale 0.5s;
-  background-color: white;
 
-}
-.p-menuitem-link {
-  padding: 1rem;
-}
-.p-submenu-list {
-  border-radius: 1.5rem;}
-
-  
-.p-menuitem-text,
-.p-submenu-icon {
-  color: black;
-}
-.p-menuitem-content {
-  transition: all ease 0.3s;
-  border-radius: 1.5rem;
-}
-.p-menubar .p-menuitem.p-highlight > .p-menuitem-content {
-  background-color: black;
-}
-.p-menubar .p-menuitem.p-highlight > .p-menuitem-content .p-menuitem-text,
-.p-menubar .p-menuitem.p-highlight > .p-menuitem-content .p-submenu-icon {
-  color: white;
-}
 .navbar__home {
   margin-top: 0.5rem;
   transition: all ease 0.2s;

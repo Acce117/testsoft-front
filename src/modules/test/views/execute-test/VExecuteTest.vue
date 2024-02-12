@@ -7,7 +7,6 @@ import { provide, reactive, ref, watch } from "vue";
 import { getTest } from "@/modules/test/test";
 import { Test } from "../../classes/test-class";
 import { isTestValid } from "@/common/utils/validateAnswers";
-
 const router = useRouter();
 const serieIndex = ref(0);
 
@@ -84,7 +83,6 @@ const test = reactive(new Test());
 provide<{ [key: string]: any }>("answers", test.answers);
 </script>
 <template>
-  <!--TODO some kind of cool loading message-->
   <div v-if="!loading">
     <h2 class="page-title">
       {{ result.name }} : {{ result.arrayserie[serieIndex].name }}
@@ -227,6 +225,7 @@ provide<{ [key: string]: any }>("answers", test.answers);
       </div>
     </Dialog>
   </div>
+  <VLoading v-else />
 </template>
 
 <style>

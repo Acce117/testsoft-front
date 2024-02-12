@@ -38,3 +38,13 @@
     transform: scale(1);
   }
 }
+@keyframes border-slide {
+  from {
+    opacity: 1;
+    margin: -100%;
+  }
+  to {
+    opacity: 1;
+    margin: 100%;
+  }
+}
