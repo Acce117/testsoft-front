@@ -17,13 +17,14 @@ const props = defineProps({
 </template>
 <style>
 .question {
-  width: 25rem;
+  width: 80%;
   display: flex;
   flex-direction: column;
   border-radius: 1.5rem;
   overflow: hidden;
   box-shadow: var(--shadow);
   margin: 2rem auto;
+  animation: fade-in 1s;
 }
 
 .question__title {
@@ -53,25 +54,13 @@ const props = defineProps({
 .answer:has(input:not(:checked)):hover {
   box-shadow: 0 0 0.5rem 0 black;
 }
-@media (min-width: 480px) {
-  .question {
-    width: 40rem;
-  }
-}
+
 @media (min-width: 768px) {
-  .question {
-    width: 70rem;
-  }
   .question__title {
     font-size: 1.5rem;
   }
   .answer {
     font-size: 1.5rem;
-  }
-}
-@media (min-width: 1024px) {
-  .question {
-    width: 80%;
   }
 }
 </style>

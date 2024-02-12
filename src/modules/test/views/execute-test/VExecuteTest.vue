@@ -43,7 +43,7 @@ const endTest = () => {
     errorVisible.value = true;
     validatedTestFirstTime.value = true;
   }
-  topBarVisible.value = false
+  topBarVisible.value = false;
 };
 
 const nextSerie = () => {
@@ -87,14 +87,14 @@ provide<Test>("test", test);
 </script>
 <template>
   <div v-if="!loading">
-    <Sidebar v-model:visible="topBarVisible" position="top">
+    <div class="test__header">
       <h2 class="page-title">
         {{ result.name }} : {{ result.arrayserie[serieIndex].name }}
       </h2>
       <h3 class="page-subtitle">
         {{ result.arrayserie[serieIndex].description }}
       </h3>
-      
+
       <div class="test__buttons">
         <button
           class="black-button"
@@ -121,21 +121,10 @@ provide<Test>("test", test);
           <img src="/img/cancel.svg" alt="salir" />
         </button>
       </div>
-    </Sidebar>
-
-    <div class="test">
-      <button
-        class="topbar-button"
-        @click="topBarVisible = true"
-        v-tooltip.bottom="'Opciones'"
-        placeholder="Bottom"
-      >
-        <img src="/img/arrow.svg" alt="opciones" />
-      </button>
       <div class="test__buttons">
         <button
           class="black-button"
-          :class="{'p-disabled':!(serieIndex > 0 && result.navigable == 1)}"
+          :class="{ 'p-disabled': !(serieIndex > 0 && result.navigable == 1) }"
           @click="prevSerie()"
           v-tooltip.bottom="'Serie Anterior'"
           placeholder="Bottom"
@@ -152,7 +141,9 @@ provide<Test>("test", test);
           :readonly="result.navigable != 1"
         />
         <button
-          :class="{'p-disabled':!(serieIndex < result.arrayserie.length - 1)}"
+          :class="{
+            'p-disabled': !(serieIndex < result.arrayserie.length - 1),
+          }"
           class="black-button"
           @click="nextSerie()"
           v-tooltip.bottom="'Siguiente Serie'"
@@ -173,12 +164,13 @@ provide<Test>("test", test);
         </vue-countdown>
         <img src="/img/timer.svg" alt="tiempo restante" />
       </div>
+    </div>
 
+    <div class="test">
       <VTestSerie
         :serie="result.arrayserie[serieIndex]"
         :answers="test.answers"
       />
-      
     </div>
     <Dialog
       v-model:visible="saveTestVisible"
@@ -269,23 +261,25 @@ provide<Test>("test", test);
 </template>
 
 <style>
+.navbar {
+  background-color: white;
+}
 .test {
-  margin-top: 6rem;
   position: relative;
+  margin-top: 26rem;
 }
-.topbar-button{
+.test__header {
   position: absolute;
-  z-index: 1000;
-  top: -4rem;
-  margin: 0 50% ;
-  box-shadow: none;
-  background-color: transparent;
-}
-.topbar-button img{
-  transform: rotate(90deg);
-}
-.p-sidebar {
-  height: 30rem;
+  background-color: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(1.2rem);
+  -webkit-backdrop-filter: blur(1.2rem);
+  z-index: 1;
+  width: 100%;
+  top: 0;
+  height: 25rem;
+  overflow: scroll;
+  box-shadow: var(--shadow);
+  animation: slide-in-from-top .5s ease;
 }
 
 .test__buttons {
@@ -308,7 +302,7 @@ provide<Test>("test", test);
   font-size: 2rem;
   width: 11rem;
   height: 6rem;
-  top: 6rem;
+  top: 13rem;
   left: -7rem;
   transition: all ease 0.5s;
   z-index: 2;
@@ -328,8 +322,11 @@ provide<Test>("test", test);
 }
 
 @media (min-width: 1024px) {
-  .topbar-button img{
-    filter: invert();
+  .test__header {
+    height: 27rem;
+  }
+  .test {
+    margin-top: 28rem;
   }
 }
 </style>

@@ -20,7 +20,7 @@ const test = inject<Test>('test');
 </script>
 @vue:before-mount="answers[`${question.id_question}`]={}"
 <template>
-  <ScrollPanel style="width: 100%;">
+  <div>
     <VQuestion
       v-for="(question, index) in props.serie?.arrayquestion"
       :id_question="question.id_question"
@@ -41,6 +41,6 @@ const test = inject<Test>('test');
         :id_question="question.id_question"
       />
     </VQuestion>
-  </ScrollPanel>
+  </div>
 </template>
 <style></style>

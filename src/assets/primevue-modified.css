@@ -35,6 +35,9 @@
   background-color: black;
   color: white;
 }
+.p-steps .p-steps-item .p-menuitem-link{
+  background-color: transparent;
+}
 .p-scrollpanel {
   height: 57rem;
 }
@@ -93,7 +96,9 @@
   transition: all ease 0.3s;
   border-radius: 1.5rem;
 }
-
+.p-menubar{
+  z-index: 5;
+}
 .p-menubar .p-menuitem.p-highlight > .p-menuitem-content .p-menuitem-text,
 .p-menubar .p-menuitem.p-highlight > .p-menuitem-content .p-submenu-icon {
   transform: scale(1);
@@ -126,15 +131,19 @@
 }
 .p-menuitem {
   position: relative;
-  z-index: 3;
+  z-index: 6;
 }
-
+.p-menubar-root-list{
+  z-index: 6;
+}
 .p-menubar-mobile .p-menubar-root-list .p-submenu-list {
   position: relative;
+  z-index: 6;
 }
 .p-submenu-list {
   overflow: hidden;
   animation: scale 0.3s ease-in-out;
+  z-index: 1000;
 }
 .p-menubar:not(.p-menubar-mobile) .p-menubar-root-list {
   gap: 2rem;

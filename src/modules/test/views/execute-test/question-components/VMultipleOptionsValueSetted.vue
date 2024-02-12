@@ -76,17 +76,18 @@ const updateInput = (value: number, oldValue: number) => {
   font-size: 1.5rem;
 }
 .actual-points-fixed {
-  font-size: 2rem;
+  font-size: 1.5rem;
   padding: 1rem;
   position: fixed;
-  width: 25rem;
-  height: 5rem;
-  top: 50%;
-  left: 50%;
-  margin-left: -12.5rem;
-  margin-top: -2.5rem;
+  width: 10rem;
+  top: 28rem;
+  left: 1%;
   z-index: 1000;
   user-select: none;
+  text-align: center;
+  background-color: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(1.2rem);
+  -webkit-backdrop-filter: blur(1.2rem);
 }
 @media (min-width: 768px) {
   .actual-points {

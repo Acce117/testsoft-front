@@ -1,30 +1,31 @@
-
 <template>
-    <div class="home">
-      <span class="home__background"></span>
-      <div class="home__left">
-        <h1>Testsoft</h1>
-        <h2>
-          Herramienta para la ejecución de test psicológicos y psicométricos
-        </h2>
-      </div>
-      <div class="home__right">
-        <VPresentation />
-      </div>
+  <div class="home">
+    <span class="home__background"></span>
+    <div class="home__left">
+      <h1>Testsoft</h1>
+      <h2>
+        Herramienta para la ejecución de test psicológicos y psicométricos
+      </h2>
     </div>
+    <div class="home__right">
+      <VPresentation />
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
 import VPresentation from "./components/VPresentation.vue";
 </script>
 
-<style>
+<style >
+
+
 .home {
   display: flex;
   align-items: center;
   flex-direction: column;
   position: relative;
-  height: 70rem;
+  gap: 5rem;
 }
 .home__left {
   display: flex;
@@ -33,14 +34,9 @@ import VPresentation from "./components/VPresentation.vue";
   justify-content: center;
   text-align: center;
   z-index: 2;
-  margin-top: 10rem;
-  animation: .5s scale;
+  margin-top: 6rem;
+  animation: 0.5s scale;
 }
-.home__left button {
-  margin-top: 2rem;
-  font-size: 1.5rem;
-}
-
 .home__right {
   display: flex;
   flex-direction: column;
@@ -51,18 +47,15 @@ import VPresentation from "./components/VPresentation.vue";
   z-index: 2;
 }
 .home__background {
-  transform: rotate(45deg);
   position: absolute;
-  height: 70rem;
-  width: 50rem;
-  left: 0rem;
-  top: -40rem;
+  height: 20rem;
+  width: 100vw;
+  top: 0;
   background: rgba(0, 0, 0);
-  border-radius: 20rem;
+  border-radius:  0 0 8rem 8rem;
   z-index: 2;
-  transition: all ease .2s;
+  transition: all ease 0.2s;
 }
-
 
 .home__left h1 {
   color: white;
@@ -75,33 +68,22 @@ import VPresentation from "./components/VPresentation.vue";
   font-size: 1.5rem;
 }
 @media (min-width: 480px) {
-  .home__background {
-    transform: rotate(40deg);
-    height: 90rem;
-    width: 70rem;
-    left: -2rem;
-    top: -60rem;
-    border-radius: 40rem;
+  .home {
+    gap: 2rem;
   }
   .home__left {
-    margin: 6rem 0;
+    margin: 5rem 0;
   }
   .home__left h2 {
     font-size: 1.8rem;
     width: 30rem;
   }
-  
 }
 @media (min-width: 768px) {
   .home__background {
-    transform: rotate(3deg);
-    height: 90rem;
-    width: 100rem;
-    left: -8rem;
-    top: -68rem;
-    border-radius: 25rem;
+   border-radius: 0 0 6rem  6rem;
   }
-  
+
   .home__left h1 {
     font-size: 4rem;
   }
@@ -109,19 +91,20 @@ import VPresentation from "./components/VPresentation.vue";
     font-size: 1.8rem;
     width: 50rem;
   }
-  
 }
 @media (min-width: 1024px) {
   .home__background {
     transform: rotate(60deg);
     height: 80rem;
     width: 80rem;
-    top: -10rem;
+    top: -5rem;
     left: -40rem;
     border-radius: 30rem;
   }
   .home {
     flex-direction: row;
+    height: 78rem;
+    overflow: hidden;
   }
   .home__left {
     width: 40rem;
@@ -138,6 +121,5 @@ import VPresentation from "./components/VPresentation.vue";
     font-size: 2.2rem;
     width: 100%;
   }
-
 }
 </style>
