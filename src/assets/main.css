@@ -110,7 +110,7 @@ button:active {
 .page-title{
   
   margin-top: 6rem;
-  font-size: 2rem;
+  font-size: 1.6rem;
   
 }
 .page-subtitle{
@@ -119,7 +119,7 @@ button:active {
 
 @media (min-width: 768px) {
   .page-title {
-    font-size: 3rem;
+    font-size: 2.5rem;
   }
   .page-subtitle{
     font-size: 1.8rem;

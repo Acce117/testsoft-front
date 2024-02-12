@@ -3,7 +3,6 @@ import VTestSerie from "./VTestSerie.vue";
 import { useRouter } from "vue-router";
 import Dialog from "primevue/dialog";
 import Steps from "primevue/steps";
-import Sidebar from "primevue/sidebar";
 import { provide, reactive, ref, watch } from "vue";
 import { getTest } from "@/modules/test/test";
 import { Test } from "../../classes/test-class";
@@ -86,72 +85,53 @@ const test = reactive(new Test());
 provide<Test>("test", test);
 </script>
 <template>
-  <div v-if="!loading">
+  <div class="test" v-if="!loading">
     <div class="test__header">
-      <h2 class="page-title">
-        {{ result.name }} : {{ result.arrayserie[serieIndex].name }}
-      </h2>
+      <div class="test__header__content">
+        <h2 class="page-title">
+          {{ result.name }}
+        </h2>
+
+        <div class="test__serie__navigation">
+          <button
+            class="black-button"
+            :class="{
+              'p-disabled': !(serieIndex > 0 && result.navigable == 1),
+            }"
+            @click="prevSerie()"
+            v-tooltip.bottom="'Serie Anterior'"
+            placeholder="Bottom"
+          >
+            <img
+              src="/img/arrow.svg"
+              alt="serie anterior"
+              style="transform: rotate(180deg)"
+            />
+          </button>
+          <Steps
+            :model="getSeriesNames()"
+            v-model:activeStep="serieIndex"
+            :readonly="result.navigable != 1"
+          />
+          <button
+            :class="{
+              'p-disabled': !(serieIndex < result.arrayserie.length - 1),
+            }"
+            class="black-button"
+            @click="nextSerie()"
+            v-tooltip.bottom="'Siguiente Serie'"
+            placeholder="Bottom"
+          >
+            <img src="/img/arrow.svg" alt="siguiente serie" />
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="test__content">
       <h3 class="page-subtitle">
         {{ result.arrayserie[serieIndex].description }}
       </h3>
-
-      <div class="test__buttons">
-        <button
-          class="black-button"
-          @click="endTest()"
-          v-tooltip.bottom="'Terminar Test'"
-          placeholder="Bottom"
-        >
-          <img src="/img/test_completed.svg" alt="terminar test" />
-        </button>
-        <button
-          class="black-button"
-          @click="infoVisible = true"
-          v-tooltip.bottom="'Información'"
-          placeholder="Bottom"
-        >
-          <img src="/img/info.svg" alt="info" />
-        </button>
-        <button
-          class="black-button"
-          @click="exitTestVisible = true"
-          v-tooltip.bottom="'Salir'"
-          placeholder="Bottom"
-        >
-          <img src="/img/cancel.svg" alt="salir" />
-        </button>
-      </div>
-      <div class="test__buttons">
-        <button
-          class="black-button"
-          :class="{ 'p-disabled': !(serieIndex > 0 && result.navigable == 1) }"
-          @click="prevSerie()"
-          v-tooltip.bottom="'Serie Anterior'"
-          placeholder="Bottom"
-        >
-          <img
-            src="/img/arrow.svg"
-            alt="serie anterior"
-            style="transform: rotate(180deg)"
-          />
-        </button>
-        <Steps
-          :model="getSeriesNames()"
-          v-model:activeStep="serieIndex"
-          :readonly="result.navigable != 1"
-        />
-        <button
-          :class="{
-            'p-disabled': !(serieIndex < result.arrayserie.length - 1),
-          }"
-          class="black-button"
-          @click="nextSerie()"
-          v-tooltip.bottom="'Siguiente Serie'"
-          placeholder="Bottom"
-        >
-          <img src="/img/arrow.svg" alt="siguiente serie" />
-        </button>
-      </div>
       <div class="test__timer">
         <vue-countdown
           :time="timeCountdown"
@@ -164,9 +144,32 @@ provide<Test>("test", test);
         </vue-countdown>
         <img src="/img/timer.svg" alt="tiempo restante" />
       </div>
-    </div>
-
-    <div class="test">
+      <div class="test__buttons">
+        <button
+          class="black-button"
+          @click="endTest()"
+          v-tooltip.right="'Terminar Test'"
+          placeholder="Right"
+        >
+          <img src="/img/test_completed.svg" alt="terminar test" />
+        </button>
+        <button
+          class="black-button"
+          @click="infoVisible = true"
+          v-tooltip.right="'Información'"
+          placeholder="Right"
+        >
+          <img src="/img/info.svg" alt="info" />
+        </button>
+        <button
+          class="black-button"
+          @click="exitTestVisible = true"
+          v-tooltip.right="'Cancelar Test'"
+          placeholder="Right"
+        >
+          <img src="/img/cancel.svg" alt="cancelar test" />
+        </button>
+      </div>
       <VTestSerie
         :serie="result.arrayserie[serieIndex]"
         :answers="test.answers"
@@ -264,29 +267,53 @@ provide<Test>("test", test);
 .navbar {
   background-color: white;
 }
-.test {
+.test__content {
   position: relative;
-  margin-top: 26rem;
+  margin-top: 16rem;
 }
 .test__header {
   position: absolute;
+  align-items: end;
+  
+  display: flex;
   background-color: rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(1.2rem);
   -webkit-backdrop-filter: blur(1.2rem);
   z-index: 1;
   width: 100%;
   top: 0;
-  height: 25rem;
+  height: 15rem;
   overflow: scroll;
   box-shadow: var(--shadow);
-  animation: slide-in-from-top .5s ease;
+  animation: slide-in-from-top 0.5s ease;
+}
+.test__header__content{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 9rem;
+}
+.test__header h2 {
+  width: 20rem;
+  margin: 0 0.5rem ;
 }
 
-.test__buttons {
+.test__buttons,
+.test__serie__navigation {
   display: flex;
   gap: 1rem;
   align-items: center;
   justify-content: center;
+}
+.test__serie__navigation {
+  flex: 1;
+  margin-bottom: 1rem;
+}
+.test__buttons {
+  position: fixed;
+  flex-direction: column;
+  right: 1rem;
   padding: 0.5rem;
 }
 
@@ -295,14 +322,14 @@ provide<Test>("test", test);
   border-radius: 1.5rem;
   box-shadow: var(--shadow);
   display: flex;
-  position: absolute;
+  position: fixed;
   justify-content: space-between;
   align-items: center;
   padding: 0.5rem;
   font-size: 2rem;
   width: 11rem;
   height: 6rem;
-  top: 13rem;
+  top: 35rem;
   left: -7rem;
   transition: all ease 0.5s;
   z-index: 2;
@@ -318,15 +345,12 @@ provide<Test>("test", test);
   cursor: pointer;
 }
 
-@media (min-width: 480px) {
-}
-
-@media (min-width: 1024px) {
-  .test__header {
-    height: 27rem;
+@media (min-width: 768px) {
+  .test__header h2 {
+    width: 50rem;
   }
-  .test {
-    margin-top: 28rem;
+  .test__serie__navigation {
+    margin-bottom: 0;
   }
 }
 </style>

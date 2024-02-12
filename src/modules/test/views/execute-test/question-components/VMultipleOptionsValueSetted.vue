@@ -80,7 +80,7 @@ const updateInput = (value: number, oldValue: number) => {
   padding: 1rem;
   position: fixed;
   width: 10rem;
-  top: 28rem;
+  top: 16rem;
   left: 1%;
   z-index: 1000;
   user-select: none;

@@ -17,7 +17,7 @@ const props = defineProps({
 </template>
 <style>
 .question {
-  width: 80%;
+  width: 70%;
   display: flex;
   flex-direction: column;
   border-radius: 1.5rem;
@@ -56,6 +56,10 @@ const props = defineProps({
 }
 
 @media (min-width: 768px) {
+  .question {
+    width: 80%;
+  }
+
   .question__title {
     font-size: 1.5rem;
   }
