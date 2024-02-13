@@ -22,7 +22,8 @@ const points = ref(props.maxPoints || 0);
 const actualPoints = computed(() => props.maxPoints - distributedPoints.value);
 
 const handleInput = (event: any, id_question: number | string, id_answer: number | string) => {
-    if (distributedPoints.value + event.value > 10 && event.value > event.formattedValue) {
+    const isGreater = distributedPoints.value + (event.value-event.formattedValue) > 10;
+    if ( isGreater ) {
         test.answers[`${id_question}`][`${id_answer}`] = event.formattedValue;
         event.originalEvent.target.value = event.formattedValue;
     }
@@ -58,12 +59,14 @@ const updateInput = (value: number, oldValue: number) => {
     <div class="answer" v-for="answer in props.possible_answers" :key="answer.id_answer">
         <label for="">
             {{ answer.text }}
-            <VInputNumber :min="0" :max="parseInt(props.maxPoints)"
+            <VInputNumber 
+                :min="0"
+                :max="parseInt(props.maxPoints)"
                 @vue:mounted="test.answers[`${props.id_question}`][`${answer.id_answer}`] = 0"
                 @update:value="(value, oldValue) => updateInput(value, oldValue)" 
                 @input="(event: any)=>handleInput(event, props.id_question, answer.id_answer)"
-                v-model.number="test.answers[`${props.id_question}`][`${answer.id_answer}`]" />
-
+                v-model.number="test.answers[`${props.id_question}`][`${answer.id_answer}`]" 
+            />
         </label>
     </div>
 </template>
