@@ -1,10 +1,6 @@
 <script setup lang="ts">
 import { inject } from "vue";
-
-import ScrollPanel from "primevue/scrollpanel";
-
 import VQuestion from "./question-components/VQuestion.vue";
-
 import VMultipleOptionsValueSetted from "./question-components/VMultipleOptionsValueSetted.vue";
 import VSingleOptionQuestion from "./question-components/VSingleOptionQuestion.vue";
 import type { Test } from "../../classes/test-class";

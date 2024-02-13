@@ -5,6 +5,7 @@ import VSelecTest from '@/modules/test/views/select-test/VSelectTest.vue'
 import VProfile from '@/modules/security/views/profile/VProfile.vue'
 import VExecuteTest from '@/modules/test/views/execute-test/VExecuteTest.vue'
 import VGeneralVue from '@/layouts/general/VGeneral.vue'
+import VResults from '@/modules/results/views/VResults.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -38,6 +39,11 @@ const router = createRouter({
           path: '/profile',
           name: 'profile',
           component: VProfile
+        },
+        {
+          path: '/results',
+          name: 'results',
+          component: VResults
         },
       ]
     }

@@ -28,6 +28,7 @@ const items = ref([
       },
       {
         label: "Ver Resultados",
+        command: () => router.push("/results"),
       },
     ],
   },

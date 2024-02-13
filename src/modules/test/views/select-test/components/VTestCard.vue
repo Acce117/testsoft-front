@@ -61,7 +61,7 @@ const executeTest = () => {
   text-align: left;
   gap: 0.5rem;
   height: 15rem;
-  overflow: scroll;
+  overflow: auto;
 }
 .test-card__description span {
   font-weight: bold;

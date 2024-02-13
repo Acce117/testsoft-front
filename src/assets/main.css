@@ -31,7 +31,7 @@ body {
 main {
   width: 100%;
   height: 100%;
-  overflow: scroll;
+  overflow: auto;
 }
 
 html {
@@ -115,6 +115,9 @@ button:active {
 }
 .page-subtitle{
   font-size: 1.5rem;
+}
+.invert-color, .invert-color *{
+  filter: invert();
 }
 
 @media (min-width: 768px) {

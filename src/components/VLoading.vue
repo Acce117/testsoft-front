@@ -1,7 +1,7 @@
 <template>
-  <div class="loading">
-    <img src="/img/loading.svg" />
-  </div>
+    <div class="loading">
+      <img src="/img/loading.svg" />
+    </div>
 </template>
 <style>
 .loading {

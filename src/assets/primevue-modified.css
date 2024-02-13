@@ -80,6 +80,7 @@
   border-radius: 1.5rem;
   animation: scale 0.5s;
   background-color: white;
+  margin-right: 5rem;
 }
 .p-menuitem-link {
   padding: 1rem;
@@ -146,7 +147,7 @@
   z-index: 1000;
 }
 .p-menubar:not(.p-menubar-mobile) .p-menubar-root-list {
-  gap: 2rem;
+  gap: 5rem;
 }
 .p-menubar:not(.p-menubar-mobile)
   .p-menubar-root-list
@@ -171,12 +172,15 @@
   content: "";
   z-index: 1;
   position: absolute;
-  width: 200%;
+  width: 100%;
   height: 200%;
   border-radius: 100%;
-  background-color: black;
+  background-color: rgb(210, 210, 210);
   opacity: 0;
   animation: border-slide 1s ease-in-out;
+}
+.p-menubar-root-list{
+  justify-content: center;
 }
 .p-submenu-list::after,
 .p-menubar.p-menubar-mobile .p-menubar-root-list::after {

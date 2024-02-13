@@ -11,7 +11,6 @@ export class Test {
     }
 
 
-    //TODO IMPORT ANSWERS AND DONT PASS THESE AS PARAMETERS
     isTestValid(id_type_question: string, questions) {
         for (let i = 0; i < questions.length; i++)
             if (!this.validateComponent(id_type_question, questions[i].id_question))

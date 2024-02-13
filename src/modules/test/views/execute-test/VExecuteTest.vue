@@ -283,7 +283,6 @@ provide<Test>("test", test);
   width: 100%;
   top: 0;
   height: 15rem;
-  overflow: scroll;
   box-shadow: var(--shadow);
   animation: slide-in-from-top 0.5s ease;
 }

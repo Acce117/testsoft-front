@@ -3,7 +3,7 @@
     <div class="login">
       <span class="screen__background"></span>
       <img src="/img/logo.png" class="login__logo" />
-      
+
       <form action="" @submit.prevent="sendCredentials()">
         <h2>Bienvenido a Testsoft</h2>
         <div class="login__input">
@@ -26,7 +26,7 @@
             ><img src="/img/password.svg" />Contraseña</label
           >
         </div>
-        <button class="black-button" type="submit">Iniciar sesión</button>
+        <button class="black-button" type="submit"><span v-if="!loading">Iniciar Sesión</span> <VLoading v-else /></button>
       </form>
     </div>
 
@@ -38,7 +38,9 @@
       ><span class="modal__background-shape"></span>
       <span class="modal__message">Inicio de sesión inválido</span>
       <div class="modal__buttons">
-        <button class="black-button" @click="visible=false">Aceptar</button>
+        <button class="black-button" @click="visible = false">
+          Aceptar
+        </button>
       </div>
     </Dialog>
   </main>
@@ -47,12 +49,11 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-
 import Dialog from "primevue/dialog";
 import { login } from "@/common/login";
 const visible = ref(false);
 const router = useRouter();
-
+const loading = ref(false)
 const credentials = ref({
   username: "",
   password: "",
@@ -60,9 +61,11 @@ const credentials = ref({
 
 async function sendCredentials() {
   try {
+    loading.value=true
     await login(credentials.value);
     router.push("/");
   } catch (err) {
+    loading.value=false
     visible.value = true;
     console.log(err);
   }
@@ -85,7 +88,7 @@ window.scrollTo(0, 0);
   overflow: hidden;
   color: white;
   box-shadow: var(--shadow);
-  animation: .5s fade-in;
+  animation: 0.5s fade-in;
 }
 .login__input {
   position: relative;
@@ -142,9 +145,16 @@ window.scrollTo(0, 0);
 }
 .login form button {
   width: 11rem;
+  height: 5rem;
   margin-left: 15rem;
   font-size: 1.4rem;
   margin-top: 8rem;
+}
+.login form button img{
+  filter: invert();
+}
+.login form button:active img{
+  filter: none;
 }
 
 .login__logo {
