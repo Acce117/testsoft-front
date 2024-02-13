@@ -1,26 +1,36 @@
 <script setup lang="ts">
-import type { Test } from "@/modules/test/classes/test-class";
-import InputNumber from "primevue/inputnumber";
-import { computed, inject, ref } from "vue";
-import VInputNumber from "./VInputNumber.vue";
+import type { Test } from '@/modules/test/classes/test-class';
+import { computed, inject, ref } from 'vue';
+import VInputNumber from './VInputNumber.vue';
 
 const props = defineProps({
-  id_question: String,
-  possible_answers: Array<{ text: string; id_answer: string }>,
+    id_question: String,
+    possible_answers: Array<{ text: string, id_answer: string }>,
+    maxPoints: {
+        type: [Number, String],
+        required: true
+    },
 });
 const puntuation = ref(false);
 const test = inject<Test>("test");
 test.answers[`${props.id_question}`] = {};
 
-//TODO verify from where this value comes
-const maxPoints = 10;
-
-//TODO validate asignation
 const distributedPoints = ref(0);
 
-const points = ref(maxPoints);
+const points = ref(props.maxPoints || 0);
+
+const actualPoints = computed(() => props.maxPoints - distributedPoints.value);
+
+const handleInput = (event: any, id_question: number | string, id_answer: number | string) => {
+    const isGreater = distributedPoints.value + (event.value-event.formattedValue) > 10;
+    if ( isGreater ) {
+        test.answers[`${id_question}`][`${id_answer}`] = event.formattedValue;
+        event.originalEvent.target.value = event.formattedValue;
+    }
+}
+
 let timeOutId:number
-const actualPoints = computed(() => points.value - distributedPoints.value);
+
 const updateInput = (value: number, oldValue: number) => {
   distributedPoints.value += value - oldValue;
   if (!puntuation.value) {
@@ -38,7 +48,7 @@ const updateInput = (value: number, oldValue: number) => {
 </script>
 
 <template>
-  <Transition name="fade">
+    <Transition name="fade">
     <span v-if="puntuation" class="actual-points-fixed box-shadow-box"
       >Puntos restantes: {{ actualPoints }}</span
     >
@@ -46,25 +56,21 @@ const updateInput = (value: number, oldValue: number) => {
   <span class="actual-points"
     >Puntos restantes: {{ actualPoints }}</span
   >
-  <div
-    class="answer"
-    v-for="answer in props.possible_answers"
-    :key="answer.id_answer"
-  >
-    <label for="">
-      {{ answer.text }}
-      <VInputNumber
-        :min="0"
-        :max="maxPoints"
-        @vue:mounted="
-          test.answers[`${props.id_question}`][`${answer.id_answer}`] = 0
-        "
-        @update:value="(value, oldValue) => updateInput(value, oldValue)"
-        v-model="test.answers[`${props.id_question}`][`${answer.id_answer}`]"
-      />
-    </label>
-  </div>
+    <div class="answer" v-for="answer in props.possible_answers" :key="answer.id_answer">
+        <label for="">
+            {{ answer.text }}
+            <VInputNumber 
+                :min="0"
+                :max="parseInt(props.maxPoints)"
+                @vue:mounted="test.answers[`${props.id_question}`][`${answer.id_answer}`] = 0"
+                @update:value="(value, oldValue) => updateInput(value, oldValue)" 
+                @input="(event: any)=>handleInput(event, props.id_question, answer.id_answer)"
+                v-model.number="test.answers[`${props.id_question}`][`${answer.id_answer}`]" 
+            />
+        </label>
+    </div>
 </template>
+
 <style scoped>
 .answer label {
   display: flex;

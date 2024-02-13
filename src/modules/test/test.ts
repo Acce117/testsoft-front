@@ -44,7 +44,7 @@ export function getTest(idTest: number | string) {
         attr:{
             id_test: idTest
         },
-        relations: ["arrayserie.arrayquestion.arrayanswer"]
+        relations: ["arrayserie.arrayquestion.arrayanswer", "arrayserie.arrayquestion.arrayquestion_top_value"]
     }, url);
 }
 
