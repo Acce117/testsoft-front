@@ -16,7 +16,7 @@ const props = defineProps({
 
 const validatedTestFirstTime = inject("validatedTestFirstTime")
 const test = inject<Test>('test');
-//
+
 </script>
 
 <template>

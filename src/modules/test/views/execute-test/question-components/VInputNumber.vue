@@ -26,6 +26,7 @@ watch(
      :max="props.max"
      :allow-empty="false"
      input-id="integeronly"
-     :use-grouping="false">
-    </InputNumber>
+     :use-grouping="false"
+    />
+     
 </template>
