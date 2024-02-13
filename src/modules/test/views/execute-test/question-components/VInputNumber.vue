@@ -17,11 +17,13 @@ watch(
             emit('update:value', value, oldValue);
     }
 )
+
 </script>
 
 <template>
     <InputNumber
      v-model="model"
+     showButtons
      :min="props.min"
      :max="props.max"
      :allow-empty="false"

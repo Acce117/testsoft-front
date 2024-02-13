@@ -1,6 +1,6 @@
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity ease 1s;
+  transition: opacity ease 0.5s;
 }
 .fade-enter-from,
 .fade-leave-to {
@@ -12,29 +12,47 @@
 }
 .background-enter-from,
 .background-leave-to {
-    opacity:0;
+  opacity: 0;
 }
 @keyframes fade-in {
-  from{
+  from {
     opacity: 0;
   }
-  to{
+  to {
     opacity: 1;
   }
 }
 @keyframes slide-in {
-  from{
+  from {
     margin-left: -50%;
   }
-  to{
+  to {
     margin-left: 0;
   }
 }
-@keyframes scale{
-  from{
+@keyframes scale {
+  from {
     transform: scale(0);
   }
-  to{
+  to {
     transform: scale(1);
+  }
+}
+@keyframes border-slide {
+  from {
+    opacity: 1;
+    margin: -100%;
+  }
+  to {
+    opacity: 1;
+    margin: 100%;
+  }
+}
+@keyframes slide-in-from-top {
+  from {
+    margin-top: -50%;
+  }
+  to {
+    margin-left: 0;
   }
 }

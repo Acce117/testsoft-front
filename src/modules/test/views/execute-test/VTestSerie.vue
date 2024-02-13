@@ -20,7 +20,7 @@ const test = inject<Test>('test');
 </script>
 
 <template>
-  <ScrollPanel style="width: 100%;">
+  <div>
     <VQuestion
       v-for="(question, index) in props.serie?.arrayquestion"
       :id_question="question.id_question"
@@ -42,6 +42,6 @@ const test = inject<Test>('test');
         :maxPoints="question.arrayquestion_top_value[0]?.top_value"
       />
     </VQuestion>
-  </ScrollPanel>
+  </div>
 </template>
 <style></style>

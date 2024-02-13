@@ -1,6 +1,5 @@
-.p-component  *{
+.p-component * {
   outline: none;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 .p-radiobutton,
 .p-radiobutton-box {
@@ -16,9 +15,7 @@
   transition-duration: 0.2s;
   background-color: black;
 }
-.p-steps{
-    margin-bottom: 1rem ;
-}
+
 .p-steps-number {
   width: 2.5rem;
   height: 2.5rem;
@@ -27,7 +24,7 @@
   color: gray;
 }
 .p-steps-title {
-    color: gray;
+  color: gray;
   font-size: 1.5rem;
   display: none;
 }
@@ -38,24 +35,204 @@
   background-color: black;
   color: white;
 }
-.p-scrollpanel{
-  height: 42rem;
+.p-steps .p-steps-item .p-menuitem-link{
+  background-color: transparent;
+}
+.p-scrollpanel {
+  height: 57rem;
 }
 .p-scrollpanel .p-scrollpanel-bar {
   transition: all ease 0.2s;
   background-color: black;
 }
 
-.p-tooltip .p-tooltip-text{
-    text-align: center;
-    color: black;
-    background-color: white;
-    box-shadow: var(--shadow);
-    font-size: 1.5rem;
-    padding: .5rem;
-    border-radius: 1.5rem;
-    
+.p-tooltip .p-tooltip-text {
+  text-align: center;
+  color: black;
+  background-color: white;
+  box-shadow: var(--shadow);
+  font-size: 1.5rem;
+  padding: 0.5rem;
+  border-radius: 1.5rem;
 }
+.p-menubar {
+  width: 100%;
+  font-size: 2rem;
+  background-color: transparent;
+  border: none;
+  justify-content: end;
+}
+.p-menubar.p-menubar-mobile .p-menubar-button {
+  color: white;
+  height: 3rem;
+  width: 3rem;
+  transition: all ease 0.3s;
+}
+.p-menubar.p-menubar-mobile .p-menubar-button:hover {
+  background-color: transparent;
+  scale: 1.2;
+}
+.p-menubar.p-menubar-mobile .p-menubar-button:active {
+  opacity: 0.5;
+  scale: 1;
+}
+.p-menubar-root-list {
+  border-radius: 1.5rem;
+  animation: scale 0.5s;
+  background-color: white;
+}
+.p-menuitem-link {
+  padding: 1rem;
+}
+.p-submenu-list {
+  border-radius: 1.5rem;
+}
+
+.p-menuitem-text,
+.p-submenu-icon {
+  color: black;
+}
+.p-menuitem-content {
+  transition: all ease 0.3s;
+  border-radius: 1.5rem;
+}
+.p-menubar{
+  z-index: 5;
+}
+.p-menubar .p-menuitem.p-highlight > .p-menuitem-content .p-menuitem-text,
+.p-menubar .p-menuitem.p-highlight > .p-menuitem-content .p-submenu-icon {
+  transform: scale(1);
+}
+.p-menuitem-text {
+  position: relative;
+}
+.p-menubar:not(.p-menubar-mobile)
+  .p-menubar-root-list
+  > .p-menuitem
+  > .p-menuitem-content
+  .p-menuitem-text:before {
+  position: absolute;
+  border-radius: 1.5rem;
+  bottom: -0.4rem;
+  content: "";
+  transform: scaleX(0);
+  background-color: black;
+  height: 0.1em;
+  width: 100%;
+  transition: transform 0.2s ease-in-out;
+}
+
+.p-menubar:not(.p-menubar-mobile)
+  .p-menubar-root-list
+  > .p-menuitem
+  > .p-menuitem-content:hover
+  .p-menuitem-text:before {
+  transform: scaleX(1);
+}
+.p-menuitem {
+  position: relative;
+  z-index: 6;
+}
+.p-menubar-root-list{
+  z-index: 6;
+}
+.p-menubar-mobile .p-menubar-root-list .p-submenu-list {
+  position: relative;
+  z-index: 6;
+}
+.p-submenu-list {
+  overflow: hidden;
+  animation: scale 0.3s ease-in-out;
+  z-index: 1000;
+}
+.p-menubar:not(.p-menubar-mobile) .p-menubar-root-list {
+  gap: 2rem;
+}
+.p-menubar:not(.p-menubar-mobile)
+  .p-menubar-root-list
+  > .p-menuitem
+  > .p-menuitem-content:hover,
+.p-menubar:not(.p-menubar-mobile)
+  .p-menubar-root-list
+  > .p-menuitem
+  > .p-menuitem-content {
+  background: transparent;
+}
+
+.p-menubar.p-menubar-mobile .p-menubar-root-list {
+  width: 20rem;
+  right: 0;
+  left: auto;
+  overflow: hidden;
+}
+.p-submenu-list::before,
+.p-menubar.p-menubar-mobile .p-menubar-root-list::before {
+  top: -25%;
+  content: "";
+  z-index: 1;
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  border-radius: 100%;
+  background-color: black;
+  opacity: 0;
+  animation: border-slide 1s ease-in-out;
+}
+.p-submenu-list::after,
+.p-menubar.p-menubar-mobile .p-menubar-root-list::after {
+  top: 0.5%;
+  left: 0.5%;
+  border-radius: 1.5rem;
+  z-index: 2;
+  position: absolute;
+  content: "";
+  background-color: white;
+  height: 99%;
+  width: 99%;
+}
+.p-menubar .p-menuitem.p-focus > .p-menuitem-content,
+.p-menubar .p-menuitem.p-highlight > .p-menuitem-content {
+  background: transparent;
+}
+.p-menubar .p-menuitem.p-focus > .p-menuitem-content:hover,
+.p-menubar .p-menuitem.p-highlight > .p-menuitem-content:hover {
+  background: #e2e8f0;
+}
+.p-submenu-icon {
+  transition: all ease 0.1s;
+  transform: rotate(-180deg);
+}
+.p-sidebar-header{
+  justify-content: end;
+}
+.p-sidebar-close{
+  box-shadow: none;
+}
+.p-inputwrapper{
+  display: flex;
+  align-items: center;
+  
+  border-radius: 1.5rem;
+  transition: all ease .2s;
+}
+
+.p-inputnumber-input {
+  text-align: center;
+  font-size: 1.8rem;
+  width: 5rem;
+  border-radius: 1.5rem;
+
+}
+.p-button.p-button-icon-only{
+  width: 2rem;
+  height: 1.5rem;
+  background-color: transparent;
+  box-shadow: none;
+}
+.p-disabled, .p-component:disabled{
+  opacity: 0.3;
+}
+
 @media (min-width: 1024px) {
   .p-steps-number {
     width: 3rem;
@@ -65,7 +242,7 @@
   .p-steps-title {
     display: block;
   }
-  .p-scrollpanel{
-    height: 43rem;
+  .p-scrollpanel {
+    height: 54rem;
   }
 }

@@ -44,7 +44,7 @@
   height: 3rem;
   box-shadow: none;
   background-color: transparent;
-  --p-focus-ring-color: transparent;
+
 }
 .p-icon {
   width: 1.5rem;
@@ -63,6 +63,7 @@
   align-items: center;
   justify-content: center;
   gap: 30%;
+  margin-bottom: 1rem;
 }
 @media (min-width:768px) {
     .modal {

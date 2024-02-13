@@ -33,7 +33,7 @@ const goTests = () => {
 .presentation {
   display: flex;
   flex-wrap: wrap;
-  width: 30rem;
+  width: 32rem;
   gap: 2rem;
   align-items: center;
   justify-content: center;
@@ -46,9 +46,9 @@ const goTests = () => {
   background-color: white;
   gap: .5rem;
   padding: 1rem;
-  font-size: 1.4rem;
-  width: 12rem;
-  height: 12rem;
+  font-size: 1.8rem;
+  width: 15rem;
+  height: 15rem;
 }
 .presentation__button:active {
   background-color: black;
@@ -64,9 +64,9 @@ const goTests = () => {
     width: 40rem;
   }
   .presentation__button {
-    width: 15rem;
-    height: 15rem;
-    font-size: 1.6rem;
+    width: 16rem;
+    height: 16rem;
+    font-size: 2rem;
   }
 }
 @media (min-width: 768px) {

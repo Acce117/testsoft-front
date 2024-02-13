@@ -8,8 +8,7 @@ import { createPinia } from 'pinia';
 import 'primevue/resources/themes/aura-light-green/theme.css'
 import Tooltip from 'primevue/tooltip';
 import VueCountdown from '@chenfengyuan/vue-countdown';
-
-//TODO loading component
+import VLoading from './components/VLoading.vue';
 //TODO improve routes
 //TODO .env for routes
 
@@ -19,6 +18,7 @@ const app = createApp(App)
 
 
 app.component('vue-countdown', VueCountdown);
+app.component('VLoading', VLoading);
 
 app.use(router)
 app.use(PrimeVue);

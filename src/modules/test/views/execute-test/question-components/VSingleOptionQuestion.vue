@@ -35,18 +35,13 @@ const test = inject<Test>("test");
   display: flex;
   align-items: center;
   gap: 1rem;
-  border-radius: 1.5rem;
-  padding: 0.5rem;
-  transition: all ease 0.2s;
 }
 .radio-button-answer:has(input[type="radio"]:not(:checked)):hover,
 .radio-button-answer:has(input[type="radio"]:not(:checked)) label:hover {
   cursor: pointer;
 }
-.radio-button-answer:has(input[type="radio"]:not(:checked)):hover {
-  box-shadow: 0 0 0.5rem 0 black;
-}
-.radio-button-answer label{
+
+.radio-button-answer label {
   display: flex;
   gap: 1rem;
   align-items: center;

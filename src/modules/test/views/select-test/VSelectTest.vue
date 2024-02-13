@@ -13,18 +13,15 @@ const { result, loading } = useTests();
 const modules = [Pagination, Navigation];
 const pagination = {
   clickable: true,
-  renderBullet: function (index:number, className:string) {
+  renderBullet: function (index: number, className: string) {
     return '<span class="' + className + '">' + (index + 1) + "</span>";
   },
 };
-
-
 </script>
 <template>
-  
+  <div v-if="!loading">
     <h2 class="page-title">Seleccione un test</h2>
     <Swiper
-      v-if="!loading"
       :spaceBetween="30"
       :slidesPerView="1"
       :loop="true"
@@ -42,7 +39,9 @@ const pagination = {
         />
       </swiper-slide>
     </Swiper>
-    <h1 v-else>Loading</h1>
+  </div>
+
+  <VLoading v-else />
 </template>
 <style>
 .swiper {
@@ -51,7 +50,6 @@ const pagination = {
   justify-content: center;
   height: 50rem;
 }
-
 
 .swiper-slide {
   display: flex;
@@ -82,7 +80,7 @@ const pagination = {
   width: 1.8rem;
   transition: all ease 0.3s;
   background: rgb(194, 194, 194);
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   color: black;
   opacity: 1;
 }
@@ -91,5 +89,4 @@ const pagination = {
   background: black;
   color: white;
 }
-
 </style>
