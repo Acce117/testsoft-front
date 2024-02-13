@@ -22,7 +22,7 @@ const points = ref(props.maxPoints || 0);
 const actualPoints = computed(() => props.maxPoints - distributedPoints.value);
 
 const handleInput = (event: any, id_question: number | string, id_answer: number | string) => {
-    if (distributedPoints.value == 10 && event.value > event.formattedValue) {
+    if (distributedPoints.value + event.value > 10 && event.value > event.formattedValue) {
         test.answers[`${id_question}`][`${id_answer}`] = event.formattedValue;
         event.originalEvent.target.value = event.formattedValue;
     }
