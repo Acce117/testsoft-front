@@ -22,7 +22,6 @@ watch(result, (newValue) => {
 });
 const exitTestVisible = ref(false);
 const saveTestVisible = ref(false);
-const errorVisible = ref(false);
 const testEndedVisible = ref(false);
 const testEnded2ndVisible = ref(false);
 const infoVisible = ref(false);
@@ -31,13 +30,14 @@ const validatedTestFirstTime = ref(false);
 provide("validatedTestFirstTime", validatedTestFirstTime);
 
 let timeOutIdToast: number;
-
+//TODO possible elimination of the setTimeout function because the toastcounter improve the fluidity of the app already
 const endTest = () => {
   clearTimeout(timeOutIdToast);
   toast.removeAllGroups();
-  let isValid = true;
+  let isValid = true;//This is for validating test
+  let toastCounter = 0; //This is for restricting the amount of toast messages in dom
   result.value.arrayserie.forEach((serie) => {
-    const questionsNotAnswered = test.getQuestionsNotAnswered(serie.arrayquestion);
+    const questionsNotAnswered = test.getQuestionsNotAnswered(serie.arrayquestion);//for each serie, this function returns the incorrect answers. This is for managing questions and series in toast
     if (questionsNotAnswered.length > 0) {
       isValid = false;
       questionsNotAnswered.forEach((question) => {
@@ -51,14 +51,18 @@ const endTest = () => {
             break;
         }
         errorMessage+=` en la pregunta ${question.questionIndex}, ${serie.name}`
-        toast.add({
+        if(toastCounter<10){
+          toast.add({
           severity: "error",
           summary: "Error",
           detail: errorMessage,
           life: 10000,
         });
+        toastCounter+=1
+        }
+        
       });
-      timeOutIdToast = setTimeout(() => {
+      timeOutIdToast = setTimeout(() => {//this is for deleting the toast to avoid close animations because they slow down the process  
         toast.removeAllGroups();
       }, 3000);
     }
@@ -222,21 +226,6 @@ provide<Test>("test", test);
         <button class="black-button" @click="router.push('/')">Aceptar</button>
         <button class="black-button" @click="exitTestVisible = false">
           Cancelar
-        </button>
-      </div>
-    </Dialog>
-    <Dialog
-      v-model:visible="errorVisible"
-      modal
-      header="Error"
-      class="modal box-shadow-box"
-      ><span class="modal__background-shape"></span>
-      <span class="modal__message"
-        >Todos las preguntas deben ser respondidas</span
-      >
-      <div class="modal__buttons">
-        <button class="black-button" @click="errorVisible = false">
-          Aceptar
         </button>
       </div>
     </Dialog>
