@@ -6,7 +6,6 @@ import Steps from "primevue/steps";
 import { provide, reactive, ref, watch } from "vue";
 import { getTest } from "@/modules/test/test";
 import { Test } from "../../classes/test-class";
-import { isTestValid } from "@/common/utils/validateAnswers";
 const router = useRouter();
 const serieIndex = ref(0);
 
@@ -36,7 +35,7 @@ const validatedTestFirstTime = ref(false);
 provide("validatedTestFirstTime", validatedTestFirstTime);
 
 const endTest = () => {
-  if (isTestValid("2", test.answers, questions)) {
+  if (test.isTestValid(questions)) {
     test.sendTest();
   } else {
     errorVisible.value = true;

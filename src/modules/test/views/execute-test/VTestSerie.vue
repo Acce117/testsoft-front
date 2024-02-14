@@ -22,7 +22,7 @@ const test = inject<Test>('test');
       :id_question="question.id_question"
       :index="index + 1"
       :title="question.statement"
-      :class="{'question-not-responded': validatedTestFirstTime? !test?.validateComponent(question.fk_id_type_question, question.id_question):false}"
+      :class="{'question-not-responded': validatedTestFirstTime? !test?.validateComponent(question):false}"
   >
       <VSingleOptionQuestion
         v-if="question.fk_id_type_question == 2"

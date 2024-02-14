@@ -45,10 +45,6 @@ const updateInput = (value: number, oldValue: number) => {
   }, 2000);
 };
 
-watch(test,(value)=>{
-  console.log(value.answers)
-})
-
 </script>
 
 <template>
