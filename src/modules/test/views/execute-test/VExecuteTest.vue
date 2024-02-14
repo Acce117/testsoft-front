@@ -6,6 +6,9 @@ import Steps from "primevue/steps";
 import { provide, reactive, ref, watch } from "vue";
 import { getTest } from "@/modules/test/test";
 import { Test } from "../../classes/test-class";
+import Toast from "primevue/toast";
+import { useToast } from "primevue/usetoast";
+const toast = useToast();
 const router = useRouter();
 const serieIndex = ref(0);
 
@@ -13,17 +16,10 @@ const { result, loading } = getTest(
   router.currentRoute.value.params.id_test as string
 );
 let timeCountdown: number;
-let questions = Array();
 
 watch(result, (newValue) => {
   timeCountdown = newValue.time_duration * 60 * 1000;
-  newValue.arrayserie.forEach((serie) => {
-    serie.arrayquestion.forEach((question) => {
-      questions.push(question);
-    });
-  });
 });
-const topBarVisible = ref(false);
 const exitTestVisible = ref(false);
 const saveTestVisible = ref(false);
 const errorVisible = ref(false);
@@ -34,14 +30,41 @@ const validatedTestFirstTime = ref(false);
 
 provide("validatedTestFirstTime", validatedTestFirstTime);
 
+let timeOutIdToast: number;
+
 const endTest = () => {
-  if (test.isTestValid(questions)) {
-    test.sendTest();
-  } else {
-    errorVisible.value = true;
-    validatedTestFirstTime.value = true;
-  }
-  topBarVisible.value = false;
+  clearTimeout(timeOutIdToast);
+  toast.removeAllGroups();
+  let isValid = true;
+  result.value.arrayserie.forEach((serie) => {
+    const questionsNotAnswered = test.getQuestionsNotAnswered(serie.arrayquestion);
+    if (questionsNotAnswered.length > 0) {
+      isValid = false;
+      questionsNotAnswered.forEach((question) => {
+        let errorMessage;
+        switch (parseInt(question.question.fk_id_type_question)) {
+          case 2:
+            errorMessage = "Debe seleccionar una respuesta";
+            break;
+          case 5:
+            errorMessage = "Existen puntos por asignar aún";
+            break;
+        }
+        errorMessage+=` en la pregunta ${question.questionIndex}, ${serie.name}`
+        toast.add({
+          severity: "error",
+          summary: "Error",
+          detail: errorMessage,
+          life: 10000,
+        });
+      });
+      timeOutIdToast = setTimeout(() => {
+        toast.removeAllGroups();
+      }, 3000);
+    }
+  });
+  if (isValid) test.sendTest();
+  validatedTestFirstTime.value = true;
 };
 
 const nextSerie = () => {
@@ -61,21 +84,21 @@ const getSeriesNames = () => {
   return names;
 };
 let firtsTimeEnd = true;
-let timeOutId: number;
+let timeOutIdTestEnded: number;
 const testEnded = () => {
   if (firtsTimeEnd) {
     testEndedVisible.value = true;
     timeCountdown = 5 * 60 * 1000;
     firtsTimeEnd = false;
   } else {
-    timeOutId = setTimeout(() => {
+    timeOutIdTestEnded = setTimeout(() => {
       router.push("/");
     }, 5000);
     testEnded2ndVisible.value = true;
   }
 };
 const testEnded2nd = () => {
-  clearTimeout(timeOutId);
+  clearTimeout(timeOutIdTestEnded);
   router.push("/");
 };
 
@@ -85,12 +108,12 @@ provide<Test>("test", test);
 </script>
 <template>
   <div class="test" v-if="!loading">
+    <Toast position="top-left" />
     <div class="test__header">
       <div class="test__header__content">
         <h2 class="page-title">
           {{ result.name }}
         </h2>
-
         <div class="test__serie__navigation">
           <button
             class="black-button"
@@ -273,7 +296,7 @@ provide<Test>("test", test);
 .test__header {
   position: absolute;
   align-items: end;
-  
+
   display: flex;
   background-color: rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(1.2rem);
@@ -285,7 +308,7 @@ provide<Test>("test", test);
   box-shadow: var(--shadow);
   animation: slide-in-from-top 0.5s ease;
 }
-.test__header__content{
+.test__header__content {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -294,7 +317,7 @@ provide<Test>("test", test);
 }
 .test__header h2 {
   width: 20rem;
-  margin: 0 0.5rem ;
+  margin: 0 0.5rem;
 }
 
 .test__buttons,
@@ -327,7 +350,7 @@ provide<Test>("test", test);
   font-size: 2rem;
   width: 11rem;
   height: 6rem;
-  top: 35rem;
+  top: 18rem;
   left: -7rem;
   transition: all ease 0.5s;
   z-index: 2;

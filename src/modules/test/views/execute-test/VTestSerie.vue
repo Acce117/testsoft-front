@@ -5,36 +5,39 @@ import VMultipleOptionsValueSetted from "./question-components/VMultipleOptionsV
 import VSingleOptionQuestion from "./question-components/VSingleOptionQuestion.vue";
 import type { Test } from "../../classes/test-class";
 
-
 const props = defineProps({
   serie: Object,
 });
 
-const validatedTestFirstTime = inject("validatedTestFirstTime")
-const test = inject<Test>('test');
-
+const validatedTestFirstTime = inject("validatedTestFirstTime");
+const test = inject<Test>("test");
 </script>
 
 <template>
   <div>
     <VQuestion
       v-for="(question, index) in props.serie?.arrayquestion"
+      :key="question.id_question"
       :id_question="question.id_question"
-      :index="index + 1"
+      :question_index="index + 1"
       :title="question.statement"
-      :class="{'question-not-responded': validatedTestFirstTime? !test?.validateComponent(question):false}"
-  >
+      :class="{
+        'question-not-responded': validatedTestFirstTime
+          ? !test?.validateComponent(question)
+          : false,
+      }"
+    >
       <VSingleOptionQuestion
         v-if="question.fk_id_type_question == 2"
         :possible_answers="question.arrayanswer"
         :id_question="question.id_question"
-        
       />
 
       <VMultipleOptionsValueSetted
         v-else-if="question.fk_id_type_question == 5"
         :possible_answers="question.arrayanswer"
         :id_question="question.id_question"
+        :question_index="index+1"
         :maxPoints="question.arrayquestion_top_value[0]?.top_value"
       />
     </VQuestion>

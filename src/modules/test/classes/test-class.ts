@@ -11,12 +11,13 @@ export class Test {
     }
 
 
-    public isTestValid(questions) {
-        for (let i = 0; i < questions.length; i++)
-            if (!this.validateComponent(questions[i]))
-                return false
-
-        return true
+    public getQuestionsNotAnswered(questions:Array<any>) {
+        let questionsNotAnswered =Array()
+        questions.forEach((question, index) => {
+            if (!this.validateComponent(question))
+                questionsNotAnswered.push({questionIndex:index+1,question:question})
+        });
+        return questionsNotAnswered
     };
 
 
@@ -42,9 +43,7 @@ export class Test {
         return this.answers[id_question] !== null || this.answers[id_question] !== undefined;
     }
     validateMultipleOptionsValueSetted(id_question: string, question_top_value: number) {
-
         return question_top_value == Object.keys(this.answers[id_question]).reduce((total_points, key) => {
-
             total_points += this.answers[id_question][key]
             return total_points
         }, 0)

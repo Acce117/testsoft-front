@@ -236,6 +236,34 @@
 .p-disabled, .p-component:disabled{
   opacity: 0.3;
 }
+.p-toast{
+  margin-top: 25rem;
+}
+.p-toast-message{
+  background-color: white;
+  border-radius: 1.5rem;
+  box-shadow: var(--shadow);
+  width: 15rem;
+}
+.p-toast-detail{
+  font-size: 1.2rem;
+}
+.p-toast-summary{
+  font-size: 1.5rem;
+}
+.p-toast> div{
+  gap: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+.p-toast-message button{
+  box-shadow: none;
+  margin-top: 1rem;
+  margin-right: 1rem;
+}
+.p-toast-message-icon{
+  margin: .5rem;
+}
 
 @media (min-width: 1024px) {
   .p-steps-number {
@@ -248,5 +276,14 @@
   }
   .p-scrollpanel {
     height: 54rem;
+  }
+  .p-toast-message{
+    width: 32rem;
+  }
+  .p-toast-detail{
+    font-size: 1.5rem;
+  }
+  .p-toast-summary{
+    font-size: 1.8rem;
   }
 }

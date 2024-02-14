@@ -2,16 +2,17 @@
 import type { Test } from "@/modules/test/classes/test-class";
 import { computed, inject, ref, watch } from "vue";
 import VInputNumber from "./VInputNumber.vue";
-
+import { useToast } from "primevue/usetoast";
+const toast = useToast();
 const props = defineProps({
   id_question: String,
+  question_index: Number,
   possible_answers: Array<{ text: string; id_answer: string }>,
   maxPoints: {
     type: [Number, String],
     required: true,
   },
 });
-const puntuation = ref(false);
 const test = inject<Test>("test");
 test.answers[`${props.id_question}`] = {};
 
@@ -35,24 +36,24 @@ const actualPoints = computed(() => props.maxPoints - distributedPoints.value);
   //@input="(event: any)=>handleInput(event, props.id_question, answer.id_answer)"
 };*/
 
-let timeOutId: number;
+let timeOutIdToast: number;
 const updateInput = (value: number, oldValue: number) => {
+  clearTimeout(timeOutIdToast);
+  toast.removeAllGroups();
   distributedPoints.value += value - oldValue;
-  if (!puntuation.value) puntuation.value = true;
-  else clearTimeout(timeOutId);
-  timeOutId = setTimeout(() => {
-    puntuation.value = false;
-  }, 2000);
+  toast.add({
+    severity: "info",
+    summary: "Info",
+    detail: `Puntos restantes en pregunta ${props.question_index}: ${actualPoints.value}`,
+    life: 30000,
+  });
+  timeOutIdToast = setTimeout(() => {
+    toast.removeAllGroups();
+  }, 3000);
 };
-
 </script>
 
 <template>
-  <Transition name="fade">
-    <span v-if="puntuation" class="actual-points-fixed box-shadow-box"
-      >Puntos restantes: {{ actualPoints }}</span
-    >
-  </Transition>
   <span class="actual-points">Puntos restantes: {{ actualPoints }}</span>
   <div
     class="answer"
@@ -85,20 +86,6 @@ const updateInput = (value: number, oldValue: number) => {
 }
 .actual-points {
   font-size: 1.5rem;
-}
-.actual-points-fixed {
-  font-size: 1.5rem;
-  padding: 1rem;
-  position: fixed;
-  width: 10rem;
-  top: 16rem;
-  left: 1%;
-  z-index: 1000;
-  user-select: none;
-  text-align: center;
-  background-color: rgba(255, 255, 255, 0.5);
-  backdrop-filter: blur(1.2rem);
-  -webkit-backdrop-filter: blur(1.2rem);
 }
 @media (min-width: 768px) {
   .actual-points {

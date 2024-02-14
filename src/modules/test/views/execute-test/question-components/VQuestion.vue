@@ -1,14 +1,14 @@
 <script setup lang="ts">
 const props = defineProps({
   id_question: String,
-  index: Number,
+  question_index: Number,
   title: String,
 });
 </script>
 <template>
   <Transition name="fade">
     <div class="question" :id="props.id_question">
-      <h4 class="question__title">{{ props.index + `-` + props.title }}</h4>
+      <h4 class="question__title">{{ props.question_index + `-` + props.title }}</h4>
       <div class="question__content">
         <slot></slot>
       </div>

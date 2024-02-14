@@ -9,10 +9,12 @@ import 'primevue/resources/themes/aura-light-green/theme.css'
 import Tooltip from 'primevue/tooltip';
 import VueCountdown from '@chenfengyuan/vue-countdown';
 import VLoading from './components/VLoading.vue';
+import ToastService from 'primevue/toastservice';
 //TODO improve routes
 //TODO .env for routes
 
 const app = createApp(App)
+
 
 
 
@@ -22,6 +24,7 @@ app.component('VLoading', VLoading);
 
 app.use(router)
 app.use(PrimeVue);
+app.use(ToastService);
 app.use(createPinia());
 app.mount('#app')
 app.directive('tooltip', Tooltip);
