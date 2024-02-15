@@ -29,43 +29,65 @@ const validatedTestFirstTime = ref(false);
 
 provide("validatedTestFirstTime", validatedTestFirstTime);
 
-let timeOutIdToast: number;
-//TODO possible elimination of the setTimeout function because the toastcounter improve the fluidity of the app already
+//
+const incorrectAnswers = {
+  "2": Array(),
+  "5": Array(),
+};
+const showIncorrectAnswers = (serieName:string) => {
+  let errorMessage: string = "";
+  for (let key in incorrectAnswers) {
+    if (incorrectAnswers[key].length > 0) {
+      switch (parseInt(key)) {
+        case 2:
+          errorMessage = "Debe seleccionar una respuesta ";
+          break;
+        case 5:
+          errorMessage = "Existen puntos por asignar aún ";
+          break;
+      }
+      if(incorrectAnswers[key].length==1) errorMessage+="en la pregunta "
+      else errorMessage+="en las preguntas "
+      incorrectAnswers[key].forEach((question, index) => {
+        if (index > 0) {
+          if (index == incorrectAnswers[key].length - 1) errorMessage += ` y `;
+          else errorMessage += ", ";
+        }
+        errorMessage += question.questionIndex;
+      });
+      toast.add({
+        severity: "error",
+        summary: "Error: " + serieName,
+        detail: errorMessage,
+        life: 3000,
+      });
+      incorrectAnswers[key].splice(0, incorrectAnswers[key].length);
+    }
+  }
+};
+//
 const endTest = () => {
-  clearTimeout(timeOutIdToast);
   toast.removeAllGroups();
-  let isValid = true;//This is for validating test
-  let toastCounter = 0; //This is for restricting the amount of toast messages in dom
-  result.value.arrayserie.forEach((serie) => {
-    const questionsNotAnswered = test.getQuestionsNotAnswered(serie.arrayquestion);//for each serie, this function returns the incorrect answers. This is for managing questions and series in toast
+  let isValid = true; //This is for validating test
+  result.value.arrayserie.forEach((serie:any) => {
+    const questionsNotAnswered = test.getQuestionsNotAnswered(
+      serie.arrayquestion
+    ); //for each serie, this function returns the incorrect answers. This is for managing questions and series in toast
     if (questionsNotAnswered.length > 0) {
       isValid = false;
       questionsNotAnswered.forEach((question) => {
-        let errorMessage;
         switch (parseInt(question.question.fk_id_type_question)) {
           case 2:
-            errorMessage = "Debe seleccionar una respuesta";
+            incorrectAnswers["2"].push(question);
             break;
           case 5:
-            errorMessage = "Existen puntos por asignar aún";
+            incorrectAnswers["5"].push(question);
             break;
         }
-        errorMessage+=` en la pregunta ${question.questionIndex}, ${serie.name}`
-        if(toastCounter<10){
-          toast.add({
-          severity: "error",
-          summary: "Error",
-          detail: errorMessage,
-          life: 10000,
-        });
-        toastCounter+=1
-        }
-        
       });
-      timeOutIdToast = setTimeout(() => {//this is for deleting the toast to avoid close animations because they slow down the process  
-        toast.removeAllGroups();
-      }, 3000);
+      showIncorrectAnswers(serie.name);
     }
+    
   });
   if (isValid) test.sendTest();
   validatedTestFirstTime.value = true;
