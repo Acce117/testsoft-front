@@ -1,95 +1,88 @@
 <script setup lang="ts">
 import VTestSerie from "./VTestSerie.vue";
-import { useRouter } from "vue-router";
-import Dialog from "primevue/dialog";
+import { onBeforeRouteLeave, useRouter } from "vue-router";
 import Steps from "primevue/steps";
+import Dialog from "primevue/dialog";
 import { provide, reactive, ref, watch } from "vue";
 import { getTest } from "@/modules/test/test";
 import { Test } from "../../classes/test-class";
-import Toast from "primevue/toast";
 import { useToast } from "primevue/usetoast";
+import { getErrorMessages } from "./getErrorMessages";
+import { useConfirm } from "primevue/useconfirm";
 const toast = useToast();
+const confirm = useConfirm();
 const router = useRouter();
+
 const serieIndex = ref(0);
 
 const { result, loading } = getTest(
   router.currentRoute.value.params.id_test as string
 );
+
 let timeCountdown: number;
 
 watch(result, (newValue) => {
   timeCountdown = newValue.time_duration * 60 * 1000;
 });
-const exitTestVisible = ref(false);
-const saveTestVisible = ref(false);
 const testEndedVisible = ref(false);
 const testEnded2ndVisible = ref(false);
 const infoVisible = ref(false);
 const validatedTestFirstTime = ref(false);
 
+const exitTestConfirm = () => {
+  confirm.require({
+    message: "¿Desea salir del test?<br/>Los resultados se perderán.",
+    header: "Salir",
+    icon: "pi pi-exclamation-triangle",
+    rejectLabel: "Cancelar",
+    acceptLabel: "Aceptar",
+    accept: () => {
+      exitTest();
+    },
+    reject: () => {
+      confirmExit = false;
+    },
+  });
+};
+const sendTestConfirm = () => {
+  confirm.require({
+    message: "¿Desea guardar los resultados del test?",
+    header: "Salir",
+    icon: "pi pi-exclamation-triangle",
+    rejectLabel: "Cancelar",
+    acceptLabel: "Aceptar",
+    accept: () => {
+      test.sendTest();
+      exitTest()
+    },
+    reject: () => {
+      confirmExit = false;
+    },
+  });
+};    
+
 provide("validatedTestFirstTime", validatedTestFirstTime);
 
-//
-const incorrectAnswers = {
-  "2": Array(),
-  "5": Array(),
-};
-const showIncorrectAnswers = (serieName:string) => {
-  let errorMessage: string = "";
-  for (let key in incorrectAnswers) {
-    if (incorrectAnswers[key].length > 0) {
-      switch (parseInt(key)) {
-        case 2:
-          errorMessage = "Debe seleccionar una respuesta ";
-          break;
-        case 5:
-          errorMessage = "Existen puntos por asignar aún ";
-          break;
-      }
-      if(incorrectAnswers[key].length==1) errorMessage+="en la pregunta "
-      else errorMessage+="en las preguntas "
-      incorrectAnswers[key].forEach((question, index) => {
-        if (index > 0) {
-          if (index == incorrectAnswers[key].length - 1) errorMessage += ` y `;
-          else errorMessage += ", ";
-        }
-        errorMessage += question.questionIndex;
-      });
-      toast.add({
-        severity: "error",
-        summary: "Error: " + serieName,
-        detail: errorMessage,
-        life: 3000,
-      });
-      incorrectAnswers[key].splice(0, incorrectAnswers[key].length);
-    }
-  }
-};
-//
-const endTest = () => {
+const validateTest = () => {
   toast.removeAllGroups();
   let isValid = true; //This is for validating test
-  result.value.arrayserie.forEach((serie:any) => {
+  result.value.arrayserie.forEach((serie: any) => {
     const questionsNotAnswered = test.getQuestionsNotAnswered(
       serie.arrayquestion
     ); //for each serie, this function returns the incorrect answers. This is for managing questions and series in toast
     if (questionsNotAnswered.length > 0) {
       isValid = false;
-      questionsNotAnswered.forEach((question) => {
-        switch (parseInt(question.question.fk_id_type_question)) {
-          case 2:
-            incorrectAnswers["2"].push(question);
-            break;
-          case 5:
-            incorrectAnswers["5"].push(question);
-            break;
-        }
+      getErrorMessages(questionsNotAnswered).forEach((error) => {
+        toast.add({
+          severity: "error",
+          summary: "Error: " + serie.name,
+          detail: error,
+          life: 3000,
+        });
       });
-      showIncorrectAnswers(serie.name);
     }
-    
   });
-  if (isValid) test.sendTest();
+  if (isValid)sendTestConfirm(); 
   validatedTestFirstTime.value = true;
 };
 
@@ -131,10 +124,28 @@ const testEnded2nd = () => {
 const test = reactive(new Test());
 
 provide<Test>("test", test);
+
+watch(
+  serieIndex,
+  () => (document.getElementsByTagName("main")[0].scrollTop = 0)
+);
+let confirmExit = false;
+onBeforeRouteLeave((to, from) => {
+  if (!confirmExit) {
+    exitTestConfirm()
+    return false;
+  }
+});
+
+
+
+const exitTest = () => {
+  confirmExit = true;
+  router.push("/");
+};
 </script>
 <template>
   <div class="test" v-if="!loading">
-    <Toast position="top-left" />
     <div class="test__header">
       <div class="test__header__content">
         <h2 class="page-title">
@@ -195,7 +206,7 @@ provide<Test>("test", test);
       <div class="test__buttons">
         <button
           class="black-button"
-          @click="endTest()"
+          @click="validateTest()"
           v-tooltip.right="'Terminar Test'"
           placeholder="Right"
         >
@@ -211,7 +222,7 @@ provide<Test>("test", test);
         </button>
         <button
           class="black-button"
-          @click="exitTestVisible = true"
+          @click="exitTestConfirm()"
           v-tooltip.right="'Cancelar Test'"
           placeholder="Right"
         >
@@ -223,34 +234,8 @@ provide<Test>("test", test);
         :answers="test.answers"
       />
     </div>
-    <Dialog
-      v-model:visible="saveTestVisible"
-      modal
-      header="Test"
-      class="modal box-shadow-box"
-      ><span class="modal__background-shape"></span>
-      <span class="modal__message">Desea guardar los resultados del test?</span>
-      <div class="modal__buttons">
-        <button class="black-button" @click="router.push('/')">Aceptar</button>
-        <button class="black-button" @click="saveTestVisible = false">
-          Cancelar
-        </button>
-      </div>
-    </Dialog>
-    <Dialog
-      v-model:visible="exitTestVisible"
-      modal
-      header="Test"
-      class="modal box-shadow-box"
-      ><span class="modal__background-shape"></span>
-      <span class="modal__message">Desea salir del test?</span>
-      <div class="modal__buttons">
-        <button class="black-button" @click="router.push('/')">Aceptar</button>
-        <button class="black-button" @click="exitTestVisible = false">
-          Cancelar
-        </button>
-      </div>
-    </Dialog>
+
+
     <Dialog
       v-model:visible="testEndedVisible"
       modal
@@ -297,9 +282,6 @@ provide<Test>("test", test);
 </template>
 
 <style>
-.navbar {
-  background-color: white;
-}
 .test__content {
   position: relative;
   margin-top: 16rem;
@@ -386,4 +368,4 @@ provide<Test>("test", test);
   }
 }
 </style>
-@/common/utils/validateAnswers
+@/common/utils/validateAnswers ./getErrorMessages

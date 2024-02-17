@@ -22,7 +22,7 @@ export class Test {
 
 
 
-    validateComponent(question) {
+    validateComponent(question:any) {
         let isComponentValid
         if (!this.answers.hasOwnProperty(question.id_question))
             isComponentValid = false
@@ -34,6 +34,7 @@ export class Test {
                 case 5:
                     isComponentValid = this.validateMultipleOptionsValueSetted(question.id_question, question.arrayquestion_top_value[0].top_value)
                     break;
+                    //ADD OTHERS QUESTION TYPES
             }
 
         return isComponentValid
@@ -48,4 +49,5 @@ export class Test {
             return total_points
         }, 0)
     }
+    //ADD OTHERS QUESTION VALIDATION FUNCTIONS
 }

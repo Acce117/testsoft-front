@@ -48,14 +48,14 @@ const pagination = {
   width: 100%;
   display: flex;
   justify-content: center;
-  height: 50rem;
+  height: 60rem;
 }
 
 .swiper-slide {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 42rem;
+  height: 52rem;
 }
 
 .swiper-button-next,
@@ -63,10 +63,10 @@ const pagination = {
   color: black;
   transition: all ease 0.2s;
 }
-
+.swiper-pagination-bullet:hover,
 .swiper-button-next:hover,
 .swiper-button-prev:hover {
-  transform: scale(1.1);
+  transform: scale(1.2);
 }
 
 .swiper-button-next:active,
@@ -74,13 +74,21 @@ const pagination = {
   transform: scale(1);
   opacity: 0.5;
 }
-
+.swiper-pagination-bullets{
+  gap: .5rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  height: 10rem;
+  overflow: auto;
+}
 .swiper-pagination-bullet {
-  height: 1.8rem;
-  width: 1.8rem;
+  height: 3rem;
+  width: 3rem;
   transition: all ease 0.3s;
-  background: rgb(194, 194, 194);
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: rgb(231, 231, 231);
+  font-size: 1.8rem;
   color: black;
   opacity: 1;
 }
