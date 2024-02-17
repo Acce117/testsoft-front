@@ -75,12 +75,12 @@ button * {
   
   user-select: none;
 }
-.black-button {
+.black-button, .p-dialog-footer button  {
   background-color: black;
   color: white;
   padding: 1rem;
 }
-.black-button:active {
+.black-button:active, .p-dialog-footer button:active {
   background-color: white;
   color: black;
 }

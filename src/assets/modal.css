@@ -1,22 +1,13 @@
-.modal {
+.p-dialog {
   position: relative;
   height: 20rem;
   width: 30rem;
+  overflow: hidden;
 }
-.modal__background-shape {
-  background-color: black;
-  width: 10rem;
-  height: 3.2rem;
-  position: absolute;
-  top: -.2rem;
-  left: -.2rem;
-  border-radius: 1.5rem 0 1.5rem 0;
-  z-index:1;
-}
-.modal__message {
+
+.p-confirm-dialog-message {
     color: black;
   display: flex;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-size: 1.4rem;
   height: 20rem;
   margin: 0 2rem;
@@ -25,6 +16,12 @@
   text-align: center;
   
 }
+.p-dialog-footer{
+  padding:2rem;
+  justify-content: center;
+  gap: 30%;
+}
+
 .modal__long-message{
   overflow: auto;
   align-items: start;
@@ -32,6 +29,7 @@
   font-size: 1.2rem;
 
 }
+
 .p-dialog-content {
   display: flex;
   flex-direction: column;
@@ -44,18 +42,30 @@
   height: 3rem;
   box-shadow: none;
   background-color: transparent;
-
+  
+}
+.p-dialog-header{
+  justify-content: end;
 }
 .p-icon {
   width: 1.5rem;
   height: 1.5rem;
 }
 .p-dialog-title {
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-size: 1.5rem;
-  margin-left: 1rem;
+  display: flex;
+  align-items: center;
   color: white;
+  background-color: black;
+  width: 12rem;
+  height: 4rem;
   z-index: 2;
+  top: 0;
+  left: -1.3rem;
+  border-radius: 1.5rem 0 1.5rem 0;
+  z-index:1;
+  position: absolute;
+  justify-content: center;
 }
 .modal__buttons {
   height: 6rem;
@@ -66,15 +76,14 @@
   margin-bottom: 1rem;
 }
 @media (min-width:768px) {
-    .modal {
+    .p-dialog{
         height: 30rem;
         width: 50rem;
       }
-      .modal__background-shape {
+      .p-dialog-title {
         width: 15rem;
-        height: 4.2rem;
       }
-      .modal__message {
+      .p-confirm-dialog-message {
         font-size: 2rem;
       }
       .modal__long-message{
@@ -93,12 +102,7 @@
         font-size: 2rem;
         margin-left: 1rem;
       }
-      .modal__buttons {
-        height: 10rem;
-        display: flex;
-        gap: 30%;
-      }
-      .modal__buttons button {
+      .p-dialog-footer button {
         font-size: 2rem;
       }
 }

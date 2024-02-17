@@ -8,7 +8,7 @@ import { Pagination, Navigation } from "swiper/modules";
 
 import { useTests } from "@/modules/test/test";
 
-const { result, loading } = useTests();
+const { result, loading, error } = useTests();
 
 const modules = [Pagination, Navigation];
 const pagination = {
@@ -19,29 +19,35 @@ const pagination = {
 };
 </script>
 <template>
-  <div v-if="!loading">
-    <h2 class="page-title">Seleccione un test</h2>
-    <Swiper
-      :spaceBetween="30"
-      :slidesPerView="1"
-      :loop="true"
-      :pagination="pagination"
-      :navigation="true"
-      :modules="modules"
-      :breakpoints="{ 768: { slidesPerView: 2 }, 1024: { slidesPerView: 3 } }"
-    >
-      <swiper-slide class="swiper-slide" v-for="test in result" :key="test.id">
-        <VTestCard
-          :id="test.id"
-          :title="test.name"
-          :description="test.description"
-          :duration="test.durationTime"
-        />
-      </swiper-slide>
-    </Swiper>
+  <VError v-if="error"/>
+  <div v-else style="width:100vw; height:100vh;">
+    <div v-if="!loading" >
+      <h2 class="page-title">Seleccione un test</h2>
+      <Swiper
+        :spaceBetween="30"
+        :slidesPerView="1"
+        :loop="true"
+        :pagination="pagination"
+        :navigation="true"
+        :modules="modules"
+        :breakpoints="{ 768: { slidesPerView: 2 }, 1024: { slidesPerView: 3 } }"
+      >
+        <swiper-slide
+          class="swiper-slide"
+          v-for="test in result"
+          :key="test.id"
+        >
+          <VTestCard
+            :id="test.id"
+            :title="test.name"
+            :description="test.description"
+            :duration="test.durationTime"
+          />
+        </swiper-slide>
+      </Swiper>
+    </div>
+    <VLoading v-else />
   </div>
-
-  <VLoading v-else />
 </template>
 <style>
 .swiper {
@@ -74,8 +80,8 @@ const pagination = {
   transform: scale(1);
   opacity: 0.5;
 }
-.swiper-pagination-bullets{
-  gap: .5rem;
+.swiper-pagination-bullets {
+  gap: 0.5rem;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
