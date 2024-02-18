@@ -4,13 +4,20 @@ import { inject } from "vue";
 import RadioButton from "primevue/radiobutton";
 
 import type { Test } from "@/modules/test/classes/test-class";
+import { SingleOptionQuestion } from "@/modules/test/classes/singleOptionQuestion-class";
 
 const props = defineProps({
-  id_question: String,
+  id_question: {
+    type: String,
+    required: true
+  },
   possible_answers: Array<{ text: string; id_answer: string }>,
 });
 
 const test = inject<Test>("test");
+
+test.questions[`${props.id_question}`] = new SingleOptionQuestion(props.id_question);
+
 </script>
 <template>
   <div
@@ -20,7 +27,7 @@ const test = inject<Test>("test");
   >
     <label :for="answer.id_answer">
       <RadioButton
-        v-model="test.answers[`${props.id_question}`]"
+        v-model="test.questions[`${props.id_question}`].answer"
         :inputId="answer.id_answer"
         :name="props.id_question + ''"
         :value="answer.id_answer"

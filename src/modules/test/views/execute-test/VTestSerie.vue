@@ -24,7 +24,7 @@ const test = inject<Test>("test");
       :title="question.statement"
       :class="{
         'question-not-responded': validatedTestFirstTime
-          ? !test?.validateComponent(question)
+          ? !test?.validateComponent(question.id_question)
           : false,
       }"
     >

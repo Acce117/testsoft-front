@@ -3,9 +3,13 @@ import type { Test } from "@/modules/test/classes/test-class";
 import { computed, inject, ref, watch } from "vue";
 import VInputNumber from "./VInputNumber.vue";
 import { useToast } from "primevue/usetoast";
+import { MultipleOptionsValueSettedQuestion } from "@/modules/test/classes/multipleOptionValueSettedQuestion-class";
 const toast = useToast();
 const props = defineProps({
-  id_question: String,
+  id_question: {
+    type: String,
+    required: true
+  },
   question_index: Number,
   possible_answers: Array<{ text: string; id_answer: string }>,
   maxPoints: {
@@ -14,27 +18,13 @@ const props = defineProps({
   },
 });
 const test = inject<Test>("test");
-test.answers[`${props.id_question}`] = {};
+test.questions[`${props.id_question}`] = new MultipleOptionsValueSettedQuestion(props.id_question, props.maxPoints);
 
 const distributedPoints = ref(0);
 
 const points = ref(props.maxPoints || 0);
 
 const actualPoints = computed(() => props.maxPoints - distributedPoints.value);
-
-/*const handleInput = (
-  event: any,
-  id_question: number | string,
-  id_answer: number | string
-) => {
-  const isGreater =
-    distributedPoints.value + (event.value - event.formattedValue) > 10;
-  if (isGreater) {
-    test.answers[`${id_question}`][`${id_answer}`] = event.formattedValue;
-    event.originalEvent.target.value = event.formattedValue;
-  }
-  //@input="(event: any)=>handleInput(event, props.id_question, answer.id_answer)"
-};*/
 
 let timeOutIdToast: number;
 const updateInput = (value: number, oldValue: number) => {
@@ -66,11 +56,11 @@ const updateInput = (value: number, oldValue: number) => {
         :min="0"
         :max="actualPoints"
         @vue:mounted="
-          test.answers[`${props.id_question}`][`${answer.id_answer}`] = 0
+          test.questions[`${props.id_question}`].answer[`${answer.id_answer}`] = 0
         "
         @update:value="(value, oldValue) => updateInput(value, oldValue)"
         v-model.number="
-          test.answers[`${props.id_question}`][`${answer.id_answer}`]
+          test.questions[`${props.id_question}`].answer[`${answer.id_answer}`]
         "
       />
     </label>
