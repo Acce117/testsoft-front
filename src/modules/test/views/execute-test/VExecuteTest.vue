@@ -3,44 +3,84 @@ import VTestSerie from "./VTestSerie.vue";
 import { onBeforeRouteLeave, useRouter } from "vue-router";
 import Steps from "primevue/steps";
 import Dialog from "primevue/dialog";
-import { provide, reactive, ref, watch } from "vue";
+import { provide, markRaw, reactive, ref, watch, defineAsyncComponent } from "vue";
 import { getTest } from "@/modules/test/test";
 import { Test } from "../../classes/test-class";
 import { useToast } from "primevue/usetoast";
 import { getErrorMessages } from "./getErrorMessages";
 import { useConfirm } from "primevue/useconfirm";
+import { useDialog } from "primevue/usedialog";
+const VDialogFooter = defineAsyncComponent(() => import("@/components/dialog/VDialogFooter.vue"));
+const VDialogMessage = defineAsyncComponent(() => import("@/components/dialog/VDialogMessage.vue"));
+const dialog = useDialog();
 const toast = useToast();
 const confirm = useConfirm();
 const router = useRouter();
-
-const serieIndex = ref(0);
-
 const { result, loading, error } = getTest(
   router.currentRoute.value.params.id_test as string
 );
+const test = reactive(new Test(router.currentRoute.value.params.id_test));
 
-let timeCountdown: number;
+provide<Test>("test", test);
 
+//SERIE NAVIGATION
+const serieIndex = ref(0);
+const nextSerie = () => {
+  serieIndex.value += 1;
+};
+const prevSerie = () => {
+  serieIndex.value -= 1;
+};
+
+const getSeriesNames = () => {
+  let names = Array();
+  if (result.value) {
+    result.value.arrayserie.forEach((serie: { name: string }) => {
+      names.push({ label: serie.name });
+    });
+  }
+  return names;
+};
+watch(
+  serieIndex,
+  () => (document.getElementsByTagName("main")[0].scrollTop = 0)
+);
+//TIMER
+
+let timeCountdown = ref();
 watch(result, (newValue) => {
-  timeCountdown = newValue.time_duration * 60 * 1000;
+  timeCountdown.value = newValue.time_duration * 60 * 1000;
 });
-const testEndedVisible = ref(false);
-const testEnded2ndVisible = ref(false);
+let hasSecondOpportunity = true;
+const timeOver = () => {
+  if (hasSecondOpportunity) {
+    timeCountdown.value = 5 *60* 1000;
+    hasSecondOpportunity = false;
+    toast.add({
+      severity: "warn",
+      summary: "Advertencia:",
+      detail: "El tiempo del test ha terminado. Se agregarán 5 minutos más.",
+      life: 5000,
+    });
+  } else {
+    confirmExit = true;
+    router.push("/select-test");
+    timeOverDialog();
+  }
+};
+
+//DIALOGS
 const infoVisible = ref(false);
-const validatedTestFirstTime = ref(false);
+provide("dialogRef", dialog);
 
 const exitTestConfirm = () => {
   confirm.require({
     message: "¿Desea salir del test? Los resultados se perderán.",
     header: "Salir",
-    icon: "pi pi-exclamation-triangle",
     rejectLabel: "Cancelar",
     acceptLabel: "Aceptar",
     accept: () => {
       exitTest();
-    },
-    reject: () => {
-      confirmExit = false;
     },
   });
 };
@@ -48,7 +88,6 @@ const sendTestConfirm = () => {
   confirm.require({
     message: "¿Desea guardar los resultados del test?",
     header: "Salir",
-    icon: "pi pi-exclamation-triangle",
     rejectLabel: "Cancelar",
     acceptLabel: "Aceptar",
     accept: () => {
@@ -60,7 +99,20 @@ const sendTestConfirm = () => {
     },
   });
 };
+const timeOverDialog = () => {
+  dialog.open(VDialogMessage, {
+    props: {
+      header: "Test",
+      modal: true,
+    },
+    templates: {
+      footer: markRaw(VDialogFooter),
+    },
+  });
+};
 
+//TEST VALIDATION
+const validatedTestFirstTime = ref(false);
 provide("validatedTestFirstTime", validatedTestFirstTime);
 
 const validateTest = () => {
@@ -86,56 +138,16 @@ const validateTest = () => {
   validatedTestFirstTime.value = true;
 };
 
-const nextSerie = () => {
-  serieIndex.value += 1;
-};
-const prevSerie = () => {
-  serieIndex.value -= 1;
-};
-
-const getSeriesNames = () => {
-  let names = Array();
-  if (result.value) {
-    result.value.arrayserie.forEach((serie: { name: string }) => {
-      names.push({ label: serie.name });
-    });
-  }
-  return names;
-};
-let firtsTimeEnd = true;
-let timeOutIdTestEnded: number;
-const testEnded = () => {
-  if (firtsTimeEnd) {
-    testEndedVisible.value = true;
-    timeCountdown = 5 * 60 * 1000;
-    firtsTimeEnd = false;
-  } else {
-    timeOutIdTestEnded = setTimeout(() => {
-      router.push("/");
-    }, 5000);
-    testEnded2ndVisible.value = true;
-  }
-};
-const testEnded2nd = () => {
-  clearTimeout(timeOutIdTestEnded);
-  router.push("/");
-};
-
-const test = reactive(new Test(router.currentRoute.value.params.id_test));
-
-provide<Test>("test", test);
-
-watch(
-  serieIndex,
-  () => (document.getElementsByTagName("main")[0].scrollTop = 0)
-);
+//ROUTER
 let confirmExit = false;
 onBeforeRouteLeave((to, from) => {
-  if (!error.value)
+  if (!error.value) {
     if (!confirmExit) {
       exitTestConfirm();
       return false;
     }
+  }
+  confirm.close();
 });
 
 const exitTest = () => {
@@ -196,7 +208,7 @@ const exitTest = () => {
           <vue-countdown
             :time="timeCountdown"
             v-slot="{ minutes, seconds }"
-            @end="testEnded()"
+            @end="timeOver()"
           >
             {{ minutes > 9 ? minutes : `0` + minutes }}:{{
               seconds > 9 ? seconds : `0` + seconds
@@ -235,47 +247,12 @@ const exitTest = () => {
           :answers="test.answers"
         />
       </div>
-
-      <Dialog
-        v-model:visible="testEndedVisible"
-        modal
-        header="Test"
-        class="modal box-shadow-box"
-        ><span class="modal__background-shape"></span>
-        <span class="modal__message"
-          >El tiempo del test ha terminado. Se agregarán 5 minutos más.</span
-        >
-        <div class="modal__buttons">
-          <button class="black-button" @click="testEndedVisible = false">
-            Aceptar
-          </button>
-        </div>
-      </Dialog>
-      <Dialog
-        v-model:visible="testEnded2ndVisible"
-        modal
-        header="Test"
-        class="modal box-shadow-box"
-        ><span class="modal__background-shape"></span>
-        <span class="modal__message">El tiempo del test ha terminado</span>
-        <div class="modal__buttons">
-          <button class="black-button" @click="testEnded2nd()">Aceptar</button>
-        </div>
-      </Dialog>
       <Dialog
         v-model:visible="infoVisible"
         modal
         header="Descripción"
-        class="modal box-shadow-box"
-        ><span class="modal__background-shape"></span>
-        <span class="modal__message modal__long-message">{{
-          result.description
-        }}</span>
-        <div class="modal__buttons">
-          <button class="black-button" @click="infoVisible = false">
-            Aceptar
-          </button>
-        </div>
+      >
+        <span class="modal__long-message">{{ result.description }}</span>
       </Dialog>
     </div>
     <VLoading v-else />

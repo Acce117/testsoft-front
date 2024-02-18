@@ -1,0 +1,106 @@
+.p-dialog {
+  position: relative;
+  height: 20rem;
+  width: 30rem;
+  overflow: hidden;
+}
+
+.p-dialog-content {
+  margin: 2rem 0;
+  overflow: auto;
+  display: flex;
+}
+
+.p-confirm-dialog-message, .modal__message {
+  color: black;
+  display: flex;
+  font-size: 1.4rem;
+  height: 12rem;
+  margin: 0 2rem;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+}
+
+.p-dialog-footer {
+  padding: 2rem;
+  justify-content: center;
+  gap: 30%;
+}
+
+.modal__long-message {
+  margin: 0 2rem;
+  align-items: start;
+  text-align: justify;
+  font-size: 1.2rem;
+}
+
+.p-dialog .p-dialog-header .p-dialog-header-icon {
+  width: 3rem;
+  height: 3rem;
+  box-shadow: none;
+  background-color: transparent;
+}
+.p-dialog-header {
+  justify-content: end;
+}
+.p-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+.p-dialog-title {
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  color: white;
+  background-color: black;
+  width: 12rem;
+  height: 4rem;
+  z-index: 2;
+  top: 0;
+  left: -1.3rem;
+  border-radius: 1.5rem 0 1.5rem 0;
+  z-index: 1;
+  position: absolute;
+  justify-content: center;
+}
+.modal__buttons {
+  height: 6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 30%;
+  margin-bottom: 1rem;
+}
+@media (min-width: 768px) {
+  .p-dialog {
+    height: 30rem;
+    width: 50rem;
+  }
+  .p-dialog-title {
+    width: 15rem;
+  }
+  .p-confirm-dialog-message, .modal__message {
+    font-size: 2rem;
+  }
+  .modal__long-message {
+    font-size: 1.6rem;
+  }
+
+  .p-dialog .p-dialog-header .p-dialog-header-icon {
+    width: 4rem;
+    height: 4rem;
+  }
+  .p-icon {
+    width: 2rem;
+    height: 2rem;
+  }
+  .p-dialog-title {
+    font-size: 2rem;
+    margin-left: 1rem;
+  }
+  .p-dialog-footer button {
+    font-size: 2rem;
+  }
+}

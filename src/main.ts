@@ -11,22 +11,24 @@ import VueCountdown from '@chenfengyuan/vue-countdown';
 import VLoading from './components/VLoading.vue';
 import VError from './components/VError.vue';
 import ToastService from 'primevue/toastservice';
-import ConfirmDialog from 'primevue/confirmdialog';
+import DialogService from 'primevue/dialogservice';
 import ConfirmationService from 'primevue/confirmationservice';
+import { isUserAuthenticated } from './modules/security/isUserAuthenticated';
 
 const app = createApp(App)
 
 app.component('vue-countdown', VueCountdown);
 app.component('VLoading', VLoading);
 app.component('VError', VError);
-app.component('ConfirmDialog', ConfirmDialog);
 
 app.use(router)
 app.use(PrimeVue);
 app.use(ToastService);
 app.use(ConfirmationService);
+app.use(DialogService);
 app.use(createPinia());
 app.mount('#app')
 app.directive('tooltip', Tooltip);
 
-router.push('/login')
+if (!isUserAuthenticated)
+    router.push('/login')

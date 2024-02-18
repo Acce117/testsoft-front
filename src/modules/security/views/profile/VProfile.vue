@@ -3,16 +3,30 @@ import { useRouter } from "vue-router";
 import { userStore } from "../../store/user-store";
 import Dialog from "primevue/dialog";
 import { ref } from "vue";
-
+import { useConfirm } from "primevue/useconfirm";
+const confirm = useConfirm();
 const router = useRouter();
-const logout = () => {
+const logOut = () => {
   visible.value = false;
   user.$reset();
+  sessionStorage.removeItem('user');
   router.push("/login");
 };
 
 const user = userStore();
 const visible = ref(false);
+
+const logOutConfirm = ()=>{
+  confirm.require({
+    message: "¿Desea cerrar sesión?",
+    header: "Salir",
+    rejectLabel: "Cancelar",
+    acceptLabel: "Aceptar",
+    accept: () => {
+      logOut();
+    },
+  })
+}
 
 </script>
 <template>
@@ -24,19 +38,10 @@ const visible = ref(false);
     <span>Rol: {{ user.role }}</span>
     <span v-if="user.userType">Tipo de Usuario: {{ user.userType }}</span>
 
-    <button class="black-button" @click="visible = true">
+    <button class="black-button" @click="logOutConfirm()">
       Cerrar Sesión
     </button>
   </div>
-
-  <Dialog v-model:visible="visible" modal header="Sesión" class="modal box-shadow-box"><span
-      class="modal__background-shape"></span>
-    <span class="modal__message">Desea cerrar sesión?</span>
-    <div class="modal__buttons">
-      <button class="black-button" @click="logout()">Aceptar</button>
-      <button class="black-button" @click="visible = false">Cancelar</button>
-    </div>
-  </Dialog>
 </template>
 <style>
 .profile {

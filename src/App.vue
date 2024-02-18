@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import { RouterView } from "vue-router";
 import Toast from "primevue/toast";
+import ConfirmDialog from "primevue/confirmdialog";
+import DynamicDialog from "primevue/dynamicdialog";
 </script>
 <template>
-  <router-view/>
+  <router-view />
   <Toast position="top-left" />
-  <ConfirmDialog/>
+  <ConfirmDialog />
+  <DynamicDialog />
 </template>
