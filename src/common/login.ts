@@ -16,7 +16,7 @@ export async function login(credentials: LoginForm) {
     if (credentials.password.trim() === '')
         throw new Error('The password must be provided ')
 
-    const response = await sendRequest('http://localhost/testsoft/api/web/site/login', credentials, 'POST');
+    const response = await sendRequest(`${import.meta.env.VITE_API_PATH}/site/login`, credentials, 'POST');
 
     if (response?.status === 401)
         throw new Error('Unauthorized');

@@ -20,7 +20,7 @@ function resultsRequest( url: string) {
 }
 
 export function getResults() {
-    const url = `http://localhost/testsoft/api/web/gestion/application_result`;
+    const url = `${import.meta.env.VITE_API_PATH}/gestion/application_result`;
 
     return resultsRequest(url);
 }

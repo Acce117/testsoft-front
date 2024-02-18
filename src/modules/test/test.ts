@@ -30,7 +30,7 @@ function testRequest(queryParams: Object, url: string) {
  */
 
 export function useTests() {
-    const url = `http://localhost/testsoft/api/web/gestion/group_for_test`;
+    const url = `${import.meta.env.VITE_API_PATH}/gestion/group_for_test`;
 
     return testRequest({
         attr: {
@@ -41,7 +41,7 @@ export function useTests() {
 }
 
 export function getTest(idTest: number | string) {
-    const url = `http://localhost/testsoft/api/web/gestion/test/view/${idTest}`;
+    const url = `${import.meta.env.VITE_API_PATH}/gestion/test/view/${idTest}`;
 
     return testRequest({
         attr:{

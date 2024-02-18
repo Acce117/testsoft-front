@@ -14,15 +14,7 @@ import ToastService from 'primevue/toastservice';
 import ConfirmDialog from 'primevue/confirmdialog';
 import ConfirmationService from 'primevue/confirmationservice';
 
-
-//TODO improve routes
-//TODO .env for routes
-
 const app = createApp(App)
-
-
-
-
 
 app.component('vue-countdown', VueCountdown);
 app.component('VLoading', VLoading);

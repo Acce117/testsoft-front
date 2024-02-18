@@ -15,7 +15,7 @@ export class Test {
         };
         
         sendRequest(
-            'http://localhost/testsoft/api/web/gestion/test/execute_test',
+            `${import.meta.env.VITE_API_PATH}/gestion/test/execute_test`,
             test,
             'POST'
         )
