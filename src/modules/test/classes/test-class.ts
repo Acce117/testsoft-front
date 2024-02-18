@@ -28,7 +28,7 @@ export class Test {
     public getQuestionsNotAnswered(questions:Array<any>) {
         let questionsNotAnswered =Array()
         questions.forEach((question, index) => {
-            if (!this.validateComponent(question))
+            if (!this.validateComponent(question.id_question))
                 questionsNotAnswered.push({questionIndex:index+1,question:question})
         });
         return questionsNotAnswered
