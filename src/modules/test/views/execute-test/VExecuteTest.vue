@@ -106,7 +106,7 @@ const testEnded2nd = () => {
   router.push("/");
 };
 
-const test = reactive(new Test());
+const test = reactive(new Test(router.currentRoute.value.params.id_test));
 
 provide<Test>("test", test);
 </script>

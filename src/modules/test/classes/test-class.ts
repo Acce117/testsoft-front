@@ -1,13 +1,26 @@
+import { sendRequest } from "@/common/utils/fetch";
+import { userStore } from "@/modules/security/store/user-store";
+
 export class Test {
     answers: { [key: string]: any };
 
-    public constructor() {
+    public constructor(readonly id_test: number|string) {
         this.answers = {};
     }
 
     public sendTest() {
-        //TODO send request with answers
-        console.log(this.answers);
+        const test = {
+            user_ci: userStore().ci,
+            ...this
+        };
+        
+        sendRequest(
+            'http://localhost/testsoft/api/web/gestion/test/execute_test',
+            test,
+            'POST'
+        )
+        .then(res=>console.log(res))
+        .catch(err=>console.log(err));
     }
 
 
