@@ -16,7 +16,8 @@ const props = defineProps({
 
 const test = inject<Test>("test");
 
-test.questions[`${props.id_question}`] = new SingleOptionQuestion(props.id_question);
+if(!test.questions[`${props.id_question}`])
+  test.questions[`${props.id_question}`] = new SingleOptionQuestion(props.id_question);
 
 </script>
 <template>

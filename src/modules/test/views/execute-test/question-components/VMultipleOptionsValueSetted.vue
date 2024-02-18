@@ -18,7 +18,9 @@ const props = defineProps({
   },
 });
 const test = inject<Test>("test");
-test.questions[`${props.id_question}`] = new MultipleOptionsValueSettedQuestion(props.id_question, props.maxPoints);
+
+if(!test.questions[`${props.id_question}`]) 
+  test.questions[`${props.id_question}`] = new MultipleOptionsValueSettedQuestion(props.id_question, props.maxPoints);
 
 const distributedPoints = ref(0);
 
