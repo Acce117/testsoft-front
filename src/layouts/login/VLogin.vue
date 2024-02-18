@@ -3,7 +3,7 @@
     <div class="login">
       <span class="screen__background"></span>
       <img src="/img/logo.png" class="login__logo" />
-
+      
       <form action="" @submit.prevent="sendCredentials()">
         <h2>Bienvenido a Testsoft</h2>
         <div class="login__input">
@@ -26,34 +26,22 @@
             ><img src="/img/password.svg" />Contraseña</label
           >
         </div>
-        <button class="black-button" type="submit"><span v-if="!loading">Iniciar Sesión</span> <VLoading v-else /></button>
+        <button class="black-button" type="submit">
+          <span v-if="!loading">Iniciar Sesión</span> <VLoading v-else />
+        </button>
       </form>
     </div>
-
-    <Dialog
-      v-model:visible="visible"
-      modal
-      header="Error"
-      class="modal box-shadow-box"
-      ><span class="modal__background-shape"></span>
-      <span class="modal__message">Inicio de sesión inválido</span>
-      <div class="modal__buttons">
-        <button class="black-button" @click="visible = false">
-          Aceptar
-        </button>
-      </div>
-    </Dialog>
   </main>
 </template>
 
 <script setup lang="ts">
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import Dialog from "primevue/dialog";
 import { login } from "@/common/login";
-const visible = ref(false);
 const router = useRouter();
-const loading = ref(false)
+const loading = ref(false);
+import { useToast } from "primevue/usetoast";
+const toast = useToast();
 const credentials = ref({
   username: "",
   password: "",
@@ -61,12 +49,18 @@ const credentials = ref({
 
 async function sendCredentials() {
   try {
-    loading.value=true
-    await login(credentials.value);
+    loading.value = true;
+    await login(credentials.value)
     router.push("/");
+    toast.removeAllGroups()
   } catch (err) {
-    loading.value=false
-    visible.value = true;
+    loading.value = false;
+    toast.add({
+          severity: "error",
+          summary: "Error",
+          detail: 'Inicio de sesión inválido',
+          life: 3000,
+        });
     console.log(err);
   }
 }
@@ -87,7 +81,6 @@ window.scrollTo(0, 0);
   border-radius: 1.5rem;
   overflow: hidden;
   color: white;
-  box-shadow: var(--shadow);
   animation: 0.5s fade-in;
 }
 .login__input {
@@ -150,10 +143,10 @@ window.scrollTo(0, 0);
   font-size: 1.4rem;
   margin-top: 8rem;
 }
-.login form button img{
+.login form button img {
   filter: invert();
 }
-.login form button:active img{
+.login form button:active img {
   filter: none;
 }
 

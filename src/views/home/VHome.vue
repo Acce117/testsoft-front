@@ -64,7 +64,7 @@ import VPresentation from "./components/VPresentation.vue";
 }
 .home__left h2 {
   color: white;
-  width: 100%;
+  width: 90%;
   font-size: 1.5rem;
 }
 @media (min-width: 480px) {

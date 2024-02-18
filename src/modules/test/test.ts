@@ -5,6 +5,7 @@ import { userStore } from "../security/store/user-store";
 function testRequest(queryParams: Object, url: string) {
     let result = ref();
     let loading = ref(true);
+    let error = ref(false);
 
     sendRequest(url, queryParams)
         .then(res => {
@@ -13,11 +14,13 @@ function testRequest(queryParams: Object, url: string) {
         }).catch(err => {
             console.log(err);
             loading.value = false;
+            error.value=true
         })
     
     return {
         result,
         loading,
+        error
     };
 }
 

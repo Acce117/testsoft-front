@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router";
+import { ref } from "vue";
 const router = useRouter();
 const props = defineProps({
-  id:Number,
+  id: Number,
   title: String,
   duration: Number,
   description: String,
@@ -10,12 +11,20 @@ const props = defineProps({
 const executeTest = () => {
   router.push(`/execute-test/${props.id}`);
 };
+const showImage = ref(true);
 </script>
 
 <template>
-  <div class="test-card">
+  <div
+    class="test-card"
+    @mouseover="showImage = false"
+    @mouseleave="showImage = true"
+  >
     <div class="test-card__header">
-      <img src="/img/test_icon.svg" />
+      <transition name="fast-fade">
+        <img v-if="showImage" src="/img/test_icon.svg" />
+      </transition>
+
       <h2>{{ props.title }}</h2>
     </div>
     <div class="test-card__description">
@@ -26,15 +35,16 @@ const executeTest = () => {
       </p>
     </div>
 
-    <button @click="executeTest()">Ejecutar</button>
+    <button class="black-button" @click="executeTest()">Ejecutar</button>
   </div>
 </template>
 
 <style>
 .test-card {
-  width: 20rem;
-  height: 25rem;
-  box-shadow: 0rem 0rem 0.6rem 0.6rem #00000030;
+  position: relative;
+  width: 28rem;
+  height: 35rem;
+  box-shadow: var(--shadow);
   border-radius: 1.5rem;
   display: flex;
   flex-direction: column;
@@ -44,73 +54,68 @@ const executeTest = () => {
   margin: 0 auto;
   transition: all ease 0.2s;
   overflow: hidden;
-  animation: .3s scale;
+  animation: 0.3s scale;
 }
 
-.test-card:hover {
-  height: 35rem;
+.test-card:hover .test-card__header {
+  height: 25%;
 }
 
 .test-card__description {
   opacity: 0;
   transition: all ease 0.2s;
-  margin: 1rem;
-  font-size: 1.3rem;
+  margin: 35% 0.2rem 0 0.2rem;
+  font-size: 1.5rem;
   display: flex;
   flex-direction: column;
   text-align: left;
   gap: 0.5rem;
-  height: 15rem;
+  height: 17rem;
   overflow: auto;
 }
-.test-card__description span {
+.test-card__description span, .test-card__header h2, .test-card button {
   font-weight: bold;
 }
+
+.test-card__description > span {
+  margin: 0 1rem;
+}
+
 .test-card__description p {
-  text-align: left;
+  text-align: justify;
+  padding: 0 1rem;
 }
 .test-card:hover .test-card__description {
   opacity: 1;
 }
 
 .test-card button {
-  background-color: black;
-  color: white;
-
   font-size: 1.5rem;
-  font-weight: bold;
-  padding: 1rem;
   width: 40%;
-  margin: 2rem;
+  margin: 1.5rem;
 }
 
-.test-card button:active {
-  color: black;
-  background-color: white;
-}
 .test-card__header {
   background-color: black;
+  position: absolute;
   display: flex;
   align-items: center;
   flex-direction: column;
+  justify-content: center;
   transition: all ease 0.2s;
   width: 100%;
+  height: 80%;
+  gap: 2rem;
+  opacity: 1;
+  overflow: auto;
 }
 .test-card__header img {
   filter: invert();
   width: 5rem;
-  margin: 2rem;
 }
 .test-card__header h2 {
-  font-weight: bold;
   color: white;
   font-size: 1.5rem;
   width: 90%;
-  margin-bottom: 1rem;
-}
-@media (min-width: 480px) {
-  .test-card {
-    width: 25rem;
-  }
 }
 </style>

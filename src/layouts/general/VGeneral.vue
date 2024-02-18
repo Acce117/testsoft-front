@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import VNavbar from "@/components/navbar/VNavbar.vue";
 window.scrollTo(0,0)
-import {ref, watch} from 'vue'
-const width = ref(window.innerWidth)
-
+import {ref} from 'vue'
 </script>
 
 <template>
@@ -23,7 +21,6 @@ const width = ref(window.innerWidth)
   position: relative;
   display: flex;
   flex-direction: column;
- 
   justify-content: center;
   background-color: white;
   width: 100vw;

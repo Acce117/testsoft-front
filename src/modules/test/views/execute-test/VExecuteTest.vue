@@ -1,73 +1,88 @@
 <script setup lang="ts">
 import VTestSerie from "./VTestSerie.vue";
-import { useRouter } from "vue-router";
-import Dialog from "primevue/dialog";
+import { onBeforeRouteLeave, useRouter } from "vue-router";
 import Steps from "primevue/steps";
+import Dialog from "primevue/dialog";
 import { provide, reactive, ref, watch } from "vue";
 import { getTest } from "@/modules/test/test";
 import { Test } from "../../classes/test-class";
-import Toast from "primevue/toast";
 import { useToast } from "primevue/usetoast";
+import { getErrorMessages } from "./getErrorMessages";
+import { useConfirm } from "primevue/useconfirm";
 const toast = useToast();
+const confirm = useConfirm();
 const router = useRouter();
+
 const serieIndex = ref(0);
 
-const { result, loading } = getTest(
+const { result, loading, error } = getTest(
   router.currentRoute.value.params.id_test as string
 );
+
 let timeCountdown: number;
 
 watch(result, (newValue) => {
   timeCountdown = newValue.time_duration * 60 * 1000;
 });
-const exitTestVisible = ref(false);
-const saveTestVisible = ref(false);
 const testEndedVisible = ref(false);
 const testEnded2ndVisible = ref(false);
 const infoVisible = ref(false);
 const validatedTestFirstTime = ref(false);
 
+const exitTestConfirm = () => {
+  confirm.require({
+    message: "¿Desea salir del test? Los resultados se perderán.",
+    header: "Salir",
+    icon: "pi pi-exclamation-triangle",
+    rejectLabel: "Cancelar",
+    acceptLabel: "Aceptar",
+    accept: () => {
+      exitTest();
+    },
+    reject: () => {
+      confirmExit = false;
+    },
+  });
+};
+const sendTestConfirm = () => {
+  confirm.require({
+    message: "¿Desea guardar los resultados del test?",
+    header: "Salir",
+    icon: "pi pi-exclamation-triangle",
+    rejectLabel: "Cancelar",
+    acceptLabel: "Aceptar",
+    accept: () => {
+      test.sendTest();
+      exitTest();
+    },
+    reject: () => {
+      confirmExit = false;
+    },
+  });
+};
+
 provide("validatedTestFirstTime", validatedTestFirstTime);
 
-let timeOutIdToast: number;
-//TODO possible elimination of the setTimeout function because the toastcounter improve the fluidity of the app already
-const endTest = () => {
-  clearTimeout(timeOutIdToast);
+const validateTest = () => {
   toast.removeAllGroups();
-  let isValid = true;//This is for validating test
-  let toastCounter = 0; //This is for restricting the amount of toast messages in dom
-  result.value.arrayserie.forEach((serie) => {
-    const questionsNotAnswered = test.getQuestionsNotAnswered(serie.arrayquestion);//for each serie, this function returns the incorrect answers. This is for managing questions and series in toast
+  let isValid = true; //This is for validating test
+  result.value.arrayserie.forEach((serie: any) => {
+    const questionsNotAnswered = test.getQuestionsNotAnswered(
+      serie.arrayquestion
+    ); //for each serie, this function returns the incorrect answers. This is for managing questions and series in toast
     if (questionsNotAnswered.length > 0) {
       isValid = false;
-      questionsNotAnswered.forEach((question) => {
-        let errorMessage;
-        switch (parseInt(question.question.fk_id_type_question)) {
-          case 2:
-            errorMessage = "Debe seleccionar una respuesta";
-            break;
-          case 5:
-            errorMessage = "Existen puntos por asignar aún";
-            break;
-        }
-        errorMessage+=` en la pregunta ${question.questionIndex}, ${serie.name}`
-        if(toastCounter<10){
-          toast.add({
+      getErrorMessages(questionsNotAnswered).forEach((error) => {
+        toast.add({
           severity: "error",
-          summary: "Error",
-          detail: errorMessage,
-          life: 10000,
+          summary: "Error: " + serie.name,
+          detail: error,
+          life: 3000,
         });
-        toastCounter+=1
-        }
-        
       });
-      timeOutIdToast = setTimeout(() => {//this is for deleting the toast to avoid close animations because they slow down the process  
-        toast.removeAllGroups();
-      }, 3000);
     }
   });
-  if (isValid) test.sendTest();
+  if (isValid) sendTestConfirm();
   validatedTestFirstTime.value = true;
 };
 
@@ -109,175 +124,165 @@ const testEnded2nd = () => {
 const test = reactive(new Test(router.currentRoute.value.params.id_test));
 
 provide<Test>("test", test);
+
+watch(
+  serieIndex,
+  () => (document.getElementsByTagName("main")[0].scrollTop = 0)
+);
+let confirmExit = false;
+onBeforeRouteLeave((to, from) => {
+  if (!error.value)
+    if (!confirmExit) {
+      exitTestConfirm();
+      return false;
+    }
+});
+
+const exitTest = () => {
+  confirmExit = true;
+  router.push("/");
+};
 </script>
 <template>
-  <div class="test" v-if="!loading">
-    <Toast position="top-left" />
-    <div class="test__header">
-      <div class="test__header__content">
-        <h2 class="page-title">
-          {{ result.name }}
-        </h2>
-        <div class="test__serie__navigation">
-          <button
-            class="black-button"
-            :class="{
-              'p-disabled': !(serieIndex > 0 && result.navigable == 1),
-            }"
-            @click="prevSerie()"
-            v-tooltip.bottom="'Serie Anterior'"
-            placeholder="Bottom"
-          >
-            <img
-              src="/img/arrow.svg"
-              alt="serie anterior"
-              style="transform: rotate(180deg)"
+  <VError v-if="error" />
+  <div v-else style="width: 100vw; height: 100vh">
+    <div class="test" v-if="!loading">
+      <div class="test__header">
+        <div class="test__header__content">
+          <h2 class="page-title">
+            {{ result.name }}
+          </h2>
+          <div class="test__serie__navigation">
+            <button
+              class="black-button"
+              :class="{
+                'p-disabled': !(serieIndex > 0 && result.navigable == 1),
+              }"
+              @click="prevSerie()"
+              v-tooltip.bottom="'Serie Anterior'"
+              placeholder="Bottom"
+            >
+              <img
+                src="/img/arrow.svg"
+                alt="serie anterior"
+                style="transform: rotate(180deg)"
+              />
+            </button>
+            <Steps
+              :model="getSeriesNames()"
+              v-model:activeStep="serieIndex"
+              :readonly="result.navigable != 1"
             />
-          </button>
-          <Steps
-            :model="getSeriesNames()"
-            v-model:activeStep="serieIndex"
-            :readonly="result.navigable != 1"
-          />
-          <button
-            :class="{
-              'p-disabled': !(serieIndex < result.arrayserie.length - 1),
-            }"
-            class="black-button"
-            @click="nextSerie()"
-            v-tooltip.bottom="'Siguiente Serie'"
-            placeholder="Bottom"
-          >
-            <img src="/img/arrow.svg" alt="siguiente serie" />
-          </button>
+            <button
+              :class="{
+                'p-disabled': !(serieIndex < result.arrayserie.length - 1),
+              }"
+              class="black-button"
+              @click="nextSerie()"
+              v-tooltip.bottom="'Siguiente Serie'"
+              placeholder="Bottom"
+            >
+              <img src="/img/arrow.svg" alt="siguiente serie" />
+            </button>
+          </div>
         </div>
       </div>
-    </div>
 
-    <div class="test__content">
-      <h3 class="page-subtitle">
-        {{ result.arrayserie[serieIndex].description }}
-      </h3>
-      <div class="test__timer">
-        <vue-countdown
-          :time="timeCountdown"
-          v-slot="{ minutes, seconds }"
-          @end="testEnded()"
-        >
-          {{ minutes > 9 ? minutes : `0` + minutes }}:{{
-            seconds > 9 ? seconds : `0` + seconds
-          }}
-        </vue-countdown>
-        <img src="/img/timer.svg" alt="tiempo restante" />
+      <div class="test__content">
+        <h3 class="page-subtitle">
+          {{ result.arrayserie[serieIndex].description }}
+        </h3>
+        <div class="test__timer">
+          <vue-countdown
+            :time="timeCountdown"
+            v-slot="{ minutes, seconds }"
+            @end="testEnded()"
+          >
+            {{ minutes > 9 ? minutes : `0` + minutes }}:{{
+              seconds > 9 ? seconds : `0` + seconds
+            }}
+          </vue-countdown>
+          <img src="/img/timer.svg" alt="tiempo restante" />
+        </div>
+        <div class="test__buttons">
+          <button
+            class="black-button"
+            @click="validateTest()"
+            v-tooltip.right="'Terminar Test'"
+            placeholder="Right"
+          >
+            <img src="/img/test_completed.svg" alt="terminar test" />
+          </button>
+          <button
+            class="black-button"
+            @click="infoVisible = true"
+            v-tooltip.right="'Información'"
+            placeholder="Right"
+          >
+            <img src="/img/info.svg" alt="info" />
+          </button>
+          <button
+            class="black-button"
+            @click="exitTestConfirm()"
+            v-tooltip.right="'Cancelar Test'"
+            placeholder="Right"
+          >
+            <img src="/img/cancel.svg" alt="cancelar test" />
+          </button>
+        </div>
+        <VTestSerie
+          :serie="result.arrayserie[serieIndex]"
+          :answers="test.answers"
+        />
       </div>
-      <div class="test__buttons">
-        <button
-          class="black-button"
-          @click="endTest()"
-          v-tooltip.right="'Terminar Test'"
-          placeholder="Right"
+
+      <Dialog
+        v-model:visible="testEndedVisible"
+        modal
+        header="Test"
+        class="modal box-shadow-box"
+        ><span class="modal__background-shape"></span>
+        <span class="modal__message"
+          >El tiempo del test ha terminado. Se agregarán 5 minutos más.</span
         >
-          <img src="/img/test_completed.svg" alt="terminar test" />
-        </button>
-        <button
-          class="black-button"
-          @click="infoVisible = true"
-          v-tooltip.right="'Información'"
-          placeholder="Right"
-        >
-          <img src="/img/info.svg" alt="info" />
-        </button>
-        <button
-          class="black-button"
-          @click="exitTestVisible = true"
-          v-tooltip.right="'Cancelar Test'"
-          placeholder="Right"
-        >
-          <img src="/img/cancel.svg" alt="cancelar test" />
-        </button>
-      </div>
-      <VTestSerie
-        :serie="result.arrayserie[serieIndex]"
-        :answers="test.answers"
-      />
+        <div class="modal__buttons">
+          <button class="black-button" @click="testEndedVisible = false">
+            Aceptar
+          </button>
+        </div>
+      </Dialog>
+      <Dialog
+        v-model:visible="testEnded2ndVisible"
+        modal
+        header="Test"
+        class="modal box-shadow-box"
+        ><span class="modal__background-shape"></span>
+        <span class="modal__message">El tiempo del test ha terminado</span>
+        <div class="modal__buttons">
+          <button class="black-button" @click="testEnded2nd()">Aceptar</button>
+        </div>
+      </Dialog>
+      <Dialog
+        v-model:visible="infoVisible"
+        modal
+        header="Descripción"
+        class="modal box-shadow-box"
+        ><span class="modal__background-shape"></span>
+        <span class="modal__message modal__long-message">{{
+          result.description
+        }}</span>
+        <div class="modal__buttons">
+          <button class="black-button" @click="infoVisible = false">
+            Aceptar
+          </button>
+        </div>
+      </Dialog>
     </div>
-    <Dialog
-      v-model:visible="saveTestVisible"
-      modal
-      header="Test"
-      class="modal box-shadow-box"
-      ><span class="modal__background-shape"></span>
-      <span class="modal__message">Desea guardar los resultados del test?</span>
-      <div class="modal__buttons">
-        <button class="black-button" @click="router.push('/')">Aceptar</button>
-        <button class="black-button" @click="saveTestVisible = false">
-          Cancelar
-        </button>
-      </div>
-    </Dialog>
-    <Dialog
-      v-model:visible="exitTestVisible"
-      modal
-      header="Test"
-      class="modal box-shadow-box"
-      ><span class="modal__background-shape"></span>
-      <span class="modal__message">Desea salir del test?</span>
-      <div class="modal__buttons">
-        <button class="black-button" @click="router.push('/')">Aceptar</button>
-        <button class="black-button" @click="exitTestVisible = false">
-          Cancelar
-        </button>
-      </div>
-    </Dialog>
-    <Dialog
-      v-model:visible="testEndedVisible"
-      modal
-      header="Test"
-      class="modal box-shadow-box"
-      ><span class="modal__background-shape"></span>
-      <span class="modal__message"
-        >El tiempo del test ha terminado. Se agregarán 5 minutos más.</span
-      >
-      <div class="modal__buttons">
-        <button class="black-button" @click="testEndedVisible = false">
-          Aceptar
-        </button>
-      </div>
-    </Dialog>
-    <Dialog
-      v-model:visible="testEnded2ndVisible"
-      modal
-      header="Test"
-      class="modal box-shadow-box"
-      ><span class="modal__background-shape"></span>
-      <span class="modal__message">El tiempo del test ha terminado</span>
-      <div class="modal__buttons">
-        <button class="black-button" @click="testEnded2nd()">Aceptar</button>
-      </div>
-    </Dialog>
-    <Dialog
-      v-model:visible="infoVisible"
-      modal
-      header="Descripción"
-      class="modal box-shadow-box"
-      ><span class="modal__background-shape"></span>
-      <span class="modal__message modal__long-message">{{
-        result.description
-      }}</span>
-      <div class="modal__buttons">
-        <button class="black-button" @click="infoVisible = false">
-          Aceptar
-        </button>
-      </div>
-    </Dialog>
+    <VLoading v-else />
   </div>
-  <VLoading v-else />
 </template>
 
 <style>
-.navbar {
-  background-color: white;
-}
 .test__content {
   position: relative;
   margin-top: 16rem;
@@ -364,4 +369,4 @@ provide<Test>("test", test);
   }
 }
 </style>
-@/common/utils/validateAnswers
+@/common/utils/validateAnswers ./getErrorMessages

@@ -11,10 +11,11 @@ const props = defineProps({
 
 const validatedTestFirstTime = inject("validatedTestFirstTime");
 const test = inject<Test>("test");
+
 </script>
 
 <template>
-  <div>
+  <div >
     <VQuestion
       v-for="(question, index) in props.serie?.arrayquestion"
       :key="question.id_question"
