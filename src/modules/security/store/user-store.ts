@@ -10,12 +10,18 @@ export interface UserInterface {
 
 export const userStore = defineStore('user', {
     state: (): UserInterface => {
-        return {
-            ci: '',
-            username: '',
-            role: [],
-            userType: '',
-            group: ''
-        }
+        let user = sessionStorage.getItem('user');
+        let state: UserInterface;
+        user ?
+            state = JSON.parse(user) :
+            state = {
+                ci: '',
+                username: '',
+                role: [],
+                userType: '',
+                group: ''
+            }
+
+        return state;
     },
 });

@@ -20,14 +20,14 @@ app.component('vue-countdown', VueCountdown);
 app.component('VLoading', VLoading);
 app.component('VError', VError);
 
+app.directive('tooltip', Tooltip);
+
 app.use(router)
 app.use(PrimeVue);
 app.use(ToastService);
 app.use(ConfirmationService);
 app.use(DialogService);
-app.use(createPinia());
-app.mount('#app')
-app.directive('tooltip', Tooltip);
+app.use(createPinia()).mount('#app')
 
-if (!isUserAuthenticated)
+if (!isUserAuthenticated())
     router.push('/login')
