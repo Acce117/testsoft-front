@@ -29,13 +29,22 @@ function testRequest(queryParams: Object, url: string) {
  * @returns reactive tests array
  */
 
-export function useTests() {
+export function getAsignedTests() {
     const url = `${import.meta.env.VITE_API_PATH}/gestion/group_for_test`;
 
     return testRequest({
         attr: {
             fk_id_group: userStore().group,
-            group_type: userStore().userType
+            group_type: userStore().userType,
+        },
+        relations:['test.arraytest_application'],
+        relations_attr: {
+            'test.arraytest_application':{
+                attr:{
+                    fk_id_user: userStore().ci
+                },
+                orderBy: 'date DESC'
+            }
         }
     }, url);
 }

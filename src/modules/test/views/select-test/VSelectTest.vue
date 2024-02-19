@@ -6,9 +6,9 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { Pagination, Navigation } from "swiper/modules";
 
-import { useTests } from "@/modules/test/test";
+import { getAsignedTests } from "@/modules/test/test";
 
-const { result, loading, error } = useTests();
+const { result, loading, error } = getAsignedTests();
 
 const modules = [Pagination, Navigation];
 const pagination = {

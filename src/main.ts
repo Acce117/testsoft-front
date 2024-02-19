@@ -13,6 +13,7 @@ import App from './App.vue'
 import router from './router'
 import VLoading from './components/VLoading.vue';
 import VError from './components/VError.vue';
+import { sendRequest } from './common/utils/fetch';
 
 const app = createApp(App)
 
@@ -31,3 +32,4 @@ app.use(createPinia()).mount('#app')
 
 if (!isUserAuthenticated())
     router.push('/login')
+
