@@ -19,9 +19,9 @@ const pagination = {
 };
 </script>
 <template>
-  <VError v-if="error"/>
-  <div v-else style="width:100vw; height:100vh;">
-    <div v-if="!loading" >
+  <VError v-if="error" />
+  <div v-else style="width: 100vw; height: 100vh">
+    <div v-if="!loading">
       <h2 class="page-title">Seleccione un test</h2>
       <Swiper
         :spaceBetween="30"
@@ -38,10 +38,12 @@ const pagination = {
           :key="test.id"
         >
           <VTestCard
-            :id="test.id"
+            :id="parseInt(test.id)"
             :title="test.name"
             :description="test.description"
-            :duration="test.durationTime"
+            :duration="parseInt(test.durationTime)"
+            :recurringTime="parseInt(test.recurringTime)"
+            :applicatedTests="test.applicatedTests"
           />
         </swiper-slide>
       </Swiper>
