@@ -30,10 +30,11 @@ const getAvailabilityTime = () => {
 </script>
 
 <template>
-  <div class="test-card__container">
     <div
-      class="test-card"
-      :class="{ 'p-disabled': !isAvailable }"
+      class="test-card box-shadow-box"
+      :class="{
+        'not-disponible': !isAvailable,
+      }"
       @mouseover="showImage = false"
       @mouseleave="showImage = true"
     >
@@ -43,8 +44,9 @@ const getAvailabilityTime = () => {
         </transition>
 
         <h2>{{ props.title }}</h2>
+        <h2 v-if="!isAvailable && showImage">No Disponible</h2>
       </div>
-      <div class="test-card__description">
+      <div class="test-card__description" v-if="isAvailable">
         <span>Duración: {{ props.duration }} min</span>
         <p>
           <span>Descripción: </span>
@@ -55,31 +57,26 @@ const getAvailabilityTime = () => {
       <button v-if="isAvailable" class="black-button" @click="executeTest()">
         Ejecutar
       </button>
+      <vue-countdown
+        :time="getAvailabilityTime()"
+        v-slot="{ days, hours, minutes, seconds }"
+        @end="isAvailable = true"
+        class="test-card__availability"
+        v-else
+      >
+        Disponible en:<br />
+        <div>
+          <span v-if="days > 0">{{ days }} días<br /></span>
+          <span v-if="hours > 0">{{ hours }} horas<br /> </span>
+          <span v-if="minutes > 0">{{ minutes }} minutos<br /> </span>
+          <span v-if="seconds >= 0">{{ seconds }} segundos</span>
+        </div>
+      </vue-countdown>
     </div>
-    
-    <vue-countdown
-      :time="getAvailabilityTime()"
-      v-slot="{ days, hours, minutes, seconds }"
-      @end="isAvailable = true"
-      class="test-card__availability"
-      v-if="!isAvailable"
-    >{{ props.title }}
-    <span>Disponible en:<br>{{ days }} días,<br>{{ hours }} horas,<br>{{ minutes }} minutos<br>{{ seconds }} segundos</span>
-    </vue-countdown>
-  </div>
 </template>
 
 <style>
-.test-card__container {
-  position: relative;
-  transition: all ease 0.2s;
-  animation: 0.3s scale;
-  display: flex;
-  border-radius: 1.5rem;
-  justify-content: center;
-  overflow: hidden;
-  box-shadow: var(--shadow);
-}
+
 .test-card {
   position: relative;
   width: 28rem;
@@ -91,35 +88,33 @@ const getAvailabilityTime = () => {
   text-align: center;
   margin: 0 auto;
   overflow: hidden;
+  transition: all ease 0.2s;
+  animation: 0.3s scale;
 }
 
-.test-card:hover .test-card__header {
-  height: 25%;
-}
 .test-card__availability {
   display: flex;
   flex-direction: column;
-  position: absolute;
-  z-index: 2;
-  top: 0;
+
+  margin-top: 1rem;
   color: black;
   font-size: 1.8rem;
   font-weight: bold;
-  margin-top: 10%;
-  text-align: center;
+  margin-top: 45%;
+
   align-items: center;
   width: 100%;
-  gap: 2rem;
+  gap: 0.5rem;
 }
-.test-card__availability span{
+.test-card__availability div {
   text-align: left;
-  font-weight: bold;
+  min-width: 50%;
 }
 
 .test-card__description {
   opacity: 0;
   transition: all ease 0.2s;
-  margin: 35% 0.2rem 0 0.2rem;
+  margin: 40% 0.2rem 0 0.2rem;
   font-size: 1.5rem;
   display: flex;
   flex-direction: column;
@@ -162,9 +157,10 @@ const getAvailabilityTime = () => {
   transition: all ease 0.2s;
   width: 100%;
   height: 80%;
-  gap: 2rem;
+  gap: 1rem;
   opacity: 1;
   overflow: auto;
+  z-index: 2;
 }
 .test-card__header img {
   filter: invert();
@@ -179,13 +175,11 @@ const getAvailabilityTime = () => {
 .test-card.p-disabled img {
   display: none;
 }
-.test-card.p-disabled .test-card__header {
+.test-card.not-disponible .test-card__header {
   height: 100%;
-  justify-content: flex-start;
- 
 }
-.test-card.p-disabled .test-card__header h2{
-  margin-top: 0;
-  color: black;
+.test-card:hover .test-card__header {
+  height: 30%;
 }
+
 </style>

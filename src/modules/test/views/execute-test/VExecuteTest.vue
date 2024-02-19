@@ -3,15 +3,26 @@ import VTestSerie from "./VTestSerie.vue";
 import { onBeforeRouteLeave, useRouter } from "vue-router";
 import Steps from "primevue/steps";
 import Dialog from "primevue/dialog";
-import { provide, markRaw, reactive, ref, watch, defineAsyncComponent } from "vue";
+import {
+  provide,
+  markRaw,
+  reactive,
+  ref,
+  watch,
+  defineAsyncComponent,
+} from "vue";
 import { getTest } from "@/modules/test/test";
 import { Test } from "../../classes/test-class";
 import { useToast } from "primevue/usetoast";
 import { getErrorMessages } from "./getErrorMessages";
 import { useConfirm } from "primevue/useconfirm";
 import { useDialog } from "primevue/usedialog";
-const VDialogFooter = defineAsyncComponent(() => import("@/components/dialog/VDialogFooter.vue"));
-const VDialogMessage = defineAsyncComponent(() => import("@/components/dialog/VDialogMessage.vue"));
+const VDialogFooter = defineAsyncComponent(
+  () => import("@/components/dialog/VDialogFooter.vue")
+);
+const VDialogMessage = defineAsyncComponent(
+  () => import("@/components/dialog/VDialogMessage.vue")
+);
 const dialog = useDialog();
 const toast = useToast();
 const confirm = useConfirm();
@@ -21,12 +32,15 @@ const { result, loading, error } = getTest(
 );
 const test = reactive(new Test(router.currentRoute.value.params.id_test));
 
-provide<Test>("test", test);
-
+provide<Test>("test", test)
 //SERIE NAVIGATION
 const serieIndex = ref(0);
 const nextSerie = () => {
-  serieIndex.value += 1;
+  if (result.value.navigable == 1) serieIndex.value += 1;
+  else if (result.value.completed == 1) {
+    if (validateSerie(result.value.arrayserie[serieIndex.value]))
+      nextSerieConfirm();
+  } else nextSerieConfirm();
 };
 const prevSerie = () => {
   serieIndex.value -= 1;
@@ -54,7 +68,7 @@ watch(result, (newValue) => {
 let hasSecondOpportunity = true;
 const timeOver = () => {
   if (hasSecondOpportunity) {
-    timeCountdown.value = 5 *60* 1000;
+    timeCountdown.value = 5 * 60 * 1000;
     hasSecondOpportunity = false;
     toast.add({
       severity: "warn",
@@ -73,9 +87,9 @@ const timeOver = () => {
 const infoVisible = ref(false);
 provide("dialogRef", dialog);
 
-const exitTestConfirm = (route:string) => {
+const exitTestConfirm = (route: string) => {
   confirm.require({
-    message: "¿Desea salir del test? Los resultados se perderán.",
+    message: "¿Desea salir del test? Las respuestas se perderán.",
     header: "Salir",
     rejectLabel: "Cancelar",
     acceptLabel: "Aceptar",
@@ -86,7 +100,7 @@ const exitTestConfirm = (route:string) => {
 };
 const sendTestConfirm = () => {
   confirm.require({
-    message: "¿Desea guardar los resultados del test?",
+    message: "¿Desea guardar las respuestas del test?",
     header: "Salir",
     rejectLabel: "Cancelar",
     acceptLabel: "Aceptar",
@@ -96,6 +110,19 @@ const sendTestConfirm = () => {
     },
     reject: () => {
       confirmExit = false;
+    },
+  });
+};
+const nextSerieConfirm = () => {
+  confirm.require({
+    message:
+      "¿Desea avanzar a la siguiente serie? No podrá regresar a la anterior...",
+    header: "Serie",
+    rejectLabel: "Cancelar",
+    acceptLabel: "Aceptar",
+    accept: () => {
+      serieIndex.value += 1;
+      validatedTestFirstTime.value=false
     },
   });
 };
@@ -115,27 +142,37 @@ const timeOverDialog = () => {
 const validatedTestFirstTime = ref(false);
 provide("validatedTestFirstTime", validatedTestFirstTime);
 
-const validateTest = () => {
-  toast.removeAllGroups();
-  let isValid = true; //This is for validating test
-  result.value.arrayserie.forEach((serie: any) => {
-    const questionsNotAnswered = test.getQuestionsNotAnswered(
-      serie.arrayquestion
-    ); //for each serie, this function returns the incorrect answers. This is for managing questions and series in toast
-    if (questionsNotAnswered.length > 0) {
-      isValid = false;
-      getErrorMessages(questionsNotAnswered).forEach((error) => {
-        toast.add({
-          severity: "error",
-          summary: "Error: " + serie.name,
-          detail: error,
-          life: 3000,
-        });
+const validateSerie = (serie: any) => {
+  let isValid = true;
+  const questionsNotAnswered = test.getQuestionsNotAnswered(
+    serie.arrayquestion
+  );
+  if (questionsNotAnswered.length > 0) {
+    isValid = false;
+    getErrorMessages(questionsNotAnswered).forEach((error) => {
+      toast.add({
+        severity: "error",
+        summary: "Error: " + serie.name,
+        detail: error,
+        life: 3000,
       });
-    }
-  });
-  if (isValid) sendTestConfirm();
+    });
+  }
   validatedTestFirstTime.value = true;
+  return isValid;
+};
+
+const validateTest = () => {
+  //for each serie, this function returns the incorrect answers. This is for managing questions and series in toast
+  toast.removeAllGroups();
+  let isValid = true;
+  if (result.value.completed == 1) {
+    
+    result.value.arrayserie.forEach((serie: any) => {
+      isValid = validateSerie(serie);
+    });
+  }
+  if (isValid) sendTestConfirm();
 };
 
 //ROUTER
@@ -150,9 +187,9 @@ onBeforeRouteLeave((to, from) => {
   confirm.close();
 });
 
-const exitTest = (route:string) => {
+const exitTest = (route: string) => {
   confirmExit = true;
-  router.push(`/`+route);
+  router.push(`/` + route);
 };
 </script>
 <template>
@@ -168,8 +205,9 @@ const exitTest = (route:string) => {
             <button
               class="black-button"
               :class="{
-                'p-disabled': !(serieIndex > 0 && result.navigable == 1),
+                'p-disabled': !(serieIndex > 0),
               }"
+              v-if=" result.navigable == 1"
               @click="prevSerie()"
               v-tooltip.bottom="'Serie Anterior'"
               placeholder="Bottom"
@@ -235,7 +273,7 @@ const exitTest = (route:string) => {
           </button>
           <button
             class="black-button"
-            @click="exitTestConfirm()"
+            @click="exitTestConfirm('select-test')"
             v-tooltip.right="'Cancelar Test'"
             placeholder="Right"
           >
@@ -244,14 +282,9 @@ const exitTest = (route:string) => {
         </div>
         <VTestSerie
           :serie="result.arrayserie[serieIndex]"
-          :answers="test.answers"
         />
       </div>
-      <Dialog
-        v-model:visible="infoVisible"
-        modal
-        header="Descripción"
-      >
+      <Dialog v-model:visible="infoVisible" modal header="Descripción">
         <span class="modal__long-message">{{ result.description }}</span>
       </Dialog>
     </div>
