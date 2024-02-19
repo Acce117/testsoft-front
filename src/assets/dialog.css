@@ -1,6 +1,5 @@
 .p-dialog {
   position: relative;
-  height: 20rem;
   width: 30rem;
   overflow: hidden;
 }
@@ -65,17 +64,11 @@
   position: absolute;
   justify-content: center;
 }
-.modal__buttons {
-  height: 6rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 30%;
-  margin-bottom: 1rem;
+.p-dialog-footer button {
+  font-size: 1.5rem;
 }
 @media (min-width: 768px) {
   .p-dialog {
-    height: 30rem;
     width: 50rem;
   }
   .p-dialog-title {

@@ -73,14 +73,14 @@ const timeOver = () => {
 const infoVisible = ref(false);
 provide("dialogRef", dialog);
 
-const exitTestConfirm = () => {
+const exitTestConfirm = (route:string) => {
   confirm.require({
     message: "¿Desea salir del test? Los resultados se perderán.",
     header: "Salir",
     rejectLabel: "Cancelar",
     acceptLabel: "Aceptar",
     accept: () => {
-      exitTest();
+      exitTest(route);
     },
   });
 };
@@ -92,7 +92,7 @@ const sendTestConfirm = () => {
     acceptLabel: "Aceptar",
     accept: () => {
       test.sendTest();
-      exitTest();
+      exitTest("/");
     },
     reject: () => {
       confirmExit = false;
@@ -143,16 +143,16 @@ let confirmExit = false;
 onBeforeRouteLeave((to, from) => {
   if (!error.value) {
     if (!confirmExit) {
-      exitTestConfirm();
+      exitTestConfirm(to.name);
       return false;
     }
   }
   confirm.close();
 });
 
-const exitTest = () => {
+const exitTest = (route:string) => {
   confirmExit = true;
-  router.push("/");
+  router.push(`/`+route);
 };
 </script>
 <template>
