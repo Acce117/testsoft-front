@@ -14,9 +14,9 @@ function testRequest(queryParams: Object, url: string) {
         }).catch(err => {
             console.log(err);
             loading.value = false;
-            error.value=true
+            error.value = true
         })
-    
+
     return {
         result,
         loading,
@@ -37,10 +37,10 @@ export function getAsignedTests() {
             fk_id_group: userStore().group,
             group_type: userStore().userType,
         },
-        relations:['test.arraytest_application'],
+        relations: ['test.arraytest_application'],
         relations_attr: {
-            'test.arraytest_application':{
-                attr:{
+            'test.arraytest_application': {
+                attr: {
                     fk_id_user: userStore().ci
                 },
                 orderBy: 'date DESC'
@@ -53,7 +53,7 @@ export function getTest(idTest: number | string) {
     const url = `${import.meta.env.VITE_API_PATH}/gestion/test/view/${idTest}`;
 
     return testRequest({
-        attr:{
+        attr: {
             id_test: idTest
         },
         relations: ["arrayserie.arrayquestion.arrayanswer", "arrayserie.arrayquestion.arrayquestion_top_value"]

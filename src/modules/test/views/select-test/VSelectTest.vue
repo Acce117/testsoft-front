@@ -1,15 +1,33 @@
 <script setup lang="ts">
 import { Swiper, SwiperSlide } from "swiper/vue";
 import VTestCard from "./components/VTestCard.vue";
+import { watch } from "vue";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { Pagination, Navigation } from "swiper/modules";
+import { userStore } from "@/modules/security/store/user-store";
 
 import { getAsignedTests } from "@/modules/test/test";
 
 const { result, loading, error } = getAsignedTests();
 
+watch(result, (newValue) => {
+  userStore().assignedTests = [];
+  newValue.forEach((test: { id: any; applicatedTests: [] }) => {
+    let availableDate = null;
+    if (test.applicatedTests.length > 0) {
+      availableDate = new Date(test.applicatedTests[0].date);
+      availableDate.setFullYear(
+        availableDate.getFullYear() + parseInt(test.recurringTime)
+      );
+    }
+    userStore().assignedTests.push({
+      id: test.id,
+      availabilityTime: availableDate,
+    });
+  });
+});
 const modules = [Pagination, Navigation];
 const pagination = {
   clickable: true,

@@ -20,13 +20,12 @@ const getAvailabilityTime = () => {
   let availabilityTime = 0;
   if (props.applicatedTests[0]) {
     const lastDate = new Date(props.applicatedTests[0].date);
-    console.log(lastDate);
     lastDate.setFullYear(lastDate.getFullYear() + props.recurringTime);
     availabilityTime = lastDate.getTime() - now.getTime();
   }
-
   return availabilityTime;
 };
+const availabilityTime=getAvailabilityTime()
 </script>
 
 <template>
@@ -58,7 +57,7 @@ const getAvailabilityTime = () => {
         Ejecutar
       </button>
       <vue-countdown
-        :time="getAvailabilityTime()"
+        :time="availabilityTime"
         v-slot="{ days, hours, minutes, seconds }"
         @end="isAvailable = true"
         class="test-card__availability"

@@ -30,7 +30,7 @@ const router = useRouter();
 const { result, loading, error } = getTest(
   router.currentRoute.value.params.id_test as string
 );
-const test = reactive(new Test(router.currentRoute.value.params.id_test));
+const test = reactive(new Test(router.currentRoute.value.params.id_test[0]));
 
 provide<Test>("test", test)
 //SERIE NAVIGATION
@@ -180,7 +180,7 @@ let confirmExit = false;
 onBeforeRouteLeave((to, from) => {
   if (!error.value) {
     if (!confirmExit) {
-      exitTestConfirm(to.name);
+      exitTestConfirm(to.name.toString());
       return false;
     }
   }
