@@ -7,13 +7,13 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { Pagination, Navigation } from "swiper/modules";
 import { userStore } from "@/modules/security/store/user-store";
-
+const user =userStore()
 import { getAsignedTests } from "@/modules/test/test";
 
 const { result, loading, error } = getAsignedTests();
 
 watch(result, (newValue) => {
-  userStore().assignedTests = [];
+  user.assignedTests = [];
   newValue.forEach((test: { id: any; applicatedTests: [] }) => {
     let availableDate = null;
     if (test.applicatedTests.length > 0) {
@@ -22,10 +22,11 @@ watch(result, (newValue) => {
         availableDate.getFullYear() + parseInt(test.recurringTime)
       );
     }
-    userStore().assignedTests.push({
+    user.assignedTests.push({
       id: test.id,
       availabilityTime: availableDate,
     });
+    sessionStorage.setItem('user', JSON.stringify(user));
   });
 });
 const modules = [Pagination, Navigation];

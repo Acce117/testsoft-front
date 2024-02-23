@@ -7,8 +7,7 @@ import VExecuteTest from '@/modules/test/views/execute-test/VExecuteTest.vue'
 import VGeneralVue from '@/layouts/general/VGeneral.vue'
 import VResults from '@/modules/results/views/VResults.vue'
 import { isUserAuthenticated } from '@/modules/security/isUserAuthenticated'
-import { userStore } from '@/modules/security/store/user-store'
-
+import { useToast } from 'primevue/usetoast'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -66,10 +65,21 @@ router.beforeEach((to, from, next) => {
   if (to.meta.requiresAuth && !isUserAuthenticated())
     next('/login');
   else if (to.path.includes('execute-test')) {
-    if (userStore().assignedTests) {
+    const user = JSON.parse(sessionStorage.getItem('user'))
+    if (user) {
       const id_test = to.path.split('/')[2]
-      const test = userStore().assignedTests.filter(test => test.id == id_test && (test.availabilityTime == null || test.availabilityTime.getTime() < new Date().getTime()))[0]
+      const test = user.assignedTests.filter(test => test.id == id_test && (test.availabilityTime == null || new Date(test.availabilityTime).getTime() < new Date().getTime()))[0]
+      console.log(test)
       if (test) next()
+      else {
+        next('/');
+        useToast().add({
+          severity: "error",
+          summary: "Error:",
+          detail: 'No puede realizar este test.',
+          life: 5000,
+        });
+      }
     } else next('/')
 
   }

@@ -23,6 +23,7 @@ const VDialogFooter = defineAsyncComponent(
 const VDialogMessage = defineAsyncComponent(
   () => import("@/components/dialog/VDialogMessage.vue")
 );
+const VShowResults = defineAsyncComponent(() => import("./VShowResults.vue"));
 const dialog = useDialog();
 const toast = useToast();
 const confirm = useConfirm();
@@ -32,7 +33,7 @@ const { result, loading, error } = getTest(
 );
 const test = reactive(new Test(router.currentRoute.value.params.id_test[0]));
 
-provide<Test>("test", test)
+provide<Test>("test", test);
 //SERIE NAVIGATION
 const serieIndex = ref(0);
 const nextSerie = () => {
@@ -64,6 +65,7 @@ watch(
 let timeCountdown = ref();
 watch(result, (newValue) => {
   timeCountdown.value = newValue.time_duration * 60 * 1000;
+  test.name = newValue.name
 });
 let hasSecondOpportunity = true;
 const timeOver = () => {
@@ -105,11 +107,23 @@ const sendTestConfirm = () => {
     rejectLabel: "Cancelar",
     acceptLabel: "Aceptar",
     accept: () => {
-      test.sendTest();
-      exitTest("/");
+      showResults();
+      exitTest("");
     },
     reject: () => {
       confirmExit = false;
+    },
+  });
+};
+const showResults = () => {
+  dialog.open(VShowResults, {
+    props: {
+      header: "Resultados",
+      modal: true,
+    },
+    templates: {},
+    data: {
+      test,
     },
   });
 };
@@ -122,7 +136,7 @@ const nextSerieConfirm = () => {
     acceptLabel: "Aceptar",
     accept: () => {
       serieIndex.value += 1;
-      validatedTestFirstTime.value=false
+      validatedTestFirstTime.value = false;
     },
   });
 };
@@ -167,9 +181,8 @@ const validateTest = () => {
   toast.removeAllGroups();
   let isValid = true;
   if (result.value.completed == 1) {
-    
     result.value.arrayserie.forEach((serie: any) => {
-      isValid = validateSerie(serie);
+      if (!validateSerie(serie)) isValid = false;
     });
   }
   if (isValid) sendTestConfirm();
@@ -207,7 +220,7 @@ const exitTest = (route: string) => {
               :class="{
                 'p-disabled': !(serieIndex > 0),
               }"
-              v-if=" result.navigable == 1"
+              v-if="result.navigable == 1"
               @click="prevSerie()"
               v-tooltip.bottom="'Serie Anterior'"
               placeholder="Bottom"
@@ -280,9 +293,7 @@ const exitTest = (route: string) => {
             <img src="/img/cancel.svg" alt="cancelar test" />
           </button>
         </div>
-        <VTestSerie
-          :serie="result.arrayserie[serieIndex]"
-        />
+        <VTestSerie :serie="result.arrayserie[serieIndex]" />
       </div>
       <Dialog v-model:visible="infoVisible" modal header="Descripción">
         <span class="modal__long-message">{{ result.description }}</span>

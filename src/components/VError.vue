@@ -2,7 +2,7 @@
     <div class="error">
       <img src="/img/connection_lost.svg" />
       <h2>Algo ha salido mal...</h2>
-      
+      <slot></slot>
     </div>
 </template>
 <style>

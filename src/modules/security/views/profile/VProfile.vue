@@ -33,7 +33,7 @@ const logOutConfirm = ()=>{
   <h2 class="page-title">Mi perfil</h2>
   <div class="profile">
     <span>Nombre: {{ user.username }}</span>
-    <span><strong>Carnet de Identidad:</strong> {{ user.ci }}</span>
+    <span>Carnet de Identidad:{{ user.ci }}</span>
     <span v-if="user.group">Grupo: {{ user.group }}</span>
     <span>Rol: {{ user.role }}</span>
     <span v-if="user.userType">Tipo de Usuario: {{ user.userType }}</span>

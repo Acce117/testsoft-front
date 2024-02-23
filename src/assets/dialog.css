@@ -80,6 +80,10 @@
   .modal__long-message {
     font-size: 1.6rem;
   }
+  .p-dialog:has(.modal__long-message){
+    width: 65rem;
+
+  }
 
   .p-dialog .p-dialog-header .p-dialog-header-icon {
     width: 4rem;
