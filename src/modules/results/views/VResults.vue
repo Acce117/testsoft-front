@@ -15,10 +15,10 @@
           ><template #header>
             <div class="table__header">
               <span class="p-ripple" v-ripple @click="expandAll()">
-                + Expandir Todos
+                + Mostrar Todos
               </span>
               <span class="p-ripple" v-ripple @click="collapseAll()">
-                - Reducir Todos
+                - Ocultar Todos
               </span>
             </div>
           </template>
@@ -61,7 +61,7 @@ import VShowFinalResults from './VShowFinalResults.vue'
 import Column from "primevue/column";
 import { getResults } from "./../results.ts";
 import { userStore } from "@/modules/security/store/user-store";
-import { ref, provide, onMounted } from "vue";
+import { ref, provide, onMounted, onUnmounted } from "vue";
 import { useDialog } from "primevue/usedialog";
 import { useToast } from "primevue/usetoast";
 const toast = useToast()
@@ -70,7 +70,6 @@ provide("dialogRef", dialog);
 const { result, loading, error } = getResults(userStore().ci);
 const expandedRows = ref([]);
 const expandAll = () => {
-  console.log(expandedRows.value);
   expandedRows.value = result.value;
 };
 const collapseAll = () => {
@@ -105,6 +104,9 @@ onMounted(() => {
       detail: "Utilice los botones del encabezado para mostrar los resultados de todos los tests o para esconderlos.",
       life: 30000,
     });
+})
+onUnmounted(() => {
+  toast.removeAllGroups()
 })
 </script>
 <style>

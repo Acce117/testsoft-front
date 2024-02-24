@@ -10,7 +10,8 @@ import {
   ref,
   watch,
   defineAsyncComponent,
-  onMounted
+  onMounted,
+  onUnmounted
 } from "vue";
 import { getTest } from "@/modules/test/test";
 import { Test } from "../../classes/test-class";
@@ -227,6 +228,9 @@ onMounted(() => {
       detail: "Los botones a la derecha se utilizan para guardar sus respuestas, mostrar información y salir del test respectivamente.",
       life: 30000,
     });
+})
+onUnmounted(() => {
+  toast.removeAllGroups()
 })
 </script>
 <template>
