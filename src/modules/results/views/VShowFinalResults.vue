@@ -8,6 +8,6 @@ import { getFinalResults } from "./../results.ts";
 const dialogRef = inject("dialogRef");
 const data = dialogRef.value.data;
 let testResult = ref({ result: undefined, loading: true, error: false });
-//testResult.value = getFinalResults(data.id) ;
+testResult.value = getFinalResults(data.id) ;
 </script>
 
