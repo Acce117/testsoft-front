@@ -23,7 +23,7 @@ const VDialogFooter = defineAsyncComponent(
 const VDialogMessage = defineAsyncComponent(
   () => import("@/components/dialog/VDialogMessage.vue")
 );
-const VShowResults = defineAsyncComponent(() => import("./VShowResults.vue"));
+const VTestResult = defineAsyncComponent(() => import("./VTestResult.vue"));
 const dialog = useDialog();
 const toast = useToast();
 const confirm = useConfirm();
@@ -116,7 +116,7 @@ const sendTestConfirm = () => {
   });
 };
 const showResults = () => {
-  dialog.open(VShowResults, {
+  dialog.open(VTestResult, {
     props: {
       header: "Resultados",
       modal: true,

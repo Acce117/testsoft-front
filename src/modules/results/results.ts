@@ -1,6 +1,6 @@
 import { sendRequest } from "@/common/utils/fetch";
 import { ref } from "vue";
-function resultsRequest( queryParams: Object, url: string) {
+function resultsRequest(queryParams: Object, url: string) {
     let result = ref();
     let loading = ref(true);
     let error = ref(false);
@@ -15,7 +15,7 @@ function resultsRequest( queryParams: Object, url: string) {
             loading.value = false;
             error.value = true
         })
-    
+
     return {
         result,
         loading,
@@ -28,16 +28,22 @@ export function getResults(ci: number | string) {
     const url = `${import.meta.env.VITE_API_PATH}/gestion/test_application`;
 
     return resultsRequest({
-        attr:{
+        attr: {
             "fk_id_user": ci
         },
         relations: ["arrayapplication_result", "test"],
-        relations_attr:{
-            "arrayapplication_result":{
+        relations_attr: {
+            "arrayapplication_result": {
                 relations: "item"
             }
         }
     }, url);
 }
+export function getFinalResults(id_test_application: number | string) {
+    const url = `${import.meta.env.VITE_API_PATH}/gestion/ERNESTO GEI`;
 
-    
+    return resultsRequest({
+        id_test_application
+    }, url);
+}
+

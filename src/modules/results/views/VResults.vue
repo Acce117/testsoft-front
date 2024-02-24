@@ -31,7 +31,7 @@
                 <button
                   class="black-button p-ripple"
                   v-ripple
-                  @click="getFinalResults(slotProps.data.id_test_application)"
+                  @click="getFinalResults(slotProps.data.id_test_application, slotProps.data.test.name)"
                 >
                   <img src="/img/test_completed.svg" />
                 </button>
@@ -57,10 +57,14 @@
 </template>
 <script setup lang="ts">
 import DataTable from "primevue/datatable";
+import VShowFinalResults from './VShowFinalResults.vue'
 import Column from "primevue/column";
 import { getResults } from "./../results.ts";
 import { userStore } from "@/modules/security/store/user-store";
-import { ref } from "vue";
+import { ref, provide } from "vue";
+import { useDialog } from "primevue/usedialog";
+const dialog = useDialog()
+provide("dialogRef", dialog);
 const { result, loading, error } = getResults(userStore().ci);
 const expandedRows = ref([]);
 const expandAll = () => {
@@ -71,8 +75,19 @@ const collapseAll = () => {
   expandedRows.value = null;
 };
 
-const getFinalResults = (id) => {
-  console.log(id);
+const getFinalResults = (id:number|string, name:string) => {
+ 
+    dialog.open(VShowFinalResults, {
+    props: {
+      header: "Resultados",
+      modal: true,
+    },
+    templates: {},
+    data: {
+      id,
+      name
+    },
+  });
 };
 </script>
 <style>
