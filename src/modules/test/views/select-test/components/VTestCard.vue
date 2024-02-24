@@ -53,7 +53,7 @@ const availabilityTime=getAvailabilityTime()
         </p>
       </div>
 
-      <button v-if="isAvailable" class="black-button" @click="executeTest()">
+      <button v-if="isAvailable" v-ripple class="black-button p-ripple" @click="executeTest()">
         Ejecutar
       </button>
       <vue-countdown

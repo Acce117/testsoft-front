@@ -64,3 +64,11 @@
     margin-left: 0;
   }
 }
+@keyframes slide-in-from-top-table {
+  from {
+    margin-top: -10%;
+  }
+  to {
+    margin-top: 0;
+  }
+}

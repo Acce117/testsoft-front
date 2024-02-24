@@ -8,7 +8,7 @@
   </div>
 
   <div v-else style="width: 100%" class="modal__long-message">
-    <div v-if="!testResult.loading">
+    <div v-if="!testResult.loading" class="test-results">
       <h1 class="results__test-title">Test: {{ data.test.name }}</h1>
       <VCategoriesResults
         v-if="testResult.result.process.element_by_category == 1"
@@ -46,7 +46,11 @@ const resendTest = () => {
 strong {
   font-weight: bold;
 }
-
+.test-results{
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
 @media (min-width: 768px) {
   .error-sending button {
     font-size: 2rem;

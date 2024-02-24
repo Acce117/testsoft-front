@@ -13,18 +13,22 @@ import App from './App.vue'
 import router from './router'
 import VLoading from './components/VLoading.vue';
 import VError from './components/VError.vue';
-import { sendRequest } from './common/utils/fetch';
+import Ripple from 'primevue/ripple';
+
+
+
+
 
 const app = createApp(App)
 
 app.component('vue-countdown', VueCountdown);
 app.component('VLoading', VLoading);
 app.component('VError', VError);
-
+app.directive('ripple', Ripple);
 app.directive('tooltip', Tooltip);
 
 app.use(router)
-app.use(PrimeVue);
+app.use(PrimeVue, { ripple: true });
 app.use(ToastService);
 app.use(ConfirmationService);
 app.use(DialogService);

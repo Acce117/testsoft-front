@@ -37,7 +37,7 @@ const logOutConfirm = ()=>{
     <span v-if="user.group">Grupo: {{ user.group }}</span>
     <span>Rol: {{ user.role }}</span>
     <span v-if="user.userType">Tipo de Usuario: {{ user.userType }}</span>
-    <button class="black-button" @click="logOutConfirm()">
+    <button class="black-button p-ripple" v-ripple @click="logOutConfirm()">
       Cerrar Sesión
     </button>
   </div>

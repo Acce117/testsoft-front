@@ -216,7 +216,8 @@ const exitTest = (route: string) => {
           </h2>
           <div class="test__serie__navigation">
             <button
-              class="black-button"
+              class="black-button p-ripple"
+              v-ripple
               :class="{
                 'p-disabled': !(serieIndex > 0),
               }"
@@ -240,7 +241,8 @@ const exitTest = (route: string) => {
               :class="{
                 'p-disabled': !(serieIndex < result.arrayserie.length - 1),
               }"
-              class="black-button"
+              class="black-button p-ripple"
+              v-ripple
               @click="nextSerie()"
               v-tooltip.bottom="'Siguiente Serie'"
               placeholder="Bottom"
@@ -269,7 +271,8 @@ const exitTest = (route: string) => {
         </div>
         <div class="test__buttons">
           <button
-            class="black-button"
+            class="black-button p-ripple"
+            v-ripple
             @click="validateTest()"
             v-tooltip.right="'Terminar Test'"
             placeholder="Right"
@@ -277,7 +280,8 @@ const exitTest = (route: string) => {
             <img src="/img/test_completed.svg" alt="terminar test" />
           </button>
           <button
-            class="black-button"
+            class="black-button p-ripple"
+            v-ripple
             @click="infoVisible = true"
             v-tooltip.right="'Información'"
             placeholder="Right"
@@ -285,7 +289,8 @@ const exitTest = (route: string) => {
             <img src="/img/info.svg" alt="info" />
           </button>
           <button
-            class="black-button"
+            class="black-button p-ripple"
+            v-ripple
             @click="exitTestConfirm('select-test')"
             v-tooltip.right="'Cancelar Test'"
             placeholder="Right"

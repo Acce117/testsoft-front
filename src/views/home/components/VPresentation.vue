@@ -1,7 +1,7 @@
 
 <template>
   <div class="presentation">
-    <button class="presentation__button" @click="goTests()">
+    <button class="presentation__button" @click="router.push('/select-test')">
       <img src="/img/test_icon.svg" />
       Realiza un test
     </button>
@@ -16,7 +16,7 @@
       Descubre compatibilidades y líderes
     </button>
 
-    <button class="presentation__button">
+    <button class="presentation__button" @click="router.push('/results')">
       <img src="/img/results.svg" />
       Analiza los resultados
     </button>
@@ -26,7 +26,7 @@
 import { useRouter } from "vue-router";
 const router = useRouter();
 const goTests = () => {
-  router.push("/select-test");
+  
 };
 </script>
 <style>
@@ -44,6 +44,7 @@ const goTests = () => {
   align-items: center;
   justify-content: center;
   background-color: white;
+  box-shadow: var(--shadow);
   gap: .5rem;
   padding: 1rem;
   font-size: 1.8rem;

@@ -26,7 +26,7 @@
             ><img src="/img/password.svg" />Contraseña</label
           >
         </div>
-        <button class="black-button" type="submit">
+        <button class="black-button p-riple" type="submit" v-ripple>
           <span v-if="!loading">Iniciar Sesión</span> <VLoading v-else />
         </button>
       </form>

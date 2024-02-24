@@ -58,16 +58,16 @@ button {
   border-radius: 1.5rem;
   transition: all ease 0.2s;
   text-align: center;
-  box-shadow: var(--shadow);
   user-select: none;
   cursor: pointer;
   animation: .3s scale;
+  overflow: hidden;
 }
 button img{
   width: 2rem;
   transition: all ease .2s;
 }
-button:active img{
+button:not(.black-button):active img{
   filter: invert();
 }
 
@@ -80,10 +80,7 @@ button * {
   color: white;
   padding: 1rem;
 }
-.black-button:active, .p-dialog-footer button:active {
-  background-color: white;
-  color: black;
-}
+
 label,
 img {
   user-select: none;
@@ -94,9 +91,7 @@ img {
 button:hover {
   transform: scale(1.1);
 }
-button:active {
-  transform: scale(1);
-}
+
 .box-shadow-box {
   background-color: white;
   border-radius: 1.5rem;
@@ -107,10 +102,15 @@ button:active {
     text-align: center;
     animation: .8s fade-in;
 }
+.centered{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .page-title{
   
   margin-top: 6rem;
-  font-size: 1.6rem;
+  font-size: 1.8rem;
   
 }
 .page-subtitle{

@@ -66,22 +66,26 @@ router.beforeEach((to, from, next) => {
     next('/login');
   else if (to.path.includes('execute-test')) {
     const user = JSON.parse(sessionStorage.getItem('user'))
-    if (user) {
-      const id_test = to.path.split('/')[2]
-      const test = user.assignedTests.filter(test => test.id == id_test && (test.availabilityTime == null || new Date(test.availabilityTime).getTime() < new Date().getTime()))[0]
-      console.log(test)
-      if (test) next()
-      else {
+    if (from.path.includes('select-test') && user) {
+      try {
+        const id_test = to.path.split('/')[2]
+        const test = user.assignedTests.filter(test => test.id == id_test)[0]
+        if (!test)
+          throw new Error('Este test no existe')
+        else if (test.availabilityTime != null && new Date(test.availabilityTime).getTime() < new Date().getTime())
+          throw new Error('No puede ejecutar este test')
+        next()
+      } catch (e) {
         next('/');
         useToast().add({
           severity: "error",
           summary: "Error:",
-          detail: 'No puede realizar este test.',
+          detail: e.message,
           life: 5000,
         });
       }
-    } else next('/')
-
+    }
+    else next('/')
   }
   else
     next();
