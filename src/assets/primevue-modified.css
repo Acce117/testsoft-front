@@ -239,12 +239,14 @@
 .p-toast{
   margin-top: 25rem;
 }
+
 .p-toast-message{
   background-color: white;
   border-radius: 1.5rem;
   box-shadow: var(--shadow);
   width: 18rem;
 }
+
 .p-toast-detail{
   font-size: 1.2rem;
 }

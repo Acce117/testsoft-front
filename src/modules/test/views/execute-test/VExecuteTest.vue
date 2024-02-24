@@ -10,6 +10,7 @@ import {
   ref,
   watch,
   defineAsyncComponent,
+  onMounted
 } from "vue";
 import { getTest } from "@/modules/test/test";
 import { Test } from "../../classes/test-class";
@@ -204,6 +205,29 @@ const exitTest = (route: string) => {
   confirmExit = true;
   router.push(`/` + route);
 };
+
+
+onMounted(() => {
+  toast.add({
+      severity: "info",
+      summary: "Tip",
+      detail: "Responda las preguntas en el tiempo asignado, que puede consultar en la parte izquierda de la pantalla a través del temporizador.",
+      life: 30000,
+    }
+    );
+    toast.add({
+      severity: "info",
+      summary: "Tip",
+      detail: "Utilice los botones del sector superior derecho para navegar entre series.",
+      life: 30000,
+    });
+    toast.add({
+      severity: "info",
+      summary: "Tip",
+      detail: "Los botones a la derecha se utilizan para guardar sus respuestas, mostrar información y salir del test respectivamente.",
+      life: 30000,
+    });
+})
 </script>
 <template>
   <VError v-if="error" />

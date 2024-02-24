@@ -61,8 +61,10 @@ import VShowFinalResults from './VShowFinalResults.vue'
 import Column from "primevue/column";
 import { getResults } from "./../results.ts";
 import { userStore } from "@/modules/security/store/user-store";
-import { ref, provide } from "vue";
+import { ref, provide, onMounted } from "vue";
 import { useDialog } from "primevue/usedialog";
+import { useToast } from "primevue/usetoast";
+const toast = useToast()
 const dialog = useDialog()
 provide("dialogRef", dialog);
 const { result, loading, error } = getResults(userStore().ci);
@@ -89,6 +91,21 @@ const getFinalResults = (id:number|string, name:string) => {
     },
   });
 };
+onMounted(() => {
+  toast.add({
+      severity: "info",
+      summary: "Tip",
+      detail: "En esta pantalla puede consultar los resultados de sus tests. Presione la flecha a la izquierda de una fila para mostrar los resultados generales del test correspondiente, o el botón de la derecha para ver los resultados finales del mismo.",
+      life: 30000,
+    }
+    );
+    toast.add({
+      severity: "info",
+      summary: "Tip",
+      detail: "Utilice los botones del encabezado para mostrar los resultados de todos los tests o para esconderlos.",
+      life: 30000,
+    });
+})
 </script>
 <style>
 .results {
