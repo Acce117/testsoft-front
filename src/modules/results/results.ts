@@ -40,7 +40,7 @@ export function getResults(ci: number | string) {
     }, url);
 }
 export function getFinalResults(id_test_application: number | string) {
-    const url = `${import.meta.env.VITE_API_PATH}/gestion/ERNESTO GEI`;
+    const url = `${import.meta.env.VITE_API_PATH}/gestion/test/test_result`;
 
     return resultsRequest({
         id_test_application
