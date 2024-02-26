@@ -1,5 +1,5 @@
 <template>
-  <VFinalResults :testResult="testResult" :testName="data.name"/> 
+  <VFinalResults :testResult="testResult" :testName="data.name" :testType="data.fk_id_type_test"/> 
 </template>
 <script setup lang="ts">
 import { inject, ref } from "vue";

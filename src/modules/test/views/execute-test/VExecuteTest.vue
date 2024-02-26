@@ -72,7 +72,7 @@ watch(result, (newValue) => {
     else time = newValue.arrayserie[0].time_serie_duration;
     timeCountdown.value =  time * 60001;
     test.name = newValue.name;
-
+    test.type = newValue.fk_id_type_test
     toast.add({
       severity: "info",
       summary: "Tip",

@@ -5,7 +5,8 @@ import { ref } from "vue";
 
 export class Test {
     questions: { [key: string]: Question<any> };
-    name: string | undefined
+    name: string | undefined;
+    type: string | number | undefined
 
     public constructor(readonly id_test: number | string ) {
         this.questions = {};

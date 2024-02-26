@@ -1,10 +1,12 @@
 <template>
   <div>
     <span
-      ><strong
-        >-Con {{ props.element?.value_result }} puntos,
-        {{ props.element?.item.name }} ({{ props.element?.item.category.name }}):</strong
-      ><br />
+      >Con <strong>{{ props.element?.value_result }}</strong> puntos,
+      <strong
+        >{{ props.element?.item.name }} ({{
+          props.element?.item.category.name
+        }})</strong
+      >:<br />
       {{ props.element?.item.description }}</span
     >
   </div>

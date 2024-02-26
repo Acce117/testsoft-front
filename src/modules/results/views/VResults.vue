@@ -34,7 +34,8 @@
                   @click="
                     getFinalResults(
                       slotProps.data.id_test_application,
-                      slotProps.data.test.name
+                      slotProps.data.test.name,
+                      slotProps.data.test.fk_id_type_test
                     )
                   "
                 >
@@ -81,7 +82,7 @@ const collapseAll = () => {
   expandedRows.value = null;
 };
 
-const getFinalResults = (id: number | string, name: string) => {
+const getFinalResults = (id: number | string, name: string, fk_id_type_test:number | string) => {
   dialog.open(VShowFinalResults, {
     props: {
       header: "Resultados",
@@ -91,10 +92,12 @@ const getFinalResults = (id: number | string, name: string) => {
     data: {
       id,
       name,
+      fk_id_type_test
     },
   });
 };
 watch(result, (newValue) => {
+  console.log(newValue)
   if (newValue.length>0) {
     toast.add({
       severity: "info",

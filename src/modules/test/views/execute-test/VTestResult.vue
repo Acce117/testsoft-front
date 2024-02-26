@@ -1,5 +1,5 @@
 <template>
-  <VFinalResults :testResult="testResult" :testName="data.test.name"> 
+  <VFinalResults :testResult="testResult" :testName="data.test.name" :testType="data.test.type"> 
     <button class="black-button" @click="resendTest()">
         Reenviar Test
       </button>
