@@ -1,28 +1,29 @@
 <template>
-  <div v-if="props.testResult.error" class="error-sending">
+  <div v-if="props.testResult?.error" class="error-sending">
     <VError><slot></slot></VError>
   </div>
 
   <div v-else style="width: 100%" class="modal__long-message">
-    <div v-if="!props.testResult.loading" class="test-results">
+    <div v-if="!props.testResult?.loading" class="test-results">
       <h1 class="results__test-title">Test: {{ props.testName }}</h1>
-      <VCategoriesResults
-        v-if="props.testResult.result.process.element_by_category == 1"
-        :testResult="props.testResult"
+      <VOnlyTopResults
+        v-if="props.testResult?.result.process.tops_values== 1"
+        :testResult="props.testResult?.result"
       />
-      <VPreferredAvoidedResults v-else :testResult="props.testResult" />
+      <VAllResults v-else :testResult="props.testResult?.result" />
     </div>
     <VLoading v-else style="height: 30rem" />
   </div>
 </template>
 <script setup lang="ts">
-import VPreferredAvoidedResults from "./VPreferredAvoidedResults.vue";
-import VCategoriesResults from "./VCategoriesResults.vue";
+import VOnlyTopResults from "./VOnlyTopResults.vue";
+import VAllResults from "./VAllResults.vue";
 const props = defineProps({
   testResult: Object,
   testName: String,
 });
 //TODO REVIEW OTHER PARAMETERS OF RESULTS VISUALIZATION
+console.log(props.testResult)
 </script>
 <style>
 .error-sending {

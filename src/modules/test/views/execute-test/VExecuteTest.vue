@@ -10,8 +10,7 @@ import {
   ref,
   watch,
   defineAsyncComponent,
-  onMounted,
-  onUnmounted
+  onUnmounted,
 } from "vue";
 import { getTest } from "@/modules/test/test";
 import { Test } from "../../classes/test-class";
@@ -65,25 +64,81 @@ watch(
 //TIMER
 
 let timeCountdown = ref();
+
 watch(result, (newValue) => {
-  timeCountdown.value = newValue.time_duration * 60 * 1000;
-  test.name = newValue.name
+  if (newValue) {
+    let time: number;
+    if (newValue.time_duration > 0) time = newValue.time_duration;
+    else time = newValue.arrayserie[0].time_serie_duration;
+    timeCountdown.value =  time * 60001;
+    test.name = newValue.name;
+
+    toast.add({
+      severity: "info",
+      summary: "Tip",
+      detail:
+        "Responda las preguntas en el tiempo asignado, que puede consultar en la parte izquierda de la pantalla a través del temporizador.",
+      life: 30000,
+    });
+    toast.add({
+      severity: "info",
+      summary: "Tip",
+      detail:
+        "Utilice los botones del sector superior derecho para navegar entre series.",
+      life: 30000,
+    });
+    toast.add({
+      severity: "info",
+      summary: "Tip",
+      detail:
+        "Los botones a la derecha se utilizan para guardar sus respuestas, mostrar información y salir del test respectivamente.",
+      life: 30000,
+    });
+  }
 });
+const setNewTime = (time: number) => {
+  timeCountdown.value = time+1;
+  setTimeout(() => {
+    timeCountdown.value = time;
+  }, 0);
+};
 let hasSecondOpportunity = true;
 const timeOver = () => {
-  if (hasSecondOpportunity) {
-    timeCountdown.value = 5 * 60 * 1000;
-    hasSecondOpportunity = false;
-    toast.add({
-      severity: "warn",
-      summary: "Advertencia:",
-      detail: "El tiempo del test ha terminado. Se agregarán 5 minutos más.",
-      life: 5000,
-    });
-  } else {
-    confirmExit = true;
-    router.push("/select-test");
-    timeOverDialog();
+  try {
+    if (result.value.time_duration > 0) {
+      if (hasSecondOpportunity) {
+        setNewTime(300000);
+        hasSecondOpportunity = false;
+        toast.add({
+          severity: "warn",
+          summary: "Advertencia:",
+          detail:
+            "El tiempo del test ha terminado. Se agregarán 5 minutos más.",
+          life: 5000,
+        });
+      } else throw new Error("Time Over");
+    } else {
+      if (serieIndex.value < result.value.arrayserie.length - 1) {
+        serieIndex.value += 1;
+        setNewTime(
+          result.value.arrayserie[serieIndex.value].time_serie_duration * 60000
+        );
+        toast.removeAllGroups()
+        toast.add({
+          severity: "warn",
+          summary: "Advertencia:",
+          detail:
+            "El tiempo de la serie ha terminado. Se ha avanzado a la próxima serie.",
+          life: 5000,
+        });
+      } else throw new Error("Time Over");
+    }
+  } catch (e) {
+    if (e.message === "Time Over") {
+      confirmExit = true;
+      router.push("/select-test");
+      timeOverDialog();
+    } else console.error(e);
   }
 };
 
@@ -138,6 +193,9 @@ const nextSerieConfirm = () => {
     acceptLabel: "Aceptar",
     accept: () => {
       serieIndex.value += 1;
+      setNewTime(
+        result.value.arrayserie[serieIndex.value].time_serie_duration * 60000
+      );
       validatedTestFirstTime.value = false;
     },
   });
@@ -207,31 +265,9 @@ const exitTest = (route: string) => {
   router.push(`/` + route);
 };
 
-
-onMounted(() => {
-  toast.add({
-      severity: "info",
-      summary: "Tip",
-      detail: "Responda las preguntas en el tiempo asignado, que puede consultar en la parte izquierda de la pantalla a través del temporizador.",
-      life: 30000,
-    }
-    );
-    toast.add({
-      severity: "info",
-      summary: "Tip",
-      detail: "Utilice los botones del sector superior derecho para navegar entre series.",
-      life: 30000,
-    });
-    toast.add({
-      severity: "info",
-      summary: "Tip",
-      detail: "Los botones a la derecha se utilizan para guardar sus respuestas, mostrar información y salir del test respectivamente.",
-      life: 30000,
-    });
-})
 onUnmounted(() => {
-  toast.removeAllGroups()
-})
+  toast.removeAllGroups();
+});
 </script>
 <template>
   <VError v-if="error" />
@@ -285,7 +321,7 @@ onUnmounted(() => {
         <h3 class="page-subtitle">
           {{ result.arrayserie[serieIndex].description }}
         </h3>
-        <div class="test__timer">
+        <div class="test__timer" ref="timer">
           <vue-countdown
             :time="timeCountdown"
             v-slot="{ minutes, seconds }"
@@ -297,6 +333,7 @@ onUnmounted(() => {
           </vue-countdown>
           <img src="/img/timer.svg" alt="tiempo restante" />
         </div>
+
         <div class="test__buttons">
           <button
             class="black-button p-ripple"
@@ -385,7 +422,6 @@ onUnmounted(() => {
   right: 1rem;
   padding: 0.5rem;
 }
-
 .test__timer {
   background-color: white;
   border-radius: 1.5rem;
@@ -413,7 +449,6 @@ onUnmounted(() => {
   left: 1rem;
   cursor: pointer;
 }
-
 @media (min-width: 768px) {
   .test__header h2 {
     width: 50rem;

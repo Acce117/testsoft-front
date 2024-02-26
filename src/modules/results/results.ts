@@ -7,7 +7,6 @@ function resultsRequest(queryParams: Object, url: string) {
 
     sendRequest(url, queryParams)
         .then(res => {
-            console.log(res.data)
             loading.value = false;
             result.value = res.data
         }).catch(err => {

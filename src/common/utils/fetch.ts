@@ -10,7 +10,6 @@ export async function sendRequest<T>(
         method: method,
         url,
     }
-
     if (data)
         method === 'GET' ?
             config.params = data :

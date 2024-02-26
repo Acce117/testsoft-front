@@ -8,7 +8,7 @@ import type { Test } from "../../classes/test-class";
 const props = defineProps({
   serie: Object,
 });
-
+const emit = defineEmits(['time-serie-over'])
 const validatedTestFirstTime = inject("validatedTestFirstTime");
 const test = inject<Test>("test");
 

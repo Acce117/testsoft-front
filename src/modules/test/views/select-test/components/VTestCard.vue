@@ -46,7 +46,7 @@ const availabilityTime=getAvailabilityTime()
         <h2 v-if="!isAvailable && showImage">No Disponible</h2>
       </div>
       <div class="test-card__description" v-if="isAvailable">
-        <span>Duración: {{ props.duration }} min</span>
+        <span>Duración: {{ props.duration >0? props.duration+' min': "Por series" }}</span>
         <p>
           <span>Descripción: </span>
           {{ props.description }}

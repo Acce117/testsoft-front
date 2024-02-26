@@ -20,7 +20,6 @@ export async function login(credentials: LoginForm) {
 
     if (response?.status === 401)
         throw new Error('Unauthorized');
-
     userStore().$patch(response.data as UserInterface);
     sessionStorage.setItem('user', JSON.stringify(response.data));
     return true;

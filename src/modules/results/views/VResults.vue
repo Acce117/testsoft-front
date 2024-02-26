@@ -31,7 +31,12 @@
                 <button
                   class="black-button p-ripple"
                   v-ripple
-                  @click="getFinalResults(slotProps.data.id_test_application, slotProps.data.test.name)"
+                  @click="
+                    getFinalResults(
+                      slotProps.data.id_test_application,
+                      slotProps.data.test.name
+                    )
+                  "
                 >
                   <img src="/img/test_completed.svg" />
                 </button>
@@ -57,15 +62,15 @@
 </template>
 <script setup lang="ts">
 import DataTable from "primevue/datatable";
-import VShowFinalResults from './VShowFinalResults.vue'
+import VShowFinalResults from "./VShowFinalResults.vue";
 import Column from "primevue/column";
 import { getResults } from "./../results.ts";
 import { userStore } from "@/modules/security/store/user-store";
-import { ref, provide, onMounted, onUnmounted } from "vue";
+import { ref, provide, watch, onUnmounted } from "vue";
 import { useDialog } from "primevue/usedialog";
 import { useToast } from "primevue/usetoast";
-const toast = useToast()
-const dialog = useDialog()
+const toast = useToast();
+const dialog = useDialog();
 provide("dialogRef", dialog);
 const { result, loading, error } = getResults(userStore().ci);
 const expandedRows = ref([]);
@@ -76,9 +81,8 @@ const collapseAll = () => {
   expandedRows.value = null;
 };
 
-const getFinalResults = (id:number|string, name:string) => {
- 
-    dialog.open(VShowFinalResults, {
+const getFinalResults = (id: number | string, name: string) => {
+  dialog.open(VShowFinalResults, {
     props: {
       header: "Resultados",
       modal: true,
@@ -86,28 +90,31 @@ const getFinalResults = (id:number|string, name:string) => {
     templates: {},
     data: {
       id,
-      name
+      name,
     },
   });
 };
-onMounted(() => {
-  toast.add({
-      severity: "info",
-      summary: "Tip",
-      detail: "En esta pantalla puede consultar los resultados de sus tests. Presione la flecha a la izquierda de una fila para mostrar los resultados generales del test correspondiente, o el botón de la derecha para ver los resultados finales del mismo.",
-      life: 30000,
-    }
-    );
+watch(result, (newValue) => {
+  if (newValue.length>0) {
     toast.add({
       severity: "info",
       summary: "Tip",
-      detail: "Utilice los botones del encabezado para mostrar los resultados de todos los tests o para esconderlos.",
+      detail:
+        "En esta pantalla puede consultar los resultados de sus tests. Presione la flecha a la izquierda de una fila para mostrar los resultados generales del test correspondiente, o el botón de la derecha para ver los resultados finales del mismo.",
       life: 30000,
     });
-})
+    toast.add({
+      severity: "info",
+      summary: "Tip",
+      detail:
+        "Utilice los botones del encabezado para mostrar los resultados de todos los tests o para esconderlos.",
+      life: 30000,
+    });
+  }
+});
 onUnmounted(() => {
-  toast.removeAllGroups()
-})
+  toast.removeAllGroups();
+});
 </script>
 <style>
 .results {
