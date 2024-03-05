@@ -25,6 +25,7 @@ const props = defineProps({
   box-shadow: var(--shadow);
   margin: 2rem auto;
   animation: fade-in 1s;
+  background-color: white;
 }
 
 .question__title {

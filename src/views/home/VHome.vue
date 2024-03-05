@@ -1,11 +1,8 @@
 <template>
   <div class="home">
-    <span class="home__background"></span>
     <div class="home__left">
-      <h1>Testsoft</h1>
-      <h2>
-        Herramienta para la ejecución de test psicológicos y psicométricos
-      </h2>
+      <h1>TestSoft</h1>
+      <h2>Herramienta para la ejecución de test psicológicos</h2>
     </div>
     <div class="home__right">
       <VPresentation />
@@ -17,9 +14,7 @@
 import VPresentation from "./components/VPresentation.vue";
 </script>
 
-<style >
-
-
+<style>
 .home {
   display: flex;
   align-items: center;
@@ -46,16 +41,7 @@ import VPresentation from "./components/VPresentation.vue";
   width: 30rem;
   z-index: 2;
 }
-.home__background {
-  position: absolute;
-  height: 20rem;
-  width: 100vw;
-  top: 0;
-  background: rgba(0, 0, 0);
-  border-radius:  0 0 8rem 8rem;
-  z-index: 2;
-  transition: all ease 0.2s;
-}
+
 
 .home__left h1 {
   color: white;
@@ -80,10 +66,6 @@ import VPresentation from "./components/VPresentation.vue";
   }
 }
 @media (min-width: 768px) {
-  .home__background {
-   border-radius: 0 0 6rem  6rem;
-  }
-
   .home__left h1 {
     font-size: 4rem;
   }
@@ -93,14 +75,6 @@ import VPresentation from "./components/VPresentation.vue";
   }
 }
 @media (min-width: 1024px) {
-  .home__background {
-    transform: rotate(60deg);
-    height: 80rem;
-    width: 80rem;
-    top: -5rem;
-    left: -40rem;
-    border-radius: 30rem;
-  }
   .home {
     flex-direction: row;
     height: 78rem;
@@ -109,16 +83,16 @@ import VPresentation from "./components/VPresentation.vue";
   .home__left {
     width: 40rem;
     margin-top: 0;
-    margin-left: 1rem;
+    margin-left: 5rem;
   }
   .home__right {
     width: 50rem;
   }
   .home__left h1 {
-    font-size: 5rem;
+    font-size: 7rem;
   }
   .home__left h2 {
-    font-size: 2.2rem;
+    font-size: 2.5rem;
     width: 100%;
   }
 }

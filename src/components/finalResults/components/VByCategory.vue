@@ -15,12 +15,12 @@
     </span>
     <span
       >El elemento <strong>{{ props.category?.items.name }}</strong> consiste
-      en: <br />
+      en:
       {{ props.category?.items.description }}</span
     ><br />
     <span
       >Descripción de la categoría <strong>{{ props.category?.name }}</strong
-      >:<br />
+      >:
       {{ props.category?.description }}
     </span>
   </div>

@@ -29,24 +29,18 @@ body {
   justify-content: center;
 }
 main {
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   overflow: auto;
+
 }
 
 html {
-  background-image: linear-gradient(
-      to right,
-      rgba(0, 0, 0, 0.7),
-      rgba(0, 0, 0, 0.7)
-    ),
-    url("/img/test.png");
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: 50%;
   font-size: 62.5%;
   width: 100vw;
   overflow-x: hidden;
+  
+
 }
 button {
   display: flex;
@@ -72,13 +66,21 @@ button:not(.black-button):active img{
 }
 
 button * {
-  
+  text-align: center;
   user-select: none;
 }
-.black-button, .p-dialog-footer button  {
+.black-button, .p-dialog-footer button , .white-button {
   background-color: black;
   color: white;
   padding: 1rem;
+}
+.white-button{
+  background-color: white;
+  color: black;
+  box-shadow: var(--shadow);
+}
+.white-button img{
+  filter: invert();
 }
 
 label,
@@ -111,13 +113,28 @@ button:hover {
   
   margin-top: 6rem;
   font-size: 1.8rem;
-  
+  color: white;
 }
 .page-subtitle{
   font-size: 1.5rem;
+  color: white;
 }
 .invert-color, .invert-color *{
   filter: invert();
+}
+.background{
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  z-index: -1;
+  background:  linear-gradient(
+    rgba(0, 0, 0, 0.7),
+    rgba(0, 0, 0,0.3)
+  ), url(img/background.jpg);
+  background-position: 50% 75%;
+  background-repeat:no-repeat ;
+  background-size: cover;
+  filter: blur(.6rem);
 }
 
 @media (min-width: 768px) {

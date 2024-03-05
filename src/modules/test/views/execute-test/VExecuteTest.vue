@@ -72,7 +72,7 @@ watch(result, (newValue) => {
     else time = newValue.arrayserie[0].time_serie_duration;
     timeCountdown.value =  time * 60001;
     test.name = newValue.name;
-    test.type = newValue.fk_id_type_test
+    test.type = newValue.fk_id_type_test;
     toast.add({
       severity: "info",
       summary: "Tip",
@@ -336,7 +336,7 @@ onUnmounted(() => {
 
         <div class="test__buttons">
           <button
-            class="black-button p-ripple"
+            class="white-button p-ripple"
             v-ripple
             @click="validateTest()"
             v-tooltip.right="'Terminar Test'"
@@ -345,7 +345,7 @@ onUnmounted(() => {
             <img src="/img/test_completed.svg" alt="terminar test" />
           </button>
           <button
-            class="black-button p-ripple"
+            class="white-button p-ripple"
             v-ripple
             @click="infoVisible = true"
             v-tooltip.right="'Información'"
@@ -354,7 +354,7 @@ onUnmounted(() => {
             <img src="/img/info.svg" alt="info" />
           </button>
           <button
-            class="black-button p-ripple"
+            class="white-button p-ripple"
             v-ripple
             @click="exitTestConfirm('select-test')"
             v-tooltip.right="'Cancelar Test'"
@@ -383,7 +383,7 @@ onUnmounted(() => {
   align-items: end;
 
   display: flex;
-  background-color: rgba(255, 255, 255, 0.9);
+  background-color: rgba(0,0,0, 0.5);
   backdrop-filter: blur(1.2rem);
   -webkit-backdrop-filter: blur(1.2rem);
   z-index: 1;
