@@ -1,27 +1,5 @@
 import { sendRequest } from "@/common/utils/fetch";
-import { ref } from "vue";
 import { userStore } from "../security/store/user-store";
-
-function testRequest(queryParams: Object, url: string) {
-    let result = ref();
-    let loading = ref(true);
-    let error = ref(false);
-
-    sendRequest(url, queryParams)
-        .then(res => {
-            loading.value = false;
-            result.value = res.data
-        }).catch(err => {
-            loading.value = false;
-            error.value = true
-        })
-
-    return {
-        result,
-        loading,
-        error
-    };
-}
 
 /**
  * retrieve available tests for user
@@ -30,8 +8,7 @@ function testRequest(queryParams: Object, url: string) {
 
 export function getAsignedTests() {
     const url = `${import.meta.env.VITE_API_PATH}/gestion/group_for_test`;
-
-    return testRequest({
+    const queryParams = {
         attr: {
             fk_id_group: userStore().group,
             group_type: userStore().userType,
@@ -45,17 +22,18 @@ export function getAsignedTests() {
                 orderBy: 'date DESC'
             }
         }
-    }, url);
+    };
+    return sendRequest(url, queryParams);
 }
 
 export function getTest(idTest: number | string) {
     const url = `${import.meta.env.VITE_API_PATH}/gestion/test/view/${idTest}`;
-
-    return testRequest({
+    const queryParams = {
         attr: {
             id_test: idTest
         },
         relations: ["arrayserie.arrayquestion.arrayanswer", "arrayserie.arrayquestion.arrayquestion_top_value"]
-    }, url);
+    };
+    return sendRequest(url, queryParams);
 }
 
