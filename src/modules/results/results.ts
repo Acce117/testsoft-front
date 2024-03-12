@@ -10,7 +10,6 @@ function resultsRequest(queryParams: Object, url: string) {
             loading.value = false;
             result.value = res.data
         }).catch(err => {
-            console.log(err);
             loading.value = false;
             error.value = true
         })

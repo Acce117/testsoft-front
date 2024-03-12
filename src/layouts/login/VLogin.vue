@@ -61,7 +61,7 @@ async function sendCredentials() {
           detail: 'Inicio de sesión inválido',
           life: 3000,
         });
-    console.log(err);
+    
   }
 }
 

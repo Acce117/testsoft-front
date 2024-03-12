@@ -97,7 +97,6 @@ const getFinalResults = (id: number | string, name: string, fk_id_type_test:numb
   });
 };
 watch(result, (newValue) => {
-  console.log(newValue)
   if (newValue.length>0) {
     toast.add({
       severity: "info",

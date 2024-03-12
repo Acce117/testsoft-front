@@ -14,9 +14,9 @@ const { result, loading, error } = getAsignedTests();
 
 watch(result, (newValue) => {
   user.assignedTests = [];
-  newValue.forEach((test: { id: any; applicatedTests: [] }) => {
-    let availableDate = null;
-    if (test.applicatedTests.length > 0) {
+  newValue.forEach((test: any) => {
+    let availableDate: Date = null;
+    if (test.applicatedTests[0]) {
       availableDate = new Date(test.applicatedTests[0].date);
       availableDate.setFullYear(
         availableDate.getFullYear() + parseInt(test.recurringTime)
@@ -26,7 +26,7 @@ watch(result, (newValue) => {
       id: test.id,
       availabilityTime: availableDate,
     });
-    sessionStorage.setItem('user', JSON.stringify(user));
+    sessionStorage.setItem('user', JSON.stringify(user.$state));
   });
 });
 const modules = [Pagination, Navigation];

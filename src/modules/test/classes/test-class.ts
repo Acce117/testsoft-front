@@ -27,12 +27,10 @@ export class Test {
             'POST'
         )
             .then(res => {
-                console.log(res)
                 loading.value = false
                 result.value = res.data
             })
             .catch(err => {
-                console.log(err)
                 error.value = true
                 loading.value = false
             });
