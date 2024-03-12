@@ -3,7 +3,6 @@
     <li class="navbar__home" @click="goHome()">
       <img src="/img/home.svg" alt="home" />
     </li>
-    <span class="background__shape"></span>
     <Menubar :model="items" />
   </ul>
 </template>
@@ -77,23 +76,10 @@ const goHome = () => {
   opacity: 0.5;
   scale: 1;
 }
-.background__shape{
-  top:0;
-  left: 0;
-  z-index: 4;
-  background-color: black;
-  position: absolute;
-  width: 100%;
-  height: 6rem;
-  
-}
+
 @media (min-width: 1024px) {
   .navbar__home {
     margin-left: 2rem;
-  }
-  .background__shape{
-    width: 9rem;
-    border-radius: 0 0 1.5rem 0;
   }
 }
 </style>

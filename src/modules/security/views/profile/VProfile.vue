@@ -52,6 +52,7 @@ const logOutConfirm = ()=>{
   font-size: 1.5rem;
   text-wrap: wrap;
   animation: fade-in 1s;
+  color: white;
 }
 
 .profile button {

@@ -87,7 +87,7 @@ const pagination = {
 
 .swiper-button-next,
 .swiper-button-prev {
-  color: black;
+  color: white;
   transition: all ease 0.2s;
 }
 .swiper-pagination-bullet:hover,

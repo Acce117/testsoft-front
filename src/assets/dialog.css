@@ -81,7 +81,7 @@
     font-size: 1.6rem;
   }
   .p-dialog:has(.modal__long-message){
-    width: 65rem;
+    width: 90vw;
 
   }
 

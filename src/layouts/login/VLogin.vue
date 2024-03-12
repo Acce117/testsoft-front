@@ -1,35 +1,40 @@
 <template>
-  <main>
-    <div class="login">
-      <span class="screen__background"></span>
-      <img src="/img/logo.png" class="login__logo" />
-      
-      <form action="" @submit.prevent="sendCredentials()">
-        <h2>Bienvenido a Testsoft</h2>
-        <div class="login__input">
-          <input
-            id="user-input"
-            type="text"
-            required
-            v-model="credentials.username"
-          />
-          <label for="user-input"><img src="/img/user.svg" />Usuario</label>
+  <main class="centered">
+    <div class="login__container box-shadow-box">
+      <img src="/img/background.jpg" alt="persona ejecutando un test" />
+      <div class="login box-shadow-box">
+        <div class="login__header centered">
+          <img src="/img/logo.png" class="login__logo" />
+          <h1>Bienvenido a TestSoft</h1>
         </div>
-        <div class="login__input">
-          <input
-            id="password-input"
-            type="password"
-            required
-            v-model="credentials.password"
-          />
-          <label for="password-input"
-            ><img src="/img/password.svg" />Contraseña</label
-          >
-        </div>
-        <button class="black-button p-riple" type="submit" v-ripple>
-          <span v-if="!loading">Iniciar Sesión</span> <VLoading v-else />
-        </button>
-      </form>
+        <form action="" @submit.prevent="sendCredentials()" class="centered">
+          <div class="login__input">
+            <input
+              id="user-input"
+              type="text"
+              required
+              v-model="credentials.username"
+              class="box-shadow-box"
+            />
+            <label for="user-input"><img src="/img/user.svg" />Usuario</label>
+          </div>
+          <div class="login__input">
+            <input
+              id="password-input"
+              type="password"
+              required
+              v-model="credentials.password"
+              class="box-shadow-box"
+            />
+            <label for="password-input"
+              ><img src="/img/password.svg" />Contraseña</label
+            >
+          </div>
+          <button class="black-button p-riple" type="submit" v-ripple>
+            <span v-if="!loading">Iniciar Sesión</span> <VLoading v-else />
+          </button>
+        </form>
+      </div>
     </div>
   </main>
 </template>
@@ -50,9 +55,9 @@ const credentials = ref({
 async function sendCredentials() {
   try {
     loading.value = true;
-    await login(credentials.value)
+    await login(credentials.value);
     router.push("/");
-    toast.removeAllGroups()
+    toast.removeAllGroups();
   } catch (err) {
     loading.value = false;
     toast.add({
@@ -69,36 +74,36 @@ window.scrollTo(0, 0);
 </script>
 
 <style>
+.login__container {
+  width: 31rem;
+  height: 50rem;
+  display: flex;
+  overflow: hidden;
+  background: transparent;
+  box-shadow: none;
+
+}
+.login__container > img {
+  display: none;
+}
 .login {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  width: 30rem;
-  height: 50rem;
-  padding: 2rem;
-  gap: 6rem;
-  background-color: white;
-  border-radius: 1.5rem;
-  overflow: hidden;
-  color: white;
+  width: 100%;
+  height: 100%;
   animation: 0.5s fade-in;
+  overflow: hidden;
+  flex-direction: column;
+  background-color: transparent;
+  box-shadow: none;
 }
 .login__input {
   position: relative;
 }
-.screen__background ~ * {
-  position: relative;
-  z-index: 1;
-}
+
 .login__input input {
-  width: 70%;
   outline: none;
   border: none;
-  border-radius: 1.5rem;
   height: 3rem;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: 50%;
   font-size: 1.5rem;
   padding: 1rem;
 }
@@ -114,7 +119,7 @@ window.scrollTo(0, 0);
   color: black;
   user-select: none;
   pointer-events: none;
-  animation: 1s slide-in;
+  animation: 1s fade-in;
 }
 .login__input label img {
   transition: all ease 0.2s;
@@ -132,57 +137,49 @@ window.scrollTo(0, 0);
   transform: scale(0.8);
 }
 .login form {
-  display: flex;
   gap: 3rem;
   flex-direction: column;
+
+  height: 30rem;
 }
 .login form button {
-  width: 11rem;
+  margin-top: 2rem;
+  width: 15rem;
   height: 5rem;
-  margin-left: 15rem;
-  font-size: 1.4rem;
-  margin-top: 8rem;
-}
-.login form button img {
-  filter: invert();
-}
-.login form button:active img {
-  filter: none;
+  font-size: 1.6rem;
 }
 
 .login__logo {
-  margin-top: 2rem;
-  width: 30%;
+  width: 10rem;
 }
-.login h2 {
+.login__header {
+  height: 20rem;
+  gap: 3rem;
+  flex-direction: column;
+}
+.login h1 {
+  color: white;
   font-size: 2rem;
   animation: 1s slide-in;
 }
 
-.screen__background {
-  transform: rotate(45deg);
-  position: absolute;
-  height: 50rem;
-  width: 50rem;
-  left: -28rem;
-
-  background: rgba(0, 0, 0);
-  border-radius: 8rem;
-}
 @media (min-width: 768px) {
-  .login {
-    width: 40rem;
-    gap: 3rem;
+  .login__container > img {
+    display: block;
+    width: 42rem;
   }
-  .screen__background {
-    left: -22rem;
+  .login__container {
+    background-color: white;
+    width: 75rem;
   }
-  .login h2 {
-    font-size: 2.7rem;
+  .login h1 {
+    color: black;
+    font-size: 2.5rem;
   }
   .login__remember,
   .login__input label,
-  .login__input {
+  .login__input,
+  .login form button {
     font-size: 2rem;
   }
   .login__input input {
@@ -191,12 +188,11 @@ window.scrollTo(0, 0);
   .login__input input:valid ~ label,
   .login__input input:focus ~ label {
     font-size: 1.5rem;
+    color: black;
   }
-  .login form button {
-    width: 12rem;
-    margin-left: 23rem;
-    font-size: 1.6rem;
-    margin-top: 4rem;
+  .login__input input:valid ~ label img,
+  .login__input input:focus ~ label img {
+    filter: none;
   }
 }
 </style>
