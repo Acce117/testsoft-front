@@ -280,7 +280,7 @@ onUnmounted(() => {
           </h2>
           <div class="test__serie__navigation">
             <button
-              class="black-button p-ripple"
+              class="white-button p-ripple"
               v-ripple
               :class="{
                 'p-disabled': !(serieIndex > 0),
@@ -305,7 +305,8 @@ onUnmounted(() => {
               :class="{
                 'p-disabled': !(serieIndex < result.arrayserie.length - 1),
               }"
-              class="black-button p-ripple"
+              v-if="result.arrayserie.length>1"
+              class="white-button p-ripple"
               v-ripple
               @click="nextSerie()"
               v-tooltip.bottom="'Siguiente Serie'"
@@ -365,7 +366,7 @@ onUnmounted(() => {
         </div>
         <VTestSerie :serie="result.arrayserie[serieIndex]" />
       </div>
-      <Dialog v-model:visible="infoVisible" modal header="Descripción">
+      <Dialog v-model:visible="infoVisible" modal header="Descripción" style="width: 50%;">
         <span class="modal__long-message">{{ result.description }}</span>
       </Dialog>
     </div>

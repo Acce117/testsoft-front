@@ -238,6 +238,16 @@
   width: 5rem;
   border-radius: 1.5rem;
 }
+
+.question:has(.p-inputnumber-input:active) .p-inputnumber:not(:has(input:active)) .p-button,
+.question:has(.p-inputnumber-input:focus) .p-inputnumber:not(:has(input:focus)) .p-button {
+  opacity: 0.3;
+  pointer-events: none;
+  cursor: default;
+  user-select: none;
+}
+
+
 .p-button.p-button-icon-only {
   width: 2rem;
   height: 1.5rem;

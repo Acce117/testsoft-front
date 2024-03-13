@@ -39,7 +39,7 @@ const pagination = {
 </script>
 <template>
   <VError v-if="error" />
-  <div v-else style="width: 100vw; height: 100vh">
+  <div v-else style="width: 100vw;">
     <div v-if="!loading">
       <h2 class="page-title">Seleccione un test</h2>
       <Swiper
