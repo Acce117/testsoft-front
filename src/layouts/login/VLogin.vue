@@ -9,29 +9,16 @@
         </div>
         <form action="" @submit.prevent="sendCredentials()" class="centered">
           <div class="login__input">
-            <input
-              id="user-input"
-              type="text"
-              required
-              v-model="credentials.username"
-              class="box-shadow-box"
-            />
+            <input id="user-input" type="text" required v-model="credentials.username" class="box-shadow-box" />
             <label for="user-input"><img src="/img/user.svg" />Usuario</label>
           </div>
           <div class="login__input">
-            <input
-              id="password-input"
-              type="password"
-              required
-              v-model="credentials.password"
-              class="box-shadow-box"
-            />
-            <label for="password-input"
-              ><img src="/img/password.svg" />Contraseña</label
-            >
+            <input id="password-input" type="password" required v-model="credentials.password" class="box-shadow-box" />
+            <label for="password-input"><img src="/img/password.svg" />Contraseña</label>
           </div>
           <button class="black-button p-riple" type="submit" v-ripple>
-            <span v-if="!loading">Iniciar Sesión</span> <VLoading v-else />
+            <span v-if="!loading">Iniciar Sesión</span>
+            <VLoading v-else />
           </button>
         </form>
       </div>
@@ -40,12 +27,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import { login } from "@/common/login";
 const router = useRouter();
 const loading = ref(false);
 import { useToast } from "primevue/usetoast";
+import { userStore, type UserInterface } from "@/modules/security/store/user-store";
 const toast = useToast();
 const credentials = ref({
   username: "",
@@ -53,21 +41,25 @@ const credentials = ref({
 });
 
 async function sendCredentials() {
-  try {
-    loading.value = true;
-    await login(credentials.value);
-    router.push("/");
-    toast.removeAllGroups();
-  } catch (err) {
-    loading.value = false;
-    toast.add({
-      severity: "error",
-      summary: "Error",
-      detail: "Inicio de sesión inválido",
-      life: 3000,
-    });
-    console.log(err);
-  }
+  loading.value = true;
+  const response = login(credentials.value);
+  watch(response.loading, () => {
+    if (!response.error.value) {
+      userStore().$patch(response.result.value as unknown as UserInterface);
+      sessionStorage.setItem('user', JSON.stringify(response.result.value));
+      router.push("/");
+      toast.removeAllGroups();
+    }
+    else {
+      loading.value = false;
+      toast.add({
+        severity: "error",
+        summary: "Error",
+        detail: 'Inicio de sesión inválido',
+        life: 3000,
+      });
+    }
+  })
 }
 
 window.scrollTo(0, 0);
@@ -83,9 +75,11 @@ window.scrollTo(0, 0);
   box-shadow: none;
 
 }
-.login__container > img {
+
+.login__container>img {
   display: none;
 }
+
 .login {
   position: relative;
   width: 100%;
@@ -96,6 +90,7 @@ window.scrollTo(0, 0);
   background-color: transparent;
   box-shadow: none;
 }
+
 .login__input {
   position: relative;
 }
@@ -107,6 +102,7 @@ window.scrollTo(0, 0);
   font-size: 1.5rem;
   padding: 1rem;
 }
+
 .login__input label {
   display: flex;
   align-items: center;
@@ -121,27 +117,32 @@ window.scrollTo(0, 0);
   pointer-events: none;
   animation: 1s fade-in;
 }
+
 .login__input label img {
   transition: all ease 0.2s;
   width: 2rem;
 }
-.login__input input:valid ~ label,
-.login__input input:focus ~ label {
+
+.login__input input:valid~label,
+.login__input input:focus~label {
   color: white;
   top: -2.8rem;
   font-size: 1rem;
 }
-.login__input input:valid ~ label img,
-.login__input input:focus ~ label img {
+
+.login__input input:valid~label img,
+.login__input input:focus~label img {
   filter: invert();
   transform: scale(0.8);
 }
+
 .login form {
   gap: 3rem;
   flex-direction: column;
 
   height: 30rem;
 }
+
 .login form button {
   margin-top: 2rem;
   width: 15rem;
@@ -152,11 +153,13 @@ window.scrollTo(0, 0);
 .login__logo {
   width: 10rem;
 }
+
 .login__header {
   height: 20rem;
   gap: 3rem;
   flex-direction: column;
 }
+
 .login h1 {
   color: white;
   font-size: 2rem;
@@ -164,34 +167,40 @@ window.scrollTo(0, 0);
 }
 
 @media (min-width: 768px) {
-  .login__container > img {
+  .login__container>img {
     display: block;
     width: 42rem;
   }
+
   .login__container {
     background-color: white;
     width: 75rem;
   }
+
   .login h1 {
     color: black;
     font-size: 2.5rem;
   }
+
   .login__remember,
   .login__input label,
   .login__input,
   .login form button {
     font-size: 2rem;
   }
+
   .login__input input {
     height: 4rem;
   }
-  .login__input input:valid ~ label,
-  .login__input input:focus ~ label {
+
+  .login__input input:valid~label,
+  .login__input input:focus~label {
     font-size: 1.5rem;
     color: black;
   }
-  .login__input input:valid ~ label img,
-  .login__input input:focus ~ label img {
+
+  .login__input input:valid~label img,
+  .login__input input:focus~label img {
     filter: none;
   }
 }

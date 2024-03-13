@@ -1,7 +1,6 @@
 import { sendRequest } from "@/common/utils/fetch";
 import { userStore } from "@/modules/security/store/user-store";
 import type { Question } from "./question-class";
-import { ref } from "vue";
 
 export class Test {
     questions: { [key: string]: Question<any> };
@@ -13,30 +12,16 @@ export class Test {
     }
 
     public sendTest() {
-        let result = ref();
-        let loading = ref(true);
-        let error = ref(false);
         const test = {
             user_ci: userStore().ci,
             ...this
         };
 
-        sendRequest(
+        return sendRequest(
             `${import.meta.env.VITE_API_PATH}/gestion/test/execute_test`,
             test,
             'POST'
         )
-            .then(res => {
-                console.log(res)
-                loading.value = false
-                result.value = res.data
-            })
-            .catch(err => {
-                console.log(err)
-                error.value = true
-                loading.value = false
-            });
-        return { result, loading, error }
     }
 
 

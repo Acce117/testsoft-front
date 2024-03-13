@@ -8,6 +8,7 @@ import VGeneralVue from '@/layouts/general/VGeneral.vue'
 import VResults from '@/modules/results/views/VResults.vue'
 import { isUserAuthenticated } from '@/modules/security/isUserAuthenticated'
 import { useToast } from 'primevue/usetoast'
+import { userStore } from '@/modules/security/store/user-store'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -65,8 +66,8 @@ router.beforeEach((to, from, next) => {
   if (to.meta.requiresAuth && !isUserAuthenticated())
     next('/login');
   else if (to.path.includes('execute-test')) {
-    const user = JSON.parse(sessionStorage.getItem('user'))
-    if (from.path.includes('select-test') && user) {
+    const user = userStore();
+    if (from.path.includes('select-test')) {
       try {
         const id_test = to.path.split('/')[2]
         const test = user.assignedTests.filter(test => test.id == id_test)[0]

@@ -133,7 +133,7 @@ const timeOver = () => {
         });
       } else throw new Error("Time Over");
     }
-  } catch (e) {
+  } catch (e: any) {
     if (e.message === "Time Over") {
       confirmExit = true;
       router.push("/select-test");
@@ -252,7 +252,7 @@ const validateTest = () => {
 let confirmExit = false;
 onBeforeRouteLeave((to, from) => {
   if (!error.value) {
-    if (!confirmExit) {
+    if (!confirmExit && to.name) {
       exitTestConfirm(to.name.toString());
       return false;
     }
