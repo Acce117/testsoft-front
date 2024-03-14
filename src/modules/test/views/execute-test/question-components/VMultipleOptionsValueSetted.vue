@@ -79,6 +79,8 @@ const updateInput = (value: number, oldValue: number) => {
 .actual-points {
   font-size: 1.5rem;
 }
+
+
 @media (min-width: 768px) {
   .actual-points {
     font-size: 2rem;
