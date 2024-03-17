@@ -10,7 +10,7 @@
         </div>
         <form
           action=""
-          @submit.prevent="sendCredentials()"
+          @submit.prevent="site.login(credentials)"
           centered
           gap-3rem
           flex-col
@@ -60,46 +60,17 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from "vue";
-import { useRouter } from "vue-router";
-import { login } from "@/common/login";
+import { ref } from "vue";
 import VLanguageChanger from "@/components/VLanguageChanger.vue";
-const router = useRouter();
 const loading = ref(false);
-import { useToast } from "primevue/usetoast";
-import {
-  userStore,
-  type UserInterface,
-} from "@/modules/security/store/user-store";
-import { useI18n } from "vue-i18n";
+import { siteStore } from "@/common/site/siteStore";
 
-const { t } = useI18n();
-const toast = useToast();
 const credentials = ref({
   username: "",
   password: "",
 });
 
-async function sendCredentials() {
-  loading.value = true;
-  const response = login(credentials.value);
-  watch(response.loading, () => {
-    if (!response.error.value) {
-      userStore().$patch(response.result.value as unknown as UserInterface);
-      sessionStorage.setItem("user", JSON.stringify(response.result.value));
-      router.push("/");
-      toast.removeAllGroups();
-    } else {
-      loading.value = false;
-      toast.add({
-        severity: "error",
-        summary: "Error",
-        detail: t('login.error') ,
-        life: 3000,
-      });
-    }
-  });
-}
+const site = siteStore();
 
 window.scrollTo(0, 0);
 </script>

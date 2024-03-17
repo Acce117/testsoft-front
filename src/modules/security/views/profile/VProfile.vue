@@ -1,35 +1,9 @@
 <script setup lang="ts">
-import { useRouter } from "vue-router";
-import { userStore } from "../../store/user-store";
-import { ref } from "vue";
-import { useConfirm } from "primevue/useconfirm";
-import { useI18n } from 'vue-i18n';
+import { userStore } from "../../store/user-store";;
 
-const { t } = useI18n();
-
-const confirm = useConfirm();
-const router = useRouter();
-const logOut = () => {
-  visible.value = false;
-  user.$reset();
-  sessionStorage.removeItem('user');
-  router.push("/login");
-};
+import { siteStore } from "@/common/site/siteStore";
 
 const user = userStore();
-const visible = ref(false);
-
-const logOutConfirm = ()=>{
-  confirm.require({
-    message: t('profile.dialogs.close-session.message'),
-    header: t('profile.dialogs.close-session.header'),
-    rejectLabel: t('global.cancel'),
-    acceptLabel: t('global.confirm'),
-    accept: () => {
-      logOut();
-    },
-  })
-}
 
 </script>
 <template>
@@ -40,7 +14,7 @@ const logOutConfirm = ()=>{
     <span v-if="user.group">{{$t('profile.group') }}: {{ user.group }}</span>
     <span>{{$t('profile.role') }}: {{ user.role }}</span>
     <span v-if="user.userType">{{$t('profile.usertype') }}: {{ user.userType }}</span>
-    <button black-button w-15rem font-size-2rem class="p-ripple" v-ripple @click="logOutConfirm()">
+    <button black-button w-15rem font-size-2rem class="p-ripple" v-ripple @click="siteStore().logout()">
       {{$t('profile.close-session') }}
     </button>
   </div>
