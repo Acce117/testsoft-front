@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router";
 import { userStore } from "../../store/user-store";
-import Dialog from "primevue/dialog";
 import { ref } from "vue";
 import { useConfirm } from "primevue/useconfirm";
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
+
 const confirm = useConfirm();
 const router = useRouter();
 const logOut = () => {
@@ -18,10 +21,10 @@ const visible = ref(false);
 
 const logOutConfirm = ()=>{
   confirm.require({
-    message: "¿Desea cerrar sesión?",
-    header: "Salir",
-    rejectLabel: "Cancelar",
-    acceptLabel: "Aceptar",
+    message: t('profile.dialogs.close-session.message'),
+    header: t('profile.dialogs.close-session.header'),
+    rejectLabel: t('global.cancel'),
+    acceptLabel: t('global.confirm'),
     accept: () => {
       logOut();
     },
@@ -30,15 +33,15 @@ const logOutConfirm = ()=>{
 
 </script>
 <template>
-  <h2 class="page-title">Mi perfil</h2>
+  <h2 class="page-title">{{$t('profile.title') }}</h2>
   <div class="profile">
-    <span>Nombre: {{ user.username }}</span>
-    <span>Carnet de Identidad:{{ user.ci }}</span>
-    <span v-if="user.group">Grupo: {{ user.group }}</span>
-    <span>Rol: {{ user.role }}</span>
-    <span v-if="user.userType">Tipo de Usuario: {{ user.userType }}</span>
-    <button class="black-button p-ripple" v-ripple @click="logOutConfirm()">
-      Cerrar Sesión
+    <span>{{$t('profile.name') }}: {{ user.username }}</span>
+    <span>{{$t('profile.id') }}:{{ user.ci }}</span>
+    <span v-if="user.group">{{$t('profile.group') }}: {{ user.group }}</span>
+    <span>{{$t('profile.role') }}: {{ user.role }}</span>
+    <span v-if="user.userType">{{$t('profile.usertype') }}: {{ user.userType }}</span>
+    <button black-button w-15rem font-size-2rem class="p-ripple" v-ripple @click="logOutConfirm()">
+      {{$t('profile.close-session') }}
     </button>
   </div>
 </template>
@@ -49,25 +52,10 @@ const logOutConfirm = ()=>{
   flex-direction: column;
   margin: 2rem 3rem;
   gap: 2rem;
-  font-size: 1.5rem;
+  font-size: 2rem;
   text-wrap: wrap;
   animation: fade-in 1s;
   color: white;
 }
 
-.profile button {
-  width: fit-content;
-}
-
-@media (min-width: 480px) {}
-
-@media (min-width: 768px) {
-  .profile {
-    font-size: 2rem;
-  }
-
-  .profile button {
-    font-size: 2rem;
-  }
-}
 </style>

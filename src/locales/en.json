@@ -1,0 +1,133 @@
+{
+    "login": {
+        "user": "User",
+        "password": "Password",
+        "title": "Welcome to TestSoft",
+        "login": "Log in",
+        "error": "Invalid login"
+    },
+    "home": {
+        "subtitle": "Tool for executing psychological tests",
+        "option1": "Take a test",
+        "option2": "Discover compatibilities and leaders",
+        "option3": "Find the most effective roles",
+        "option4": "Analyze the results"
+    },
+    "select-test": {
+        "title": "Select a test",
+        "dialogs": {},
+        "test-card": {
+            "duration": "Duration",
+            "description": "Description",
+            "not-available": "Not Available",
+            "available": "Available on"
+        }
+    },
+    "execute-test": {
+        "dialogs": {
+            "serie-ended": "The series time has ended. It has advanced to the next series.",
+            "test-ended-first-time": "The test time has ended. 5 more minutes will be added.",
+            "test-ended": "The test time has ended",
+            "confirm-next-serie": {
+                "title": "Series",
+                "message": "Do you want to advance to the next series? You won't be able to go back to the previous..."
+            },
+            "confirm-save-test": {
+                "title": "Exit",
+                "message": "Do you want to save the test answers?"
+            },
+            "confirm-exit-test": {
+                "title": "Exit",
+                "message": "Do you want to exit the test? The answers will be lost."
+            }
+        },
+        "tooltips": {
+            "next": "Next Serie",
+            "prev": "Previous Serie",
+            "exit": "Cancel Test",
+            "save": "Finish Test",
+            "info": "Information"
+        },
+        "question-components": {
+            "5": {
+                "remaining-points": "Remaining points in the question"
+            }
+        },
+        "error": {
+            "2": "You must select an answer",
+            "5": "There are points remaining to allocate",
+            "in-question": "in the question"
+        }
+    },
+    "results": {
+        "title": "Results",
+        "no-test": "Has not done any test",
+        "show-all": "Show All",
+        "hide-all": "Hide All",
+        "final-results": "See Final Results",
+        "results-of": "Results of",
+        "date": "Date",
+        "test": "Test",
+        "name": "Name",
+        "value": "Value",
+        "global-result": "Global Result",
+        "dialogs": {},
+        "all-elements-top-values": {
+            "preferred": "Preferred",
+            "avoided": "Avoided"
+        },
+        "by-category": {
+            "1": "In the category",
+            "2": "you are characterized by",
+            "3": "with a score of",
+            "4": "what is considered a value",
+            "5": "The element",
+            "6": "consists of",
+            "7": "Description of the category"
+        },
+        "by-element": {
+            "1": "With",
+            "2": "points"
+        }
+    },
+    "profile": {
+        "title": "My profile",
+        "dialogs": {
+            "close-session": {
+                "header": "Exit",
+                "message": "Do you want to log out?"
+            }
+        },
+        "name": "Name",
+        "id": "Identification Card",
+        "role": "Role",
+        "usertype": "User Type",
+        "group": "Group",
+        "close-session": "Log out"
+    },
+    "info": {},
+    "global": {
+        "and": "and",
+        "confirm": "Accept",
+        "cancel": "Cancel",
+        "error": "Something went wrong",
+        "resend": "Resend Test",
+        "execute": "Execute",
+        "warning": "Warning"
+    },
+    "navbar": {
+        "1": {
+            "name": "Test",
+            "1": "Run Test",
+            "2": "Roles",
+            "3": "Compatibilities",
+            "4": "View Results"
+        },
+        "2": {
+            "name": "Info"
+        },
+        "3": {
+            "name": "Profile"
+        }
+    }
+}

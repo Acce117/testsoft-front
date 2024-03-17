@@ -10,7 +10,8 @@
   display: flex;
 }
 
-.p-confirm-dialog-message, .modal__message {
+.p-confirm-dialog-message,
+.modal__message {
   color: black;
   display: flex;
   font-size: 1.4rem;
@@ -59,13 +60,16 @@
   z-index: 2;
   top: 0;
   left: -1.3rem;
-  border-radius: 1.5rem 0 1.5rem 0;
+  border-radius: 1rem 0 1rem 0;
   z-index: 1;
   position: absolute;
   justify-content: center;
 }
 .p-dialog-footer button {
   font-size: 1.5rem;
+  background-color: black;
+  color: white;
+  padding: 1rem;
 }
 @media (min-width: 768px) {
   .p-dialog {
@@ -74,15 +78,15 @@
   .p-dialog-title {
     width: 15rem;
   }
-  .p-confirm-dialog-message, .modal__message {
+  .p-confirm-dialog-message,
+  .modal__message {
     font-size: 2rem;
   }
   .modal__long-message {
     font-size: 1.6rem;
   }
-  .p-dialog:has(.modal__long-message){
+  .p-dialog:has(.modal__long-message) {
     width: 90vw;
-
   }
 
   .p-dialog .p-dialog-header .p-dialog-header-icon {

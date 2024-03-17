@@ -1,28 +1,61 @@
 <template>
-  <main class="centered">
-    <div class="login__container box-shadow-box">
+  <main centered>
+    <VLanguageChanger />
+    <section class="login__container">
       <img src="/img/background.jpg" alt="persona ejecutando un test" />
-      <div class="login box-shadow-box">
-        <div class="login__header centered">
-          <img src="/img/logo.png" class="login__logo" />
-          <h1>Bienvenido a TestSoft</h1>
+      <div class="login">
+        <div class="login__header" centered>
+          <img src="/img/logo.png" w-10rem />
+          <h1 text-white  font-size-2rem  anim-slide-in-1 md:text-black md:font-size-2.5rem>{{ $t("login.title") }}</h1>
         </div>
-        <form action="" @submit.prevent="sendCredentials()" class="centered">
+        <form
+          action=""
+          @submit.prevent="sendCredentials()"
+          centered
+          gap-3rem
+          flex-col
+          h-30rem
+        >
           <div class="login__input">
-            <input id="user-input" type="text" required v-model="credentials.username" class="box-shadow-box" />
-            <label for="user-input"><img src="/img/user.svg" />Usuario</label>
+            <input
+              id="user-input"
+              type="text"
+              required
+              v-model="credentials.username"
+              shadow-box
+            />
+            <label for="user-input"
+              ><img src="/img/user.svg" />{{ $t("login.user") }}</label
+            >
           </div>
           <div class="login__input">
-            <input id="password-input" type="password" required v-model="credentials.password" class="box-shadow-box" />
-            <label for="password-input"><img src="/img/password.svg" />Contraseña</label>
+            <input
+              id="password-input"
+              type="password"
+              required
+              v-model="credentials.password"
+              shadow-box
+            />
+            <label for="password-input"
+              ><img src="/img/password.svg" />{{ $t("login.password") }}</label
+            >
           </div>
-          <button class="black-button p-riple" type="submit" v-ripple>
-            <span v-if="!loading">Iniciar Sesión</span>
+          <button
+            black-button
+            mt-2rem
+            w-15rem
+            h-5rem
+            font-size-1.6rem
+            class="p-riple"
+            type="submit"
+            v-ripple
+          >
+            <span v-if="!loading">{{ $t("login.login") }}</span>
             <VLoading v-else />
           </button>
         </form>
       </div>
-    </div>
+    </section>
   </main>
 </template>
 
@@ -30,10 +63,17 @@
 import { ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import { login } from "@/common/login";
+import VLanguageChanger from "@/components/VLanguageChanger.vue";
 const router = useRouter();
 const loading = ref(false);
 import { useToast } from "primevue/usetoast";
-import { userStore, type UserInterface } from "@/modules/security/store/user-store";
+import {
+  userStore,
+  type UserInterface,
+} from "@/modules/security/store/user-store";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
 const toast = useToast();
 const credentials = ref({
   username: "",
@@ -46,20 +86,19 @@ async function sendCredentials() {
   watch(response.loading, () => {
     if (!response.error.value) {
       userStore().$patch(response.result.value as unknown as UserInterface);
-      sessionStorage.setItem('user', JSON.stringify(response.result.value));
+      sessionStorage.setItem("user", JSON.stringify(response.result.value));
       router.push("/");
       toast.removeAllGroups();
-    }
-    else {
+    } else {
       loading.value = false;
       toast.add({
         severity: "error",
         summary: "Error",
-        detail: 'Inicio de sesión inválido',
+        detail: t('login.error') ,
         life: 3000,
       });
     }
-  })
+  });
 }
 
 window.scrollTo(0, 0);
@@ -73,10 +112,9 @@ window.scrollTo(0, 0);
   overflow: hidden;
   background: transparent;
   box-shadow: none;
-
 }
 
-.login__container>img {
+.login__container > img {
   display: none;
 }
 
@@ -123,35 +161,17 @@ window.scrollTo(0, 0);
   width: 2rem;
 }
 
-.login__input input:valid~label,
-.login__input input:focus~label {
+.login__input input:valid ~ label,
+.login__input input:focus ~ label {
   color: white;
   top: -2.8rem;
   font-size: 1rem;
 }
 
-.login__input input:valid~label img,
-.login__input input:focus~label img {
+.login__input input:valid ~ label img,
+.login__input input:focus ~ label img {
   filter: invert();
   transform: scale(0.8);
-}
-
-.login form {
-  gap: 3rem;
-  flex-direction: column;
-
-  height: 30rem;
-}
-
-.login form button {
-  margin-top: 2rem;
-  width: 15rem;
-  height: 5rem;
-  font-size: 1.6rem;
-}
-
-.login__logo {
-  width: 10rem;
 }
 
 .login__header {
@@ -160,14 +180,10 @@ window.scrollTo(0, 0);
   flex-direction: column;
 }
 
-.login h1 {
-  color: white;
-  font-size: 2rem;
-  animation: 1s slide-in;
-}
+
 
 @media (min-width: 768px) {
-  .login__container>img {
+  .login__container > img {
     display: block;
     width: 42rem;
   }
@@ -175,14 +191,10 @@ window.scrollTo(0, 0);
   .login__container {
     background-color: white;
     width: 75rem;
+    box-shadow: var(--shadow);
+    border-radius: var(--bradius);
   }
 
-  .login h1 {
-    color: black;
-    font-size: 2.5rem;
-  }
-
-  .login__remember,
   .login__input label,
   .login__input,
   .login form button {
@@ -193,14 +205,14 @@ window.scrollTo(0, 0);
     height: 4rem;
   }
 
-  .login__input input:valid~label,
-  .login__input input:focus~label {
+  .login__input input:valid ~ label,
+  .login__input input:focus ~ label {
     font-size: 1.5rem;
     color: black;
   }
 
-  .login__input input:valid~label img,
-  .login__input input:focus~label img {
+  .login__input input:valid ~ label img,
+  .login__input input:focus ~ label img {
     filter: none;
   }
 }

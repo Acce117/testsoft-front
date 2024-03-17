@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import VTestSerie from "./VTestSerie.vue";
+import VTestHeader from "./VTestHeader.vue";
 import { onBeforeRouteLeave, useRouter } from "vue-router";
-import Steps from "primevue/steps";
 import Dialog from "primevue/dialog";
 import {
   provide,
@@ -15,9 +15,10 @@ import {
 import { getTest } from "@/modules/test/test";
 import { Test } from "../../classes/test-class";
 import { useToast } from "primevue/usetoast";
-import { getErrorMessages } from "./getErrorMessages";
 import { useConfirm } from "primevue/useconfirm";
 import { useDialog } from "primevue/usedialog";
+import { useI18n } from "vue-i18n";
+const { t } = useI18n();
 const VDialogFooter = defineAsyncComponent(
   () => import("@/components/dialog/VDialogFooter.vue")
 );
@@ -35,32 +36,10 @@ const { result, loading, error } = getTest(
 const test = reactive(new Test(router.currentRoute.value.params.id_test[0]));
 
 provide<Test>("test", test);
-//SERIE NAVIGATION
-const serieIndex = ref(0);
-const nextSerie = () => {
-  if (result.value.navigable == 1) serieIndex.value += 1;
-  else if (result.value.completed == 1) {
-    if (validateSerie(result.value.arrayserie[serieIndex.value]))
-      nextSerieConfirm();
-  } else nextSerieConfirm();
-};
-const prevSerie = () => {
-  serieIndex.value -= 1;
-};
 
-const getSeriesNames = () => {
-  let names = Array();
-  if (result.value) {
-    result.value.arrayserie.forEach((serie: { name: string }) => {
-      names.push({ label: serie.name });
-    });
-  }
-  return names;
-};
-watch(
-  serieIndex,
-  () => (document.getElementsByTagName("main")[0].scrollTop = 0)
-);
+const serieIndex = ref(0);
+provide("serieIndex", serieIndex);
+
 //TIMER
 
 let timeCountdown = ref();
@@ -70,34 +49,13 @@ watch(result, (newValue) => {
     let time: number;
     if (newValue.time_duration > 0) time = newValue.time_duration;
     else time = newValue.arrayserie[0].time_serie_duration;
-    timeCountdown.value =  time * 60001;
+    timeCountdown.value = time * 60001;
     test.name = newValue.name;
     test.type = newValue.fk_id_type_test;
-    toast.add({
-      severity: "info",
-      summary: "Tip",
-      detail:
-        "Responda las preguntas en el tiempo asignado, que puede consultar en la parte izquierda de la pantalla a través del temporizador.",
-      life: 30000,
-    });
-    toast.add({
-      severity: "info",
-      summary: "Tip",
-      detail:
-        "Utilice los botones del sector superior derecho para navegar entre series.",
-      life: 30000,
-    });
-    toast.add({
-      severity: "info",
-      summary: "Tip",
-      detail:
-        "Los botones a la derecha se utilizan para guardar sus respuestas, mostrar información y salir del test respectivamente.",
-      life: 30000,
-    });
   }
 });
 const setNewTime = (time: number) => {
-  timeCountdown.value = time+1;
+  timeCountdown.value = time + 1;
   setTimeout(() => {
     timeCountdown.value = time;
   }, 0);
@@ -111,9 +69,8 @@ const timeOver = () => {
         hasSecondOpportunity = false;
         toast.add({
           severity: "warn",
-          summary: "Advertencia:",
-          detail:
-            "El tiempo del test ha terminado. Se agregarán 5 minutos más.",
+          summary: t("global.warning") + ":",
+          detail: t("execute-test.dialogs.test-ended-first-time"),
           life: 5000,
         });
       } else throw new Error("Time Over");
@@ -123,12 +80,11 @@ const timeOver = () => {
         setNewTime(
           result.value.arrayserie[serieIndex.value].time_serie_duration * 60000
         );
-        toast.removeAllGroups()
+        toast.removeAllGroups();
         toast.add({
           severity: "warn",
-          summary: "Advertencia:",
-          detail:
-            "El tiempo de la serie ha terminado. Se ha avanzado a la próxima serie.",
+          summary: t("global.warning") + ":",
+          detail: t("execute-test.dialogs.serie-ended"),
           life: 5000,
         });
       } else throw new Error("Time Over");
@@ -142,16 +98,38 @@ const timeOver = () => {
   }
 };
 
+const nextSerie = () => {
+  if (result.value.navigable == 1) serieIndex.value += 1;
+  else if (result.value.result?.completed == 1) {
+    if (validateSerie(result.value.arrayserie[serieIndex.value]))
+      nextSerieConfirm();
+  } else nextSerieConfirm();
+};
+const nextSerieConfirm = () => {
+  useConfirm().require({
+    message: t("execute-test.dialogs.confirm-next-serie.message"),
+    header: t("execute-test.dialogs.confirm-next-serie.title"),
+    rejectLabel: t("global.cancel"),
+    acceptLabel: t("global.confirm"),
+    accept: () => {
+      serieIndex.value += 1;
+      setNewTime(
+        result.value.arrayserie[serieIndex.value].time_serie_duration * 60000
+      );
+      validatedTestFirstTime.value = false;
+    },
+  });
+};
 //DIALOGS
 const infoVisible = ref(false);
 provide("dialogRef", dialog);
 
 const exitTestConfirm = (route: string) => {
   confirm.require({
-    message: "¿Desea salir del test? Las respuestas se perderán.",
-    header: "Salir",
-    rejectLabel: "Cancelar",
-    acceptLabel: "Aceptar",
+    message: t("execute-test.dialogs.confirm-exit-test.message"),
+    header: t("execute-test.dialogs.confirm-exit-test.title"),
+    rejectLabel: t("global.cancel"),
+    acceptLabel: t("global.confirm"),
     accept: () => {
       exitTest(route);
     },
@@ -159,10 +137,10 @@ const exitTestConfirm = (route: string) => {
 };
 const sendTestConfirm = () => {
   confirm.require({
-    message: "¿Desea guardar las respuestas del test?",
-    header: "Salir",
-    rejectLabel: "Cancelar",
-    acceptLabel: "Aceptar",
+    message: t("execute-test.dialogs.confirm-save-test.message"),
+    header: t("execute-test.dialogs.confirm-save-test.title"),
+    rejectLabel: t("global.cancel"),
+    acceptLabel: t("global.confirm"),
     accept: () => {
       showResults();
       exitTest("");
@@ -175,7 +153,7 @@ const sendTestConfirm = () => {
 const showResults = () => {
   dialog.open(VTestResult, {
     props: {
-      header: "Resultados",
+      header: t("results.title"),
       modal: true,
     },
     templates: {},
@@ -184,26 +162,11 @@ const showResults = () => {
     },
   });
 };
-const nextSerieConfirm = () => {
-  confirm.require({
-    message:
-      "¿Desea avanzar a la siguiente serie? No podrá regresar a la anterior...",
-    header: "Serie",
-    rejectLabel: "Cancelar",
-    acceptLabel: "Aceptar",
-    accept: () => {
-      serieIndex.value += 1;
-      setNewTime(
-        result.value.arrayserie[serieIndex.value].time_serie_duration * 60000
-      );
-      validatedTestFirstTime.value = false;
-    },
-  });
-};
+
 const timeOverDialog = () => {
   dialog.open(VDialogMessage, {
     props: {
-      header: "Test",
+      header: t("results.test"),
       modal: true,
     },
     templates: {
@@ -268,61 +231,65 @@ const exitTest = (route: string) => {
 onUnmounted(() => {
   toast.removeAllGroups();
 });
+
+const questionsNotAnswered = {
+  "2": Array(),
+  "5": Array(),
+};
+
+const pushQuestionsNotAnswered = (questions: any[]) => {
+  questions.forEach((question) => {
+    switch (parseInt(question.question.fk_id_type_question)) {
+      case 2:
+        questionsNotAnswered["2"].push(question);
+        break;
+      case 5:
+        questionsNotAnswered["5"].push(question);
+        break;
+      //ADD OTHERS QUESTION TYPES
+    }
+  });
+};
+
+const getErrorMessages = (questions: any[]) => {
+  let errorMessages = Array();
+  pushQuestionsNotAnswered(questions);
+  for (let key in questionsNotAnswered) {
+    if (questionsNotAnswered[key].length > 0) {
+      let error = t(`execute-test.error.${key}`) + " ";
+      if (questionsNotAnswered[key].length == 1)
+        error += `${t("execute-test.error.in-question")} `;
+      else error += `${t("execute-test.error.in-question")}s `;
+      questionsNotAnswered[key].forEach((question: any, index: number) => {
+        if (index > 0) {
+          if (index == questionsNotAnswered[key].length - 1)
+            error += ` ${t("global.and")} `;
+          else error += ", ";
+        }
+        error += question.questionIndex;
+      });
+      errorMessages.push(error);
+      questionsNotAnswered[key].splice(0, questionsNotAnswered[key].length);
+    }
+  }
+  return errorMessages;
+};
 </script>
 <template>
   <VError v-if="error" />
   <div v-else style="width: 100vw; height: 100vh">
     <div class="test" v-if="!loading">
-      <div class="test__header">
-        <div class="test__header__content">
-          <h2 class="page-title">
-            {{ result.name }}
-          </h2>
-          <div class="test__serie__navigation">
-            <button
-              class="white-button p-ripple"
-              v-ripple
-              :class="{
-                'p-disabled': !(serieIndex > 0),
-              }"
-              v-if="result.navigable == 1"
-              @click="prevSerie()"
-              v-tooltip.bottom="'Serie Anterior'"
-              placeholder="Bottom"
-            >
-              <img
-                src="/img/arrow.svg"
-                alt="serie anterior"
-                style="transform: rotate(180deg)"
-              />
-            </button>
-            <Steps
-              :model="getSeriesNames()"
-              v-model:activeStep="serieIndex"
-              :readonly="result.navigable != 1"
-            />
-            <button
-              :class="{
-                'p-disabled': !(serieIndex < result.arrayserie.length - 1),
-              }"
-              v-if="result.arrayserie.length>1"
-              class="white-button p-ripple"
-              v-ripple
-              @click="nextSerie()"
-              v-tooltip.bottom="'Siguiente Serie'"
-              placeholder="Bottom"
-            >
-              <img src="/img/arrow.svg" alt="siguiente serie" />
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <div class="test__content">
-        <h3 class="page-subtitle">
+      <VTestHeader :result="result" @next-serie="nextSerie()" />
+      <div class="test__content" relative mt-64>
+        <h3 page-subtitle>
           {{ result.arrayserie[serieIndex].description }}
         </h3>
-        <div class="test__timer" ref="timer">
+        <div
+          class="test__timer"
+          ref="timer"
+          hover:left-1rem
+          hover:cursor-pointer
+        >
           <vue-countdown
             :time="timeCountdown"
             v-slot="{ minutes, seconds }"
@@ -332,15 +299,20 @@ onUnmounted(() => {
               seconds > 9 ? seconds : `0` + seconds
             }}
           </vue-countdown>
-          <img src="/img/timer.svg" alt="tiempo restante" />
+          <img
+            src="/img/timer.svg"
+            alt="tiempo restante"
+            filter-invert
+            w-3rem
+          />
         </div>
 
-        <div class="test__buttons">
+        <div centered gap-1rem fixed flex-col right-1rem pa-0.5rem>
           <button
             class="white-button p-ripple"
             v-ripple
             @click="validateTest()"
-            v-tooltip.right="'Terminar Test'"
+            v-tooltip.right="t('execute-test.tooltips.save')"
             placeholder="Right"
           >
             <img src="/img/test_completed.svg" alt="terminar test" />
@@ -349,7 +321,7 @@ onUnmounted(() => {
             class="white-button p-ripple"
             v-ripple
             @click="infoVisible = true"
-            v-tooltip.right="'Información'"
+            v-tooltip.right="t('execute-test.tooltips.info')"
             placeholder="Right"
           >
             <img src="/img/info.svg" alt="info" />
@@ -358,7 +330,7 @@ onUnmounted(() => {
             class="white-button p-ripple"
             v-ripple
             @click="exitTestConfirm('select-test')"
-            v-tooltip.right="'Cancelar Test'"
+            v-tooltip.right="t('execute-test.tooltips.exit')"
             placeholder="Right"
           >
             <img src="/img/cancel.svg" alt="cancelar test" />
@@ -366,8 +338,21 @@ onUnmounted(() => {
         </div>
         <VTestSerie :serie="result.arrayserie[serieIndex]" />
       </div>
-      <Dialog v-model:visible="infoVisible" modal header="Descripción" style="width: 50%;">
-        <span class="modal__long-message">{{ result.description }}</span>
+      <Dialog
+        v-model:visible="infoVisible"
+        modal
+        header="Información"
+        style="width: 50%"
+      >
+        <span class="modal__long-message">
+          <span font-bold>Descripción del test:</span> {{ result.description }}
+          <br />
+          Responda las preguntas en el tiempo asignado, que puede consultar en
+          la parte izquierda de la pantalla a través del temporizador.<br />Utilice
+          los botones del sector superior derecho para navegar entre series.<br />Los
+          botones a la derecha se utilizan para guardar sus respuestas, mostrar
+          información y salir del test respectivamente.
+        </span>
       </Dialog>
     </div>
     <VLoading v-else />
@@ -375,54 +360,6 @@ onUnmounted(() => {
 </template>
 
 <style>
-.test__content {
-  position: relative;
-  margin-top: 16rem;
-}
-.test__header {
-  position: absolute;
-  align-items: end;
-
-  display: flex;
-  background-color: rgba(0,0,0, 0.5);
-  backdrop-filter: blur(1.2rem);
-  -webkit-backdrop-filter: blur(1.2rem);
-  z-index: 1;
-  width: 100%;
-  top: 0;
-  height: 15rem;
-  box-shadow: var(--shadow);
-  animation: slide-in-from-top 0.5s ease;
-}
-.test__header__content {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  height: 9rem;
-}
-.test__header h2 {
-  width: 20rem;
-  margin: 0 0.5rem;
-}
-
-.test__buttons,
-.test__serie__navigation {
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-  justify-content: center;
-}
-.test__serie__navigation {
-  flex: 1;
-  margin-bottom: 1rem;
-}
-.test__buttons {
-  position: fixed;
-  flex-direction: column;
-  right: 1rem;
-  padding: 0.5rem;
-}
 .test__timer {
   background-color: white;
   border-radius: 1.5rem;
@@ -439,24 +376,6 @@ onUnmounted(() => {
   left: -7rem;
   transition: all ease 0.5s;
   z-index: 2;
-}
-
-.test__timer img {
-  filter: invert();
-  width: 3rem;
-}
-
-.test__timer:hover {
-  left: 1rem;
-  cursor: pointer;
-}
-@media (min-width: 768px) {
-  .test__header h2 {
-    width: 50rem;
-  }
-  .test__serie__navigation {
-    margin-bottom: 0;
-  }
 }
 </style>
 @/common/utils/validateAnswers ./getErrorMessages

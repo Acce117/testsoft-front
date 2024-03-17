@@ -1,65 +1,63 @@
 <template>
-  <h2 class="page-title">Resultados</h2>
-  <div class="centered" style="width: 100%">
-    <VError v-if="error" />
-    <div v-else class="centered" style="width: 100%">
-      <VLoading v-if="loading" />
-      <h2 class="page-subtitle" v-else-if="Object.keys(result).length == 0">
-        No ha realizado ningún test
-      </h2>
-      <div v-else class="table-card box-shadow-box">
-        <DataTable
-          :value="result"
-          v-model:expandedRows="expandedRows"
-          :size="'large'"
-          ><template #header>
-            <div class="table__header">
-              <span class="p-ripple" v-ripple @click="expandAll()">
-                + Mostrar Todos
-              </span>
-              <span class="p-ripple" v-ripple @click="collapseAll()">
-                - Ocultar Todos
-              </span>
+  <h2 page-title>{{ $t("results.title") }}</h2>
+  <VError v-if="error" />
+  <section v-else-if="!loading" centered>
+    <h2 page-subtitle v-if="Object.keys(result).length == 0">
+      {{ $t("results.no-test") }}
+    </h2>
+    <div class="table-card" shadow-box>
+      <DataTable
+        :value="result"
+        v-model:expandedRows="expandedRows"
+        :size="'large'"
+        ><template #header>
+          <div class="table__header">
+            <span class="p-ripple" v-ripple @click="expandAll()">
+              + {{ $t("results.show-all") }}
+            </span>
+            <span class="p-ripple" v-ripple @click="collapseAll()">
+              - {{ $t("results.hide-all") }}
+            </span>
+          </div>
+        </template>
+        <Column expander style="width: 4rem" header=" " />
+        <Column field="test.name" :header="t('results.test')"></Column>
+        <Column field="date" :header="t('results.date')"></Column>
+        <Column :header="t('results.final-results')"
+          ><template #body="slotProps">
+            <div pa-1rem centered>
+              <button
+                black-button
+                class="p-ripple"
+                v-ripple
+                @click="
+                  getFinalResults(
+                    slotProps.data.id_test_application,
+                    slotProps.data.test.name,
+                    slotProps.data.test.fk_id_type_test
+                  )
+                "
+              >
+                <img src="/img/test_completed.svg" />
+              </button>
+            </div> </template
+        ></Column>
+        <template #expansion="slotProps">
+          <div overflow-hidden>
+            <div anim-slide-in-from-top-table-0.2>
+              <h4 font-bold>{{ $t("results.results-of") }} {{ slotProps.data.test.name }}</h4>
+              <DataTable :value="slotProps.data.arrayapplication_result">
+                <Column field="item.name" :header="t('results.name')"></Column>
+                <Column field="value_result" :header="t('results.value')"></Column>
+              </DataTable>
             </div>
-          </template>
-          <Column expander style="width: 4rem" header=" " />
-          <Column field="test.name" header="Test"></Column>
-          <Column field="date" header="Fecha"></Column>
-          <Column header="Ver Resultados Finales"
-            ><template #body="slotProps">
-              <div class="test-final-results centered">
-                <button
-                  class="black-button p-ripple"
-                  v-ripple
-                  @click="
-                    getFinalResults(
-                      slotProps.data.id_test_application,
-                      slotProps.data.test.name,
-                      slotProps.data.test.fk_id_type_test
-                    )
-                  "
-                >
-                  <img src="/img/test_completed.svg" />
-                </button>
-              </div> </template
-          ></Column>
-          <template #expansion="slotProps">
-            <div class="table-expansion">
-              <div>
-                <h4 style="font-weight: bold">
-                  Resultados de {{ slotProps.data.test.name }}
-                </h4>
-                <DataTable :value="slotProps.data.arrayapplication_result">
-                  <Column field="item.name" header="Nombre"></Column>
-                  <Column field="value_result" header="Valor"></Column>
-                </DataTable>
-              </div>
-            </div>
-          </template>
-        </DataTable>
-      </div>
+          </div>
+        </template>
+      </DataTable>
     </div>
-  </div>
+  </section>
+
+  <VLoading v-else />
 </template>
 <script setup lang="ts">
 import DataTable from "primevue/datatable";
@@ -70,6 +68,8 @@ import { userStore } from "@/modules/security/store/user-store";
 import { ref, provide, watch, onUnmounted } from "vue";
 import { useDialog } from "primevue/usedialog";
 import { useToast } from "primevue/usetoast";
+import { useI18n } from "vue-i18n";
+const { t } =useI18n()
 const toast = useToast();
 const dialog = useDialog();
 provide("dialogRef", dialog);
@@ -82,7 +82,11 @@ const collapseAll = () => {
   expandedRows.value = null;
 };
 
-const getFinalResults = (id: number | string, name: string, fk_id_type_test:number | string) => {
+const getFinalResults = (
+  id: number | string,
+  name: string,
+  fk_id_type_test: number | string
+) => {
   dialog.open(VShowFinalResults, {
     props: {
       header: "Resultados",
@@ -92,12 +96,12 @@ const getFinalResults = (id: number | string, name: string, fk_id_type_test:numb
     data: {
       id,
       name,
-      fk_id_type_test
+      fk_id_type_test,
     },
   });
 };
 watch(result, (newValue) => {
-  if (newValue.length>0) {
+  if (newValue.length > 0) {
     toast.add({
       severity: "info",
       summary: "Tip",
@@ -119,23 +123,12 @@ onUnmounted(() => {
 });
 </script>
 <style>
-.results {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-}
 .table-card {
   width: 80%;
   padding: 1rem;
   margin: 2rem;
   max-width: 100rem;
   overflow: hidden;
-}
-.table-expansion {
-  overflow: hidden;
-}
-.table-expansion div {
-  animation: 0.2s slide-in-from-top-table linear;
 }
 
 .p-datatable-wrapper,
@@ -167,9 +160,7 @@ onUnmounted(() => {
 .table__header span:hover {
   background-color: rgb(222, 222, 222);
 }
-.test-final-results {
-  padding: 1rem;
-}
+
 @media (min-width: 1024px) {
   .p-datatable-wrapper,
   .table__header span {

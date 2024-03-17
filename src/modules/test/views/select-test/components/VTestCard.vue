@@ -25,57 +25,69 @@ const getAvailabilityTime = () => {
   }
   return availabilityTime;
 };
-const availabilityTime=getAvailabilityTime()
+const availabilityTime = getAvailabilityTime();
 </script>
 
 <template>
-    <div
-      class="test-card box-shadow-box"
-      :class="{
-        'not-disponible': !isAvailable,
-      }"
-      @mouseover="showImage = false"
-      @mouseleave="showImage = true"
-    >
-      <div class="test-card__header">
-        <transition name="fast-fade">
-          <img v-if="showImage" src="/img/test_icon.svg" />
-        </transition>
+  <div
+    class="test-card"
+    shadow-box
+    :class="{
+      'not-disponible': !isAvailable,
+    }"
+    @mouseover="showImage = false"
+    @mouseleave="showImage = true"
+  >
+    <div class="test-card__header" centered>
+      <transition name="fast-fade">
+        <img v-if="showImage" filter-invert w-5rem src="/img/test_icon.svg" />
+      </transition>
 
-        <h2>{{ props.title }}</h2>
-        <h2 v-if="!isAvailable && showImage">No Disponible</h2>
-      </div>
-      <div class="test-card__description" v-if="isAvailable">
-        <span>Duración: {{ props.duration >0? props.duration+' min': "Por series" }}</span>
-        <p>
-          <span>Descripción: </span>
-          {{ props.description }}
-        </p>
-      </div>
-
-      <button v-if="isAvailable" v-ripple class="black-button p-ripple" @click="executeTest()">
-        Ejecutar
-      </button>
-      <vue-countdown
-        :time="availabilityTime"
-        v-slot="{ days, hours, minutes, seconds }"
-        @end="isAvailable = true"
-        class="test-card__availability"
-        v-else
-      >
-        Disponible en:<br />
-        <div>
-          <span v-if="days > 0">{{ days }} días<br /></span>
-          <span v-if="hours > 0">{{ hours }} horas<br /> </span>
-          <span v-if="minutes > 0">{{ minutes }} minutos<br /> </span>
-          <span v-if="seconds >= 0">{{ seconds }} segundos</span>
-        </div>
-      </vue-countdown>
+      <h2>{{ props.title }}</h2>
+      <h2 v-if="!isAvailable && showImage">{{ $t('select-test.test-card.not-available') }}</h2>
     </div>
+    <div class="test-card__description" v-if="isAvailable">
+      <span
+        >{{ $t('select-test.test-card.duration') }}:
+        {{ props.duration > 0 ? props.duration + " min" : "Por series" }}</span
+      >
+      <p>
+        <span>{{ $t('select-test.test-card.description') }}: </span>
+        {{ props.description }}
+      </p>
+    </div>
+
+    <button
+      v-if="isAvailable"
+      v-ripple
+      class="p-ripple"
+      black-button
+      text-8
+      w-10rem
+      m-6
+      @click="executeTest()"
+    >
+    {{ $t('global.execute') }}
+    </button>
+    <vue-countdown
+      :time="availabilityTime"
+      v-slot="{ days, hours, minutes, seconds }"
+      @end="isAvailable = true"
+      class="test-card__availability"
+      v-else
+    >
+    {{ $t('select-test.test-card.available') }}:<br />
+      <div text-left min-w-56>
+        <span v-if="days > 0">{{ days }} días<br /></span>
+        <span v-if="hours > 0">{{ hours }} horas<br /> </span>
+        <span v-if="minutes > 0">{{ minutes }} minutos<br /> </span>
+        <span v-if="seconds >= 0">{{ seconds }} segundos</span>
+      </div>
+    </vue-countdown>
+  </div>
 </template>
 
 <style>
-
 .test-card {
   position: relative;
   width: 28rem;
@@ -94,20 +106,14 @@ const availabilityTime=getAvailabilityTime()
 .test-card__availability {
   display: flex;
   flex-direction: column;
-
   margin-top: 1rem;
   color: black;
   font-size: 1.8rem;
   font-weight: bold;
   margin-top: 45%;
-
   align-items: center;
   width: 100%;
   gap: 0.5rem;
-}
-.test-card__availability div {
-  text-align: left;
-  min-width: 50%;
 }
 
 .test-card__description {
@@ -123,8 +129,7 @@ const availabilityTime=getAvailabilityTime()
   overflow: auto;
 }
 .test-card__description span,
-.test-card__header h2,
-.test-card button {
+.test-card__header h2 {
   font-weight: bold;
 }
 
@@ -140,19 +145,10 @@ const availabilityTime=getAvailabilityTime()
   opacity: 1;
 }
 
-.test-card button {
-  font-size: 1.5rem;
-  width: 40%;
-  margin: 1.5rem;
-}
-
 .test-card__header {
   background-color: black;
   position: absolute;
-  display: flex;
-  align-items: center;
   flex-direction: column;
-  justify-content: center;
   transition: all ease 0.2s;
   width: 100%;
   height: 80%;
@@ -161,13 +157,10 @@ const availabilityTime=getAvailabilityTime()
   overflow: auto;
   z-index: 2;
 }
-.test-card__header img {
-  filter: invert();
-  width: 5rem;
-}
+
 .test-card__header h2 {
   color: white;
-  font-size: 1.5rem;
+  font-size: 2rem;
   width: 90%;
 }
 
@@ -180,5 +173,4 @@ const availabilityTime=getAvailabilityTime()
 .test-card:hover .test-card__header {
   height: 30%;
 }
-
 </style>

@@ -1,52 +1,42 @@
-
 <template>
-  <div class="presentation">
-    <button class="presentation__button" @click="router.push('/select-test')">
+  <div centered flex-wrap gap-8 w-32rem lg:w-50rem lg:gap-16>
+    <button
+      class="presentation__button"
+      white-button
+      @click="router.push('/select-test')"
+    >
       <img src="/img/test_icon.svg" />
-      Realiza un test
+      {{ $t("home.option1") }}
     </button>
 
-    <button class="presentation__button">
+    <button class="presentation__button" white-button>
       <img src="/img/role.svg" />
-      Encuentra los roles más efectivos
+      {{ $t("home.option2") }}
     </button>
 
-    <button class="presentation__button">
+    <button class="presentation__button" white-button>
       <img src="/img/equality.svg" />
-      Descubre compatibilidades y líderes
+      {{ $t("home.option3") }}
     </button>
 
-    <button class="presentation__button" @click="router.push('/results')">
+    <button
+      class="presentation__button"
+      white-button
+      @click="router.push('/results')"
+    >
       <img src="/img/results.svg" />
-      Analiza los resultados
+      {{ $t("home.option4") }}
     </button>
   </div>
 </template>
 <script setup lang="ts">
 import { useRouter } from "vue-router";
 const router = useRouter();
-const goTests = () => {
-  
-};
 </script>
 <style>
-.presentation {
-  display: flex;
-  flex-wrap: wrap;
-  width: 32rem;
-  gap: 2rem;
-  align-items: center;
-  justify-content: center;
-}
 .presentation__button {
-  display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background-color: white;
-  box-shadow: var(--shadow);
-  gap: .5rem;
-  padding: 1rem;
+  gap: 0.5rem;
   font-size: 1.8rem;
   width: 15rem;
   height: 15rem;
@@ -60,39 +50,14 @@ const goTests = () => {
   width: 3rem;
 }
 
-@media (min-width: 480px) {
-  .presentation{
-    width: 40rem;
-  }
-  .presentation__button {
-    width: 16rem;
-    height: 16rem;
-    font-size: 2rem;
-  }
-}
-@media (min-width: 768px) {
-  .presentation {
-    width: 50rem;
-    gap: 3rem;
-  }
-  .presentation__button {
-    width: 18rem;
-    height: 18rem;
-    font-size: 1.8rem;
-  }
-  .presentation__button img {
-    width: 5rem;
-  }
-}
 @media (min-width: 1024px) {
-  .presentation {
-    width: 50rem;
-    gap: 4rem;
-  }
   .presentation__button {
     width: 20rem;
     height: 20rem;
     font-size: 2rem;
+  }
+  .presentation__button img {
+    width: 5rem;
   }
 }
 </style>

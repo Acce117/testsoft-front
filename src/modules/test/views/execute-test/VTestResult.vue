@@ -1,7 +1,7 @@
 <template>
   <VFinalResults :testResult="testResult" :testName="data.test.name" :testType="data.test.type"> 
-    <button class="black-button" @click="resendTest()">
-        Reenviar Test
+    <button black-button @click="resendTest()">
+        {{ $t('global.resend') }}
       </button>
   </VFinalResults>
 </template>

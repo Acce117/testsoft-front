@@ -26,7 +26,7 @@ if(!test.questions[`${props.id_question}`])
     v-for="answer in props.possible_answers"
     :key="answer.id_answer"
   >
-    <label :for="answer.id_answer">
+    <label :for="answer.id_answer" flex  gap-1rem flex-items-center w-full h-full>
       <RadioButton
         v-model="test.questions[`${props.id_question}`].answer"
         :inputId="answer.id_answer"
@@ -47,13 +47,5 @@ if(!test.questions[`${props.id_question}`])
 .radio-button-answer:has(input[type="radio"]:not(:checked)):hover,
 .radio-button-answer:has(input[type="radio"]:not(:checked)) label:hover {
   cursor: pointer;
-}
-
-.radio-button-answer label {
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-  width: 100%;
-  height: 100%;
 }
 </style>

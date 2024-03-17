@@ -1,5 +1,5 @@
 <template>
   <span class="p-confirm-dialog-message" data-pc-section="message"
-    >El tiempo del test ha terminado.</span
+    >{{ $t('execute-test.dialogs.test-ended') }}.</span
   >
 </template>

@@ -1,13 +1,13 @@
 <template>
-  <div v-if="props.testResult?.error" class="error-sending">
-    <VError><slot></slot></VError>
+  <div  class="error-sending" v-if="props.testResult?.error" >
+    <VError ></VError>
   </div>
 
-  <div v-else style="width: 100%" class="modal__long-message">
-    <div v-if="!props.testResult?.loading" class="test-results">
+  <div v-else-if="!props.testResult?.loading" class="modal__long-message">
+    <div  class="test-results">
       <h1 class="results__test-title">Test: {{ props.testName }}</h1>
       <h2 v-if="props.testResult?.result.process.global_result == 1">
-        Resultado Global: {{ getGlobalResult() }}
+        {{ $t('results.global-result') }}: {{ getGlobalResult() }}
       </h2>
       <VAllElementsTopValues
         v-if="
@@ -38,14 +38,17 @@
         :testResult="props.testResult?.result"
       />
     </div>
-    <VLoading v-else style="height: 30rem" />
+    
   </div>
+  <VLoading v-else style="height: 30rem" />
 </template>
 <script setup lang="ts">
 import VAllElementsTopValues from "./components/VAllElementsTopValues.vue";
 import VAllElementsNoTopValues from "./components/VAllElementsNoTopValues.vue";
 import VElementByCategoryTopValues from "./components/VElementByCategoryTopValues.vue";
 import VElementByCategoryNoTopValues from "./components/VElementByCategoryNoTopValues.vue";
+import { useI18n } from 'vue-i18n';
+const { t } = useI18n();
 
 const props = defineProps({
   testResult: Object,
@@ -64,7 +67,7 @@ const getGlobalResult = () => {
             index ==
             Object.keys(props.testResult?.result.categories).length - 1
           )
-            result += ` y `;
+            result += ` `+t('global.and')+` `;
           else result += ", ";
         }
         result += props.testResult?.result.categories[category].items.name;
@@ -81,6 +84,7 @@ const getGlobalResult = () => {
 .error-sending {
   width: 100%;
   height: 30rem;
+  filter:invert();
 }
 .results__test-title {
   text-align: left;

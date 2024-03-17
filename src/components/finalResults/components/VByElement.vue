@@ -1,7 +1,7 @@
 <template>
   <div>
     <span
-      >Con <strong>{{ props.element?.value_result }}</strong> puntos,
+      >{{ $t('results.by-element.1') }} <strong>{{ props.element?.value_result }}</strong> {{ $t('results.by-element.2') }},
       <strong
         >{{ props.element?.item.name }} ({{
           props.element?.item.category.name

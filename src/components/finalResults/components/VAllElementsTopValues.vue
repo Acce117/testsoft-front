@@ -1,18 +1,24 @@
 <template>
-  <h2 v-if="props.testResult?.process.count_max >0 && props.testResult?.process.count_min >0">
-    Tus
-    {{ props.testResult?.process.fk_id_test == 3 ? "roles" : "elementos" }}
-    preferidos son:
+  <h2
+    v-if="
+      props.testResult?.process.count_max > 0 &&
+      props.testResult?.process.count_min > 0
+    "
+  >
+    {{ $t("results.all-elements-top-values.preferred") }}:
   </h2>
 
   <VByElement
     v-for="element in props.testResult?.Preferred"
     :element="element"
   />
-  <h2 v-if="props.testResult?.process.count_min >0 && props.testResult?.process.count_max >0">
-    Tus
-    {{ props.testResult?.process.fk_id_test == 3 ? "roles" : "elementos" }}
-    evitados son:
+  <h2
+    v-if="
+      props.testResult?.process.count_min > 0 &&
+      props.testResult?.process.count_max > 0
+    "
+  >
+    {{ $t("results.all-elements-top-values.avoided") }}:
   </h2>
 
   <VByElement v-for="element in props.testResult?.Avoided" :element="element" />
