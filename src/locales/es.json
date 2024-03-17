@@ -1,0 +1,135 @@
+{
+    "login": {
+        "user": "Usuario",
+        "password": "Contraseña",
+        "title": "Bienvenido a TestSoft",
+        "login": "Iniciar Sesión",
+        "error": "Inicio de sesión inválido"
+    },
+    "home": {
+        "subtitle": "Herramienta para la ejecución de test psicológicos",
+        "option1": "Realiza un test",
+        "option2": "Descubre compatibilidades y líderes",
+        "option3": "Encuentra los roles más efectivos",
+        "option4": "Analiza los resultados"
+    },
+    "select-test": {
+        "title":"Seleccione un test",
+        "dialogs": {},
+        "test-card":{
+            "duration":"Duración",
+            "description":"Descripción",
+            "not-available":"No Disponible",
+            "available":"Disponible en"
+        }
+    },
+    "execute-test": {
+        "dialogs": {
+            "serie-ended":"El tiempo de la serie ha terminado. Se ha avanzado a la próxima serie.",
+            "test-ended-first-time":"El tiempo del test ha terminado. Se agregarán 5 minutos más.",
+            "test-ended": "El tiempo del test ha terminado",
+            "confirm-next-serie":{
+                "title":"Serie",
+                "message":"¿Desea avanzar a la siguiente serie? No podrá regresar a la anterior...",
+            },
+            "confirm-save-test":{
+                "title":"Salir",
+                "message":"¿Desea guardar las respuestas del test?"
+            },
+            "confirm-exit-test":{
+                "title":"Salir",
+                "message":"¿Desea salir del test? Las respuestas se perderán."
+            },
+            
+        },
+        "tooltips":{
+            "next":"Siguiente Serie",
+            "prev":"Serie Anterior",
+            "exit":"Cancelar Test",
+            "save":"Terminar Test",
+            "info":"Información"
+        },
+
+        "question-components":{
+            "5":{
+                "remaining-points":"Puntos restantes en la pregunta"
+            }
+        },
+        "error":{
+            "2":"Debe seleccionar una respuesta",
+            "5":"Existen puntos por asignar aún",
+            "in-question":"en la pregunta"
+        }
+    },
+    "results": {
+        "title": "Resultados",
+        "no-test": "No ha realizado ningún test",
+        "show-all": "Mostrar Todos",
+        "hide-all": "Ocultar Todos",
+        "final-results": "Ver Resultados Finales",
+        "results-of": "Resultados de",
+        "date": "Fecha",
+        "test": "Test",
+        "name": "Nombre",
+        "value": "Valor",
+        "global-result": "Resultado Global",
+        "dialogs": {},
+        "all-elements-top-values": {
+            "preferred": "Preferidos",
+            "avoided": "Evitados"
+        },
+        "by-category": {
+            "1": "En la categoría",
+            "2": "usted se caracteriza por",
+            "3": "con una puntuación de",
+            "4": "lo que se considera un valor",
+            "5": "El elemento",
+            "6": "consiste en",
+            "7": "Descripción de la categoría"
+        },
+        "by-element": {
+            "1": "Con",
+            "2": "puntos"
+        }
+    },
+    "profile": {
+        "title": "Mi perfil",
+        "dialogs": {
+            "close-session": {
+                "header": "Salir",
+                "message": "¿Desea cerrar sesión?"
+            }
+        },
+        "name": "Nombre",
+        "id": "Carnet de Identidad",
+        "role": "Rol",
+        "usertype": "Tipo de Usuario",
+        "group": "Grupo",
+        "close-session": "Cerrar Sesión"
+    },
+    "info": {},
+    "global": {
+        "and": "y",
+        "confirm": "Aceptar",
+        "cancel": "Cancelar",
+        "error": "Algo ha salido mal",
+        "resend": "Reenviar Test",
+        "execute": "Ejecutar",
+        "warning":"Advertencia"
+    },
+    "navbar": {
+        "1": {
+            "name": "Test",
+            "1": "Ejecutar Test",
+            "2": "Roles",
+            "3": "Compatibilidades",
+            "4": "Ver Resultados"
+        },
+        "2": {
+            "name": "Info"
+        },
+        "3": {
+            "name": "Perfil"
+        }
+    }
+}

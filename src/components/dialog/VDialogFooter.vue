@@ -2,13 +2,10 @@
   <button
     class="p-confirm-dialog-reject p-button-text p-ripple"
     type="button"
-    aria-label="Aceptar"
-    data-pc-name="rejectbutton"
-    data-pc-section="root"
     v-ripple
     @click="closeDialog()"
   >
-    <span class="p-button-label" data-pc-section="label">Aceptar</span>
+    <span class="p-button-label" data-pc-section="label">{{$t('global.confirm')}}</span>
   </button>
 </template>
 <script setup lang="ts">

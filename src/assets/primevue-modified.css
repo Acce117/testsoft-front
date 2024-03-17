@@ -53,7 +53,7 @@
   box-shadow: var(--shadow);
   font-size: 1.5rem;
   padding: 0.5rem;
-  border-radius: 1.5rem;
+  border-radius: var(--bradius);
 }
 .p-menubar {
   width: 100%;
@@ -77,7 +77,7 @@
   scale: 1;
 }
 .p-menubar-root-list {
-  border-radius: 1.5rem;
+  border-radius: var(--bradius);
   animation: scale 0.5s;
   background-color: white;
   margin-right: 5rem;
@@ -86,7 +86,7 @@
   padding: 1rem;
 }
 .p-submenu-list {
-  border-radius: 1.5rem;
+  border-radius: var(--bradius);
 }
 
 .p-menuitem-text,
@@ -95,7 +95,7 @@
 }
 .p-menuitem-content {
   transition: all ease 0.3s;
-  border-radius: 1.5rem;
+  border-radius: var(--bradius);
 }
 .p-menubar {
   z-index: 5;
@@ -113,7 +113,7 @@
   > .p-menuitem-content
   .p-menuitem-text:before {
   position: absolute;
-  border-radius: 1.5rem;
+  border-radius: var(--bradius);
   bottom: -0.4rem;
   content: "";
   transform: scaleX(0);
@@ -198,7 +198,7 @@
 .p-menubar.p-menubar-mobile .p-menubar-root-list::after {
   top: 0.5%;
   left: 0.5%;
-  border-radius: 1.5rem;
+  border-radius: var(--bradius);
   z-index: 2;
   position: absolute;
   content: "";
@@ -228,7 +228,7 @@
   display: flex;
   align-items: center;
 
-  border-radius: 1.5rem;
+  border-radius: var(--bradius);
   transition: all ease 0.2s;
 }
 
@@ -236,7 +236,7 @@
   text-align: center;
   font-size: 1.8rem;
   width: 5rem;
-  border-radius: 1.5rem;
+  border-radius: var(--bradius);
 }
 
 .question:has(.p-inputnumber-input:active) .p-inputnumber:not(:has(input:active)) .p-button,
@@ -264,7 +264,7 @@
 
 .p-toast-message {
   background-color: white;
-  border-radius: 1.5rem;
+  border-radius: var(--bradius);
   box-shadow: var(--shadow);
   width: 18rem;
 }

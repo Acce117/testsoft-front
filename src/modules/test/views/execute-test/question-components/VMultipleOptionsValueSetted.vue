@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import type { Test } from "@/modules/test/classes/test-class";
-import { computed, inject, ref, watch } from "vue";
+import { computed, inject, ref } from "vue";
 import VInputNumber from "./VInputNumber.vue";
 import { useToast } from "primevue/usetoast";
 import { MultipleOptionsValueSettedQuestion } from "@/modules/test/classes/multipleOptionValueSettedQuestion-class";
+import { useI18n } from "vue-i18n";
+const { t } = useI18n()
+
 const toast = useToast();
 const props = defineProps({
   id_question: {
@@ -24,8 +27,6 @@ if(!test.questions[`${props.id_question}`])
 
 const distributedPoints = ref(0);
 
-const points = ref(props.maxPoints || 0);
-
 const actualPoints = computed(() => props.maxPoints - distributedPoints.value);
 
 let timeOutIdToast: number;
@@ -36,7 +37,7 @@ const updateInput = (value: number, oldValue: number) => {
   toast.add({
     severity: "info",
     summary: "Info",
-    detail: `Puntos restantes en pregunta ${props.question_index}: ${actualPoints.value}`,
+    detail: `${t('execute-test.question-components.5.remaining-points')} ${props.question_index}: ${actualPoints.value}`,
     life: 30000,
   });
   timeOutIdToast = setTimeout(() => {
@@ -46,13 +47,13 @@ const updateInput = (value: number, oldValue: number) => {
 </script>
 
 <template>
-  <span class="actual-points">Puntos restantes: {{ actualPoints }}</span>
+  <span font-size-2rem>{{ $t('execute-test.question-components.5.remaining-points') }}: {{ actualPoints }}</span>
   <div
     class="answer"
     v-for="answer in props.possible_answers"
     :key="answer.id_answer"
   >
-    <label for="">
+    <label for="" flex  w-full  flex-justify-between  flex-items-center>
       {{ answer.text }}
       <VInputNumber
         :min="0"
@@ -68,22 +69,3 @@ const updateInput = (value: number, oldValue: number) => {
     </label>
   </div>
 </template>
-
-<style scoped>
-.answer label {
-  display: flex;
-  width: 100%;
-  justify-content: space-between;
-  align-items: center;
-}
-.actual-points {
-  font-size: 1.5rem;
-}
-
-
-@media (min-width: 768px) {
-  .actual-points {
-    font-size: 2rem;
-  }
-}
-</style>

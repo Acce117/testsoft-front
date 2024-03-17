@@ -1,44 +1,77 @@
 <template>
   <ul class="navbar">
-    <li class="navbar__home" @click="goHome()">
-      <img src="/img/home.svg" alt="home" />
+    <li
+      mt-0.5rem
+      trans-0.2
+      z-5
+      hover:scale-110
+      active:opacity-50
+      active:scale-100
+      cursor-pointer
+      pointer-events-initial
+      @click="goHome()"
+    >
+      <img src="/img/home.svg" w-3rem alt="home" />
     </li>
     <Menubar :model="items" />
+    <VLanguageChanger />
   </ul>
 </template>
 <script setup lang="ts">
+import VLanguageChanger from "../VLanguageChanger.vue";
 import { useRouter } from "vue-router";
 import Menubar from "primevue/menubar";
-import { ref } from "vue";
+import { ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
+const { t, locale } = useI18n();
 const router = useRouter();
 const items = ref([
   {
-    label: "Test",
+    label: " ",
     items: [
       {
-        label: "Ejecutar Test",
+        label: " ",
         command: () => router.push("/select-test"),
       },
       {
-        label: "Roles",
+        label: " ",
       },
       {
-        label: "Compatibilidades",
+        label: " ",
       },
       {
-        label: "Ver Resultados",
+        label: " ",
         command: () => router.push("/results"),
       },
     ],
   },
   {
-    label: "Info",
+    label: " ",
   },
   {
-    label: "Perfil",
+    label: " ",
     command: () => router.push("/profile"),
   },
 ]);
+
+const updateNavbarLabels = () => {
+  items.value.forEach((item, index) => {
+    if (item.label) {
+      item.label = t(`navbar.${index + 1}.name`);
+    }
+    if (item.items) {
+      item.items.forEach((subItem, subIndex) => {
+        subItem.label = t(`navbar.${index + 1}.${subIndex+1}`);
+      });
+    }
+  });
+};
+
+updateNavbarLabels()
+
+watch(locale, () => {
+  updateNavbarLabels();
+});
 
 const goHome = () => {
   router.push("/");
@@ -56,30 +89,5 @@ const goHome = () => {
   left: 0;
   list-style: none;
   background-color: transparent;
-}
-
-.navbar__home {
-  margin-top: 0.5rem;
-  transition: all ease 0.2s;
-  z-index: 5;
-}
-.navbar__home img {
-  cursor: pointer;
-  pointer-events: all;
-  transition: all ease 0.2s;
-  width: 3rem;
-}
-.navbar__home:hover {
-  scale: 1.2;
-}
-.navbar__home:active {
-  opacity: 0.5;
-  scale: 1;
-}
-
-@media (min-width: 1024px) {
-  .navbar__home {
-    margin-left: 2rem;
-  }
 }
 </style>

@@ -14,9 +14,8 @@ import router from './router'
 import VLoading from './components/VLoading.vue';
 import VError from './components/VError.vue';
 import Ripple from 'primevue/ripple';
-
-
-
+import { i18n } from "./plugins/i18n";
+import 'uno.css'
 
 
 const app = createApp(App)
@@ -33,6 +32,7 @@ app.use(ToastService);
 app.use(ConfirmationService);
 app.use(DialogService);
 app.use(createPinia()).mount('#app')
+app.use(i18n);
 
 if (!isUserAuthenticated())
     router.push('/login')

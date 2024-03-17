@@ -1,20 +1,11 @@
 <template>
-  <div class="loading">
+  <div centered w-full h-full gap-3 >
     <div class="dot"></div>
     <div class="dot"></div>
     <div class="dot"></div>
   </div>
 </template>
 <style>
-.loading {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  gap: .7rem;
-  justify-content: center;
-  align-items: center;
-}
-
 @keyframes opac {
   0% {
     opacity: 0%;

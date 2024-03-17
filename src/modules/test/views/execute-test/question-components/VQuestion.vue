@@ -8,8 +8,8 @@ const props = defineProps({
 <template>
   <Transition name="fade">
     <div class="question" :id="props.id_question">
-      <h4 class="question__title">{{ props.question_index + `-` + props.title }}</h4>
-      <div class="question__content">
+      <h4 pa-1rem bg-black  font-size-1.6rem  w-full  text-white md:font-size-2rem>{{ props.question_index + `-` + props.title }}</h4>
+      <div relative flex m-1rem flex-col gap-1rem>
         <slot></slot>
       </div>
     </div>
@@ -28,44 +28,26 @@ const props = defineProps({
   background-color: white;
 }
 
-.question__title {
-  padding: 1rem;
-  background-color: black;
-  font-size: 1.2rem;
-  width: 100%;
-  color: white;
-}
-.question__content {
-  position: relative;
-  display: flex;
-  margin: 1rem;
-  flex-direction: column;
-  gap: 1rem;
-}
 .question-not-responded {
   transition: all ease 0.5s;
   box-shadow: 0 0 0.3rem 0.3rem rgba(255, 0, 0, 0.7);
 }
 .answer {
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   transition: all ease 0.2s;
-  border-radius: 1.5rem;
+  border-radius: var(--bradius);
   padding: 0.4rem;
 }
 .answer:has(input:not(:checked)):hover {
-  box-shadow: 0 0 0.5rem 0 black;
+  box-shadow: var(--shadow);
 }
 
 @media (min-width: 768px) {
   .question {
     width: 80%;
   }
-
-  .question__title {
-    font-size: 1.5rem;
-  }
   .answer {
-    font-size: 1.5rem;
+    font-size: 1.8rem;
   }
 }
 </style>

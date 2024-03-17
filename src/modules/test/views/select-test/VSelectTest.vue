@@ -7,7 +7,7 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { Pagination, Navigation } from "swiper/modules";
 import { userStore } from "@/modules/security/store/user-store";
-const user =userStore()
+const user = userStore();
 import { getAsignedTests } from "@/modules/test/test";
 
 const { result, loading, error } = getAsignedTests();
@@ -26,49 +26,51 @@ watch(result, (newValue) => {
       id: test.id,
       availabilityTime: availableDate,
     });
-    sessionStorage.setItem('user', JSON.stringify(user.$state));
+    sessionStorage.setItem("user", JSON.stringify(user.$state));
   });
 });
 const modules = [Pagination, Navigation];
 const pagination = {
+  enabled: true,
   clickable: true,
+  dynamicBullets: true,
   renderBullet: function (index: number, className: string) {
     return '<span class="' + className + '">' + (index + 1) + "</span>";
   },
 };
+const renderPagination = () => {
+  if (result.value.length <= 3 && window.innerWidth >= 768)
+    pagination.enabled = false;
+  else pagination.enabled = true;
+};
 </script>
 <template>
   <VError v-if="error" />
-  <div v-else style="width: 100vw;">
-    <div v-if="!loading">
-      <h2 class="page-title">Seleccione un test</h2>
-      <Swiper
-        :spaceBetween="30"
-        :slidesPerView="1"
-        :loop="true"
-        :pagination="pagination"
-        :navigation="true"
-        :modules="modules"
-        :breakpoints="{ 768: { slidesPerView: 2 }, 1024: { slidesPerView: 3 } }"
-      >
-        <swiper-slide
-          class="swiper-slide"
-          v-for="test in result"
-          :key="test.id"
-        >
-          <VTestCard
-            :id="parseInt(test.id)"
-            :title="test.name"
-            :description="test.description"
-            :duration="parseInt(test.durationTime)"
-            :recurringTime="parseInt(test.recurringTime)"
-            :applicatedTests="test.applicatedTests"
-          />
-        </swiper-slide>
-      </Swiper>
-    </div>
-    <VLoading v-else />
-  </div>
+  <section v-else-if="!loading">
+    <h2 page-title>{{ $t('select-test.title') }}</h2>
+    <Swiper
+      :spaceBetween="30"
+      :slidesPerView="1"
+      :loop="true"
+      :pagination="pagination"
+      :navigation="true"
+      :modules="modules"
+      :breakpoints="{ 768: { slidesPerView: 2 }, 1024: { slidesPerView: 3 } }"
+      @breakpoint="renderPagination()"
+    >
+      <swiper-slide class="swiper-slide" v-for="test in result" :key="test.id">
+        <VTestCard
+          :id="parseInt(test.id)"
+          :title="test.name"
+          :description="test.description"
+          :duration="parseInt(test.durationTime)"
+          :recurringTime="parseInt(test.recurringTime)"
+          :applicatedTests="test.applicatedTests"
+        />
+      </swiper-slide>
+    </Swiper>
+  </section>
+  <VLoading v-else />
 </template>
 <style>
 .swiper {
