@@ -32,7 +32,8 @@ app.use(PrimeVue, { ripple: true });
 app.use(ToastService);
 app.use(ConfirmationService);
 app.use(DialogService);
-app.use(createPinia()).mount('#app')
+app.use(createPinia())
+app.mount('#app')
 
 if (!isUserAuthenticated())
     router.push('/login')
