@@ -289,6 +289,26 @@
   margin: 0.5rem;
 }
 
+.p-listbox{
+  border: none;
+}
+.p-listbox-list{
+  padding: 2rem;
+}
+.p-listbox-item{
+  color: black;
+  font-size: 2rem;
+  padding: 1rem;
+  border-radius: var(--bradius);
+  margin-top: 1rem;
+}
+.p-listbox-item.p-highlight{
+  box-shadow: var(--shadow);
+  background-color: white;
+
+  
+}
+
 @media (min-width: 1024px) {
   .p-steps-number {
     width: 3rem;

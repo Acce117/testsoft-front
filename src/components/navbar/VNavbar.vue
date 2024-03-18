@@ -13,8 +13,11 @@
     >
       <img src="/img/home.svg" w-3rem alt="home" />
     </li>
+    <li>
+      <VLanguageChanger />
+    </li>
+
     <Menubar :model="items" />
-    <VLanguageChanger />
   </ul>
 </template>
 <script setup lang="ts">
@@ -24,6 +27,7 @@ import Menubar from "primevue/menubar";
 import { ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 const { t, locale } = useI18n();
+
 const router = useRouter();
 const items = ref([
   {
@@ -61,13 +65,13 @@ const updateNavbarLabels = () => {
     }
     if (item.items) {
       item.items.forEach((subItem, subIndex) => {
-        subItem.label = t(`navbar.${index + 1}.${subIndex+1}`);
+        subItem.label = t(`navbar.${index + 1}.${subIndex + 1}`);
       });
     }
   });
 };
 
-updateNavbarLabels()
+updateNavbarLabels();
 
 watch(locale, () => {
   updateNavbarLabels();

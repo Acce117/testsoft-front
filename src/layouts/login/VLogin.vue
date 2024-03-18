@@ -1,9 +1,13 @@
 <template>
   <main centered>
-    <VLanguageChanger />
+    <div fixed left-0.5rem top-0.5rem>
+      <VLanguageChanger />
+    </div>
+    
     <section class="login__container">
       <img src="/img/background.jpg" alt="persona ejecutando un test" />
       <div class="login">
+        
         <div class="login__header" centered>
           <img src="/img/logo.png" w-10rem />
           <h1 text-white  font-size-2rem  anim-slide-in-1 md:text-black md:font-size-2.5rem>{{ $t("login.title") }}</h1>
