@@ -1,6 +1,6 @@
 .p-dialog {
   position: relative;
-  width: 30rem;
+  width: 31rem;
   overflow: hidden;
 }
 
@@ -14,7 +14,7 @@
 .modal__message {
   color: black;
   display: flex;
-  font-size: 1.4rem;
+  font-size: 1.5rem;
   height: 12rem;
   margin: 0 2rem;
   justify-content: center;
@@ -33,7 +33,7 @@
   margin: 0 2rem;
   align-items: start;
   text-align: justify;
-  font-size: 1.2rem;
+  font-size: 1.5rem;
 }
 
 .p-dialog .p-dialog-header .p-dialog-header-icon {
