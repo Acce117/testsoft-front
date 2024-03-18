@@ -6,50 +6,18 @@
       <div class="login">
         <div class="login__header" centered>
           <img src="/img/logo.png" w-10rem />
-          <h1 text-white  font-size-2rem  anim-slide-in-1 md:text-black md:font-size-2.5rem>{{ $t("login.title") }}</h1>
+          <h1 text-white font-size-2rem anim-slide-in-1 md:text-black md:font-size-2.5rem>{{ $t("login.title") }}</h1>
         </div>
-        <form
-          action=""
-          @submit.prevent="site.login(credentials)"
-          centered
-          gap-3rem
-          flex-col
-          h-30rem
-        >
+        <form action="" @submit.prevent="site.login(credentials)" centered gap-3rem flex-col h-30rem>
           <div class="login__input">
-            <input
-              id="user-input"
-              type="text"
-              required
-              v-model="credentials.username"
-              shadow-box
-            />
-            <label for="user-input"
-              ><img src="/img/user.svg" />{{ $t("login.user") }}</label
-            >
+            <input id="user-input" type="text" required v-model="credentials.username" shadow-box />
+            <label for="user-input"><img src="/img/user.svg" />{{ $t("login.user") }}</label>
           </div>
           <div class="login__input">
-            <input
-              id="password-input"
-              type="password"
-              required
-              v-model="credentials.password"
-              shadow-box
-            />
-            <label for="password-input"
-              ><img src="/img/password.svg" />{{ $t("login.password") }}</label
-            >
+            <input id="password-input" type="password" required v-model="credentials.password" shadow-box />
+            <label for="password-input"><img src="/img/password.svg" />{{ $t("login.password") }}</label>
           </div>
-          <button
-            black-button
-            mt-2rem
-            w-15rem
-            h-5rem
-            font-size-1.6rem
-            class="p-riple"
-            type="submit"
-            v-ripple
-          >
+          <button black-button mt-2rem w-15rem h-5rem font-size-1.6rem class="p-riple" type="submit" v-ripple>
             <span v-if="!loading">{{ $t("login.login") }}</span>
             <VLoading v-else />
           </button>
@@ -64,6 +32,7 @@ import { ref } from "vue";
 import VLanguageChanger from "@/components/VLanguageChanger.vue";
 const loading = ref(false);
 import { siteStore } from "@/common/site/siteStore";
+import useEvents from "../../common/utils/useEvents";
 
 const credentials = ref({
   username: "",
@@ -71,6 +40,9 @@ const credentials = ref({
 });
 
 const site = siteStore();
+
+useEvents().addListener('loadingOn', ()=>loading.value = true);
+useEvents().addListener('loadingOff', ()=>loading.value = false);
 
 window.scrollTo(0, 0);
 </script>
@@ -85,7 +57,7 @@ window.scrollTo(0, 0);
   box-shadow: none;
 }
 
-.login__container > img {
+.login__container>img {
   display: none;
 }
 
@@ -132,15 +104,15 @@ window.scrollTo(0, 0);
   width: 2rem;
 }
 
-.login__input input:valid ~ label,
-.login__input input:focus ~ label {
+.login__input input:valid~label,
+.login__input input:focus~label {
   color: white;
   top: -2.8rem;
   font-size: 1rem;
 }
 
-.login__input input:valid ~ label img,
-.login__input input:focus ~ label img {
+.login__input input:valid~label img,
+.login__input input:focus~label img {
   filter: invert();
   transform: scale(0.8);
 }
@@ -154,7 +126,7 @@ window.scrollTo(0, 0);
 
 
 @media (min-width: 768px) {
-  .login__container > img {
+  .login__container>img {
     display: block;
     width: 42rem;
   }
@@ -176,14 +148,14 @@ window.scrollTo(0, 0);
     height: 4rem;
   }
 
-  .login__input input:valid ~ label,
-  .login__input input:focus ~ label {
+  .login__input input:valid~label,
+  .login__input input:focus~label {
     font-size: 1.5rem;
     color: black;
   }
 
-  .login__input input:valid ~ label img,
-  .login__input input:focus ~ label img {
+  .login__input input:valid~label img,
+  .login__input input:focus~label img {
     filter: none;
   }
 }

@@ -3,7 +3,7 @@ function useEvents(){
         window.addEventListener(name, cb);
     }
 
-    function dispatch(name: string, data: any){
+    function dispatch(name: string, data?: any){
         const event = new CustomEvent(name, {
             detail: data
         });
