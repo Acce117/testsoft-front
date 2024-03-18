@@ -10,28 +10,27 @@ const { t } = i18n.global;
 export const siteStore = defineStore('site', {
     actions: {
         login(credentials: any) {
-            let loading = true;
-
             if (credentials.username.trim() === '')
                 throw new Error('The user name must be provided')
             if (credentials.password.trim() === '')
                 throw new Error('The password must be provided ')
 
             const response = sendRequest(`${import.meta.env.VITE_API_PATH}/site/login`, credentials, 'POST');
+            useEvents().dispatch('loadingOn');
 
             watch(response.loading, () => {
-                if (!response.error.value) {
+                if ( !response.error.value ) {
                     userStore().$patch(response.result.value as unknown as UserInterface);
                     sessionStorage.setItem("user", JSON.stringify(response.result.value));
                     useEvents().dispatch('redirect', '/');
                 } else {
-                    loading = false;
                     useEvents().dispatch('error', {
                         severity: "error",
                         summary: "Error",
                         detail: t('login.error'),
                         life: 3000,
                     });
+                    useEvents().dispatch('loadingOff');
                 }
             });
         },
