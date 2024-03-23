@@ -1,6 +1,7 @@
-import { sendRequest } from "@/common/utils/fetch";
+
 import { userStore } from "@/modules/security/store/user-store";
 import type { Question } from "./question-class";
+import { useSendRequest } from "@/common/utils/fetch";
 
 export class Test {
     questions: { [key: string]: Question<any> };
@@ -17,11 +18,12 @@ export class Test {
             ...this
         };
 
-        return sendRequest(
+        return useSendRequest(
+            true, 
             `${import.meta.env.VITE_API_PATH}/gestion/test/execute_test`,
             test,
             'POST'
-        )
+        );
     }
 
 

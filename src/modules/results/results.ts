@@ -1,4 +1,5 @@
-import { sendRequest } from "@/common/utils/fetch";
+import { useSendRequest } from "@/common/utils/fetch";
+
 
 export function getResults(ci: number | string) {
     const url = `${import.meta.env.VITE_API_PATH}/gestion/test_application`;
@@ -14,7 +15,7 @@ export function getResults(ci: number | string) {
         }
     };
 
-    return sendRequest(url, queryParams);
+    return useSendRequest(true, url, queryParams);
 }
 export function getFinalResults(id_test_application: number | string) {
     const url = `${import.meta.env.VITE_API_PATH}/gestion/test/test_result`;
@@ -22,6 +23,6 @@ export function getFinalResults(id_test_application: number | string) {
         id_test_application
     };
 
-    return sendRequest(url, queryParams);
+    return useSendRequest(true, url, queryParams);
 }
 

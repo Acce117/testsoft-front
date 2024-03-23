@@ -1,38 +1,46 @@
 import { defineStore } from "pinia";
-import { sendRequest } from "../utils/fetch";
-import { watch } from "vue";
+import { useSendRequest } from "../utils/fetch";
+import { reactive, watch } from "vue";
 import { userStore, type UserInterface } from "@/modules/security/store/user-store";
 import useEvents from "../utils/useEvents";
 import { i18n } from "@/plugins/i18n";
+import router from "@/router";
 
 const { t } = i18n.global;
 
 export const siteStore = defineStore('site', {
     actions: {
-        login(credentials: any) {
-            if (credentials.username.trim() === '')
-                throw new Error('The user name must be provided')
-            if (credentials.password.trim() === '')
-                throw new Error('The password must be provided ')
+        useLogin() {
+            const request = useSendRequest();
 
-            const response = sendRequest(`${import.meta.env.VITE_API_PATH}/site/login`, credentials, 'POST');
-            useEvents().dispatch('loadingOn');
+            function login(credentials: any) {
+                if (credentials.username.trim() === '')
+                    throw new Error('The user name must be provided')
+                if (credentials.password.trim() === '')
+                    throw new Error('The password must be provided ')
 
-            watch(response.loading, () => {
-                if ( !response.error.value ) {
-                    userStore().$patch(response.result.value as unknown as UserInterface);
-                    sessionStorage.setItem("user", JSON.stringify(response.result.value));
-                    useEvents().dispatch('redirect', '/');
-                } else {
-                    useEvents().dispatch('error', {
-                        severity: "error",
-                        summary: "Error",
-                        detail: t('login.error'),
-                        life: 3000,
-                    });
-                    useEvents().dispatch('loadingOff');
-                }
-            });
+                request.sendRequest(
+                    `${import.meta.env.VITE_API_PATH}/site/login`,
+                    credentials,
+                    'POST',
+                    () => {
+                        if (!request.error.value) {
+                            userStore().$patch(request.result.value as unknown as UserInterface);
+                            sessionStorage.setItem("uer", JSON.stringify(request.result.value));
+                            useEvents().dispatch('redirect', '/');
+                        } else {
+                            useEvents().dispatch('error', {
+                                severity: "error",
+                                summary: "Error",
+                                detail: t('login.error'),
+                                life: 3000,
+                            });
+                        }
+                    }
+                )
+            }
+
+            return reactive({ loading: request.loading, login });
         },
 
         logout() {
