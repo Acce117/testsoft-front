@@ -12,7 +12,7 @@
           <img src="/img/logo.png" w-10rem />
           <h1 text-white font-size-2rem anim-slide-in-1 md:text-black md:font-size-2.5rem>{{ $t("login.title") }}</h1>
         </div>
-        <form action="" @submit.prevent="site.login(credentials)" centered gap-3rem flex-col h-30rem>
+        <form action="" @submit.prevent="login.login(credentials)" centered gap-3rem flex-col h-30rem>
           <div class="login__input">
             <input id="user-input" type="text" required v-model="credentials.username" shadow-box />
             <label for="user-input"><img src="/img/user.svg" />{{ $t("login.user") }}</label>
@@ -22,7 +22,7 @@
             <label for="password-input"><img src="/img/password.svg" />{{ $t("login.password") }}</label>
           </div>
           <button black-button mt-2rem w-15rem h-5rem font-size-1.6rem class="p-riple" type="submit" v-ripple>
-            <span v-if="!loading">{{ $t("login.login") }}</span>
+            <span v-if="!login.loading">{{ $t("login.login") }}</span>
             <VLoading v-else />
           </button>
         </form>
@@ -34,19 +34,16 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import VLanguageChanger from "@/components/VLanguageChanger.vue";
-const loading = ref(false);
+
 import { siteStore } from "@/common/site/siteStore";
-import useEvents from "../../common/utils/useEvents";
+
 
 const credentials = ref({
   username: "",
   password: "",
 });
 
-const site = siteStore();
-
-useEvents().addListener('loadingOn', ()=>loading.value = true);
-useEvents().addListener('loadingOff', ()=>loading.value = false);
+const login = siteStore().useLogin();
 
 window.scrollTo(0, 0);
 </script>

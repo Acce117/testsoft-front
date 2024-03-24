@@ -1,4 +1,5 @@
-import { sendRequest } from "@/common/utils/fetch";
+
+import { useSendRequest } from "@/common/utils/fetch";
 import { userStore } from "../security/store/user-store";
 
 /**
@@ -23,7 +24,7 @@ export function getAsignedTests() {
             }
         }
     };
-    return sendRequest(url, queryParams);
+    return useSendRequest(true, url, queryParams);
 }
 
 export function getTest(idTest: number | string) {
@@ -34,6 +35,6 @@ export function getTest(idTest: number | string) {
         },
         relations: ["arrayserie.arrayquestion.arrayanswer", "arrayserie.arrayquestion.arrayquestion_top_value"]
     };
-    return sendRequest(url, queryParams);
+    return useSendRequest(true, url, queryParams);
 }
 
