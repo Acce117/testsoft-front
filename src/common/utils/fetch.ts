@@ -1,5 +1,19 @@
-import axios, { type AxiosRequestConfig } from "axios";
+import axios, { AxiosError, AxiosHeaders, type AxiosRequestConfig } from "axios";
 import { ref } from "vue";
+import TokenHandler from "./token-handler";
+
+async function refreshToken(){
+    
+    const res = await axios({
+        headers: {
+            Authorization: `Bearer ${TokenHandler.getRefreshToken()}`
+        },
+        url: `${import.meta.env.VITE_API_PATH}/site/refreshToken`,
+        method: 'POST'
+    })
+    
+    TokenHandler.storeToken(res.data);
+}
 
 export function useSendRequest(
     immediate = false,
@@ -20,21 +34,35 @@ export function useSendRequest(
     ) {
 
         const config: AxiosRequestConfig = {
-            method: method,
+            headers: new AxiosHeaders(),
+            method,
             url,
         }
+        
+        const token = TokenHandler.getToken();
+        if(token){
+            if(config.headers) config.headers.Authorization = `Bearer ${token}`;
+        }
+
         if (data)
             method === 'GET' ?
                 config.params = data :
                 config.data = JSON.stringify(data);
 
+        let err: AxiosError;
         axios(config)
             .then(res => {
                 result.value = res.data 
                 error.value = false
             })
-            .catch(err => error.value = true )
-            .finally(() => {
+            .catch(e => { 
+                error.value = true 
+                err = e;
+            })
+            .finally(async () => {
+                /*if(error.value && TokenHandler.getRefreshToken())
+                    await refreshToken();
+                */
                 loading.value = false;
                 cb();
             });

@@ -5,13 +5,47 @@ import { userStore, type UserInterface } from "@/modules/security/store/user-sto
 import useEvents from "../utils/useEvents";
 import { i18n } from "@/plugins/i18n";
 import router from "@/router";
+import TokenHandler from "../utils/token-handler";
 
 const { t } = i18n.global;
 
 export const siteStore = defineStore('site', {
     actions: {
+        loadUser() {
+            const token: string | null = TokenHandler.getRefreshToken();
+            let user;
+            try {
+                if (token) {
+                    const a = token.split('.');
+                    user = JSON.parse(atob(token.split('.')[1])).user;
+                }
+            } catch (err) {
+                console.log(err);
+            }
+
+            return user;
+        },
+
         useLogin() {
             const request = useSendRequest();
+
+            const loginRequestHandler = (() => {
+                if (!request.error.value) {
+                    TokenHandler.storeRefreshToken(request.result.value.refreshToken);
+                    TokenHandler.storeToken(request.result.value.token);
+
+                    const user = this.loadUser();        
+                    userStore().$patch(user);
+                    useEvents().dispatch('redirect', '/');
+                } else {
+                    useEvents().dispatch('error', {
+                        severity: "error",
+                        summary: "Error",
+                        detail: t('login.error'),
+                        life: 3000,
+                    });
+                }
+            }).bind(this);
 
             function login(credentials: any) {
                 if (credentials.username.trim() === '')
@@ -23,21 +57,8 @@ export const siteStore = defineStore('site', {
                     `${import.meta.env.VITE_API_PATH}/site/login`,
                     credentials,
                     'POST',
-                    () => {
-                        if (!request.error.value) {
-                            userStore().$patch(request.result.value as unknown as UserInterface);
-                            sessionStorage.setItem("uer", JSON.stringify(request.result.value));
-                            useEvents().dispatch('redirect', '/');
-                        } else {
-                            useEvents().dispatch('error', {
-                                severity: "error",
-                                summary: "Error",
-                                detail: t('login.error'),
-                                life: 3000,
-                            });
-                        }
-                    }
-                )
+                    loginRequestHandler
+                );
             }
 
             return reactive({ loading: request.loading, login });
@@ -51,7 +72,8 @@ export const siteStore = defineStore('site', {
                 acceptLabel: t('global.confirm'),
                 accept: () => {
                     userStore().$reset();
-                    sessionStorage.removeItem('user');
+                    TokenHandler.removeRefreshToken();
+                    TokenHandler.removeToken();
                     useEvents().dispatch('redirect', "/login");
                 },
             })
