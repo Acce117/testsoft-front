@@ -4,13 +4,15 @@ import TokenHandler from "./token-handler";
 
 async function refreshToken(){
     
-    const res = await axios({
-        headers: {
-            Authorization: `Bearer ${TokenHandler.getRefreshToken()}`
-        },
-        url: `${import.meta.env.VITE_API_PATH}/site/refreshToken`,
-        method: 'POST'
-    })
+    const config: AxiosRequestConfig = {
+        headers: new AxiosHeaders(),
+        url: `${import.meta.env.VITE_API_PATH}/seguridad/jwt/refresh`,
+        method: 'POST',
+    }
+    
+    if(config.headers) config.headers.Authorization = `Bearer ${TokenHandler.getRefreshToken()}`;
+
+    const res = await axios(config);
     
     TokenHandler.storeToken(res.data);
 }
