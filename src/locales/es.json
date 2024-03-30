@@ -11,59 +11,66 @@
         "option1": "Realiza un test",
         "option2": "Descubre compatibilidades y líderes",
         "option3": "Encuentra los roles más efectivos",
-        "option4": "Analiza los resultados"
+        "option4": "Analiza los resultados",
+        "option5": "Analiza la información",
+        "option6": "Asigna un test",
+        "option7": "Gestiona grupos",
+        "option8": "Gestiona los usuarios"
     },
     "select-test": {
-        "title":"Seleccione un test",
+        "title": "Seleccione un test",
         "dialogs": {},
-        "test-card":{
-            "duration":"Duración",
-            "description":"Descripción",
-            "not-available":"No Disponible",
-            "available":"Disponible en"
+        "test-card": {
+            "duration": "Duración",
+            "description": "Descripción",
+            "not-available": "No Disponible",
+            "available": "Disponible en"
         }
     },
     "execute-test": {
         "dialogs": {
-            "serie-ended":"El tiempo de la serie ha terminado. Se ha avanzado a la próxima serie.",
-            "test-ended-first-time":"El tiempo del test ha terminado. Se agregarán 5 minutos más.",
+            "serie-ended": "El tiempo de la serie ha terminado. Se ha avanzado a la próxima serie.",
+            "test-ended-first-time": "El tiempo del test ha terminado. Se agregarán 5 minutos más.",
             "test-ended": "El tiempo del test ha terminado",
-            "confirm-next-serie":{
-                "title":"Serie",
-                "message":"¿Desea avanzar a la siguiente serie? No podrá regresar a la anterior...",
+            "confirm-next-serie": {
+                "title": "Serie",
+                "message": "¿Desea avanzar a la siguiente serie? No podrá regresar a la anterior..."
             },
-            "confirm-save-test":{
-                "title":"Salir",
-                "message":"¿Desea guardar las respuestas del test?"
+            "confirm-save-test": {
+                "title": "Salir",
+                "message": "¿Desea guardar las respuestas del test?"
             },
-            "confirm-exit-test":{
-                "title":"Salir",
-                "message":"¿Desea salir del test? Las respuestas se perderán."
+            "confirm-exit-test": {
+                "title": "Salir",
+                "message": "¿Desea salir del test? Las respuestas se perderán."
             },
-            
-        },
-        "tooltips":{
-            "next":"Siguiente Serie",
-            "prev":"Serie Anterior",
-            "exit":"Cancelar Test",
-            "save":"Terminar Test",
-            "info":"Información"
-        },
-
-        "question-components":{
-            "5":{
-                "remaining-points":"Puntos restantes en la pregunta"
+            "description": {
+                "title": "Descripción del test",
+                "message":"Responda las preguntas en el tiempo asignado, que puede consultar en la parte izquierda de la pantalla a través del temporizador. Utilice los botones del sector superior derecho para navegar entre series. Los botones a la derecha se utilizan para guardar sus respuestas, mostrar información y salir del test respectivamente."
             }
         },
-        "error":{
-            "2":"Debe seleccionar una respuesta",
-            "5":"Existen puntos por asignar aún",
-            "in-question":"en la pregunta"
+        "tooltips": {
+            "next": "Siguiente Serie",
+            "prev": "Serie Anterior",
+            "exit": "Cancelar Test",
+            "save": "Terminar Test",
+            "info": "Información"
+        },
+        "question-components": {
+            "5": {
+                "remaining-points": "Puntos restantes en la pregunta"
+            }
+        },
+        "error": {
+            "2": "Debe seleccionar una respuesta",
+            "5": "Existen puntos por asignar aún",
+            "in-question": "en la pregunta"
         }
     },
     "results": {
         "title": "Resultados",
-        "no-test": "No ha realizado ningún test",
+        "info":"En esta pantalla puede consultar los resultados de sus tests. Presione la flecha a la izquierda de una fila para mostrar los resultados generales del test correspondiente, o el botón de la derecha para ver los resultados finales del mismo. Utilice los botones del encabezado para mostrar los resultados de todos los tests o para esconderlos.",
+
         "show-all": "Mostrar Todos",
         "hide-all": "Ocultar Todos",
         "final-results": "Ver Resultados Finales",
@@ -93,43 +100,73 @@
         }
     },
     "profile": {
-        "title": "Mi perfil",
-        "dialogs": {
-            "close-session": {
-                "header": "Salir",
-                "message": "¿Desea cerrar sesión?"
-            }
-        },
-        "name": "Nombre",
-        "id": "Carnet de Identidad",
-        "role": "Rol",
-        "usertype": "Tipo de Usuario",
-        "group": "Grupo",
-        "close-session": "Cerrar Sesión"
+        "title": "Mi perfil"
     },
-    "info": {},
+    "info": {
+        "developers":"Desarrolladores",
+        "roles":{
+            "project_manager":"Jefe de Proyecto",
+            "developer":"Desarrollador"
+        }
+    },
     "global": {
         "and": "y",
         "confirm": "Aceptar",
         "cancel": "Cancelar",
+        "delete": "Eliminar",
+        "find": "Buscar",
+        "add": "Añadir",
         "error": "Algo ha salido mal",
         "resend": "Reenviar Test",
         "execute": "Ejecutar",
-        "warning":"Advertencia"
+        "warning": "Advertencia",
+        "info": "Información",
+        "no-results": "No se encontraron resultados",
+        "loading": "Cargando"
+    },
+    "users": {
+        "title": "Usuarios",
+        "name": "Nombres",
+        "lastname": "Apellidos",
+        "ci": "Carnet de Identidad",
+        "username": "Nombre de Usuario",
+        "password": "Contraseña",
+        "email": "Correo",
+        "sex": "Sexo",
+        "role": "Rol",
+        "usertype": "Tipo de Usuario",
+        "group": "Grupo"
     },
     "navbar": {
-        "1": {
+        "test": {
             "name": "Test",
-            "1": "Ejecutar Test",
-            "2": "Roles",
-            "3": "Compatibilidades",
-            "4": "Ver Resultados"
+            "execute": "Ejecutar Test",
+            "roles": "Roles",
+            "compatibility": "Compatibilidades",
+            "results": "Ver Resultados"
         },
-        "2": {
+        "assign-test": {
+            "name": "Asignar Test"
+        },
+        "create": "Crear Test",
+        "info": {
             "name": "Info"
         },
-        "3": {
-            "name": "Perfil"
+        "profile": {
+            "name": "Perfil",
+            "user": "Usuario",
+            "close-session": "Cerrar Sesión",
+            "dialogs": {
+                "header": "Salir",
+                "message": "¿Desea cerrar sesión?"
+            }
+        },
+        "users": {
+            "name": "Usuarios"
         }
+    },
+    "error": {
+        "empty": "El campo no puede estar vacío",
+        "email": "El dato introducido no es un correo"
     }
 }

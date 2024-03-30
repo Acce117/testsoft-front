@@ -56,7 +56,7 @@ button {
   animation: .3s scale;
   overflow: hidden;
 }
-button:hover {
+button:not(.presentation__button):hover {
   transform: scale(1.1);
 }
 button img{
@@ -71,8 +71,22 @@ button * {
   text-align: center;
   user-select: none;
 }
+input {
+  font-family: var(--font-family);
+}
 
 
+input:not([type="checkbox"]), input:not([type="radio"]) {
+  outline: none;
+  height: 3rem;
+  font-size: 1.5rem;
+  padding: 1rem;
+  transition: border ease .2s;
+  border: .1rem solid transparent;
+}
+input:hover, input:focus{
+  border: .1rem black solid;
+}
 .white-button img{
   filter: invert();
 }

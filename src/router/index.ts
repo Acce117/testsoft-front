@@ -4,11 +4,14 @@ import VHome from '@/views/home/VHome.vue'
 import VSelecTest from '@/modules/test/views/select-test/VSelectTest.vue'
 import VProfile from '@/modules/security/views/profile/VProfile.vue'
 import VExecuteTest from '@/modules/test/views/execute-test/VExecuteTest.vue'
+import VAssignTest from '@/modules/management/assign-test/views/VAssignTest.vue'
 import VGeneralVue from '@/layouts/general/VGeneral.vue'
 import VResults from '@/modules/results/views/VResults.vue'
 import { isUserAuthenticated } from '@/modules/security/isUserAuthenticated'
 import { useToast } from 'primevue/usetoast'
 import { userStore } from '@/modules/security/store/user-store'
+import VUsersManagement from '@/modules/management/users/views/VUsersManagement.vue'
+import VInfo from '@/views/info/VInfo.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -52,7 +55,25 @@ const router = createRouter({
           name: 'results',
           component: VResults,
           meta: { requiresAuth: true }
-        }
+        },
+        {
+          path: '/users',
+          name: 'users',
+          component: VUsersManagement,
+          meta: { requiresAuth: true }
+        },
+        {
+          path: '/assign-test',
+          name: 'assign-test',
+          component: VAssignTest,
+          meta: { requiresAuth: true }
+        },
+        {
+          path: '/info',
+          name: 'info',
+          component: VInfo,
+          meta: { requiresAuth: true }
+        },
       ]
     },
     {
@@ -76,7 +97,7 @@ router.beforeEach((to, from, next) => {
         else if (test.availabilityTime != null && new Date(test.availabilityTime).getTime() < new Date().getTime())
           throw new Error('No puede ejecutar este test')
         next()
-      } catch (e) {
+      } catch (e:any) {
         next('/');
         useToast().add({
           severity: "error",

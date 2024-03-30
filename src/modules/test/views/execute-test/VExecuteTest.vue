@@ -14,6 +14,9 @@ import {
 } from "vue";
 import { getTest } from "@/modules/test/test";
 import { Test } from "../../classes/test-class";
+import VButtonsContainer from "@/components/buttons/VButtonsContainer.vue";
+import VWhiteButton from "@/components/buttons/VWhiteButton.vue";
+import VInfoButton from "@/components/buttons/VInfoButton.vue";
 import { useToast } from "primevue/usetoast";
 import { useConfirm } from "primevue/useconfirm";
 import { useDialog } from "primevue/usedialog";
@@ -306,54 +309,33 @@ const getErrorMessages = (questions: any[]) => {
             w-3rem
           />
         </div>
-
-        <div centered gap-1rem fixed flex-col right-1rem pa-0.5rem>
-          <button
-            class="white-button p-ripple"
-            v-ripple
+        <VButtonsContainer>
+          <VWhiteButton
             @click="validateTest()"
             v-tooltip.right="t('execute-test.tooltips.save')"
-            placeholder="Right"
           >
             <img src="/img/test_completed.svg" alt="terminar test" />
-          </button>
-          <button
-            class="white-button p-ripple"
-            v-ripple
+          </VWhiteButton>
+          <VInfoButton
             @click="infoVisible = true"
-            v-tooltip.right="t('execute-test.tooltips.info')"
-            placeholder="Right"
           >
-            <img src="/img/info.svg" alt="info" />
-          </button>
-          <button
-            class="white-button p-ripple"
-            v-ripple
+            <span font-bold
+              >{{ $t("execute-test.dialogs.description.title") }}:</span
+            >
+            {{ result.description }} <br />{{
+              $t("execute-test.dialogs.description.message")
+            }}
+          </VInfoButton>
+          <VWhiteButton
             @click="exitTestConfirm('select-test')"
             v-tooltip.right="t('execute-test.tooltips.exit')"
-            placeholder="Right"
           >
             <img src="/img/cancel.svg" alt="cancelar test" />
-          </button>
-        </div>
+          </VWhiteButton>
+        </VButtonsContainer>
+
         <VTestSerie :serie="result.arrayserie[serieIndex]" />
       </div>
-      <Dialog
-        v-model:visible="infoVisible"
-        modal
-        header="Información"
-        style="width: 50%"
-      >
-        <span class="modal__long-message">
-          <span font-bold>Descripción del test:</span> {{ result.description }}
-          <br />
-          Responda las preguntas en el tiempo asignado, que puede consultar en
-          la parte izquierda de la pantalla a través del temporizador.<br />Utilice
-          los botones del sector superior derecho para navegar entre series.<br />Los
-          botones a la derecha se utilizan para guardar sus respuestas, mostrar
-          información y salir del test respectivamente.
-        </span>
-      </Dialog>
     </div>
     <VLoading v-else />
   </div>

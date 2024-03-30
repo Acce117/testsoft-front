@@ -27,8 +27,7 @@ const props = defineProps({
   animation: fade-in 1s;
   background-color: white;
 }
-
-.question-not-responded {
+.invalid-input {
   transition: all ease 0.5s;
   box-shadow: 0 0 0.3rem 0.3rem rgba(255, 0, 0, 0.7);
 }

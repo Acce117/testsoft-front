@@ -52,8 +52,12 @@
   background-color: white;
   box-shadow: var(--shadow);
   font-size: 1.5rem;
-  padding: 0.5rem;
+  padding: 1rem;
+  margin:1rem;
   border-radius: var(--bradius);
+}
+.p-tooltip-arrow{
+  display: none;
 }
 .p-menubar {
   width: 100%;
@@ -305,8 +309,6 @@
 .p-listbox-item.p-highlight{
   box-shadow: var(--shadow);
   background-color: white;
-
-  
 }
 
 @media (min-width: 1024px) {

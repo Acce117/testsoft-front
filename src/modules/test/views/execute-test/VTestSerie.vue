@@ -23,7 +23,7 @@ const test = inject<Test>("test");
       :question_index="index + 1"
       :title="question.statement"
       :class="{
-        'question-not-responded': validatedTestFirstTime
+        'invalid-input': validatedTestFirstTime
           ? !test?.validateComponent(question.id_question)
           : false,
       }"

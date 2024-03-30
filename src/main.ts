@@ -13,15 +13,23 @@ import App from './App.vue'
 import router from './router'
 import VLoading from './components/VLoading.vue';
 import VError from './components/VError.vue';
+import VInput from './components/VInput.vue'
 import Ripple from 'primevue/ripple';
 import { i18n } from "./plugins/i18n";
 import 'uno.css'
+import VWhiteButton from './components/buttons/VWhiteButton.vue';
+import VButtonsContainer from './components/buttons/VButtonsContainer.vue';
 
 
 const app = createApp(App)
 
 app.component('vue-countdown', VueCountdown);
 app.component('VLoading', VLoading);
+app.component('VInput', VInput);
+app.component('VWhiteButton', VWhiteButton);
+app.component('VButtonsContainer',VButtonsContainer)
+
+
 app.component('VError', VError);
 app.directive('ripple', Ripple);
 app.directive('tooltip', Tooltip);

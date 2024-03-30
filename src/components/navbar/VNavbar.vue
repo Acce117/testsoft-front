@@ -26,46 +26,85 @@ import { useRouter } from "vue-router";
 import Menubar from "primevue/menubar";
 import { ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
+import { userStore } from "@/modules/security/store/user-store";
+import { siteStore } from "@/common/site/siteStore";
 const { t, locale } = useI18n();
 
 const router = useRouter();
-const items = ref([
+const itemsTestExecutor = [
   {
     label: " ",
+    i18n: "test",
     items: [
       {
         label: " ",
+        i18n: "execute",
         command: () => router.push("/select-test"),
       },
       {
         label: " ",
+        i18n: "roles",
       },
       {
         label: " ",
+        i18n: "compatibility",
       },
       {
         label: " ",
+        i18n: "results",
         command: () => router.push("/results"),
       },
     ],
   },
+];
+const itemsAnalist = [
   {
-    label: " ",
+    label: "Users",
+    i18n: "users",
+    command: () => router.push("/users"),
   },
   {
     label: " ",
-    command: () => router.push("/profile"),
+    i18n: "assign-test",
+    command: () => router.push("/assign-test"),
+  }
+];
+const items = ref([]);
+if (userStore().role.includes("Estudiante"))
+  itemsTestExecutor.forEach((item) => items.value.push(item));
+if (userStore().role.includes("Analista"))
+  itemsAnalist.forEach((item) => items.value.push(item));
+items.value.push(
+  {
+    label: " ",
+    i18n: "profile",
+    items:[
+      {
+        label:" ",
+        i18n:"user",
+        command: () => router.push("/profile"),
+      },
+      {
+        label:" ",
+        i18n:"close-session",
+        command: () =>  siteStore().logout(),
+      },
+    ]
   },
-]);
-
+  {
+    label: " ",
+    i18n: "info",
+    command: () => router.push("/info"),
+  }
+);
 const updateNavbarLabels = () => {
-  items.value.forEach((item, index) => {
+  items.value.forEach((item:any) => {
     if (item.label) {
-      item.label = t(`navbar.${index + 1}.name`);
+      item.label = t(`navbar.${item.i18n}.name`);
     }
     if (item.items) {
-      item.items.forEach((subItem, subIndex) => {
-        subItem.label = t(`navbar.${index + 1}.${subIndex + 1}`);
+      item.items.forEach((subItem:any) => {
+        subItem.label = t(`navbar.${item.i18n}.${subItem.i18n}`);
       });
     }
   });
@@ -93,5 +132,7 @@ const goHome = () => {
   left: 0;
   list-style: none;
   background-color: transparent;
+  backdrop-filter: blur(.5rem);
+
 }
 </style>

@@ -2,6 +2,7 @@
 import { RouterView, useRouter } from "vue-router";
 import Toast from "primevue/toast";
 import ConfirmDialog from "primevue/confirmdialog";
+import ConfirmPopup from "primevue/confirmpopup";
 import DynamicDialog from "primevue/dynamicdialog";
 import useEvents from "./common/utils/useEvents";
 import { useToast } from "primevue/usetoast";
@@ -29,5 +30,6 @@ useEvents().addListener('confirm', (event: CustomEventInit)=>{
   <router-view />
   <Toast position="top-left" />
   <ConfirmDialog />
+  <ConfirmPopup group="popup"/>
   <DynamicDialog />
 </template>

@@ -129,5 +129,9 @@
         "3": {
             "name": "Profile"
         }
+    },
+    "error":{
+        "empty":"This field can't be empty",
+        "email":"El dato introducido no es un correo"
     }
 }

@@ -19,7 +19,7 @@ export default defineConfig({
                 'color': 'white',
                 'text-align': 'center',
                 'animation': '.8s fade-in',
-                'margin-top': '6rem',
+                'margin-top': '7rem',
                 'font-size': '2rem'
             }
         ],
@@ -37,6 +37,10 @@ export default defineConfig({
                 'background-color': 'white',
                 'border-radius': 'var(--bradius)'
             }],
+            [
+                'shadow', {
+                    'box-shadow': 'var(--shadow)',
+                }],
         [
             'black-button', {
                 'background-color': 'black',
