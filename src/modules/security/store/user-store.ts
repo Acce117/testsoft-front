@@ -1,3 +1,4 @@
+import { siteStore } from "@/common/site/siteStore";
 import { defineStore } from "pinia";
 
 export interface UserInterface {
@@ -11,10 +12,10 @@ export interface UserInterface {
 
 export const userStore = defineStore('user', {
     state: (): UserInterface => {
-        let user = sessionStorage.getItem('user');
+        let user = siteStore().loadUser();
         let state: UserInterface;
         user ?
-            state = JSON.parse(user) :
+            state = user :
             state = {
                 ci: '',
                 username: '',
