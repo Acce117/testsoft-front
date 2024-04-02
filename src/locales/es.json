@@ -111,9 +111,16 @@
     },
     "global": {
         "and": "y",
+        "export":{
+            "title":"Exportar",
+            "message":"¿Desea exportar los resultados a PDF?", 
+            "correct": "PDF exportado correctamente",
+            "error":"Error al exportar"
+        },
         "confirm": "Aceptar",
         "cancel": "Cancelar",
         "delete": "Eliminar",
+        "edit":"Editar",
         "find": "Buscar",
         "add": "Añadir",
         "error": "Algo ha salido mal",

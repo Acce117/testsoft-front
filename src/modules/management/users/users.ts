@@ -2,9 +2,9 @@ import { useSendRequest } from "@/common/utils/fetch";
 import useEvents from "@/common/utils/useEvents";
 
 
-export function getUsers(ci:  string) {
-    const url = `${import.meta.env.VITE_API_PATH}/seguridad/user`;
-  
+export function getUsers(ci?:  string) {
+    const url = `${import.meta.env.VITE_API_PATH}/gestion/student`;
+    
 
     return useSendRequest(true, url);
 }

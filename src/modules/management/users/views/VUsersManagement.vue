@@ -1,12 +1,11 @@
 <template>
   <h2 page-title>{{ $t("users.title") }}</h2>
   <VButtonsContainer top-6rem v-if="!loading && !error">
-      <VWhiteButton @click="addDialog = true" v-tooltip.right="t('global.add')">
-        <img src="/img/add_user.svg" />
-      </VWhiteButton>
-    </VButtonsContainer>
+    <VWhiteButton @click="addDialog = true" v-tooltip.right="t('global.add')">
+      <img src="/img/add_user.svg" />
+    </VWhiteButton>
+  </VButtonsContainer>
   <VTable :error="error" :loading="loading">
-    
     <DataTable
       :value="result"
       :size="'large'"
@@ -15,10 +14,11 @@
       scrollHeight="60vh"
       striped-rows
       v-model:filters="filters"
+      v-model:editingRows="editingRows"
       filterDisplay="row"
-      editMode="cell"
+      editMode="row"
       :virtualScrollerOptions="{ itemSize: 46 }"
-      @cell-edit-complete="onCellEditComplete($event)"
+      @row-edit-save="onRowEditSave"
     >
       <template #header>
         <div class="table__header">
@@ -40,6 +40,7 @@
       <Column field="email" :header="t('users.email')"></Column>
       <Column field="sex" :header="t('users.sex')"></Column>
       <Column field="user_type" :header="t('users.usertype')"></Column>
+      <Column :header="t('global.edit')" :rowEditor="true"></Column>
       <Column :header="t('global.delete')">
         <template #body="slotProps">
           <div pa-1rem centered>
@@ -57,6 +58,7 @@
 
       <template #empty>{{ $t("global.no-results") }} </template>
     </DataTable>
+    {{ result }}
   </VTable>
 
   <VAddUserDialog v-model="addDialog" />
@@ -74,7 +76,8 @@ import { useConfirm } from "primevue/useconfirm";
 import VAddUserDialog from "./dialogs/VAddUserDialog.vue";
 const confirm = useConfirm();
 const { t } = useI18n();
-const { result, loading, error } = getUsers(userStore().ci);
+const { result, loading, error } = getUsers();
+const editingRows = ref([]);
 const filters = ref({
   global: { value: null, matchMode: FilterMatchMode.CONTAINS },
 });
@@ -90,31 +93,17 @@ const confirmDelete = (userToDelete: any, event: any) => {
     },
   });
 };
-const onCellEditComplete = (event) => {
-  let { data, originalEvent, newValue, field } = event;
-
-  switch (field) {
-    default:
-      console.log(originalEvent);
-      if (
-        originalEvent.target.localName !== "td" &&
-        originalEvent.target.localName !== "input" &&
-        newValue.trim().length > 0
-      ) {
-        confirm.require({
-          message: t("users.dialogs.confirm-edit.message"),
-          rejectLabel: t("global.cancel"),
-          acceptLabel: t("global.confirm"),
-          accept: () => {
-            data[field] = newValue;
-          },
-          reject: () => {
-            event.preventDefault();
-          },
-        });
-      } else event.preventDefault();
-      break;
-  }
+const onRowEditSave = (event) => {
+  let { newData, index } = event;
+  console.log(event)
+  result.value[index] = newData;
+};
+const loadLazyData = (event) => {
+    const request = getUsers()
+    //lazyParams.value = { ...lazyParams.value, first: event?.first || first.value };
+    result.value = request.result;
+    loading.value =request.loading
+    
 };
 const addDialog = ref(false);
 </script>
@@ -155,4 +144,19 @@ const addDialog = ref(false);
   color: white;
   padding: 1rem;
 }
+.p-row-editor-init, .p-row-editor-cancel-icon, .p-row-editor-save-icon {
+  width: 2rem;
+  margin: auto;
+  height: 2rem;
+  border-radius: 0;
+}
+
+.p-cell-editing:has(.p-row-editor-cancel-icon){
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap:1rem;
+  height: 5rem ;
+}
+
 </style>

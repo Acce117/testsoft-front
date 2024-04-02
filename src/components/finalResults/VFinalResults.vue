@@ -1,13 +1,26 @@
 <template>
-  <div  class="error-sending" v-if="props.testResult?.error" >
-    <VError ></VError>
+  <div class="error-sending" v-if="props.testResult?.error">
+    <VError></VError>
   </div>
 
   <div v-else-if="!props.testResult?.loading" class="modal__long-message">
-    <div  class="test-results">
+    <button
+      black-button
+      font-size-2rem
+      gap-1rem
+      absolute
+      right-1rem
+      class="p-ripple"
+      v-ripple
+      @click="confirmPDF"
+    >
+      <img src="/img/PDF.svg" w-3rem />
+    </button>
+    <div class="test-results" id="test-results" text-black>
       <h1 class="results__test-title">Test: {{ props.testName }}</h1>
+
       <h2 v-if="props.testResult?.result.process.global_result == 1">
-        {{ $t('results.global-result') }}: {{ getGlobalResult() }}
+        {{ $t("results.global-result") }}: {{ getGlobalResult() }}
       </h2>
       <VAllElementsTopValues
         v-if="
@@ -38,7 +51,6 @@
         :testResult="props.testResult?.result"
       />
     </div>
-    
   </div>
   <VLoading v-else style="height: 30rem" />
 </template>
@@ -47,7 +59,9 @@ import VAllElementsTopValues from "./components/VAllElementsTopValues.vue";
 import VAllElementsNoTopValues from "./components/VAllElementsNoTopValues.vue";
 import VElementByCategoryTopValues from "./components/VElementByCategoryTopValues.vue";
 import VElementByCategoryNoTopValues from "./components/VElementByCategoryNoTopValues.vue";
-import { useI18n } from 'vue-i18n';
+import { useI18n } from "vue-i18n";
+import html2pdf from "html2pdf.js";
+import useEvents from "@/common/utils/useEvents";
 const { t } = useI18n();
 
 const props = defineProps({
@@ -56,6 +70,41 @@ const props = defineProps({
   testType: String,
 });
 //TODO REVIEW OTHER PARAMETERS OF RESULTS VISUALIZATION
+const exportToPDF = () => {
+  html2pdf(document.getElementById("test-results"), {
+    margin: 3,
+    filename: "Results of " + props.testName + ".pdf",
+  })
+    .then(
+      useEvents().dispatch("error", {
+        severity: "info",
+        summary: t("global.info"),
+        life: 3000,
+        detail: t("global.export.correct"),
+      })
+    )
+    .catch(e=>{
+      useEvents().dispatch("error", {
+        severity: "error",
+        summary: t("global.error"),
+        life: 3000,
+        detail: t("global.export.error"),
+      })}
+    );
+};
+
+const confirmPDF = (event: any) => {
+  useEvents().dispatch("confirm", {
+    target: event.target,
+    group: "popup",
+    message: t("global.export.message"),
+    rejectLabel: t("global.cancel"),
+    acceptLabel: t("global.export.title"),
+    accept: () => {
+      exportToPDF();
+    },
+  });
+};
 
 const getGlobalResult = () => {
   let result = "";
@@ -67,7 +116,7 @@ const getGlobalResult = () => {
             index ==
             Object.keys(props.testResult?.result.categories).length - 1
           )
-            result += ` `+t('global.and')+` `;
+            result += ` ` + t("global.and") + ` `;
           else result += ", ";
         }
         result += props.testResult?.result.categories[category].items.name;
@@ -84,7 +133,7 @@ const getGlobalResult = () => {
 .error-sending {
   width: 100%;
   height: 30rem;
-  filter:invert();
+  filter: invert();
 }
 .results__test-title {
   text-align: left;
