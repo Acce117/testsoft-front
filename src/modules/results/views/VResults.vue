@@ -7,6 +7,9 @@
       :size="'large'"
       ><template #header>
         <div class="table__header">
+          <VInfoButton :black="true">
+            {{ $t("results.info") }}
+          </VInfoButton>
           <span class="p-ripple" v-ripple @click="expandAll()">
             + {{ $t("results.show-all") }}
           </span>
@@ -55,14 +58,6 @@
       </template>
       <template #empty> {{ $t("global.no-results") }} </template>
     </DataTable>
-    <VButtonsContainer top-6rem right-10vw>
-      
-          <VInfoButton
-          >
-           {{ $t('results.info') }}
-          </VInfoButton>
-
-        </VButtonsContainer>
   </VTable>
 </template>
 <script setup lang="ts">
@@ -71,7 +66,6 @@ import DataTable from "primevue/datatable";
 import VShowFinalResults from "./VShowFinalResults.vue";
 import Column from "primevue/column";
 import VInfoButton from "@/components/buttons/VInfoButton.vue";
-import VButtonsContainer from "@/components/buttons/VButtonsContainer.vue";
 import { getResults } from "./../results.ts";
 import { userStore } from "@/modules/security/store/user-store";
 import { ref, provide, onUnmounted } from "vue";

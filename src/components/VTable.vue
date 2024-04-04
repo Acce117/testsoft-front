@@ -24,11 +24,15 @@ const props = defineProps({
 }
 
 .p-datatable-wrapper,
+.p-treetable-wrapper,
 .table__header span {
   font-size: 1.5rem;
 }
 .p-column-title {
   font-weight: bold;
+}
+th, tr{
+  color: black;
 }
 
 .p-row-toggler:hover {
@@ -55,6 +59,7 @@ const props = defineProps({
 
 @media (min-width: 1024px) {
   .p-datatable-wrapper,
+  .p-treetable-wrapper,
   .table__header span {
     font-size: 1.8rem;
   }

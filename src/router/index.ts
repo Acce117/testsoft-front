@@ -12,6 +12,14 @@ import { useToast } from 'primevue/usetoast'
 import { userStore } from '@/modules/security/store/user-store'
 import VUsersManagement from '@/modules/management/users/views/VUsersManagement.vue'
 import VInfo from '@/views/info/VInfo.vue'
+import useEvents from '@/common/utils/useEvents'
+const notAuthorizedToastError = {
+  severity: "error",
+  summary: "Error:",
+  detail: 'global.not-authorized',
+  i18n: true,
+  life: 5000,
+}
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -42,7 +50,8 @@ const router = createRouter({
           path: '/execute-test/:id_test',
           name: 'execute-test',
           component: VExecuteTest,
-          meta: { requiresAuth: true }
+          meta: { requiresAuth: true },
+          beforeEnter: (to, from, next) => validateTestExecutionPermission(to, from, next)
         },
         {
           path: '/profile',
@@ -66,7 +75,8 @@ const router = createRouter({
           path: '/assign-test',
           name: 'assign-test',
           component: VAssignTest,
-          meta: { requiresAuth: true }
+          meta: { requiresAuth: true },
+          beforeEnter: (to, from, next) => { validateAdminRole(next) }
         },
         {
           path: '/info',
@@ -83,33 +93,42 @@ const router = createRouter({
 
   ]
 })
-router.beforeEach((to, from, next) => {
-  if (to.meta.requiresAuth && !isUserAuthenticated())
-    next('/login');
-  else if (to.path.includes('execute-test')) {
-    const user = userStore();
-    if (from.path.includes('select-test')) {
-      try {
-        const id_test = to.path.split('/')[2]
-        const test = user.assignedTests.filter(test => test.id == id_test)[0]
-        if (!test)
-          throw new Error('Este test no existe')
-        else if (test.availabilityTime != null && new Date(test.availabilityTime).getTime() < new Date().getTime())
-          throw new Error('No puede ejecutar este test')
-        next()
-      } catch (e:any) {
-        next('/');
-        useToast().add({
-          severity: "error",
-          summary: "Error:",
-          detail: e.message,
-          life: 5000,
-        });
-      }
-    }
-    else next('/')
+const validateAdminRole = (next: Function) => {
+  const user = userStore();
+  if (user.role.includes('Analista'))
+    next()
+  else {
+    next('/')
+    useEvents().dispatch('error', notAuthorizedToastError);
   }
-  else
-    next();
+}
+const validateTestExecutionPermission = (to: any, from: any, next: Function) => {
+
+  const user = userStore();
+  if (from.path.includes('select-test')) {
+    try {
+      const id_test = to.path.split('/')[2]
+      const test = user.assignedTests.filter(test => test.id == id_test)[0]
+      if (!test || (test.availabilityTime != null && new Date(test.availabilityTime).getTime() < new Date().getTime()))
+        throw new Error('global.not-authorized')
+      next()
+    } catch (e: any) {
+      next('/');
+      useEvents().dispatch('error', notAuthorizedToastError);
+    }
+  }
+  else {
+    next('/');
+    useEvents().dispatch('error', notAuthorizedToastError);
+  }
+
+}
+router.beforeEach((to, from, next) => {
+  console.log(isUserAuthenticated())
+
+  if (to.meta.requiresAuth && !isUserAuthenticated()) {
+    useEvents().dispatch('error', notAuthorizedToastError);
+  }
+  else next();
 });
 export default router

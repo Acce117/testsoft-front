@@ -5,7 +5,7 @@ import DialogService from 'primevue/dialogservice';
 import ConfirmationService from 'primevue/confirmationservice';
 import { isUserAuthenticated } from './modules/security/isUserAuthenticated';
 import Tooltip from 'primevue/tooltip';
-import 'primevue/resources/themes/aura-light-green/theme.css'
+import 'primevue/resources/themes/aura-light-noir/theme.css'
 import { createPinia } from 'pinia';
 import VueCountdown from '@chenfengyuan/vue-countdown';
 import './assets/main.css'
@@ -18,6 +18,7 @@ import Ripple from 'primevue/ripple';
 import { i18n } from "./plugins/i18n";
 import 'uno.css'
 import VWhiteButton from './components/buttons/VWhiteButton.vue';
+import VBlackButton from './components/buttons/VBlackButton.vue';
 import VButtonsContainer from './components/buttons/VButtonsContainer.vue';
 
 
@@ -27,6 +28,8 @@ app.component('vue-countdown', VueCountdown);
 app.component('VLoading', VLoading);
 app.component('VInput', VInput);
 app.component('VWhiteButton', VWhiteButton);
+app.component('VBlackButton', VBlackButton);
+
 app.component('VButtonsContainer',VButtonsContainer)
 
 

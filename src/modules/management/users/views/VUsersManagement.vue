@@ -1,27 +1,27 @@
 <template>
   <h2 page-title>{{ $t("users.title") }}</h2>
-  <VButtonsContainer top-6rem v-if="!loading && !error">
-    <VWhiteButton @click="addDialog = true" v-tooltip.right="t('global.add')">
-      <img src="/img/add_user.svg" />
-    </VWhiteButton>
-  </VButtonsContainer>
   <VTable :error="error" :loading="loading">
     <DataTable
       :value="result"
       :size="'large'"
       showGridlines
-      scrollable
-      scrollHeight="60vh"
       striped-rows
+      :rows="8"
+      paginator
       v-model:filters="filters"
       v-model:editingRows="editingRows"
       filterDisplay="row"
       editMode="row"
-      :virtualScrollerOptions="{ itemSize: 46 }"
       @row-edit-save="onRowEditSave"
     >
       <template #header>
         <div class="table__header">
+          <VBlackButton
+            @click="addDialog = true"
+            v-tooltip.left="t('global.add')"
+          >
+            <img  src="/img/add_user.svg" />
+          </VBlackButton>
           <input
             v-model="filters['global'].value"
             :placeholder="t('global.find') + '...'"
@@ -95,15 +95,14 @@ const confirmDelete = (userToDelete: any, event: any) => {
 };
 const onRowEditSave = (event) => {
   let { newData, index } = event;
-  console.log(event)
+  console.log(event);
   result.value[index] = newData;
 };
 const loadLazyData = (event) => {
-    const request = getUsers()
-    //lazyParams.value = { ...lazyParams.value, first: event?.first || first.value };
-    result.value = request.result;
-    loading.value =request.loading
-    
+  const request = getUsers();
+  //lazyParams.value = { ...lazyParams.value, first: event?.first || first.value };
+  result.value = request.result;
+  loading.value = request.loading;
 };
 const addDialog = ref(false);
 </script>
@@ -144,19 +143,20 @@ const addDialog = ref(false);
   color: white;
   padding: 1rem;
 }
-.p-row-editor-init, .p-row-editor-cancel-icon, .p-row-editor-save-icon {
+.p-row-editor-init,
+.p-row-editor-cancel-icon,
+.p-row-editor-save-icon {
   width: 2rem;
   margin: auto;
   height: 2rem;
   border-radius: 0;
 }
 
-.p-cell-editing:has(.p-row-editor-cancel-icon){
+.p-cell-editing:has(.p-row-editor-cancel-icon) {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap:1rem;
-  height: 5rem ;
+  gap: 1rem;
+  height: 5rem;
 }
-
 </style>

@@ -7,21 +7,31 @@ import DynamicDialog from "primevue/dynamicdialog";
 import useEvents from "./common/utils/useEvents";
 import { useToast } from "primevue/usetoast";
 import { useConfirm } from "primevue/useconfirm";
+import { useI18n } from "vue-i18n";
 
 const router = useRouter();
 const toast = useToast();
 const confirm = useConfirm();
+const { t } = useI18n();
 
-useEvents().addListener('error', (event: CustomEventInit)=>{
-  toast.add(event.detail);
+useEvents().addListener("error", (event: CustomEventInit) => {
+  const eventDetail = event.detail;
+  if (eventDetail.i18n) {
+    toast.add({
+      severity: eventDetail.severity,
+      summary: eventDetail.summary,
+      detail: t(eventDetail.detail),
+      life: 5000,
+    });
+  } else toast.add(eventDetail);
 });
-useEvents().addListener('redirect', (event: CustomEventInit)=>{
+useEvents().addListener("redirect", (event: CustomEventInit) => {
   router.push(event.detail);
   toast.removeAllGroups();
 });
-useEvents().addListener('confirm', (event: CustomEventInit)=>{
+useEvents().addListener("confirm", (event: CustomEventInit) => {
   confirm.require(event.detail);
-})
+});
 </script>
 <template>
   <div class="background">
@@ -30,6 +40,6 @@ useEvents().addListener('confirm', (event: CustomEventInit)=>{
   <router-view />
   <Toast position="top-left" />
   <ConfirmDialog />
-  <ConfirmPopup group="popup"/>
+  <ConfirmPopup group="popup" />
   <DynamicDialog />
 </template>

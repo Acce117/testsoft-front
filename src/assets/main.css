@@ -56,7 +56,7 @@ button {
   animation: .3s scale;
   overflow: hidden;
 }
-button:not(.presentation__button):hover {
+button:hover {
   transform: scale(1.1);
 }
 button img{
