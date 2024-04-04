@@ -12,7 +12,7 @@ const { t } = i18n.global;
 export const siteStore = defineStore('site', {
     actions: {
         loadUser() {
-            const token: string | null = TokenHandler.getRefreshToken();
+            const token: string | null = TokenHandler.getToken();
             let user;
             try {
                 if (token) {

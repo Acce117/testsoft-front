@@ -68,7 +68,7 @@ import VTable from "@/components/VTable.vue";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import { FilterMatchMode } from "primevue/api";
-import { getUsers, deleteUser } from "./../users.ts";
+import { getUsers, deleteUser } from "../users";
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { userStore } from "@/modules/security/store/user-store";
