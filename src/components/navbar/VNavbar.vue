@@ -61,49 +61,67 @@ const itemsAnalist = [
   {
     label: "Users",
     i18n: "users",
-    command: () => router.push("/users"),
+   
+    items: [
+      {
+        label: " ",
+        i18n: "manage-users",
+        command: () => router.push("/users"),
+      }
+    ],
   },
   {
-    label: " ",
-    i18n: "assign-test",
-    command: () => router.push("/assign-test"),
-  }
+    label: "Groups",
+    i18n: "groups",
+    items: [
+      {
+        label: " ",
+        i18n: "assign-test",
+        command: () => router.push("/assign-test"),
+      },
+      {
+        label: " ",
+        i18n: "manage-groups",
+        command: () => router.push("/manage-groups"),
+      },
+    ],
+  },
 ];
-const items = ref([]);
-if (userStore().role.includes("Estudiante"))
-  itemsTestExecutor.forEach((item) => items.value.push(item));
-if (userStore().role.includes("Analista"))
-  itemsAnalist.forEach((item) => items.value.push(item));
-items.value.push(
+const itemsDefault = [
   {
     label: " ",
     i18n: "profile",
-    items:[
+    items: [
       {
-        label:" ",
-        i18n:"user",
+        label: " ",
+        i18n: "user",
         command: () => router.push("/profile"),
       },
       {
-        label:" ",
-        i18n:"close-session",
-        command: () =>  siteStore().logout(),
+        label: " ",
+        i18n: "close-session",
+        command: () => siteStore().logout(),
       },
-    ]
+    ],
   },
   {
     label: " ",
     i18n: "info",
     command: () => router.push("/info"),
-  }
-);
+  },
+];
+const items = ref([]);
+if (userStore().role.includes("Estudiante"))
+  items.value.push(...itemsTestExecutor);
+if (userStore().role.includes("Analista")) items.value.push(...itemsAnalist);
+items.value.push(...itemsDefault);
 const updateNavbarLabels = () => {
-  items.value.forEach((item:any) => {
+  items.value.forEach((item: any) => {
     if (item.label) {
       item.label = t(`navbar.${item.i18n}.name`);
     }
     if (item.items) {
-      item.items.forEach((subItem:any) => {
+      item.items.forEach((subItem: any) => {
         subItem.label = t(`navbar.${item.i18n}.${subItem.i18n}`);
       });
     }
@@ -132,7 +150,6 @@ const goHome = () => {
   left: 0;
   list-style: none;
   background-color: transparent;
-  backdrop-filter: blur(.5rem);
-
+  backdrop-filter: blur(0.5rem);
 }
 </style>

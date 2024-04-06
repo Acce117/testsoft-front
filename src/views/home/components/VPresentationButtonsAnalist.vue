@@ -1,30 +1,30 @@
 <template>
-    <div
+    <button
       class="presentation__button"
       white-button
     >
       <img src="/img/graphic.svg" />
       {{ $t("home.option5") }}
-    </div>
+    </button>
 
-    <div class="presentation__button" white-button @click="router.push('/assign-test')">
+    <button class="presentation__button" white-button @click="router.push('/assign-test')">
       <img src="/img/assign_test.svg" />
       {{ $t("home.option6") }}
-    </div>
+    </button>
 
-    <div class="presentation__button" white-button>
+    <button class="presentation__button" white-button>
       <img src="/img/group.svg" />
       {{ $t("home.option7") }}
-    </div>
+    </button>
 
-    <div
+    <button
       class="presentation__button"
       white-button
       @click="router.push('/users')"
     >
       <img src="/img/user.svg" />
       {{ $t("home.option8") }}
-    </div>
+    </button>
 </template>
 <script setup lang="ts">
 import { useRouter } from "vue-router";

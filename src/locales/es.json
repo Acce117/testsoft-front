@@ -129,7 +129,8 @@
         "warning": "Advertencia",
         "info": "Información",
         "no-results": "No se encontraron resultados",
-        "loading": "Cargando"
+        "loading": "Cargando", 
+        "not-authorized":"Usted no está autorizado"
     },
     "users": {
         "title": "Usuarios",
