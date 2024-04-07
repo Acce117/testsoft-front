@@ -6,7 +6,9 @@ export function getUsers(ci?:  string) {
     const url = `${import.meta.env.VITE_API_PATH}/gestion/student`;
     
 
-    return useSendRequest(true, url);
+    return useSendRequest(true, url, {
+      relations:['user', 'student_group']
+    });
 }
 export function deleteUser(userToDelete:any, users:any) {
     const url = `${import.meta.env.VITE_API_PATH}/seguridad/user/delete/${userToDelete.CI}`;
