@@ -54,9 +54,11 @@ const createTableTree = (newData: Array<any>) => {
   });
 };
 const insertGroup = (group: any, parent: any) => {
-  let children = []
+  let children = [];
   if (group.subGroups.length > 0) {
-    group.subGroups.forEach((group: any) => children.push(insertGroup(group, parent)));
+    group.subGroups.forEach((group: any) =>
+      children.push(insertGroup(group, parent))
+    );
   }
   const groupFormated = {
     key: group.id,
@@ -65,7 +67,7 @@ const insertGroup = (group: any, parent: any) => {
     },
     children: children,
   };
-  
+
   return groupFormated;
 };
 createTableTree([
@@ -73,7 +75,14 @@ createTableTree([
     id: "1",
     name: "juan",
     subGroups: [
-      { id: "3", name: "jose", subGroups: [{ id: "4", name: "jesus", subGroups: [] },{ id: "5", name: "ramon", subGroups: [] }] },
+      {
+        id: "3",
+        name: "jose",
+        subGroups: [
+          { id: "4", name: "jesus", subGroups: [] },
+          { id: "5", name: "ramon", subGroups: [] },
+        ],
+      },
       { id: "2", name: "pedro", subGroups: [] },
     ],
   },

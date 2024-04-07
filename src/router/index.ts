@@ -69,7 +69,9 @@ const router = createRouter({
           path: '/users',
           name: 'users',
           component: VUsersManagement,
-          meta: { requiresAuth: true }
+          meta: { requiresAuth: true },
+          beforeEnter: (to, from, next) => { validateAdminRole(next) }
+
         },
         {
           path: '/assign-test',
@@ -124,8 +126,6 @@ const validateTestExecutionPermission = (to: any, from: any, next: Function) => 
 
 }
 router.beforeEach((to, from, next) => {
-  console.log(isUserAuthenticated())
-
   if (to.meta.requiresAuth && !isUserAuthenticated()) {
     useEvents().dispatch('error', notAuthorizedToastError);
   }
