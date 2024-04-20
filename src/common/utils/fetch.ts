@@ -49,7 +49,8 @@ export function useSendRequest(
         if (data)
             method === 'GET' ?
                 config.params = data :
-                config.data = JSON.stringify(data);
+                config.data = data;
+                //config.data = JSON.stringify(data);
 
         let err: AxiosError;
         axios(config)
