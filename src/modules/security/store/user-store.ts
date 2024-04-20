@@ -3,6 +3,7 @@ import { defineStore } from "pinia";
 
 export interface UserInterface {
     ci: '',
+    name:'',
     username: '',
     role: [],
     userType: '',
@@ -18,6 +19,7 @@ export const userStore = defineStore('user', {
             state = user :
             state = {
                 ci: '',
+                name:'',
                 username: '',
                 role: [],
                 userType: '',

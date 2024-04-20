@@ -57,8 +57,9 @@ const availabilityTime = getAvailabilityTime();
       </p>
     </div>
 
-    v-if="isAvailable"
+    
     <button
+    v-if="isAvailable"
       v-ripple
       class="p-ripple"
       black-button
@@ -69,7 +70,7 @@ const availabilityTime = getAvailabilityTime();
     >
     {{ $t('global.execute') }}
     </button>
-    <!--vue-countdown
+    <vue-countdown
       :time="availabilityTime"
       v-slot="{ days, hours, minutes, seconds }"
       @end="isAvailable = true"
@@ -83,7 +84,7 @@ const availabilityTime = getAvailabilityTime();
         <span v-if="minutes > 0">{{ minutes }} minutos<br /> </span>
         <span v-if="seconds >= 0">{{ seconds }} segundos</span>
       </div>
-    </vue-countdown-->
+    </vue-countdown>
   </div>
 </template>
 

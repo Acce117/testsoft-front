@@ -5,16 +5,27 @@
       flex
       flex-wrap
       w-80rem
-      gap-3rem
-      h-60rem
+      gap-2rem
+      h-50rem
       data-pc-section="message"
     >
       <h3 w-full>Inserte los datos del nuevo usuario:</h3>
       <VInput id="name" v-model="newUser.name" text="users.name" />
 
       <VInput id="lastname" v-model="newUser.lastname" text="users.lastname" />
-      <VInput id="ci" v-model="newUser.ci" text="users.ci" />
-      <VInput id="email" v-model="newUser.email" text="users.email" />
+      <VInput
+        id="ci"
+        v-on:keydown="if(!(new RegExp('/^[\d\b]').test($event.key)) )$event.preventDefault();"
+        v-model="newUser.ci"
+        text="users.ci"
+        :validation="validateCI"
+      />
+      <VInput
+        id="email"
+        v-model="newUser.email"
+        text="users.email"
+        :validation="validateEmail"
+      />
 
       <VInput id="username" v-model="newUser.username" text="users.username" />
       <VInput
@@ -24,21 +35,19 @@
         text="users.password"
       />
 
-      <TreeSelect
-        loading
-        v-if="loading || error"
-        :placeholder="t('global.loading') + '...'"
-        w-15rem
-      />
-
-      <TreeSelect
-        v-else
+     
+      <Treeselect
         v-model="newUser.group"
         :options="result"
-        optionLabel="key"
-        @change="updateGroup($event)"
         :placeholder="t('users.group')"
-        w-15rem
+        :clearable="false"
+        :multiple="false"
+        :flat="true"
+        :disable-branch-nodes="true"
+        :searchable="false"
+        w-25rem
+        mb-1rem
+        v-on:select="selectGroup"
       />
 
       <div class="p-dialog-footer" w-full>
@@ -54,94 +63,92 @@
 </template>
 <script setup lang="ts">
 import { ref } from "vue";
-
-import TreeSelect from "primevue/treeselect";
+import Treeselect from 'vue3-treeselect'
+import 'vue3-treeselect/dist/vue3-treeselect.css'
 import Dialog from "primevue/dialog";
 import { useI18n } from "vue-i18n";
 import { watch } from "vue";
+import { validateEmail } from "@/common/utils/validations";
+import { validateCI } from "@/common/utils/validations";
+
 const { t } = useI18n();
 const visible = defineModel();
 //const {result, loading, error}
 const loading = false;
 const error = false;
-const updateGroup = (event: any) => {
-      
-
-};
-const selectLeaf = (key:string)=>{
-
+const selectGroup=(node:any)=>{
 }
 const result = ref([
   {
     label: "Australia",
-    key: "AU",
+    id: "AU",
     data: "Australia",
     children: [
       {
         label: "New South Wales",
         data: "New South Wales",
         children: [
-          { label: "Sydney", key: "A-SY" },
-          { label: "Newcastle", key: "A-NE" },
-          { label: "Wollongong", key: "A-WO" },
+          { label: "Sydney", id: "A-SY" },
+          { label: "Newcastle", id: "A-NE" },
+          { label: "Wollongong", id: "A-WO" },
         ],
       },
       {
         label: "Queensland",
         children: [
-          { label: "Brisbane", key: "A-BR" },
-          { label: "Townsville", key: "A-TO" },
+          { label: "Brisbane", id: "A-BR" },
+          { label: "Townsville", id: "A-TO" },
         ],
       },
     ],
   },
   {
     label: "Canada",
-    key: "CA",
+    id: "CA",
     children: [
       {
         label: "Quebec",
         children: [
-          { label: "Montreal", key: "C-MO" },
-          { label: "Quebec City", key: "C-QU" },
+          { label: "Montreal", id: "C-MO" },
+          { label: "Quebec City", id: "C-QU" },
         ],
       },
       {
         label: "Ontario",
         children: [
-          { label: "Ottawa", key: "C-OT" },
-          { label: "Toronto", key: "C-TO" },
+          { label: "Ottawa", id: "C-OT" },
+          { label: "Toronto", id: "C-TO" },
         ],
       },
     ],
   },
   {
     label: "United States",
-    key: "US",
+    id: "US",
     children: [
       {
         label: "California",
         cities: [
-          { label: "Los Angeles", key: "US-LA" },
-          { label: "San Diego", key: "US-SD" },
-          { label: "San Francisco", key: "US-SF" },
+          { label: "Los Angeles", id: "US-LA" },
+          { label: "San Diego", id: "US-SD" },
+          { label: "San Francisco", id: "US-SF" },
         ],
       },
       {
         label: "Florida",
         children: [
-          { label: "Jacksonville", key: "US-JA" },
-          { label: "Miami", key: "US-MI" },
-          { label: "Tampa", key: "US-TA" },
-          { label: "Orlando", key: "US-OR" },
+          { label: "Jacksonville", id: "US-JA" },
+          { label: "Miami", id: "US-MI" },
+          { label: "Tampa", id: "US-TA" },
+          { label: "Orlando", id: "US-OR" },
         ],
       },
       {
         label: "Texas",
         children: [
-          { label: "Austin", key: "US-AU" },
-          { label: "Dallas", key: "US-DA" },
-          { label: "Houston", key: "US-HO" },
+          { label: "Austin", id: "US-AU" },
+          { label: "Dallas", id: "US-DA" },
+          { label: "Houston", id: "US-HO" },
         ],
       },
     ],
@@ -155,55 +162,50 @@ const newUser = ref({
   ci: "",
   email: "",
   sex: "",
-  user_type: "",
-  group: "",
+  group:null
 });
-watch(newUser.value, (newValue) => {
-  console.log("a" + newValue.group);
-});
+
 </script>
 <style>
 .p-dropdown *,
 .p-dropdown-item-label,
-.p-cascadeselect *,
-.p-cascadeselect-item-content {
+
+.vue-treeselect * {
   font-size: 1.5rem;
   color: black;
 }
-.p-cascadeselect-item-content {
-  justify-content: space-between;
-}
 
-.p-cascadeselect-item.p-highlight {
-  border: 0.1rem solid black;
-  background-color: white;
-}
-
-.p-dropdown,
-.p-cascadeselect {
-  padding: 1rem;
-  height: 3rem;
-  text-align: left;
-
-  box-shadow: var(--shadow);
+.vue-treeselect{
   border: 0.1rem solid transparent;
   border-radius: var(--bradius);
+  transition: border ease .2s;
+
+}
+.vue-treeselect__control {
+  height: 3rem;
+  text-align: left;
+  box-shadow: var(--shadow);
+  border-radius: var(--bradius);
+}
+
+.vue-treeselect__value-container{
+  height: 3rem;
 }
 .p-dropdown:hover,
-.p-cascadeselect:hover {
+.vue-treeselect:hover {
   border: 0.1rem solid black;
 }
 
 @media (min-width: 780px) {
   .p-dropdown,
-  .p-cascadeselect,
-  .p-cascadeselect-item-content {
+  .vue-treeselect__control,
+  .vue-treeselect__value-container
+  {
     height: 4rem;
   }
   .p-dropdown *,
-  .p-cascadeselect *,
   .p-dropdown-item-label,
-  .p-cascadeselect-item-content {
+  .vue-treeselect__control * {
     font-size: 2rem;
   }
 }

@@ -36,7 +36,7 @@
             <img w-2rem src="/img/mail.svg">
             {{ props.mail }}
         </div>
-        <div v-if="props.group" font-size-1.5rem flex gap-1rem>
+        <div v-if="props.group && props.group !=='null'" font-size-1.5rem flex gap-1rem>
             <img w-2rem src="/img/group.svg">
             {{ props.group }}
         </div>

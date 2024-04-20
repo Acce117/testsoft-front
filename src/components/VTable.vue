@@ -41,7 +41,7 @@ th, tr{
 .table__header {
   display: flex;
   align-items: center;
-  justify-content: end;
+  justify-content: start;
   gap: 2rem;
   padding: 1rem;
 }

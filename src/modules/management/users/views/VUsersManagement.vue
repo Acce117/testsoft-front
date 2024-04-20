@@ -6,7 +6,7 @@
       :size="'large'"
       showGridlines
       striped-rows
-      :rows="8"
+      :rows="6"
       paginator
       v-model:filters="filters"
       v-model:editingRows="editingRows"
@@ -16,49 +16,60 @@
     >
       <template #header>
         <div class="table__header">
-          <VBlackButton
-            @click="addDialog = true"
-            v-tooltip.left="t('global.add')"
-          >
-            <img  src="/img/add_user.svg" />
-          </VBlackButton>
+          
           <input
             v-model="filters['global'].value"
             :placeholder="t('global.find') + '...'"
             type="text"
             shadow-box
           />
+          <VBlackButton
+            @click="addDialog = true"
+            v-tooltip.top="t('global.add')"
+          >
+            <img  src="/img/add_user.svg" />
+          </VBlackButton>
         </div>
       </template>
-      <Column field="CI" :header="t('users.ci')">
+      <Column field="user.CI" :header="t('users.ci')">
         <template #editor="slotProps">
-          <input type="text" v-model="slotProps.data.CI" w-full /> </template
+          <input type="text" v-model="slotProps.data.user.CI" w-full /> </template
       ></Column>
-      <Column field="name" :header="t('users.name')"></Column>
-      <Column field="last_name" :header="t('users.lastname')"></Column>
-      <Column field="username" :header="t('users.username')"></Column>
-      <Column field="email" :header="t('users.email')"></Column>
-      <Column field="sex" :header="t('users.sex')"></Column>
-      <Column field="user_type" :header="t('users.usertype')"></Column>
+      <Column field="user.name" :header="t('users.name')">
+        <template #editor="slotProps">
+          <input type="text" v-model="slotProps.data.user.name" w-full /> </template>
+      </Column>
+      <Column field="user.last_name" :header="t('users.lastname')">
+        <template #editor="slotProps">
+          <input type="text" v-model="slotProps.data.user.last_name" w-full /> </template>
+      </Column>
+      <Column field="user.username" :header="t('users.username')"></Column>
+      <Column field="user.email" :header="t('users.email')"></Column>
+      <Column field="user.sex" :header="t('users.sex')"></Column>
+      <Column field="student_group.name_group" :header="t('users.group')"></Column>
+
       <Column :header="t('global.edit')" :rowEditor="true"></Column>
       <Column :header="t('global.delete')">
+        
         <template #body="slotProps">
-          <div pa-1rem centered>
+          <div  pa-.5rem centered>
             <button
               class="p-ripple"
+              v-if="slotProps.data.deleted==0"
               v-ripple
-              @click="confirmDelete(slotProps.data, $event)"
+              @click="confirmDelete(slotProps.data.id_student, $event)"
               bg-white
             >
+            
               <img src="/img/delete.svg" w-3rem filter-invert cursor-pointer />
             </button>
+            <span v-else>{{ $t('global.deleted') }}</span>
           </div>
         </template>
       </Column>
 
       <template #empty>{{ $t("global.no-results") }} </template>
     </DataTable>
-    {{ result }}
   </VTable>
 
   <VAddUserDialog v-model="addDialog" />
@@ -68,7 +79,7 @@ import VTable from "@/components/VTable.vue";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import { FilterMatchMode } from "primevue/api";
-import { getUsers, deleteUser } from "../users";
+import { getUsers, deleteUser, updateUser, addUser } from "../users";
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { userStore } from "@/modules/security/store/user-store";
@@ -81,7 +92,7 @@ const editingRows = ref([]);
 const filters = ref({
   global: { value: null, matchMode: FilterMatchMode.CONTAINS },
 });
-const confirmDelete = (userToDelete: any, event: any) => {
+const confirmDelete = (id: string, event: any) => {
   confirm.require({
     group: "popup",
     target: event.currentTarget,
@@ -89,20 +100,14 @@ const confirmDelete = (userToDelete: any, event: any) => {
     rejectLabel: t("global.cancel"),
     acceptLabel: t("global.confirm"),
     accept: () => {
-      deleteUser(userToDelete, result);
+      deleteUser(id, result);
     },
   });
 };
-const onRowEditSave = (event) => {
+const onRowEditSave = (event:any) => {
   let { newData, index } = event;
-  console.log(event);
-  result.value[index] = newData;
-};
-const loadLazyData = (event) => {
-  const request = getUsers();
-  //lazyParams.value = { ...lazyParams.value, first: event?.first || first.value };
-  result.value = request.result;
-  loading.value = request.loading;
+  console.log(newData)
+  updateUser(result.value[index].fk_CI, newData.user, ()=>result.value[index] = newData)
 };
 const addDialog = ref(false);
 </script>

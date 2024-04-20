@@ -100,7 +100,13 @@
         }
     },
     "profile": {
-        "title": "Mi perfil"
+        "title": "Mi perfil",
+        "dialogs": {
+            "close-session": {
+                "header": "Salir",
+                "message": "¿Desea cerrar sesión?"
+            }
+        }
     },
     "info": {
         "developers":"Desarrolladores",
@@ -120,6 +126,7 @@
         "confirm": "Aceptar",
         "cancel": "Cancelar",
         "delete": "Eliminar",
+        "deleted": "Eliminado",
         "edit":"Editar",
         "find": "Buscar",
         "add": "Añadir",
@@ -130,7 +137,8 @@
         "info": "Información",
         "no-results": "No se encontraron resultados",
         "loading": "Cargando", 
-        "not-authorized":"Usted no está autorizado"
+        "not-authorized":"Usted no está autorizado",
+        "language":"Idioma"
     },
     "users": {
         "title": "Usuarios",
@@ -153,9 +161,7 @@
             "compatibility": "Compatibilidades",
             "results": "Ver Resultados"
         },
-        "assign-test": {
-            "name": "Asignar Test"
-        },
+        
         "create": "Crear Test",
         "info": {
             "name": "Info"
@@ -170,7 +176,14 @@
             }
         },
         "users": {
-            "name": "Usuarios"
+            "name": "Usuarios",
+            "manage-users":"Gestionar Usuarios"
+        },
+        "groups": {
+            "name": "Grupos",
+            "manage-groups":"Gestionar Grupos",
+            "assign-test":"Asignar Test"
+            
         }
     },
     "error": {

@@ -4,11 +4,12 @@ import { userStore } from "../../store/user-store";
 const user = userStore();
 </script>
 <template>
+  
   <h2 class="page-title">{{ $t("profile.title") }}</h2>
   <VUserCard
     m-auto
     mt-10rem
-    :name="user.name + ' ' + user.last_name"
+    :name="user.name"
     :role="user.role"
     :id="user.ci"
     :username="user.username"
@@ -16,6 +17,7 @@ const user = userStore();
     lg:scale-125
     w-30vw
   />
+  
   
 </template>
 <style></style>

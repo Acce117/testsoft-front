@@ -13,7 +13,7 @@
   >
     <img src="/img/language.svg" w-3rem alt="language" />
   </div>
-  <Dialog v-model:visible="languageChangerVisible" modal header="Idioma">
+  <Dialog v-model:visible="languageChangerVisible" modal :header="t('global.language')">
     <Listbox
       v-model="$i18n.locale"
       :options="$i18n.availableLocales"
@@ -43,6 +43,8 @@
 import { ref } from "vue";
 import Dialog from "primevue/dialog";
 import Listbox from "primevue/listbox";
+import { useI18n } from "vue-i18n";
 const languageChangerVisible = ref(false);
+const { t } = useI18n();
+
 </script>
-<style></style>
