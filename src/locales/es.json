@@ -138,7 +138,9 @@
         "no-results": "No se encontraron resultados",
         "loading": "Cargando", 
         "not-authorized":"Usted no está autorizado",
-        "language":"Idioma"
+        "language":"Idioma",
+        "completed": "Operación completada satisfactoriamente",
+        "failed":"Operación fallida"
     },
     "users": {
         "title": "Usuarios",
@@ -151,7 +153,8 @@
         "sex": "Sexo",
         "role": "Rol",
         "usertype": "Tipo de Usuario",
-        "group": "Grupo"
+        "group": "Grupo",
+        "add":"Inserte los datos del nuevo usuario"
     },
     "navbar": {
         "test": {

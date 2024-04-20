@@ -2,6 +2,7 @@
   <Dialog v-model:visible="visible" modal :header="t('global.add')" w-80rem>
     <form
       class="p-confirm-dialog-message"
+      @submit.prevent="addUser(newUser, props.users)"
       flex
       flex-wrap
       w-80rem
@@ -9,14 +10,13 @@
       h-50rem
       data-pc-section="message"
     >
-      <h3 w-full>Inserte los datos del nuevo usuario:</h3>
+      <h3 w-full>{{ $t("users.add") }}</h3>
       <VInput id="name" v-model="newUser.name" text="users.name" />
 
-      <VInput id="lastname" v-model="newUser.lastname" text="users.lastname" />
+      <VInput id="lastname" v-model="newUser.last_name" text="users.lastname" />
       <VInput
         id="ci"
-        v-on:keydown="if(!(new RegExp('/^[\d\b]').test($event.key)) )$event.preventDefault();"
-        v-model="newUser.ci"
+        v-model="newUser.CI"
         text="users.ci"
         :validation="validateCI"
       />
@@ -35,9 +35,8 @@
         text="users.password"
       />
 
-     
       <Treeselect
-        v-model="newUser.group"
+        v-model="newUser.fk_id_group"
         :options="result"
         :placeholder="t('users.group')"
         :clearable="false"
@@ -54,7 +53,7 @@
         <button black-button type="button" @click="visible = false">
           {{ $t("global.cancel") }}
         </button>
-        <button black-button :class="{ 'p-disabled': true }" type="submit">
+        <button black-button :class="{ 'p-disabled': false }" type="submit">
           {{ $t("global.add") }}
         </button>
       </div>
@@ -63,21 +62,25 @@
 </template>
 <script setup lang="ts">
 import { ref } from "vue";
-import Treeselect from 'vue3-treeselect'
-import 'vue3-treeselect/dist/vue3-treeselect.css'
+import Treeselect from "vue3-treeselect";
+import "vue3-treeselect/dist/vue3-treeselect.css";
 import Dialog from "primevue/dialog";
 import { useI18n } from "vue-i18n";
 import { watch } from "vue";
 import { validateEmail } from "@/common/utils/validations";
 import { validateCI } from "@/common/utils/validations";
+import { addUser } from "../../users";
+
+const props = defineProps({
+  users: Array,
+});
 
 const { t } = useI18n();
 const visible = defineModel();
 //const {result, loading, error}
 const loading = false;
 const error = false;
-const selectGroup=(node:any)=>{
-}
+const selectGroup = (node: any) => {};
 const result = ref([
   {
     label: "Australia",
@@ -155,31 +158,31 @@ const result = ref([
   },
 ]);
 const newUser = ref({
+  CI:"",
   name: "",
   username: "",
-  lastname: "",
+  last_name: "",
   password: "",
-  ci: "",
   email: "",
   sex: "",
-  group:null
+  user_type:"student",
+  fk_CI: "",
+  fk_id_group:"57",
+  deleted:0,
 });
-
 </script>
 <style>
 .p-dropdown *,
 .p-dropdown-item-label,
-
 .vue-treeselect * {
   font-size: 1.5rem;
   color: black;
 }
 
-.vue-treeselect{
+.vue-treeselect {
   border: 0.1rem solid transparent;
   border-radius: var(--bradius);
-  transition: border ease .2s;
-
+  transition: border ease 0.2s;
 }
 .vue-treeselect__control {
   height: 3rem;
@@ -188,7 +191,7 @@ const newUser = ref({
   border-radius: var(--bradius);
 }
 
-.vue-treeselect__value-container{
+.vue-treeselect__value-container {
   height: 3rem;
 }
 .p-dropdown:hover,
@@ -199,8 +202,7 @@ const newUser = ref({
 @media (min-width: 780px) {
   .p-dropdown,
   .vue-treeselect__control,
-  .vue-treeselect__value-container
-  {
+  .vue-treeselect__value-container {
     height: 4rem;
   }
   .p-dropdown *,

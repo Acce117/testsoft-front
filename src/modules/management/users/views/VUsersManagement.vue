@@ -33,6 +33,7 @@
       </template>
       <Column field="user.CI" :header="t('users.ci')">
         <template #editor="slotProps">
+          
           <input type="text" v-model="slotProps.data.user.CI" w-full /> </template
       ></Column>
       <Column field="user.name" :header="t('users.name')">
@@ -57,7 +58,7 @@
               class="p-ripple"
               v-if="slotProps.data.deleted==0"
               v-ripple
-              @click="confirmDelete(slotProps.data.id_student, $event)"
+              @click="confirmDelete(slotProps.data, $event)"
               bg-white
             >
             
@@ -72,7 +73,7 @@
     </DataTable>
   </VTable>
 
-  <VAddUserDialog v-model="addDialog" />
+  <VAddUserDialog v-model="addDialog" :users="result"/>
 </template>
 <script setup lang="ts">
 import VTable from "@/components/VTable.vue";
@@ -92,7 +93,7 @@ const editingRows = ref([]);
 const filters = ref({
   global: { value: null, matchMode: FilterMatchMode.CONTAINS },
 });
-const confirmDelete = (id: string, event: any) => {
+const confirmDelete = (user:any, event: any) => {
   confirm.require({
     group: "popup",
     target: event.currentTarget,
@@ -100,7 +101,7 @@ const confirmDelete = (id: string, event: any) => {
     rejectLabel: t("global.cancel"),
     acceptLabel: t("global.confirm"),
     accept: () => {
-      deleteUser(id, result);
+      deleteUser(user);
     },
   });
 };

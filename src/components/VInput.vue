@@ -8,7 +8,7 @@
       bg-white
       rd-1rem
       w-25rem
-      mb-.5rem
+      mb-1.3rem
       @input="canValidate=true"
       :class="{ 'invalid-input': canValidate?!validate():false }"
     />
