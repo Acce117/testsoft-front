@@ -1,18 +1,19 @@
 <template>
   <h2 page-title>{{ $t("users.title") }}</h2>
-  <VTable :error="error" :loading="loading">
+  <VTable :error="error" :loading="loading" >
     <DataTable
       :value="result"
       :size="'large'"
       showGridlines
       striped-rows
-      :rows="6"
+      :rows="9"
       paginator
       v-model:filters="filters"
       v-model:editingRows="editingRows"
       filterDisplay="row"
       editMode="row"
       @row-edit-save="onRowEditSave"
+      h-50rem
     >
       <template #header>
         <div class="table__header">
@@ -31,13 +32,7 @@
         </div>
       </template>
       <Column field="user.CI" :header="t('users.ci')">
-        <template #editor="slotProps">
-          <input
-            type="text"
-            v-model="slotProps.data.user.CI"
-            w-full
-          /> </template
-      ></Column>
+       </Column>
       <Column field="user.name" :header="t('users.name')">
         <template #editor="slotProps">
           <input type="text" v-model="slotProps.data.user.name" w-full />
@@ -67,7 +62,15 @@
       <Column field="user.sex" :header="t('users.sex')"></Column>
       <Column field="student_group.name_group" :header="t('users.group')">
         <template #editor="slotProps">
-          <TreeSelect type="text" v-model="slotProps.data.user.last_name" w-full />
+          <TreeSelect
+            v-model="slotProps.data.user.fk_id_group"
+            w-full
+        :options="groups"
+        :clearable="false"
+        :multiple="false"
+        :flat="true"
+        :disable-branch-nodes="true"
+        :searchable="false"          />
         </template>
       </Column>
 
@@ -92,8 +95,7 @@
       <template #empty>{{ $t("global.no-results") }} </template>
     </DataTable>
   </VTable>
-
-  <VAddUserDialog v-model="addDialog" :users="result" />
+  <VAddUserDialog v-model="addDialog" :users="result" :groups="groups"/>
 </template>
 <script setup lang="ts">
 import VTable from "@/components/VTable.vue";
@@ -105,9 +107,11 @@ import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useConfirm } from "primevue/useconfirm";
 import VAddUserDialog from "./dialogs/VAddUserDialog.vue";
+import { useSendRequest } from "@/common/utils/fetch";
 const confirm = useConfirm();
 const { t } = useI18n();
 const { result, loading, error } = getUsers();
+const groups = useSendRequest(true, `${import.meta.env.VITE_API_PATH}/gestion/group`).result
 const editingRows = ref([]);
 const filters = ref({
   global: { value: null, matchMode: FilterMatchMode.CONTAINS },

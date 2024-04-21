@@ -1,5 +1,5 @@
 <template>
-  <Dialog v-model:visible="visible" modal :header="t('global.add')" w-80rem>
+  <Dialog v-model:visible="visible" modal :header="t('global.add')" w-80rem h-60rem>
     <form
       class="p-confirm-dialog-message"
       @submit.prevent="
@@ -68,7 +68,7 @@
 
       <Treeselect
         v-model="newUser.fk_id_group"
-        :options="result"
+        :options="groups"
         :placeholder="t('users.group')"
         :clearable="false"
         :multiple="false"
@@ -106,20 +106,20 @@ import { validateEmail } from "@/common/utils/validations";
 import { validateCI } from "@/common/utils/validations";
 import { addUser } from "../../users";
 import { validateEmptyString } from "@/common/utils/validations";
+import { useSendRequest } from "@/common/utils/fetch";
 
 const props = defineProps({
   users: {
     type: Array,
     required: true,
   },
+  groups:Array
 });
 
 const { t } = useI18n();
 const visible = defineModel();
-//const {result, loading, error}
-const loading = false;
-const error = false;
-const selectGroup = (node: any) => {};
+
+
 const validateID = (text: string) => {
   userValidity.value.CI = false;
   newUser.value.CI = newUser.value.CI.replace(/[^0-9]/g, "");
@@ -149,7 +149,7 @@ const newUser = ref({
   sex: "",
   user_type: "student",
   fk_CI: "",
-  fk_id_group: "57",
+  fk_id_group: null,
   deleted: 0,
 });
 
@@ -196,82 +196,7 @@ watch(visible, (newValue) => {
     };
   }
 });
-const result = ref([
-  {
-    label: "Australia",
-    id: "AU",
-    data: "Australia",
-    children: [
-      {
-        label: "New South Wales",
-        data: "New South Wales",
-        children: [
-          { label: "Sydney", id: "A-SY" },
-          { label: "Newcastle", id: "A-NE" },
-          { label: "Wollongong", id: "A-WO" },
-        ],
-      },
-      {
-        label: "Queensland",
-        children: [
-          { label: "Brisbane", id: "A-BR" },
-          { label: "Townsville", id: "A-TO" },
-        ],
-      },
-    ],
-  },
-  {
-    label: "Canada",
-    id: "CA",
-    children: [
-      {
-        label: "Quebec",
-        children: [
-          { label: "Montreal", id: "C-MO" },
-          { label: "Quebec City", id: "C-QU" },
-        ],
-      },
-      {
-        label: "Ontario",
-        children: [
-          { label: "Ottawa", id: "C-OT" },
-          { label: "Toronto", id: "C-TO" },
-        ],
-      },
-    ],
-  },
-  {
-    label: "United States",
-    id: "US",
-    children: [
-      {
-        label: "California",
-        cities: [
-          { label: "Los Angeles", id: "US-LA" },
-          { label: "San Diego", id: "US-SD" },
-          { label: "San Francisco", id: "US-SF" },
-        ],
-      },
-      {
-        label: "Florida",
-        children: [
-          { label: "Jacksonville", id: "US-JA" },
-          { label: "Miami", id: "US-MI" },
-          { label: "Tampa", id: "US-TA" },
-          { label: "Orlando", id: "US-OR" },
-        ],
-      },
-      {
-        label: "Texas",
-        children: [
-          { label: "Austin", id: "US-AU" },
-          { label: "Dallas", id: "US-DA" },
-          { label: "Houston", id: "US-HO" },
-        ],
-      },
-    ],
-  },
-]);
+
 </script>
 <style>
 .p-dropdown *,
