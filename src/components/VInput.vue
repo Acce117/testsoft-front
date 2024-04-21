@@ -5,6 +5,8 @@
       :type="props.type"
       required
       v-model="model"
+      :maxlength="props.max"
+      :minlength="props.min"
       bg-white
       rd-1rem
       w-25rem
@@ -23,6 +25,8 @@ const props = defineProps({
   id: String,
   type: String,
   text: { type: String, required: true },
+  max:Number,
+  min:Number,
   validation: {
     type: Function,
     default: function (text: String) {
@@ -32,12 +36,13 @@ const props = defineProps({
 });
 const error = ref('Error')
 let canValidate = ref(false)
-const emit = defineEmits(["invalid"]);
+const emit = defineEmits(["invalid","valid"]);
 const model = defineModel();
 const validate = () => {
   let isValid = true;
   try{
     props.validation(model.value)
+    emit("valid");
   }catch (e:any){
     emit("invalid");
     isValid = false;

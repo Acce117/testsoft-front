@@ -77,7 +77,6 @@ const itemsAnalist = [
       {
         label: " ",
         i18n: "assign-test",
-        command: () => router.push("/assign-test"),
       },
       {
         label: " ",

@@ -140,7 +140,8 @@
         "not-authorized":"Usted no está autorizado",
         "language":"Idioma",
         "completed": "Operación completada satisfactoriamente",
-        "failed":"Operación fallida"
+        "failed":"Operación fallida",
+        "confirm-delete":"¿Desea eliminar el elemento?"
     },
     "users": {
         "title": "Usuarios",
@@ -155,6 +156,8 @@
         "usertype": "Tipo de Usuario",
         "group": "Grupo",
         "add":"Inserte los datos del nuevo usuario"
+            
+         
     },
     "navbar": {
         "test": {
@@ -191,6 +194,10 @@
     },
     "error": {
         "empty": "El campo no puede estar vacío",
-        "email": "El dato introducido no es un correo"
+        "email": "El dato introducido no es un correo",
+        "ci":"El carnet no es correcto",
+        "ci_date":"La fecha no es correcta",
+        "existent_ci":"Este carnet ya existe",
+        "existent_username":"Este nombre de usuario ya existe"
     }
 }

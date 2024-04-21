@@ -7,7 +7,7 @@
       {{ $t("home.option5") }}
     </button>
 
-    <button class="presentation__button" white-button @click="router.push('/assign-test')">
+    <button class="presentation__button" white-button >
       <img src="/img/assign_test.svg" />
       {{ $t("home.option6") }}
     </button>

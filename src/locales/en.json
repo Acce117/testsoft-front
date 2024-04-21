@@ -65,53 +65,133 @@
             "2": "You must select an answer",
             "5": "There are points to be assigned yet",
             "in-question": "in the question"
+        }
+    },
+    "results": {
+        "title": "Results",
+        "info": "On this screen, you can check the results of your tests. Press the left arrow of a row to show the general results of the corresponding test, or the button on the right to view the final results. Use the buttons in the header to display results of all tests or hide them.",
+        "show-all": "Show All",
+        "hide-all": "Hide All",
+        "final-results": "View Final Results",
+        "results-of": "Results of",
+        "date": "Date",
+        "test": "Test",
+        "name": "Name",
+        "value": "Value",
+        "global-result": "Global Result",
+        "dialogs": {},
+        "all-elements-top-values": {
+            "preferred": "Preferred",
+            "avoided": "Avoided"
         },
-        "results": {
-            "title": "Results",
-            "info": "On this screen, you can check the results of your tests. Press the left arrow of a row to show the general results of the corresponding test, or the button on the right to view the final results. Use the buttons in the header to display results of all tests or hide them.",
-            "show-all": "Show All",
-            "hide-all": "Hide All",
-            "final-results": "View Final Results",
-            "results-of": "Results of",
-            "date": "Date",
-            "test": "Test",
-            "name": "Name",
-            "value": "Value",
-            "global-result": "Global Result",
-            "dialogs": {},
-            "all-elements-top-values": {
-                "preferred": "Preferred",
-                "avoided": "Avoided"
-            },
-            "by-category": {
-                "1": "In the category",
-                "2": "you are characterized by",
-                "3": "with a score of",
-                "4": "which is considered a value",
-                "5": "The element",
-                "6": "consists of",
-                "7": "Category Description"
-            },
-            "by-element": {
-                "1": "With",
-                "2": "points"
-            }
+        "by-category": {
+            "1": "In the category",
+            "2": "you are characterized by",
+            "3": "with a score of",
+            "4": "which is considered a value",
+            "5": "The element",
+            "6": "consists of",
+            "7": "Category Description"
         },
-        "profile": {
-            "title": "My Profile",
-            "dialogs": {
-                "close-session": {
-                    "header": "Logout",
-                    "message": "Do you want to log out?"
-                }
-            }
-        },
-        "info": {
-            "developers": "Developers",
-            "roles": {
-                "project_manager": "Project Manager",
-                "developer": "Developer"
+        "by-element": {
+            "1": "With",
+            "2": "points"
+        }
+    },
+    "profile": {
+        "title": "My Profile",
+        "dialogs": {
+            "close-session": {
+                "header": "Logout",
+                "message": "Do you want to log out?"
             }
         }
+    },
+    "info": {
+        "developers": "Developers",
+        "roles": {
+            "project_manager": "Project Manager",
+            "developer": "Developer"
+        }
+    },
+    "global": {
+        "export": {
+            "title": "Export",
+            "message": "Do you want to export the results to PDF?",
+            "correct": "PDF exported successfully",
+            "error": "Error exporting"
+        },
+        "confirm": "Confirm",
+        "cancel": "Cancel",
+        "delete": "Delete",
+        "deleted": "Deleted",
+        "edit": "Edit",
+        "find": "Search",
+        "add": "Add",
+        "error": "Something went wrong",
+        "resend": "Resend Test",
+        "execute": "Execute",
+        "warning": "Warning",
+        "info": "Information",
+        "no-results": "No results found",
+        "loading": "Loading",
+        "not-authorized": "You are not authorized",
+        "language": "Language",
+        "completed": "Operation completed successfully",
+        "failed": "Operation failed",
+        "confirm-delete": "Do you want to delete the item?"
+    },
+    "users": {
+        "title": "Users",
+        "name": "Name",
+        "lastname": "Lastname",
+        "ci": "ID Card",
+        "username": "Username",
+        "password": "Password",
+        "email": "Email",
+        "sex": "Sex",
+        "role": "Role",
+        "usertype": "User Type",
+        "group": "Group",
+        "add": "Enter the data for the new user"
+    },
+    "navbar": {
+        "test": {
+            "name": "Test",
+            "execute": "Run Test",
+            "roles": "Roles",
+            "compatibility": "Compatibility",
+            "results": "View Results"
+        },
+        "create": "Create Test",
+        "info": {
+            "name": "Info"
+        },
+        "profile": {
+            "name": "Profile",
+            "user": "User",
+            "close-session": "Close Session",
+            "dialogs": {
+                "header": "Logout",
+                "message": "Do you want to logout?"
+            }
+        },
+        "users": {
+            "name": "Users",
+            "manage-users": "Manage Users"
+        },
+        "groups": {
+            "name": "Groups",
+            "manage-groups": "Manage Groups",
+            "assign-test": "Assign Test"
+        }
+    },
+    "error": {
+        "empty": "Field cannot be empty",
+        "email": "The data entered is not an email",
+        "ci": "ID number is incorrect",
+        "ci_date": "Date is incorrect",
+        "existent_ci": "This ID number already exists",
+        "existent_username": "This username already exists"
     }
 }
