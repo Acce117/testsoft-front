@@ -13,7 +13,7 @@
       filterDisplay="row"
       editMode="row"
       @row-edit-save="onRowEditSave"
-      h-50rem
+      min-h-50rem
     >
       <template #header>
         <div class="table__header">
