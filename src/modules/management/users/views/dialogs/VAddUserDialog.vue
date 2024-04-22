@@ -77,7 +77,7 @@
         :searchable="false"
         w-25rem
         mb-1rem
-        v-on:select="userValidity.fk_id_group = true"
+        v-on:select="onGroupSelected"
       />
 
       <div class="p-dialog-footer" w-full>
@@ -119,7 +119,11 @@ const props = defineProps({
 const { t } = useI18n();
 const visible = defineModel();
 
-
+const onGroupSelected = (node)=>{
+  console.log(node)
+  newUser.value.name_group = node.label
+  userValidity.value.fk_id_group = true; 
+}
 const validateID = (text: string) => {
   userValidity.value.CI = false;
   newUser.value.CI = newUser.value.CI.replace(/[^0-9]/g, "");
@@ -150,6 +154,7 @@ const newUser = ref({
   user_type: "student",
   fk_CI: "",
   fk_id_group: null,
+  name_group:null,
   deleted: 0,
 });
 

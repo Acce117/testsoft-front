@@ -1,6 +1,6 @@
 <template>
   <h2 page-title>{{ $t("users.title") }}</h2>
-  <VTable :error="error" :loading="loading" >
+  <VTable :error="error" :loading="loading">
     <DataTable
       :value="result"
       :size="'large'"
@@ -31,8 +31,7 @@
           </VBlackButton>
         </div>
       </template>
-      <Column field="user.CI" :header="t('users.ci')">
-       </Column>
+      <Column field="fk_CI" :header="t('users.ci')"> </Column>
       <Column field="user.name" :header="t('users.name')">
         <template #editor="slotProps">
           <input type="text" v-model="slotProps.data.user.name" w-full />
@@ -62,15 +61,18 @@
       <Column field="user.sex" :header="t('users.sex')"></Column>
       <Column field="student_group.name_group" :header="t('users.group')">
         <template #editor="slotProps">
-          <TreeSelect
-            v-model="slotProps.data.user.fk_id_group"
-            w-full
-        :options="groups"
-        :clearable="false"
-        :multiple="false"
-        :flat="true"
-        :disable-branch-nodes="true"
-        :searchable="false"          />
+          <Treeselect
+            v-model="slotProps.data.fk_id_group"
+            w-15rem
+            :options="groups"
+            :clearable="false"
+            :multiple="false"
+            :flat="true"
+            :disable-branch-nodes="true"
+            :searchable="false"
+            v-on:select="(node:any)=>onGroupSelected(node,slotProps.data)"
+
+          />
         </template>
       </Column>
 
@@ -94,10 +96,13 @@
 
       <template #empty>{{ $t("global.no-results") }} </template>
     </DataTable>
+    
   </VTable>
-  <VAddUserDialog v-model="addDialog" :users="result" :groups="groups"/>
+  
+  <VAddUserDialog v-model="addDialog" :users="result" :groups="groups" />
 </template>
 <script setup lang="ts">
+import Treeselect from "vue3-treeselect";
 import VTable from "@/components/VTable.vue";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
@@ -111,7 +116,13 @@ import { useSendRequest } from "@/common/utils/fetch";
 const confirm = useConfirm();
 const { t } = useI18n();
 const { result, loading, error } = getUsers();
-const groups = useSendRequest(true, `${import.meta.env.VITE_API_PATH}/gestion/group`).result
+const onGroupSelected = (node:any, user:any)=>{
+  user.student_group.name_group = node.label
+}
+const groups = useSendRequest(
+  true,
+  `${import.meta.env.VITE_API_PATH}/gestion/group`
+).result;
 const editingRows = ref([]);
 const filters = ref({
   global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -130,8 +141,10 @@ const confirmDelete = (user: any, event: any) => {
 };
 const onRowEditSave = (event: any) => {
   let { newData, index } = event;
-  console.log(newData);
-  updateUser(newData, () => (result.value[index] = newData));
+  updateUser(
+    { id_student: newData.id_student, student: { email: newData.email } },
+    () => (result.value[index] = newData)
+  );
 };
 const addDialog = ref(false);
 </script>

@@ -44,7 +44,6 @@ export function addUser(userToAdd: any, users: any, cb: Function) {
   userToAdd.sex = parseInt(userToAdd.CI.charAt(9)) % 2 == 0 ? 'M' : 'F'
   const url = `${import.meta.env.VITE_API_PATH}/gestion/student/create`;
   const request = useSendRequest()
-  console.log(users)
   request.sendRequest(url, userToAdd, "POST", () => {
     validateRequest(request.error.value, () => {
       users.push({
@@ -56,6 +55,10 @@ export function addUser(userToAdd: any, users: any, cb: Function) {
           email: userToAdd.email,
           sex: userToAdd.sex,
           user_type: userToAdd.user_type,
+          student_group:{
+            id_student_group:userToAdd.fk_id_group,
+            name_group:userToAdd.name_group
+          }
         },
         fk_CI: userToAdd.CI,
         fk_id_group: userToAdd.fk_id_group,
@@ -67,7 +70,6 @@ export function addUser(userToAdd: any, users: any, cb: Function) {
 }
 export function updateUser(userToModify: any, cb: any) {
   console.log(userToModify)
-  userToModify.user.sex = parseInt(userToModify.fk_CI.charAt(9)) % 2 == 0 ? 'M' : 'F'
   const url = `${import.meta.env.VITE_API_PATH}/gestion/student/update/${userToModify.id_student}`;
   const request = useSendRequest()
   request.sendRequest(url, userToModify, "PATCH", () => {
