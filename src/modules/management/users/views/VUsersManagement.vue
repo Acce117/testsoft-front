@@ -34,28 +34,33 @@
       <Column field="fk_CI" :header="t('users.ci')"> </Column>
       <Column field="user.name" :header="t('users.name')">
         <template #editor="slotProps">
-          <input type="text" v-model="slotProps.data.user.name" w-full />
+          <VInputTable
+            id="name-table"
+            v-model="slotProps.data.user.name"
+          /> 
         </template>
       </Column>
       <Column field="user.last_name" :header="t('users.lastname')">
         <template #editor="slotProps">
-          <input type="text" v-model="slotProps.data.user.last_name" w-full />
+          <VInputTable
+            id="lastname-table"
+            v-model="slotProps.data.user.last_name"
+          /> 
+        
         </template>
       </Column>
       <Column field="user.username" :header="t('users.username')"
         ><template #editor="slotProps">
-          <input
-            type="text"
+          <VInputTable
+            id="lastname-table"
             v-model="slotProps.data.user.username"
-            w-full
           /> </template
       ></Column>
       <Column field="user.email" :header="t('users.email')"
         ><template #editor="slotProps">
-          <input
-            type="text"
+         <VInputTable
+            id="email-table"
             v-model="slotProps.data.user.email"
-            w-full
           /> </template
       ></Column>
       <Column field="user.sex" :header="t('users.sex')"></Column>
@@ -71,7 +76,6 @@
             :disable-branch-nodes="true"
             :searchable="false"
             v-on:select="(node:any)=>onGroupSelected(node,slotProps.data)"
-
           />
         </template>
       </Column>
@@ -96,13 +100,13 @@
 
       <template #empty>{{ $t("global.no-results") }} </template>
     </DataTable>
-    
   </VTable>
-  
+
   <VAddUserDialog v-model="addDialog" :users="result" :groups="groups" />
 </template>
 <script setup lang="ts">
 import Treeselect from "vue3-treeselect";
+import VInputTable from "@/components/VInputTable.vue"
 import VTable from "@/components/VTable.vue";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
@@ -116,9 +120,9 @@ import { useSendRequest } from "@/common/utils/fetch";
 const confirm = useConfirm();
 const { t } = useI18n();
 const { result, loading, error } = getUsers();
-const onGroupSelected = (node:any, user:any)=>{
-  user.student_group.name_group = node.label
-}
+const onGroupSelected = (node: any, user: any) => {
+  user.student_group.name_group = node.label;
+};
 const groups = useSendRequest(
   true,
   `${import.meta.env.VITE_API_PATH}/gestion/group`
@@ -141,8 +145,9 @@ const confirmDelete = (user: any, event: any) => {
 };
 const onRowEditSave = (event: any) => {
   let { newData, index } = event;
+  console.log(newData);
   updateUser(
-    { id_student: newData.id_student, student: { email: newData.email } },
+    { id_student: newData.id_student, Student: { email: newData.user.email } },
     () => (result.value[index] = newData)
   );
 };

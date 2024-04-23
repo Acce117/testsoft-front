@@ -8,6 +8,7 @@ export interface UserInterface {
     role: [],
     userType: '',
     group: '',
+    groupName:'',
     assignedTests:Array<{id:string, availabilityTime:Date}>
 }
 
@@ -24,6 +25,7 @@ export const userStore = defineStore('user', {
                 role: [],
                 userType: '',
                 group: '',
+                groupName:'',
                 assignedTests:[]
             }
 

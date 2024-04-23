@@ -34,7 +34,7 @@ export const siteStore = defineStore('site', {
                     TokenHandler.storeRefreshToken(request.result.value.refreshToken);
                     TokenHandler.storeToken(request.result.value.token);
 
-                    const user = this.loadUser();        
+                    const user = this.loadUser(); 
                     userStore().$patch(user);
                     useEvents().dispatch('redirect', '/');
                 } else {

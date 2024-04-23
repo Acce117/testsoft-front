@@ -1,5 +1,6 @@
 @import url(./animations.css);
 @import url(./dialog.css);
+@import url(./tree-select.css);
 @layer reset, primevue;
 @import url(./primevue-modified.css);
 

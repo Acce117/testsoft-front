@@ -13,7 +13,7 @@ const user = userStore();
     :role="user.role"
     :id="user.ci"
     :username="user.username"
-    :group="user.group+''"
+    :group="user.groupName"
     lg:scale-125
     w-30vw
   />

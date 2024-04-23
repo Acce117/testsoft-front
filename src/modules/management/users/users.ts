@@ -55,10 +55,11 @@ export function addUser(userToAdd: any, users: any, cb: Function) {
           email: userToAdd.email,
           sex: userToAdd.sex,
           user_type: userToAdd.user_type,
-          student_group:{
-            id_student_group:userToAdd.fk_id_group,
-            name_group:userToAdd.name_group
-          }
+          
+        },
+        student_group:{
+          id_student_group:userToAdd.fk_id_group,
+          name_group:userToAdd.name_group
         },
         fk_CI: userToAdd.CI,
         fk_id_group: userToAdd.fk_id_group,
@@ -69,10 +70,10 @@ export function addUser(userToAdd: any, users: any, cb: Function) {
   })
 }
 export function updateUser(userToModify: any, cb: any) {
-  console.log(userToModify)
+  console.log(userToModify.Student)
   const url = `${import.meta.env.VITE_API_PATH}/gestion/student/update/${userToModify.id_student}`;
   const request = useSendRequest()
-  request.sendRequest(url, userToModify, "PATCH", () => {
+  request.sendRequest(url, {Student:userToModify.Student}, "PATCH", () => {
     validateRequest(request.error.value, cb)
   })
 }

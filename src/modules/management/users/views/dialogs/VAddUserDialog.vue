@@ -1,5 +1,12 @@
 <template>
-  <Dialog v-model:visible="visible" modal :header="t('global.add')" w-80rem h-60rem>
+  <Dialog
+    v-model:visible="visible"
+    modal
+    :header="t('global.add')"
+    w-31rem
+    md:w-80rem
+    h-52rem
+  >
     <form
       class="p-confirm-dialog-message"
       @submit.prevent="
@@ -11,7 +18,6 @@
       flex-wrap
       w-80rem
       gap-2rem
-      h-50rem
       data-pc-section="message"
     >
       <h3 w-full>{{ $t("users.add") }}</h3>
@@ -106,24 +112,22 @@ import { validateEmail } from "@/common/utils/validations";
 import { validateCI } from "@/common/utils/validations";
 import { addUser } from "../../users";
 import { validateEmptyString } from "@/common/utils/validations";
-import { useSendRequest } from "@/common/utils/fetch";
 
 const props = defineProps({
   users: {
     type: Array,
     required: true,
   },
-  groups:Array
+  groups: Array,
 });
 
 const { t } = useI18n();
 const visible = defineModel();
 
-const onGroupSelected = (node)=>{
-  console.log(node)
-  newUser.value.name_group = node.label
-  userValidity.value.fk_id_group = true; 
-}
+const onGroupSelected = (node: any) => {
+  newUser.value.name_group = node.label;
+  userValidity.value.fk_id_group = true;
+};
 const validateID = (text: string) => {
   userValidity.value.CI = false;
   newUser.value.CI = newUser.value.CI.replace(/[^0-9]/g, "");
@@ -154,7 +158,7 @@ const newUser = ref({
   user_type: "student",
   fk_CI: "",
   fk_id_group: null,
-  name_group:null,
+  name_group: null,
   deleted: 0,
 });
 
@@ -196,51 +200,14 @@ watch(visible, (newValue) => {
       sex: "",
       user_type: "student",
       fk_CI: "",
-      fk_id_group: "57",
+      fk_id_group: null,
+      name_group: null,
       deleted: 0,
     };
   }
 });
-
 </script>
 <style>
-.p-dropdown *,
-.p-dropdown-item-label,
-.vue-treeselect * {
-  font-size: 1.5rem;
-  color: black;
-}
 
-.vue-treeselect {
-  border: 0.1rem solid transparent;
-  border-radius: var(--bradius);
-  transition: border ease 0.2s;
-}
-.vue-treeselect__control {
-  height: 3rem;
-  text-align: left;
-  box-shadow: var(--shadow);
-  border-radius: var(--bradius);
-}
 
-.vue-treeselect__value-container {
-  height: 3rem;
-}
-.p-dropdown:hover,
-.vue-treeselect:hover {
-  border: 0.1rem solid black;
-}
-
-@media (min-width: 780px) {
-  .p-dropdown,
-  .vue-treeselect__control,
-  .vue-treeselect__value-container {
-    height: 4rem;
-  }
-  .p-dropdown *,
-  .p-dropdown-item-label,
-  .vue-treeselect__control * {
-    font-size: 2rem;
-  }
-}
 </style>

@@ -1,0 +1,57 @@
+form .vue-treeselect * {
+  font-size: 1.5rem;
+  color: black;
+}
+form .vue-treeselect__placeholder {
+  display: flex;
+  align-items: center;
+}
+.p-cell-editing .vue-treeselect {
+  border-radius: 0;
+  border: 0.1rem solid black;
+}
+.p-cell-editing .vue-treeselect__control {
+  box-shadow: none;
+  border-radius: 0;
+}
+.p-cell-editing .vue-treeselect__control:focus {
+  animation: none;
+}
+
+form .vue-treeselect {
+  border: 0.1rem solid transparent;
+  border-radius: var(--bradius);
+  transition: border ease 0.2s;
+}
+form .vue-treeselect__control {
+  height: 3rem;
+  text-align: left;
+  box-shadow: var(--shadow);
+  border-radius: var(--bradius);
+}
+
+form .vue-treeselect__value-container {
+  height: 3rem;
+}
+form .vue-treeselect:hover {
+  border: 0.1rem solid black;
+}
+
+@media (min-width: 780px) {
+  form .vue-treeselect__control,
+  form .vue-treeselect__value-container {
+    height: 4rem;
+  }
+
+  form .vue-treeselect__control * {
+    font-size: 2rem;
+  }
+  .p-cell-editing .vue-treeselect * {
+    font-size: 1.5rem;
+  }
+}
+@media (min-width: 1024px) {
+  .p-cell-editing .vue-treeselect * {
+    font-size: 1.8rem;
+  }
+}

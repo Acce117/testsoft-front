@@ -1,13 +1,15 @@
 .p-dialog {
   position: relative;
   width: 31rem;
-  overflow: hidden;
+  overflow: auto;
+
 }
 
 .p-dialog-content {
   margin: 2rem 0;
   overflow: auto;
   display: flex;
+  height: 100%;
 }
 
 .p-confirm-dialog-message,
