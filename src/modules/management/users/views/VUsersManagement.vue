@@ -158,7 +158,6 @@ const onRowEditSave = (event: any) => {
       },
     },
     () => {
-      result.value[index] = newData;
     },
     () => {
       setOldData(newData, oldEditData);
