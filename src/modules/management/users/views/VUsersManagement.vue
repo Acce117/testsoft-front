@@ -164,6 +164,7 @@ const onRowEditSave = (event: any) => {
       setOldData(newData, oldEditData);
     }
   );
+  switchDisabledOnEdit(false)
 };
 ////
 let oldEditData = {
@@ -186,6 +187,7 @@ const setOldData = (newData: any, oldData: any) => {
 const onRowEditCancel = (event: any) => {
   let { newData } = event;
   setOldData(newData, oldEditData);
+  switchDisabledOnEdit(false)
 };
 const onRowEditInit = (event: any) => {
   oldEditData = {
@@ -196,7 +198,19 @@ const onRowEditInit = (event: any) => {
     email: event.data.user.email,
     name_group: event.data.student_group.name_group,
   };
+  switchDisabledOnEdit(true)
 };
+const switchDisabledOnEdit=(mode:boolean)=>{
+  let classListHeader = document.getElementsByClassName('table__header')[0].classList
+  let classListPaginator = document.getElementsByClassName('p-paginator')[0].classList
+  if(mode){
+    classListHeader.add('p-disabled')
+    classListPaginator.add('p-disabled')
+  }else {
+    classListHeader.remove('p-disabled')
+    classListPaginator.remove('p-disabled')
+  }
+}
 const validateUsername = (text: string) => {
   validateEmptyString(text);
   let existentUsername = result.value.filter(

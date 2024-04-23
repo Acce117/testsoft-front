@@ -6,10 +6,10 @@ const validateRequest = (error: boolean, cbIfTrue: Function) => {
     cbIfTrue()
   console.log(error)
   const options = !error ? {
-    severity: "info", summary: "global.info",
+    severity: "info", summary: "Info",
     detail: 'global.completed'
   } : {
-    severity: "error", summary: "global.error",
+    severity: "error", summary: "Error",
     detail: 'global.failed'
   }
   useEvents().dispatch('error', {
