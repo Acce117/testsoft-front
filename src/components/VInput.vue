@@ -34,7 +34,7 @@ const props = defineProps({
     }
   },
 });
-const error = ref('Error')
+const error = ref('error.error')
 let canValidate = ref(false)
 const emit = defineEmits(["invalid","valid"]);
 const model = defineModel();

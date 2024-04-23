@@ -12,18 +12,23 @@
       v-model:editingRows="editingRows"
       filterDisplay="row"
       editMode="row"
+      dataKey="id_student"
       @row-edit-save="onRowEditSave"
+      @row-edit-init="onRowEditInit"
+      @row-edit-cancel="onRowEditCancel"
       min-h-50rem
     >
       <template #header>
         <div class="table__header">
           <input
+            class="find-input"
             v-model="filters['global'].value"
             :placeholder="t('global.find') + '...'"
             type="text"
             shadow-box
           />
           <VBlackButton
+            class="add-button"
             @click="addDialog = true"
             v-tooltip.top="t('global.add')"
           >
@@ -33,41 +38,36 @@
       </template>
       <Column field="fk_CI" :header="t('users.ci')"> </Column>
       <Column field="user.name" :header="t('users.name')">
-        <template #editor="slotProps">
-          <VInputTable
-            id="name-table"
-            v-model="slotProps.data.user.name"
-          /> 
+        <template #editor="{ data, field }">
+          <VInputTable id="name-table" v-model="data.user.name" />
         </template>
       </Column>
       <Column field="user.last_name" :header="t('users.lastname')">
-        <template #editor="slotProps">
-          <VInputTable
-            id="lastname-table"
-            v-model="slotProps.data.user.last_name"
-          /> 
-        
+        <template #editor="{ data, field }">
+          <VInputTable id="lastname-table" v-model="data.user.last_name" />
         </template>
       </Column>
       <Column field="user.username" :header="t('users.username')"
-        ><template #editor="slotProps">
+        ><template #editor="{ data, field }">
           <VInputTable
             id="lastname-table"
-            v-model="slotProps.data.user.username"
+            v-model="data.user.username"
+            :validation="validateUsername"
           /> </template
       ></Column>
       <Column field="user.email" :header="t('users.email')"
-        ><template #editor="slotProps">
-         <VInputTable
+        ><template #editor="{ data, field }">
+          <VInputTable
             id="email-table"
-            v-model="slotProps.data.user.email"
+            v-model="data.user.email"
+            :validation="validateEmail"
           /> </template
       ></Column>
       <Column field="user.sex" :header="t('users.sex')"></Column>
       <Column field="student_group.name_group" :header="t('users.group')">
-        <template #editor="slotProps">
+        <template #editor="{ data, field }">
           <Treeselect
-            v-model="slotProps.data.fk_id_group"
+            v-model="data.fk_id_group"
             w-15rem
             :options="groups"
             :clearable="false"
@@ -75,7 +75,7 @@
             :flat="true"
             :disable-branch-nodes="true"
             :searchable="false"
-            v-on:select="(node:any)=>onGroupSelected(node,slotProps.data)"
+            v-on:select="(node:any)=>onGroupSelected(node,data)"
           />
         </template>
       </Column>
@@ -85,7 +85,7 @@
         <template #body="slotProps">
           <div pa-.5rem centered>
             <button
-              class="p-ripple"
+              class="p-ripple delete-button"
               v-if="slotProps.data.deleted == 0"
               v-ripple
               @click="confirmDelete(slotProps.data, $event)"
@@ -106,7 +106,7 @@
 </template>
 <script setup lang="ts">
 import Treeselect from "vue3-treeselect";
-import VInputTable from "@/components/VInputTable.vue"
+import VInputTable from "@/components/VInputTable.vue";
 import VTable from "@/components/VTable.vue";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
@@ -115,6 +115,7 @@ import { getUsers, deleteUser, updateUser } from "../users";
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useConfirm } from "primevue/useconfirm";
+import { validateEmail, validateEmptyString } from "@/common/utils/validations";
 import VAddUserDialog from "./dialogs/VAddUserDialog.vue";
 import { useSendRequest } from "@/common/utils/fetch";
 const confirm = useConfirm();
@@ -145,11 +146,64 @@ const confirmDelete = (user: any, event: any) => {
 };
 const onRowEditSave = (event: any) => {
   let { newData, index } = event;
-  console.log(newData);
   updateUser(
-    { id_student: newData.id_student, Student: { email: newData.user.email } },
-    () => (result.value[index] = newData)
+    {
+      id_student: newData.id_student,
+      student: {
+        username: newData.user.username,
+        email: newData.user.email,
+        fk_id_group: newData.fk_id_group,
+        name: newData.user.name,
+        last_name: newData.user.last_name,
+      },
+    },
+    () => {
+      result.value[index] = newData;
+    },
+    () => {
+      setOldData(newData, oldEditData);
+    }
   );
+};
+////
+let oldEditData = {
+  username: null,
+  group: null,
+  name: null,
+  last_name: null,
+  email: null,
+  name_group: null,
+};
+const setOldData = (newData: any, oldData: any) => {
+  newData.user.username = oldData.username;
+  newData.fk_id_group = oldData.group;
+  newData.user.name = oldData.name;
+  newData.user.last_name = oldData.last_name;
+  newData.user.email = oldData.email;
+  newData.student_group.name_group = oldData.name_group;
+  newData.student_group.id_student_group = oldData.group;
+};
+const onRowEditCancel = (event: any) => {
+  let { newData } = event;
+  setOldData(newData, oldEditData);
+};
+const onRowEditInit = (event: any) => {
+  oldEditData = {
+    username: event.data.user.username,
+    group: event.data.fk_id_group,
+    name: event.data.user.name,
+    last_name: event.data.user.last_name,
+    email: event.data.user.email,
+    name_group: event.data.student_group.name_group,
+  };
+};
+const validateUsername = (text: string) => {
+  validateEmptyString(text);
+  let existentUsername = result.value.filter(
+    (user) => user.user.username === text
+  );
+  console.log(existentUsername)
+  if (existentUsername.length > 1) throw new Error("error.existent_username");
 };
 const addDialog = ref(false);
 </script>
@@ -197,6 +251,12 @@ const addDialog = ref(false);
   margin: auto;
   height: 2rem;
   border-radius: 0;
+}
+tr:has(.invalid-input) .p-row-editor-save,
+table:has(input) .p-row-editor-init,
+table:has(input) .delete-button {
+  pointer-events: none;
+  opacity: 0.5;
 }
 
 .p-cell-editing:has(.p-row-editor-cancel-icon) {

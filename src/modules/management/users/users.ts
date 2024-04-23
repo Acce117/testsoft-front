@@ -69,11 +69,12 @@ export function addUser(userToAdd: any, users: any, cb: Function) {
     })
   })
 }
-export function updateUser(userToModify: any, cb: any) {
-  console.log(userToModify.Student)
+export function updateUser(userToModify: any, cb: any, cbForOldData:any) {
   const url = `${import.meta.env.VITE_API_PATH}/gestion/student/update/${userToModify.id_student}`;
   const request = useSendRequest()
-  request.sendRequest(url, {Student:userToModify.Student}, "PATCH", () => {
+  request.sendRequest(url, {student:userToModify.student}, "PATCH", () => {
     validateRequest(request.error.value, cb)
+    if(request.error.value)
+      cbForOldData()
   })
 }

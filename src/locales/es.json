@@ -193,6 +193,7 @@
         }
     },
     "error": {
+        "error":"Error",
         "empty": "El campo no puede estar vacío",
         "email": "El dato introducido no es un correo",
         "ci":"El carnet no es correcto",

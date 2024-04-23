@@ -10,18 +10,12 @@
       bg-white
       @input="canValidate = true"
       :class="{ 'invalid-input': canValidate ? !validate() : false }"
-      w-full h-full
-      />
-    <span
-      font-size-1.5rem
-      absolute
-      text-red
-      top-3rem
-      right-0
-      md:top-4rem
-      b-dark
-      >{{ $t(error) }}</span
-    >
+      w-full
+      h-full
+    />
+    <span font-size-1.2rem absolute text-red top--8rem pa-.5rem shadow-box>{{
+      $t(error)
+    }}</span>
   </div>
 </template>
 <script setup lang="ts">
@@ -39,7 +33,7 @@ const props = defineProps({
     },
   },
 });
-const error = ref("Error");
+const error = ref("error.error");
 let canValidate = ref(false);
 const emit = defineEmits(["invalid", "valid"]);
 const model = defineModel();
@@ -63,70 +57,34 @@ const validate = () => {
 .custom-input-table input {
   border: solid black 0.2rem;
   animation: border-input 2s infinite;
-  transition: all ease .5s;
+  transition: all ease 0.5s;
 }
 .custom-input-table input.invalid-input {
   border: solid red 0.3rem;
   animation: border-input-invalid 2s infinite;
   box-shadow: none;
 }
-.custom-input-table input.invalid-input ~ span {
+.custom-input-table:hover input.invalid-input ~ span,
+input.invalid-input:active ~ span {
   display: block;
 }
 .custom-input-table span {
   display: none;
 }
-.custom-input-table label {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  font-size: 1.5rem;
-  position: absolute;
-  top: 0.2rem;
-  left: 1rem;
-  transition: all ease 0.2s;
-  color: black;
-  user-select: none;
-  pointer-events: none;
-  animation: 2s fade-in;
+tr:has(input:focus) input {
+  animation: none;
+}
+tr:has(input:focus) input:not(:focus) {
+  border-color: transparent;
 }
 
-.custom-input-table label img {
-  transition: all ease 0.2s;
-  width: 2rem;
+.custom-input-table input:focus {
+  animation: none;
 }
 
-
-.custom-input-table input:focus  {
-  animation:none;
-}
-@keyframes border-input {
-  0% {
-    border-color: black;
-  }
-  50% {
-    border-color: transparent;
-  }
-  100% {
-    border-color: black;
-  }
-}
-@keyframes border-input-invalid {
-  0% {
-    border-color: red;
-  }
-  50% {
-    border-color: transparent;
-  }
-  100% {
-    border-color: red;
-  }
-}
-@media (min-width:1024px) {
+@media (min-width: 1024px) {
   .custom-input-table input {
     font-size: 1.8rem;
   }
- 
-  
 }
 </style>
