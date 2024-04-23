@@ -16,16 +16,19 @@
       @row-edit-save="onRowEditSave"
       @row-edit-init="onRowEditInit"
       @row-edit-cancel="onRowEditCancel"
+      @value-change="setFocus"
+      
       min-h-50rem
     >
       <template #header>
         <div class="table__header">
           <input
-            class="find-input"
+            id="find-input"
             v-model="filters['global'].value"
             :placeholder="t('global.find') + '...'"
             type="text"
             shadow-box
+            v-on:input="changeFocusToFilter"
           />
           <VBlackButton
             class="add-button"
@@ -39,7 +42,7 @@
       <Column field="fk_CI" :header="t('users.ci')"> </Column>
       <Column field="user.name" :header="t('users.name')">
         <template #editor="{ data, field }">
-          <VInputTable id="name-table" v-model="data.user.name" />
+          <VInputTable id="name-table" v-model="data.user.name" @focus-input = "(id:string)=>{focusedInput = id; console.log(filters)}"/>
         </template>
       </Column>
       <Column field="user.last_name" :header="t('users.lastname')">
@@ -124,6 +127,18 @@ const { result, loading, error } = getUsers();
 const onGroupSelected = (node: any, user: any) => {
   user.student_group.name_group = node.label;
 };
+let focusedInput:string;
+const setFocus = ()=>{
+  setTimeout(()=>document.getElementById(focusedInput).focus(),100)
+}
+const changeFocusToFilter = ()=>{
+  focusedInput='find-input'
+  console.log(editingRows.value[0])
+  setOldData(editingRows.value[0], oldEditData);
+   editingRows.value=[]
+   switchDisabledOnEdit(false)
+
+}
 const groups = useSendRequest(
   true,
   `${import.meta.env.VITE_API_PATH}/gestion/group`
@@ -200,7 +215,7 @@ const onRowEditInit = (event: any) => {
   switchDisabledOnEdit(true)
 };
 const switchDisabledOnEdit=(mode:boolean)=>{
-  let classListHeader = document.getElementsByClassName('table__header')[0].classList
+  let classListHeader = document.getElementsByClassName('add-button')[0].classList
   let classListPaginator = document.getElementsByClassName('p-paginator')[0].classList
   if(mode){
     classListHeader.add('p-disabled')
@@ -215,7 +230,6 @@ const validateUsername = (text: string) => {
   let existentUsername = result.value.filter(
     (user) => user.user.username === text
   );
-  console.log(existentUsername)
   if (existentUsername.length > 1) throw new Error("error.existent_username");
 };
 const addDialog = ref(false);

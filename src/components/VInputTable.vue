@@ -8,7 +8,7 @@
       :maxlength="props.max"
       :minlength="props.min"
       bg-white
-      @input="canValidate = true"
+      @input="emit('focus-input', props.id)"
       :class="{ 'invalid-input': canValidate ? !validate() : false }"
       w-full
       h-full
@@ -22,7 +22,10 @@
 import { ref } from "vue";
 import { validateEmptyString } from "@/common/utils/validations.ts";
 const props = defineProps({
-  id: String,
+  id: {
+    type:String,
+    required:true
+  },
   type: String,
   max: Number,
   min: Number,
@@ -35,7 +38,7 @@ const props = defineProps({
 });
 const error = ref("error.error");
 let canValidate = ref(false);
-const emit = defineEmits(["invalid", "valid"]);
+const emit = defineEmits(["invalid", "valid", 'focus-input']);
 const model = defineModel();
 const validate = () => {
   let isValid = true;
@@ -49,6 +52,7 @@ const validate = () => {
   }
   return isValid;
 };
+
 </script>
 <style>
 .custom-input-table {
