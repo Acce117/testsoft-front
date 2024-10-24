@@ -1,5 +1,5 @@
 <template>
-<div relative flex flex-col shadow-box min-w-36rem text-black pa-2rem gap-1rem anim-scale-0.5>
+<div relative flex flex-col bg-white shadow-xl rounded-xl w-xs text-black pa-1rem gap-1rem anim-scale-0.5>
         <img
           rd-4rem
           border-solid
@@ -7,37 +7,37 @@
           border-white
           border-.4rem
           absolute
-          top--3.5rem
-          h-7rem
+          top--2rem
+          h-4rem
           
           :src="props.img?props.img: props.sex==='F'?'/img/user_female.png':'/img/user_1.png'"
         />
-        <span font-bold font-size-1.7rem mt-2rem
+        <span font-bold text-md mt-1rem
           >{{ props.name }}</span
         >
         
-        <div v-if="props.username" font-size-1.5rem flex gap-1rem>
-            <img w-2rem src="/img/user.svg">
+        <div v-if="props.username" text-xs flex gap-1rem>
+            <img w-1rem src="/img/user.svg">
             {{ props.username }}
         </div>
-        <div v-if="props.role" font-size-1.5rem flex gap-1rem>
-            <img w-2rem src="/img/certified.svg">
+        <div v-if="props.role" text-xs flex gap-1rem>
+            <img w-1rem src="/img/certified.svg">
             {{ props.role }}
         </div>
-        <div v-if="props.id" font-size-1.5rem flex gap-1rem>
-            <img w-2rem src="/img/id.svg">
+        <div v-if="props.id" text-xs flex gap-1rem>
+            <img w-1rem src="/img/id.svg">
             {{ props.id }}
         </div>
-        <div v-if="props.phone" font-size-1.5rem flex gap-1rem>
-            <img w-2rem src="/img/phone.svg">
+        <div v-if="props.phone" text-xs flex gap-1rem>
+            <img w-1rem src="/img/phone.svg">
             {{ props.phone }}
         </div>
-        <div v-if="props.mail" font-size-1.5rem flex gap-1rem>
-            <img w-2rem src="/img/mail.svg">
+        <div v-if="props.mail" text-xs flex gap-1rem>
+            <img w-1rem src="/img/mail.svg">
             {{ props.mail }}
         </div>
-        <div v-if="props.group && props.group !=='null'" font-size-1.5rem flex gap-1rem>
-            <img w-2rem src="/img/group.svg">
+        <div v-if="props.group && props.group !=='null'" text-xs flex gap-1rem>
+            <img w-1rem src="/img/group.svg">
             {{ props.group }}
         </div>
       </div>

@@ -5,11 +5,9 @@
     text-white
     centered
     gap-2rem
-    mt-24
-    lg:mt-48
+    mt-2rem
   >
-    <h2 page-subtitle>{{ $t("info.developers") }}</h2>
-    <h3 page-subtitle></h3>
+    <h2 text-slate-8 font-bold text-3xl>{{ $t("info.developers") }}</h2>
     <div
       flex-col
       anim-scale-0.5

@@ -34,9 +34,7 @@ useEvents().addListener("confirm", (event: CustomEventInit) => {
 });
 </script>
 <template>
-  <div class="background">
-    <div class="background__content"></div>
-  </div>
+ 
   <router-view />
   <Toast position="top-left" />
   <ConfirmDialog />

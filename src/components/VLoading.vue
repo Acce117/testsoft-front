@@ -28,24 +28,24 @@
 }
 
 .dot {
-  width: 1rem;
-  height: 1rem;
+  width: .5rem;
+  height: .5rem;
   border-radius: 100%;
   animation: opac 1s infinite ease-in-out;
   background-color: white;
 }
 
 .dot:nth-child(1) {
-  background-color: #5c5c5b;
+  background-color: #ffffffb4;
 }
 
 .dot:nth-child(2) {
-  background-color: #babab8;
+  background-color: #ffffff8e;
   animation-delay: 0.3s;
 }
 
 .dot:nth-child(3) {
-  background-color: #8c8c8b;
+  background-color: #ffffff6b;
   animation-delay: 0.6s;
 }
 </style>
