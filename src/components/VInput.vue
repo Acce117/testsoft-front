@@ -1,32 +1,32 @@
 <template>
-  <div class="custom-input">
-    <input
-      :id="props.id"
-      :type="props.type"
-      required
-      v-model="model"
-      :maxlength="props.max"
-      :minlength="props.min"
-      bg-white
-      rd-1rem
-      w-25rem
-      mb-1.3rem
-      @input="canValidate=true"
-      :class="{ 'invalid-input': canValidate?!validate():false }"
-    />
-    <label :for="props.id"><slot></slot>{{ $t(props.text) }}</label>
-    <span font-size-1.5rem absolute text-red top-3rem right-0 md:top-4rem>{{ $t(error) }}</span>
+
+  <div w-full>
+
+    <FloatLabel w-full>
+      <InputText :maxlength="max" :minlength="min" :required rounded-xl focus:border-primary outline-none :id="props.id"
+        w-full :type="props.type" v-model="model" :invalid="canValidate? !validate():false" />
+      <label :for="props.id" flex items-center justify-center gap-2>
+        <slot></slot>{{ $t(props.text) }}
+      </label>
+
+    </FloatLabel>
+    <small text-red v-if="canValidate? !validate():false">{{ $t(error) }}</small>
   </div>
+
+
 </template>
 <script setup lang="ts">
-import { ref } from 'vue';
-import {validateEmptyString} from '@/common/utils/validations.ts'
+import { inject, ref } from 'vue';
+import { validateEmptyString } from '@/common/utils/validations'
+import InputText from 'primevue/inputtext';
+import FloatLabel from 'primevue/floatlabel';
 const props = defineProps({
   id: String,
   type: String,
   text: { type: String, required: true },
-  max:Number,
-  min:Number,
+  max: Number,
+  min: Number,
+  required: Boolean,
   validation: {
     type: Function,
     default: function (text: String) {
@@ -35,15 +35,15 @@ const props = defineProps({
   },
 });
 const error = ref('error.error')
-let canValidate = ref(false)
-const emit = defineEmits(["invalid","valid"]);
+let canValidate = inject('canValidate')
+const emit = defineEmits(["invalid", "valid"]);
 const model = defineModel();
 const validate = () => {
   let isValid = true;
-  try{
+  try {
     props.validation(model.value)
     emit("valid");
-  }catch (e:any){
+  } catch (e: any) {
     emit("invalid");
     isValid = false;
     error.value = e.message
@@ -55,19 +55,24 @@ const validate = () => {
 .custom-input {
   position: relative;
 }
+
 .custom-input input {
   box-shadow: var(--shadow);
 }
+
 .custom-input input.invalid-input {
   transition: all ease 0.5s;
   box-shadow: 0 0 0.3rem 0.3rem rgba(255, 0, 0, 0.7);
 }
+
 .custom-input input.invalid-input~span {
   display: block;
 }
-.custom-input span{
-    display: none;
+
+.custom-input span {
+  display: none;
 }
+
 .custom-input label {
   display: flex;
   align-items: center;
@@ -88,34 +93,38 @@ const validate = () => {
   width: 2rem;
 }
 
-.custom-input input:valid ~ label,
-.custom-input input:focus ~ label {
+.custom-input input:valid~label,
+.custom-input input:focus~label {
   color: white;
   top: -2.8rem;
   font-size: 1rem;
 }
 
-.custom-input input:valid ~ label img,
-.custom-input input:focus ~ label img {
+.custom-input input:valid~label img,
+.custom-input input:focus~label img {
   filter: invert();
   transform: scale(0.8);
 }
+
 @media (min-width: 768px) {
+
   .custom-input label,
   .custom-input {
     font-size: 2rem;
   }
+
   .custom-input input {
     height: 4rem;
   }
-  .custom-input input:valid ~ label,
-  .custom-input input:focus ~ label {
+
+  .custom-input input:valid~label,
+  .custom-input input:focus~label {
     font-size: 1.5rem;
     color: black;
   }
 
-  .custom-input input:valid ~ label img,
-  .custom-input input:focus ~ label img {
+  .custom-input input:valid~label img,
+  .custom-input input:focus~label img {
     filter: none;
   }
 }

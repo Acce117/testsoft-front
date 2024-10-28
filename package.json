@@ -16,6 +16,7 @@
     "axios": "^1.6.7",
     "html2pdf.js": "^0.10.1",
     "pinia": "^2.1.7",
+    "primeicons": "^7.0.0",
     "primevue": "^3.50.0",
     "swiper": "^11.0.5",
     "unocss": "^0.58.5",

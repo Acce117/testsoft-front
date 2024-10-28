@@ -7,10 +7,10 @@ const props = defineProps({
 </script>
 <template>
   <Transition name="fade">
-    <div class="question" :id="props.id_question">
+    <div class="question"  flex flex-col overflow-hidden bg-white rounded-6 m-8 :id="props.id_question">
       <h4 pa-1rem bg-black  font-size-1.6rem  w-full  text-white md:font-size-2rem>{{ props.question_index + `-` + props.title }}</h4>
       <div relative flex m-1rem flex-col gap-1rem>
-        <slot></slot>
+        <slot :id_question :question_index></slot>
       </div>
     </div>
   </Transition>
@@ -18,14 +18,8 @@ const props = defineProps({
 <style>
 .question {
   width: 70%;
-  display: flex;
-  flex-direction: column;
-  border-radius: 1.5rem;
-  overflow: hidden;
   box-shadow: var(--shadow);
-  margin: 2rem auto;
   animation: fade-in 1s;
-  background-color: white;
 }
 .invalid-input {
   transition: all ease 0.5s;

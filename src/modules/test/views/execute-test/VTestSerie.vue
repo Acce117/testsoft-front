@@ -21,6 +21,7 @@ const test = inject<Test>("test");
       :key="question.id_question"
       :id_question="question.id_question"
       :question_index="index + 1"
+      :possible_answers="question.arrayanswer"
       :title="question.statement"
       :class="{
         'invalid-input': validatedTestFirstTime
@@ -30,14 +31,10 @@ const test = inject<Test>("test");
     >
       <VSingleOptionQuestion
         v-if="question.fk_id_type_question == 2"
-        :possible_answers="question.arrayanswer"
-        :id_question="question.id_question"
       />
 
       <VMultipleOptionsValueSetted
         v-else-if="question.fk_id_type_question == 5"
-        :possible_answers="question.arrayanswer"
-        :id_question="question.id_question"
         :question_index="index+1"
         :maxPoints="question.arrayquestion_top_value[0]?.top_value"
       />

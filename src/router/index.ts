@@ -31,13 +31,13 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: VGeneralVue,
-      meta: { requiresAuth: true },
+      //meta: { requiresAuth: true },
       children: [
         {
           path: '/',
           name: 'home',
           component: VHome,
-          meta: { requiresAuth: true }
+          //meta: { requiresAuth: true }
         },
         {
           path: '/select-test',
@@ -124,10 +124,11 @@ const validateTestExecutionPermission = (to: any, from: any, next: Function) => 
   }
 
 }
+/*
 router.beforeEach((to, from, next) => {
   if (to.meta.requiresAuth && !isUserAuthenticated()) {
     useEvents().dispatch('error', notAuthorizedToastError);
   }
   else next();
-});
+});*/
 export default router

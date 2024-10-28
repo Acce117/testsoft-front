@@ -1,26 +1,23 @@
 @import url(./animations.css);
-@import url(./dialog.css);
 @import url(./tree-select.css);
 @layer reset, primevue;
 @import url(./primevue-modified.css);
+
+
 
 *,
 *::before,
 *::after {
   box-sizing: border-box;
-  margin: 0;
   font-weight: normal;
-  padding: 0;
 }
 :root {
-	--shadow:0 0 0.3rem 0.3rem #00000030;
-  --bradius:1rem;
+  --shadow: 0 0 0.3rem 0.3rem #00000030;
+  --bradius: 1rem;
 }
 
 body {
-  min-height: 100vh;
   transition: color 0.5s, background-color 0.5s;
-  line-height: 1.6;
   font-family: var(--font-family);
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -29,6 +26,8 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  padding: 0;
+  margin: 0;
 }
 main {
   width: 100vw;
@@ -37,58 +36,20 @@ main {
 }
 
 html {
-  font-size: 62.5%;
   width: 100vw;
   overflow-x: hidden;
+  background: -webkit-linear-gradient(0deg, #3faee4,#ffffff);
+  
+  background: linear-gradient(0deg, #3faee4,#ffffff);
+ 
 }
 
-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: none;
-  position: relative;
-  color: black;
-  border-radius: 1rem;
-  transition: all ease 0.2s;
-  text-align: center;
-  user-select: none;
-  cursor: pointer;
-  animation: .3s scale;
-  overflow: hidden;
-}
-button:hover {
-  transform: scale(1.1);
-}
-button img{
-  width: 2rem;
-  transition: all ease .2s;
-}
-button:not(.black-button):active img{
-  filter: invert();
+input:not([type="checkbox"]),
+input:not([type="radio"]) {
+  transition: border ease 0.2s;
 }
 
-button * {
-  text-align: center;
-  user-select: none;
-}
-input {
-  font-family: var(--font-family);
-}
-
-
-input:not([type="checkbox"]), input:not([type="radio"]) {
-  outline: none;
-  height: 3rem;
-  font-size: 1.5rem;
-  padding: 1rem;
-  transition: border ease .2s;
-  border: .1rem solid transparent;
-}
-input:hover, input:focus{
-  border: .1rem black solid;
-}
-.white-button img{
+.white-button img {
   filter: invert();
 }
 
@@ -99,25 +60,3 @@ img {
 img {
   pointer-events: none;
 }
-
-.background__content{
-  width: 110%;
-  height: 110%;
-  background:  linear-gradient(
-    rgba(0, 0, 0, 0.7),
-    rgba(0, 0, 0,0.3)
-  ), url(img/background.jpg);
-  background-position: 50% 75%;
-  background-repeat:no-repeat ;
-  background-size: cover;
-  filter: blur(1rem);
-  margin: -2rem;
-}
-.background{
-  width: 100%;
-  height: 100%;
-  position: fixed;
-  z-index: -1;
-  overflow: hidden;
-}
-

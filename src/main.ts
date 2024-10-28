@@ -20,6 +20,7 @@ import 'uno.css'
 import VWhiteButton from './components/buttons/VWhiteButton.vue';
 import VBlackButton from './components/buttons/VBlackButton.vue';
 import VButtonsContainer from './components/buttons/VButtonsContainer.vue';
+import 'primeicons/primeicons.css'
 
 
 const app = createApp(App)
@@ -45,7 +46,8 @@ app.use(DialogService);
 app.use(i18n);
 app.use(createPinia())
 app.mount('#app')
-
+/*
 if (!isUserAuthenticated())
     router.push('/login')
 
+*/

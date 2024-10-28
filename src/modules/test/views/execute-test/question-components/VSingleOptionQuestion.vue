@@ -7,10 +7,7 @@ import type { Test } from "@/modules/test/classes/test-class";
 import { SingleOptionQuestion } from "@/modules/test/classes/singleOptionQuestion-class";
 
 const props = defineProps({
-  id_question: {
-    type: String,
-    required: true
-  },
+  id_question: String,
   possible_answers: Array<{ text: string; id_answer: string }>,
 });
 

@@ -1,5 +1,5 @@
 <template>
-  <ul class="navbar">
+  <!--<ul class="navbar">
     <li
       mt-0.5rem
       trans-0.2
@@ -13,12 +13,17 @@
     >
       <img src="/img/home.svg" w-3rem alt="home" />
     </li>
-    <li>
-      <VLanguageChanger />
-    </li>
+    
 
-    <Menubar :model="items" />
-  </ul>
+  </ul>-->
+  <Menubar :model="items" absolute w-full border-none>
+
+    <template #start>
+        
+      <RouterLink to="/" size-10> <img src="/public/img/logo.png" size-10/></RouterLink>
+    </template>
+  </Menubar>
+
 </template>
 <script setup lang="ts">
 import VLanguageChanger from "../VLanguageChanger.vue";
