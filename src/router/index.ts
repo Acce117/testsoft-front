@@ -43,7 +43,7 @@ const router = createRouter({
           path: '/select-test',
           name: 'select-test',
           component: VSelecTest,
-          meta: { requiresAuth: true }
+          //meta: { requiresAuth: true }
         },
         {
           path: '/execute-test/:id_test',

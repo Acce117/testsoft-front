@@ -20,6 +20,7 @@ if(!test.questions[`${props.id_question}`])
 <template>
   <div
     class="radio-button-answer answer"
+    gap-
     v-for="answer in props.possible_answers"
     :key="answer.id_answer"
   >

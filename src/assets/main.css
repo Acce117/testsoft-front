@@ -4,6 +4,17 @@
 @import url(./primevue-modified.css);
 
 
+@font-face {
+  font-family: "Poppins";
+  src: url('/Poppins-Regular.ttf');
+}
+
+@font-face {
+  font-family: "Poppins";
+  font-weight: bold;
+  src: url('/Poppins-Bold.ttf');
+}
+
 
 *,
 *::before,
@@ -11,14 +22,19 @@
   box-sizing: border-box;
   font-weight: normal;
 }
+
+
 :root {
   --shadow: 0 0 0.3rem 0.3rem #00000030;
   --bradius: 1rem;
+  --p-font-family: 'Poppins', sans-serif;
+
 }
+
 
 body {
   transition: color 0.5s, background-color 0.5s;
-  font-family: var(--font-family);
+  font-family: 'Poppins';
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

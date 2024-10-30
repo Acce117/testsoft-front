@@ -54,7 +54,7 @@ export const siteStore = defineStore('site', {
                     throw new Error('The password must be provided ')
 
                 request.sendRequest(
-                    `${import.meta.env.VITE_API_PATH}/site/login`,
+                    `${import.meta.env.VITE_API_PATH}/login`,
                     credentials,
                     'POST',
                     loginRequestHandler
@@ -68,8 +68,7 @@ export const siteStore = defineStore('site', {
             useEvents().dispatch('confirm', {
                 message: t('profile.dialogs.close-session.message'),
                 header: t('profile.dialogs.close-session.header'),
-                rejectLabel: t('global.cancel'),
-                acceptLabel: t('global.confirm'),
+                
                 accept: () => {
                     userStore().$reset();
                     TokenHandler.removeRefreshToken();

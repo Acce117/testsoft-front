@@ -2,15 +2,18 @@
 
   <div w-full>
 
-    <FloatLabel w-full>
-      <InputText :maxlength="max" :minlength="min" :required rounded-xl focus:border-primary outline-none :id="props.id"
-        w-full :type="props.type" v-model="model" :invalid="canValidate? !validate():false" />
+    <FloatLabel   variant="on">
+      <InputText :maxlength="max" :minlength="min" :required l  :id="props.id"
+        w-full :type="props.type" v-model="model" :invalid="canValidate ? !validate() : false"  />
       <label :for="props.id" flex items-center justify-center gap-2>
         <slot></slot>{{ $t(props.text) }}
       </label>
 
     </FloatLabel>
-    <small text-red v-if="canValidate? !validate():false">{{ $t(error) }}</small>
+
+
+
+    <small text-red v-if="canValidate ? !validate() : false">{{ $t(error) }}</small>
   </div>
 
 

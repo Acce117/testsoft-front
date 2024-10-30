@@ -5,7 +5,7 @@
     text-white
     centered
     gap-2rem
-    mt-2rem
+    mt-4rem
   >
     <h2 text-slate-8 font-bold text-3xl>{{ $t("info.developers") }}</h2>
     <div

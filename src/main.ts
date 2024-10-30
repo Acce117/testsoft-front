@@ -5,7 +5,6 @@ import DialogService from 'primevue/dialogservice';
 import ConfirmationService from 'primevue/confirmationservice';
 import { isUserAuthenticated } from './modules/security/isUserAuthenticated';
 import Tooltip from 'primevue/tooltip';
-import 'primevue/resources/themes/aura-light-noir/theme.css'
 import { createPinia } from 'pinia';
 import VueCountdown from '@chenfengyuan/vue-countdown';
 import './assets/main.css'
@@ -20,8 +19,8 @@ import 'uno.css'
 import VWhiteButton from './components/buttons/VWhiteButton.vue';
 import VBlackButton from './components/buttons/VBlackButton.vue';
 import VButtonsContainer from './components/buttons/VButtonsContainer.vue';
+import { MyPreset } from './plugins/primevue-preset';
 import 'primeicons/primeicons.css'
-
 
 const app = createApp(App)
 
@@ -39,7 +38,16 @@ app.directive('ripple', Ripple);
 app.directive('tooltip', Tooltip);
 
 app.use(router)
-app.use(PrimeVue, { ripple: true });
+app.use(PrimeVue, {
+    theme: {
+        preset: MyPreset,
+        options: {
+            darkModeSelector: false,
+            cssLayer: false
+        }
+    },
+    ripple: true
+});
 app.use(ToastService);
 app.use(ConfirmationService);
 app.use(DialogService);

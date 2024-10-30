@@ -1,3 +1,4 @@
+import { fontFamily } from "@unocss/preset-uno/theme";
 import {
   defineConfig,
   presetTypography,
@@ -14,7 +15,8 @@ export default defineConfig({
     colors:{
          'primary':'#3faee4',
          'secondary':'#2388bb'
-    }
+    },
+    
   }
     
   ,
@@ -24,6 +26,7 @@ export default defineConfig({
       ([_, name, num]) => ({ animation: `${name} ${num}s` }),
     ],
     [/^trans-([\.\d]+)$/, ([_, num]) => ({ transition: `all ease ${num}s` })],
+    
     [
       "page-title",
       {
@@ -58,31 +61,8 @@ export default defineConfig({
         "box-shadow": "var(--shadow)",
       },
     ],
-    [
-      "black-button",
-      {
-        "background-color": "black",
-        color: "white",
-        padding: "1rem",
-      },
-    ],
-    [
-      "primary-button",
-      {
-        "background-color": "black",
-        color: "white",
-        padding: "1rem",
-      },
-    ],
-    [
-      "white-button",
-      {
-        "background-color": "white",
-        color: "black",
-        "box-shadow": "var(--shadow)",
-        padding: "1rem",
-      },
-    ],
+    
+    
     [
       "centered",
       {

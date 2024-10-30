@@ -113,7 +113,6 @@ import VInputTable from "@/components/VInputTable.vue";
 import VTable from "@/components/VTable.vue";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
-import { FilterMatchMode } from "primevue/api";
 import { getUsers, deleteUser, updateUser } from "../users";
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
@@ -145,7 +144,7 @@ const groups = useSendRequest(
 ).result;
 const editingRows = ref([]);
 const filters = ref({
-  global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  global: { value: null, matchMode: null },
 });
 const confirmDelete = (user: any, event: any) => {
   confirm.require({

@@ -1,4 +1,6 @@
 <template>
+  <div absolute  w-full z-50>
+
   <!--<ul class="navbar">
     <li
       mt-0.5rem
@@ -16,13 +18,15 @@
     
 
   </ul>-->
-  <Menubar :model="items" absolute w-full border-none>
+  <Menubar :model="items"  >
 
     <template #start>
         
-      <RouterLink to="/" size-10> <img src="/public/img/logo.png" size-10/></RouterLink>
+      <RouterLink to="/" size-10> <img src="/img/logo.png" size-10/></RouterLink>
     </template>
   </Menubar>
+</div>
+
 
 </template>
 <script setup lang="ts">

@@ -1,5 +1,5 @@
 <template>
-<div relative flex flex-col bg-white shadow-xl rounded-xl w-xs text-black pa-1rem gap-1rem anim-scale-0.5>
+<div relative flex flex-col bg-white shadow-xl rounded-xl w-21rem text-black pa-1rem gap-1rem anim-scale-0.5>
         <img
           rd-4rem
           border-solid

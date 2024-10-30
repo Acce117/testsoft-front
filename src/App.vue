@@ -30,11 +30,21 @@ useEvents().addListener("redirect", (event: CustomEventInit) => {
   toast.removeAllGroups();
 });
 useEvents().addListener("confirm", (event: CustomEventInit) => {
-  confirm.require(event.detail);
+  confirm.require({
+    ...event.detail,
+    rejectProps: {
+      label:  t('global.cancel'),
+      severity: 'secondary',
+      outlined: true
+    },
+    acceptProps: {
+      label:t('global.confirm'),
+    },
+  });
 });
 </script>
 <template>
- 
+
   <router-view />
   <Toast position="top-left" />
   <ConfirmDialog />
