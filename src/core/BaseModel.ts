@@ -27,6 +27,7 @@ export class BaseModel {
     });
   }
    async create(body:object) {
+    console.log(body)
     return await sendRequest({method:'POST',
       url: `${import.meta.env.VITE_API_PATH}/${this.getURL()}`, body:body
     });

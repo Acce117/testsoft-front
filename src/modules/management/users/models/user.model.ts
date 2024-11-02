@@ -3,6 +3,32 @@ import useEvents from "@/common/utils/useEvents";
 import { BaseModel } from "@/core/BaseModel";
 
 const url = "user";
+const columns = [
+  {
+    field: "name",
+    header: "Nombre",
+  },
+  {
+    field: "last_name",
+    header: "Apellido",
+  },
+  {
+    field: "username",
+    header: "Nombre de Usuario",
+  },
+  {
+    field: "email",
+    header: "Email",
+  },
+  {
+    field: "sex",
+    header: "Sexo",
+  },
+  {
+    field: "user_type",
+    header: "Tipo de Usuario",
+  },
+];
 export class User extends BaseModel {
   user_id;
   name;
@@ -52,37 +78,15 @@ export class User extends BaseModel {
   public getID(): string {
     return this.user_id;
   }
+  public getColumns() {
+    return columns;
+  }
 
   public getFieldAsID(): string {
     return "user_id";
   }
 
-  columns = [
-    {
-      field: "name",
-      header: "Nombre",
-    },
-    {
-      field: "last_name",
-      header: "Apellido",
-    },
-    {
-      field: "username",
-      header: "Nombre de Usuario",
-    },
-    {
-      field: "email",
-      header: "Email",
-    },
-    {
-      field: "sex",
-      header: "Sexo",
-    },
-    {
-      field: "user_type",
-      header: "Tipo de Usuario",
-    },
-  ];
+  
 }
 
 const validateRequest = (error: boolean, cbIfTrue: Function) => {

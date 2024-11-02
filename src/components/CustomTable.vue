@@ -2,7 +2,7 @@
     <Card style="width: 90%; overflow: auto">
         <template #content>
 
-            <DataTable removableSort ref="dt" :globalFilterFields="props.model.columns.map((c) => c.field)"
+            <DataTable removableSort ref="dt" :globalFilterFields="props.model.getColumns().map((c) => c.field)"
                 v-model:filters="filters" filterDisplay="row" paginator :value="data" :rows="5"
                 :rowsPerPageOptions="[5, 10, 20, 50]">
 
@@ -28,7 +28,7 @@
                     </div>
 
                 </template>
-                <Column v-for="(col, index) in props.model.columns" :key="index" sortable :field="col.field"
+                <Column v-for="(col, index) in props.model.getColumns()" :key="index" sortable :field="col.field"
                     :header="col.header">
                     <template #body="slotProps">
 
@@ -72,7 +72,6 @@
             </DataTable>
             <!-- <h2 v-else-if="isError" class="error">{{ $t('table.something_wrong') }}</h2> -->
         </template>
-        {{ props.model }}
     </Card>
 
     <Dialog v-model:visible="showInfoDialog" modal :header="$t('table.information')" :style="{ width: '25rem' }">
@@ -221,10 +220,10 @@ const showAddDialog = ref(false)
 
 
 const addElement = () => {
-    mutateAdd(props.model.value)
+    mutateAdd(props.model)
 }
 const updateElement = () => {
-    mutateUpdate(props.model.value)
+    mutateUpdate(props.model)
 }
 
 const deleteElement = (event, data) => {
@@ -307,7 +306,7 @@ const activateElement = (event, data) => {
 
 const { mutate: mutateAdd } = useMutation({
     mutationKey: [`${queryKey}-add`],
-    mutationFn: props.model.create,
+    mutationFn: (data)=> props.model.create(data),
     onSuccess: async () => {
         await refetch()
         toast.add({ severity: 'info', summary: t('table.confirmation'), detail: t('table.element_ok_added'), life: 5000 });
@@ -322,7 +321,7 @@ const { mutate: mutateAdd } = useMutation({
 
 const { mutate: mutateUpdate } = useMutation({
     mutationKey: [`${queryKey}-update`],
-    mutationFn: props.model.update,
+    mutationFn: (data)=> props.model.update(data),
     onSuccess: async () => {
         await refetch()
         toast.add({ severity: 'info', summary: t('table.confirmation'), detail: t('table.element_ok_updated'), life: 5000 });

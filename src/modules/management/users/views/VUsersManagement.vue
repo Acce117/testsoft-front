@@ -1,8 +1,8 @@
 <template>
 
-  <CustomTable title="Usuarios" :model="user" fieldAsId="user_id">
+  <CustomTable title="Usuarios" :model="user" >
     <template #form-add>
-      <VInput id="name" v-model="user.name" text="Nombres" />
+      <VInput v-model="user.name" text="Nombres" />
 
 
       <VInput id="lastname" v-model="user.last_name" text="Apellidos"/>
@@ -30,24 +30,19 @@
 </template>
 <script setup lang="ts">
 import Treeselect from "vue3-treeselect";
-import VTable from "@/components/VTable.vue";
-import DataTable from "primevue/datatable";
-import Column from "primevue/column";
-import { getUsers, deleteUser, updateUser, User } from "../models/user.model";
+
+import {  User } from "../models/user.model";
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { useConfirm } from "primevue/useconfirm";
 import { validateEmail, validateEmptyString } from "@/common/utils/validations";
 import VAddUserDialog from "./dialogs/VAddUserDialog.vue";
 import { useSendRequest } from "@/common/utils/fetch";
 import CustomTable from "@/components/CustomTable.vue";
 import VInput from "@/components/VInput.vue";
-const confirm = useConfirm();
 const onGroupSelected = (node: any, user: any) => {
   user.student_group.name_group = node.label;
 };
 let user = ref(new User())
-console.log(user.value)
 const { t } = useI18n();
 
 
