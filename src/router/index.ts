@@ -69,7 +69,7 @@ const router = createRouter({
           name: 'users',
           component: VUsersManagement,
           meta: { requiresAuth: true },
-          beforeEnter: (to, from, next) => { validateAdminRole(next) }
+          //beforeEnter: (to, from, next) => { validateAdminRole(next) }
 
         },
         {

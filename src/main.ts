@@ -19,11 +19,14 @@ import 'uno.css'
 import VWhiteButton from './components/buttons/VWhiteButton.vue';
 import VBlackButton from './components/buttons/VBlackButton.vue';
 import VButtonsContainer from './components/buttons/VButtonsContainer.vue';
+import { VueQueryPlugin } from '@tanstack/vue-query'
 import { MyPreset } from './plugins/primevue-preset';
 import 'primeicons/primeicons.css'
 
 const app = createApp(App)
 
+
+app.use(VueQueryPlugin)
 app.component('vue-countdown', VueCountdown);
 app.component('VLoading', VLoading);
 app.component('VInput', VInput);

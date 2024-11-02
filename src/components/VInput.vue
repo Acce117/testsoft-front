@@ -3,7 +3,7 @@
   <div w-full>
 
     <FloatLabel   variant="on">
-      <InputText :maxlength="max" :minlength="min" :required l  :id="props.id"
+      <InputText @blur="canValidate=true" :maxlength="max" :minlength="min" :required l  :id="props.id"
         w-full :type="props.type" v-model="model" :invalid="canValidate ? !validate() : false"  />
       <label :for="props.id" flex items-center justify-center gap-2>
         <slot></slot>{{ $t(props.text) }}
@@ -38,7 +38,7 @@ const props = defineProps({
   },
 });
 const error = ref('error.error')
-let canValidate = inject('canValidate')
+let canValidate = ref(false)
 const emit = defineEmits(["invalid", "valid"]);
 const model = defineModel();
 const validate = () => {
@@ -53,6 +53,7 @@ const validate = () => {
   }
   return isValid;
 };
+defineExpose(validate)
 </script>
 <style>
 .custom-input {

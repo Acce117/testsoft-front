@@ -110,7 +110,7 @@ import { useI18n } from "vue-i18n";
 import { watch } from "vue";
 import { validateEmail } from "@/common/utils/validations";
 import { validateCI } from "@/common/utils/validations";
-import { addUser } from "../../users";
+import { addUser } from "../../models/user.model";
 import { validateEmptyString } from "@/common/utils/validations";
 
 const props = defineProps({

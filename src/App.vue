@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import { RouterView, useRouter } from "vue-router";
 import Toast from "primevue/toast";
+import { VueQueryDevtools } from '@tanstack/vue-query-devtools'
 import ConfirmDialog from "primevue/confirmdialog";
 import ConfirmPopup from "primevue/confirmpopup";
 import DynamicDialog from "primevue/dynamicdialog";
 import useEvents from "./common/utils/useEvents";
 import { useToast } from "primevue/usetoast";
 import { useConfirm } from "primevue/useconfirm";
+
 import { useI18n } from "vue-i18n";
 
 const router = useRouter();
@@ -50,4 +52,5 @@ useEvents().addListener("confirm", (event: CustomEventInit) => {
   <ConfirmDialog />
   <ConfirmPopup group="popup" />
   <DynamicDialog />
+  <VueQueryDevtools />
 </template>

@@ -1,7 +1,7 @@
 <template>
-  <div absolute  w-full z-50>
+  <div absolute w-full z-50>
 
-  <!--<ul class="navbar">
+    <!--<ul class="navbar">
     <li
       mt-0.5rem
       trans-0.2
@@ -18,14 +18,14 @@
     
 
   </ul>-->
-  <Menubar :model="items"  >
+    <Menubar :model="items">
 
-    <template #start>
-        
-      <RouterLink to="/" size-10> <img src="/img/logo.png" size-10/></RouterLink>
-    </template>
-  </Menubar>
-</div>
+      <template #start>
+
+        <RouterLink to="/" size-10> <img src="/img/logo.png" size-10 /></RouterLink>
+      </template>
+    </Menubar>
+  </div>
 
 
 </template>
@@ -70,7 +70,7 @@ const itemsAnalist = [
   {
     label: "Users",
     i18n: "users",
-   
+
     items: [
       {
         label: " ",
@@ -97,9 +97,27 @@ const itemsAnalist = [
 ];
 const itemsDefault = [
   {
+    label: "Users",
+    i18n: "users",
+
+    items: [
+      {
+        label: " ",
+        i18n: "manage-users",
+        command: () => router.push("/users"),
+      }
+    ],
+  },
+  {
+    label: " ",
+    i18n: "execute",
+    command: () => router.push("/select-test"),
+  },
+  {
     label: " ",
     i18n: "profile",
     items: [
+
       {
         label: " ",
         i18n: "user",
