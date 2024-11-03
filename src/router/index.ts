@@ -12,6 +12,7 @@ import { userStore } from '@/modules/security/store/user-store'
 import VUsersManagement from '@/modules/management/users/views/VUsersManagement.vue'
 import VInfo from '@/views/info/VInfo.vue'
 import useEvents from '@/common/utils/useEvents'
+import AdminLayout from '@/layouts/admin/AdminLayout.vue'
 const notAuthorizedToastError = {
   severity: "error",
   summary: "Error:",
@@ -27,6 +28,23 @@ const router = createRouter({
       name: 'login',
       component: VLogin
     },
+    {
+      path: '/admin',
+      name: 'admin',
+      component: AdminLayout,
+      //meta: { requiresAuth: true },
+      children: [
+        {
+          path: '/users',
+          name: 'users',
+          component: VUsersManagement,
+          meta: { requiresAuth: true },
+          //beforeEnter: (to, from, next) => { validateAdminRole(next) }
+    
+        }
+      ]
+    },
+    
     {
       path: '/',
       name: 'home',
@@ -64,14 +82,7 @@ const router = createRouter({
           component: VResults,
           meta: { requiresAuth: true }
         },
-        {
-          path: '/users',
-          name: 'users',
-          component: VUsersManagement,
-          meta: { requiresAuth: true },
-          //beforeEnter: (to, from, next) => { validateAdminRole(next) }
-
-        },
+        
         {
           path: '/assign-test',
           name: 'assign-test',

@@ -1,6 +1,7 @@
 import { useSendRequest } from "@/common/utils/fetch";
 import useEvents from "@/common/utils/useEvents";
 import { BaseModel } from "@/core/BaseModel";
+import { schema } from "../schemas/user.schema";
 
 const url = "user";
 const columns = [
@@ -29,6 +30,8 @@ const columns = [
     header: "Tipo de Usuario",
   },
 ];
+
+
 export class User extends BaseModel {
   user_id;
   name;
@@ -80,6 +83,9 @@ export class User extends BaseModel {
   }
   public getColumns() {
     return columns;
+  }
+  public getSchema() {
+    return schema;
   }
 
   public getFieldAsID(): string {

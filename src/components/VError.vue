@@ -1,7 +1,12 @@
 <template>
-    <div centered flex-col gap-8 w-full h-full>
-      <img filter-invert w-3rem src="/img/connection_lost.svg" />
-      <h2 text-10 text-white>{{ $t('global.error') }}...</h2>
+    <div centered flex-col gap-1 w-full h-full>
+      <i :class="`pi pi-exclamation-triangle ${props.mode==='primary'?'text-primary':'text-white'}`" style="font-size: 1.5rem"  />
+      <h2 text-2xl :class="props.mode==='primary'?'text-primary':'text-white'">{{ $t('global.error') }}...</h2>
       <slot></slot>
     </div>
 </template>
+<script setup lang="ts">
+const props=defineProps({
+  mode:String
+})
+</script>

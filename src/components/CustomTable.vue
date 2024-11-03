@@ -1,28 +1,32 @@
 <template>
-    <Card style="width: 90%; overflow: auto">
+    <Card style="width: 100%; overflow: auto" max-w-screen>
         <template #content>
 
-            <DataTable removableSort ref="dt" :globalFilterFields="props.model.getColumns().map((c) => c.field)"
-                v-model:filters="filters" filterDisplay="row" paginator :value="data" :rows="5"
-                :rowsPerPageOptions="[5, 10, 20, 50]">
+            <DataTable removableSort ref="dt" size="small"
+                :globalFilterFields="props.model.getColumns().map((c) => c.field)" v-model:filters="filters"
+                filterDisplay="row" paginator :value="data" :rows="5" :rowsPerPageOptions="[5, 10, 20, 50]">
 
 
                 <template #header>
                     <div class="custom-table-header">
-                        <h1 text-2xl>{{ title }}</h1>
+                        <h1 text-2xl m-0 font-semibold>{{ title }}</h1>
                         <div class="custom-table-header__options">
                             <IconField>
                                 <InputIcon>
                                     <i class="pi pi-search" />
                                 </InputIcon>
-                                <InputText v-model="filters['global'].value" :placeholder="$t('table.search')" />
+                                <InputText w-12rem lg:w-20rem v-model="filters['global'].value"
+                                    :placeholder="$t('table.search')" />
                             </IconField>
-                            <Button icon="pi pi-external-link" @click="toggle" aria-haspopup="true"
-                                aria-controls="overlay_menu" />
-                            <Menu ref="menu" id="overlay_menu" :model="exportOptions" :popup="true" />
+                            <div flex gap-2>
+                                <Button icon="pi pi-plus" @click="showAdd()" />
 
-                            <Button icon="pi pi-plus" @click="showAdd()" />
-                            <Button icon="pi pi-refresh" @click="refetch()" />
+                                <Button icon="pi pi-external-link" @click="toggle" aria-haspopup="true"
+                                    aria-controls="overlay_menu" severity="secondary" />
+                                <Menu ref="menu"  id="overlay_menu" :model="exportOptions" :popup="true" />
+
+                                <Button icon="pi pi-refresh" severity="secondary" @click="refetch()" />
+                            </div>
 
                         </div>
                     </div>
@@ -51,18 +55,18 @@
                         <Skeleton v-if="isRefetching || isPending" width="60%" borderRadius=".4rem" height="1.5rem" />
 
                         <div v-else class="custom-table-actions">
-                            <i class="pi pi-eye"  v-tooltip="$t('table.view_information')"
+                            <i class="pi pi-eye" v-tooltip="$t('table.view_information')"
                                 @click="showElement(slotProps.data)" />
                             <i class="pi pi-file-edit" v-tooltip="$t('table.update')"
                                 @click="showUpdate(slotProps.data)" />
 
-                            <i v-if="!props.fieldAsActive" v-tooltip="$t('table.delete')"
+                            <!-- <i v-if="!props.fieldAsActive" v-tooltip="$t('table.delete')"
                                 @click="deleteElement($event, slotProps.data)" class="pi pi-trash" />
                             <i v-if="slotProps.data[props.fieldAsActive] == true" v-tooltip="$t('table.desactivate')"
                                 @click="desactivateElement($event, slotProps.data)" class="pi pi-trash" />
 
                             <i v-if="slotProps.data[props.fieldAsActive] == false" v-tooltip="$t('table.recover')"
-                                @click="activateElement($event, slotProps.data)" class="pi pi-history" />
+                                @click="activateElement($event, slotProps.data)" class="pi pi-history" /> -->
 
                         </div>
                     </template>
@@ -75,25 +79,41 @@
     </Card>
 
     <Dialog v-model:visible="showInfoDialog" modal :header="$t('table.information')" :style="{ width: '25rem' }">
-        <div class="dialog-form">
-            <slot name="info"></slot>
-            {{ props.model }}
+        <div w-full h-32 flex items-center justify-center v-if="isRefetchingOfOne || isPendingOfOne">
+            <i class="pi pi-spinner pi-spin" style="font-size: 3rem" text-primary></i>
+
         </div>
-        <div class="flex justify-end gap-2">
-            <Button type="button" :label="$t('table.accepts')" @click="showInfoDialog = false"></Button>
+
+        <div v-else-if="isSuccessOfONe" class="dialog-form">
+            <slot name="view-element"></slot>
+            <div class="flex justify-end gap-2">
+                <Button type="button" :label="$t('table.accepts')" @click="showInfoDialog = false"></Button>
+            </div>
+        </div>
+        <div v-else>
+            <VError mode="primary">
+                <Button type="button" icon="pi pi-refresh" :label="$t('table.retry')" @click="refetchOfOne()"></Button>
+            </VError>
+
         </div>
     </Dialog>
     <Dialog v-model:visible="showAddDialog" modal :header="$t('table.add')" :style="{ width: '25rem' }">
+
         <span>{{ $t('table.new_element') }}</span>
-        <div class="dialog-form">
-            <slot name="form-add"></slot>
-            {{model}}
-        </div>
-        <div class="dialog-footer">
-            <Button type="button" :label="$t('table.cancel')" severity="secondary"
-                @click="showAddDialog = false"></Button>
-            <Button type="button" :label="$t('table.save')" @click="addElement()"></Button>
-        </div>
+        <Form @submit="addElement" :validation-schema="props.model.getSchema()">
+            <div class="dialog-form">
+                <slot name="form-add"></slot>
+
+                {{ model }}
+            </div>
+
+            <div class="dialog-footer">
+                <Button type="button" :label="$t('table.cancel')" severity="secondary"
+                    @click="showAddDialog = false"></Button>
+                <Button type="submit" :label="$t('table.save')"></Button>
+            </div>
+        </Form>
+
     </Dialog>
     <Dialog v-model:visible="showUpdateDialog" modal :header="$t('table.update')" :style="{ width: '25rem' }">
         <span>{{ $t('table.update_element') }}</span>
@@ -109,13 +129,14 @@
 </template>
 <script setup lang="ts">
 import Column from 'primevue/column';
+import { Form } from 'vee-validate';
 import Card from 'primevue/card';
 import Dialog from 'primevue/dialog';
 import DataTable from 'primevue/datatable';
 import IconField from 'primevue/iconfield';
 import InputIcon from 'primevue/inputicon';
 import { FilterMatchMode } from '@primevue/core/api';
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 import { useConfirm } from "primevue/useconfirm";
@@ -126,6 +147,7 @@ import Menu from 'primevue/menu';
 import { useI18n } from 'vue-i18n';
 import { BaseModel } from '@/core/BaseModel';
 import Skeleton from 'primevue/skeleton';
+import VError from './VError.vue';
 
 useQueryClient()
 const props = defineProps({
@@ -151,8 +173,21 @@ const { data, isPending, isSuccess, isError, isRefetching, refetch } = useQuery(
     }
 })
 
+const { data: dataOfOne, isPending: isPendingOfOne, isSuccess: isSuccessOfONe, isRefetching: isRefetchingOfOne, refetch: refetchOfOne } = useQuery({
+    queryKey: [queryKey + '-one'],
+    queryFn: () => {
+        return props.model.getOne()
+    },
+    enabled: false
+})
+
+watch(dataOfOne, (newValue) => {
+    props.model.setData(newValue)
+})
+
 
 const dt = ref();
+
 
 const { t } = useI18n();
 
@@ -207,6 +242,7 @@ const showAdd = () => {
 const showElement = (data) => {
     props.model.setData(data)
     showInfoDialog.value = true
+    refetchOfOne()
 }
 
 const showUpdateDialog = ref(false)
@@ -219,8 +255,9 @@ const showUpdate = (data) => {
 const showAddDialog = ref(false)
 
 
-const addElement = () => {
-    mutateAdd(props.model)
+const addElement = (values) => {
+    console.log(values)
+    //mutateAdd(props.model)
 }
 const updateElement = () => {
     mutateUpdate(props.model)
@@ -306,7 +343,7 @@ const activateElement = (event, data) => {
 
 const { mutate: mutateAdd } = useMutation({
     mutationKey: [`${queryKey}-add`],
-    mutationFn: (data)=> props.model.create(data),
+    mutationFn: (data) => props.model.create(data),
     onSuccess: async () => {
         await refetch()
         toast.add({ severity: 'info', summary: t('table.confirmation'), detail: t('table.element_ok_added'), life: 5000 });
@@ -321,7 +358,7 @@ const { mutate: mutateAdd } = useMutation({
 
 const { mutate: mutateUpdate } = useMutation({
     mutationKey: [`${queryKey}-update`],
-    mutationFn: (data)=> props.model.update(data),
+    mutationFn: (data) => props.model.update(data),
     onSuccess: async () => {
         await refetch()
         toast.add({ severity: 'info', summary: t('table.confirmation'), detail: t('table.element_ok_updated'), life: 5000 });
@@ -370,7 +407,8 @@ const { mutate: mutateDelete } = useMutation({
 
 .custom-table-header__options {
     display: flex;
-    width: fit-content;
+    width: 100%;
+    justify-content: space-between;
     gap: 1rem;
 }
 
