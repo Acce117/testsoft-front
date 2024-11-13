@@ -13,6 +13,7 @@ import VUsersManagement from '@/modules/management/users/views/VUsersManagement.
 import VInfo from '@/views/info/VInfo.vue'
 import useEvents from '@/common/utils/useEvents'
 import AdminLayout from '@/layouts/admin/AdminLayout.vue'
+import VGroups from '@/modules/management/group/views/VGroups.vue'
 const notAuthorizedToastError = {
   severity: "error",
   summary: "Error:",
@@ -38,6 +39,14 @@ const router = createRouter({
           path: '/users',
           name: 'users',
           component: VUsersManagement,
+          meta: { requiresAuth: true },
+          //beforeEnter: (to, from, next) => { validateAdminRole(next) }
+    
+        },
+        {
+          path: '/groups',
+          name: 'groups',
+          component: VGroups,
           meta: { requiresAuth: true },
           //beforeEnter: (to, from, next) => { validateAdminRole(next) }
     

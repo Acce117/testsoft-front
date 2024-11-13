@@ -1,5 +1,5 @@
 <template>
-  <div z-50 m-3 >
+  <div z-50  w-full >
 
     <Menubar :model="items">
 

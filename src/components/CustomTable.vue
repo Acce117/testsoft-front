@@ -1,15 +1,15 @@
 <template>
-    <Card style="width: 100%; overflow: auto" max-w-screen>
+    <Card >
         <template #content>
 
-            <DataTable removableSort ref="dt" size="small"
+            <DataTable removableSort ref="dt" size="small"  tableStyle="min-width: 50rem"
                 :globalFilterFields="props.model.getColumns().map((c) => c.field)" v-model:filters="filters"
                 filterDisplay="row" paginator :value="data" :rows="5" :rowsPerPageOptions="[5, 10, 20, 50]">
 
 
                 <template #header>
                     <div class="custom-table-header">
-                        <h1 text-2xl m-0 font-semibold>{{ title }}</h1>
+                        <h1 text-xl m-0 font-semibold>{{ title }}</h1>
                         <div class="custom-table-header__options">
                             <IconField>
                                 <InputIcon>
@@ -23,7 +23,7 @@
 
                                 <Button icon="pi pi-external-link" @click="toggle" aria-haspopup="true"
                                     aria-controls="overlay_menu" severity="secondary" />
-                                <Menu ref="menu"  id="overlay_menu" :model="exportOptions" :popup="true" />
+                                <Menu ref="menu" id="overlay_menu" :model="exportOptions" :popup="true" />
 
                                 <Button icon="pi pi-refresh" severity="secondary" @click="refetch()" />
                             </div>
@@ -34,16 +34,20 @@
                 </template>
                 <Column v-for="(col, index) in props.model.getColumns()" :key="index" sortable :field="col.field"
                     :header="col.header">
+
+
                     <template #body="slotProps">
 
                         <Skeleton v-if="isRefetching || isPending" width="60%" borderRadius=".4rem" height="1.5rem" />
-                        <div v-else>
+                        <div overflow-auto text-sm v-else>
                             <Rating v-if="col.isRating" :modelValue="slotProps.data[col.field]" readonly />
                             <span v-else-if="col.isBoolean || col.field === fieldAsActive">{{
                                 slotProps.data[col.field] == true ? t('yes') : t('no') }}</span>
-                            <span v-else-if="slotProps.data[col.field] !== undefined">{{ slotProps.data[col.field]
-                                }}</span>
-                            <span v-else>-</span>
+                            <span v-else-if="slotProps.data[col.field] !== undefined">{{ typeof
+                                slotProps.data[col.field] == 'string' ? slotProps.data[col.field].length < 20 ?
+                                slotProps.data[col.field] : slotProps.data[col.field].substring(0, 20) +'...':
+                                    slotProps.data[col.field] }}</span>
+                                    <span v-else>-</span>
                         </div>
 
                     </template>
@@ -78,13 +82,14 @@
         </template>
     </Card>
 
-    <Dialog v-model:visible="showInfoDialog" modal :header="$t('table.information')" :style="{ width: '25rem' }">
+    <Dialog v-model:visible="showInfoDialog" modal :header="$t('table.information')"
+        class="w-4/5 max-w-50rem min-w-25rem">
         <div w-full h-32 flex items-center justify-center v-if="isRefetchingOfOne || isPendingOfOne">
             <i class="pi pi-spinner pi-spin" style="font-size: 3rem" text-primary></i>
 
         </div>
 
-        <div v-else-if="isSuccessOfONe" class="dialog-form">
+        <div v-else-if="isSuccessOfOne" class="dialog-form">
             <slot name="view-element"></slot>
             <div class="flex justify-end gap-2">
                 <Button type="button" :label="$t('table.accepts')" @click="showInfoDialog = false"></Button>
@@ -97,7 +102,7 @@
 
         </div>
     </Dialog>
-    <Dialog v-model:visible="showAddDialog" modal :header="$t('table.add')" :style="{ width: '25rem' }">
+    <Dialog v-model:visible="showAddDialog" modal :header="$t('table.add')" class="w-4/5 max-w-50rem min-w-25rem">
 
         <span>{{ $t('table.new_element') }}</span>
         <Form @submit="addElement" :validation-schema="props.model.getSchema()">
@@ -115,7 +120,7 @@
         </Form>
 
     </Dialog>
-    <Dialog v-model:visible="showUpdateDialog" modal :header="$t('table.update')" :style="{ width: '25rem' }">
+    <Dialog v-model:visible="showUpdateDialog" modal :header="$t('table.update')" class="w-4/5 max-w-50rem min-w-25rem">
         <span>{{ $t('table.update_element') }}</span>
         <div class="dialog-form">
             <slot name="form-add"></slot>
@@ -173,7 +178,7 @@ const { data, isPending, isSuccess, isError, isRefetching, refetch } = useQuery(
     }
 })
 
-const { data: dataOfOne, isPending: isPendingOfOne, isSuccess: isSuccessOfONe, isRefetching: isRefetchingOfOne, refetch: refetchOfOne } = useQuery({
+const { data: dataOfOne, isPending: isPendingOfOne, isSuccess: isSuccessOfOne, isRefetching: isRefetchingOfOne, refetch: refetchOfOne } = useQuery({
     queryKey: [queryKey + '-one'],
     queryFn: () => {
         return props.model.getOne()
@@ -257,7 +262,7 @@ const showAddDialog = ref(false)
 
 const addElement = (values) => {
     console.log(values)
-    //mutateAdd(props.model)
+    mutateAdd(props.model)
 }
 const updateElement = () => {
     mutateUpdate(props.model)
@@ -443,4 +448,8 @@ const { mutate: mutateDelete } = useMutation({
     align-items: center;
     justify-content: center;
 }
+
+
+
+
 </style>

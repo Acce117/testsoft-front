@@ -5,19 +5,23 @@ import AdminSideBar from './components/AdminSideBar.vue';
 import { ref } from 'vue';
 import Drawer from 'primevue/drawer';
 import Button from 'primevue/button';
+import VUsersManagement from '@/modules/management/users/views/VUsersManagement.vue';
+import DataTable from 'primevue/datatable';
+import Column from 'primevue/column';
 
 const visible=ref(false)
+const products = ref();
 </script>
 
 <template>
   
   <main bg-sky-300 w-screen h-screen flex anim-fade-in-1>
-    <div class="hidden xl:block">
+     <aside class=" xl:flex ">
       <AdminSideBar />
 
-    </div>
+    </aside>
 
-    <div class="card flex justify-center">
+    <aside class="card flex justify-center">
       <Drawer v-model:visible="visible" class="!w-fit">
         <template #container>
           <AdminSideBar />
@@ -26,12 +30,12 @@ const visible=ref(false)
 
       </Drawer>
       
-    </div>
+    </aside>
 
+    
 
-
-    <section h-screen flex flex-col w-full>
-      <AdminNavbar>
+    <section h-full w-full flex-col flex gap-2 p-2 >
+      <AdminNavbar >
         <template #sidebar-button >
           <div xl:hidden block>
             <Button  icon="pi pi-arrow-right" h-fit severity="secondary" @click="visible = true" />
@@ -39,10 +43,10 @@ const visible=ref(false)
           </div>
         </template>
       </AdminNavbar>
-      <div overflow-auto m3  h-full>
-
+      <div h-full overflow-auto max-w-full rounded-xl  w-full>
         <RouterView></RouterView>
       </div>
+
     </section>
 
 

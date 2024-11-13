@@ -6,6 +6,10 @@ import { schema } from "../schemas/user.schema";
 const url = "user";
 const columns = [
   {
+    field: "CI",
+    header: "Carnet de Identidad",
+  },
+  {
     field: "name",
     header: "Nombre",
   },
@@ -29,17 +33,25 @@ const columns = [
     field: "user_type",
     header: "Tipo de Usuario",
   },
+  {
+    field: "country_id",
+    header: "País",
+  },
+  
 ];
 
 
 export class User extends BaseModel {
   user_id;
+  CI;
   name;
   username;
+  password;
   last_name;
   email;
   sex;
   user_type;
+  country_id;
 
   constructor(data: any = null) {
     super();
@@ -47,32 +59,45 @@ export class User extends BaseModel {
     if (data) {
       this.user_id = data.user_id;
       this.name = data.name;
+      this.CI = data.CI;
+      this.password = data.password;
+
       this.username = data.username;
       this.last_name = data.last_name;
       this.email = data.email;
       this.sex = data.sex;
       this.user_type = data.user_type;
+      this.country_id = data.country_id;
+
     }
   }
 
   public setData(data: any) {
     this.user_id = data.user_id;
+    this.CI = data.CI;
     this.name = data.name;
+    this.password = data.password;
     this.username = data.username;
     this.last_name = data.last_name;
     this.email = data.email;
     this.sex = data.sex;
     this.user_type = data.user_type;
+    this.country_id = data.country_id;
+
   }
 
   public clearData() {
     this.user_id = undefined;
+    this.CI = undefined;
     this.name = undefined;
+    this.password = undefined;
     this.username = undefined;
     this.last_name = undefined;
     this.email = undefined;
     this.sex = undefined;
     this.user_type = undefined;
+    this.country_id = undefined;
+
   }
 
   public getURL(): string {
@@ -95,89 +120,6 @@ export class User extends BaseModel {
   
 }
 
-const validateRequest = (error: boolean, cbIfTrue: Function) => {
-  if (!error) cbIfTrue();
-  console.log(error);
-  const options = !error
-    ? {
-        severity: "info",
-        summary: "Info",
-        detail: "global.completed",
-      }
-    : {
-        severity: "error",
-        summary: "Error",
-        detail: "global.failed",
-      };
-  useEvents().dispatch("error", {
-    severity: options.severity,
-    summary: options.summary,
-    detail: options.detail,
-    i18n: true,
-    life: 3000,
-  });
-};
-export function getUsers(ci?: string) {
-  const url = `${import.meta.env.VITE_API_PATH}/gestion/student`;
+ 
 
-  return useSendRequest(true, url, {
-    relations: ["user", "student_group"],
-  });
-}
-export function deleteUser(user: any) {
-  const url = `${
-    import.meta.env.VITE_API_PATH
-  }/gestion/student/delete_parameters`;
-  const request = useSendRequest();
-  request.sendRequest(
-    url,
-    {
-      attr: {
-        id_student: user.id_student,
-      },
-    },
-    "DELETE",
-    () => {
-      validateRequest(request.error.value, () => (user.deleted = 1));
-    }
-  );
-}
-export function addUser(userToAdd: any, users: any, cb: Function) {
-  userToAdd.fk_CI = userToAdd.CI;
-  userToAdd.sex = parseInt(userToAdd.CI.charAt(9)) % 2 == 0 ? "M" : "F";
-  const url = `${import.meta.env.VITE_API_PATH}/gestion/student/create`;
-  const request = useSendRequest();
-  request.sendRequest(url, userToAdd, "POST", () => {
-    validateRequest(request.error.value, () => {
-      users.push({
-        user: {
-          CI: userToAdd.CI,
-          name: userToAdd.name,
-          username: userToAdd.username,
-          last_name: userToAdd.last_name,
-          email: userToAdd.email,
-          sex: userToAdd.sex,
-          user_type: userToAdd.user_type,
-        },
-        student_group: {
-          id_student_group: userToAdd.fk_id_group,
-          name_group: userToAdd.name_group,
-        },
-        fk_CI: userToAdd.CI,
-        fk_id_group: userToAdd.fk_id_group,
-        deleted: 0,
-      });
-      cb();
-    });
-  });
-}
-export function updateUser(userToModify: any, cb: any, cbForOldData: any) {
-  const url = `${import.meta.env.VITE_API_PATH}/gestion/student/update/${
-    userToModify.id_student
-  }`;
-  const request = useSendRequest();
-  request.sendRequest(url, { student: userToModify.student }, "PATCH", () => {
-    validateRequest(request.error.value, cb);
-    if (request.error.value) cbForOldData();
-  });
-}
+

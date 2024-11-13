@@ -1,6 +1,6 @@
 <template>
 
-    <div class="card flex justify-center h-screen">
+    <div class="card flex  justify-center h-screen">
         <Menu :model="items" >
             <template #start>
                 <span class="inline-flex items-center gap-1 px-2 py-5">
@@ -9,16 +9,13 @@
                 </span>
             </template>
             <template #submenulabel="{ item }">
-                <span class="text-primary font-bold">{{ item.label }}</span>
+                <span class="text-primary font-semibold">{{ item.label }}</span>
             </template>
             <template #item="{ item, props }">
                 <a v-ripple class="flex items-center" v-bind="props.action">
                     <span :class="item.icon" />
-                    <span>{{ item.label }}</span>
-                    <Badge v-if="item.badge" class="ml-auto" :value="item.badge" />
-                    <span v-if="item.shortcut"
-                        class="ml-auto border border-surface rounded bg-emphasis text-muted-color text-xs p-1">{{
-                            item.shortcut }}</span>
+                    <span font-bold>{{ item.label }}</span>
+                    
                 </a>
             </template>
 
@@ -27,6 +24,7 @@
 </template>
 <script setup lang="ts">
 
+import router from "@/router";
 import Menu from "primevue/menu";
 import { ref } from "vue";
 
@@ -40,15 +38,20 @@ const items = ref([
             {
                 label: 'Usuarios',
                 icon: 'pi pi-user',
+                command:()=>router.push('/users')
             },
             {
                 label: 'Grupos',
                 icon: 'pi pi-users',
+                command:()=>router.push('/groups')
+
 
             }, 
             {
                 label: 'Test',
                 icon: 'pi pi-file',
+                command:()=>router.push('/tests')
+
 
             }
         ]
@@ -70,3 +73,9 @@ const items = ref([
 ]);
 
 </script>
+<style >
+
+.p-menu-submenu-label{
+    margin-top: 1rem !important;
+}
+</style>
