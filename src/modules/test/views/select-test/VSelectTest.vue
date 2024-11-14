@@ -1,129 +1,131 @@
 <script setup lang="ts">
-import { Swiper, SwiperSlide } from "swiper/vue";
 import VTestCard from "./components/VTestCard.vue";
-import { watch } from "vue";
+import { nextTick, ref, watch } from "vue";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-import { Pagination, Navigation } from "swiper/modules";
 import { userStore } from "@/modules/security/store/user-store";
 const user = userStore();
-import { getAsignedTests } from "@/modules/test/test";
+import { useAssignedTests } from "../../composables/useAssignedTests";
+import Carousel from "primevue/carousel";
+import Button from "primevue/button";
+import Popover from "primevue/popover";
 
-const { result, loading, error } = getAsignedTests();
 
-watch(result, (newValue) => {
-  user.assignedTests = [];
-  newValue.forEach((test: any) => {
-    let availableDate: Date = null;
-    if (test.applicatedTests[0]) {
-      availableDate = new Date(test.applicatedTests[0].date);
-      availableDate.setFullYear(
-        availableDate.getFullYear() + parseInt(test.recurringTime)
-      );
-    }
-    user.assignedTests.push({
-      id: test.id,
-      availabilityTime: availableDate,
-    });
-    sessionStorage.setItem("user", JSON.stringify(user.$state));
-  });
-});
-const modules = [Pagination, Navigation];
-const pagination = {
-  enabled: true,
-  clickable: true,
-  dynamicBullets: true,
-  renderBullet: function (index: number, className: string) {
-    return '<span class="' + className + '">' + (index + 1) + "</span>";
+const { tests, isPending, isError } = useAssignedTests()
+
+// watch(tests, (newValue) => {
+//   user.assignedTests = [];
+//   newValue.forEach((test: any) => {
+//     let availableDate: Date = null;
+//     if (test.applicatedTests[0]) {
+//       availableDate = new Date(test.applicatedTests[0].date);
+//       availableDate.setFullYear(
+//         availableDate.getFullYear() + parseInt(test.recurringTime)
+//       );
+//     }
+//     user.assignedTests.push({
+//       id: test.id,
+//       availabilityTime: availableDate,
+//     });
+//     sessionStorage.setItem("user", JSON.stringify(user.$state));
+//   });
+// });
+
+// const renderPagination = () => {
+//   if (result.value.length <= 3 && window.innerWidth >= 768)
+//     pagination.enabled = false;
+//   else pagination.enabled = true;
+// };
+
+const responsiveOptions = ref([
+  {
+    breakpoint: '1400px',
+    numVisible: 3,
+    numScroll: 1
   },
-};
-const renderPagination = () => {
-  if (result.value.length <= 3 && window.innerWidth >= 768)
-    pagination.enabled = false;
-  else pagination.enabled = true;
-};
+  {
+    breakpoint: '1199px',
+    numVisible: 2,
+    numScroll: 1
+  },
+
+  {
+    breakpoint: '575px',
+    numVisible: 1,
+    numScroll: 1
+  }
+]);
+
+const op = ref();
+const selectedTest = ref();
+
+const displayProduct = (event, test) => {
+  op.value.hide();
+
+  selectedTest.value = test;
+  console.log('asdsad')
+
+  nextTick(() => {
+    op.value.show(event);
+  });
+
+}
+
+const hidePopover = () => {
+  op.value.hide();
+}
+
 </script>
 <template>
-  <VError v-if="error" />
-  <section v-else-if="!loading">
-    <h2 page-title>{{ $t('select-test.title') }}</h2>
-    <Swiper
-      :spaceBetween="30"
-      :slidesPerView="1"
-      :loop="true"
-      :pagination="pagination"
-      :navigation="true"
-      :modules="modules"
-      :breakpoints="{ 768: { slidesPerView: 2 }, 1024: { slidesPerView: 3 } }"
-      @breakpoint="renderPagination()"
-    >
-      <swiper-slide class="swiper-slide" v-for="test in result" :key="test.id">
-        <VTestCard
-          :id="parseInt(test.id)"
-          :title="test.name"
-          :description="test.description"
-          :duration="parseInt(test.durationTime)"
-          :recurringTime="parseInt(test.recurringTime)"
-          :applicatedTests="test.applicatedTests"
-        />
+  <VError v-if="isError" />
+  <section v-else-if="!isPending">
+    <h2 text-slate-800 page-title>{{ $t('select-test.title') }}</h2>
+
+    <Carousel :value="tests" :numVisible="3" :numScroll="1" :responsiveOptions="responsiveOptions" circular>
+      <template #item="slotProps">
+        <VTestCard :test="slotProps.data" :infoCb="displayProduct" />
+      </template>
+    </Carousel>
+    <!-- <Swiper :spaceBetween="30" :slidesPerView="1" :loop="true" :pagination="pagination" :navigation="true"
+      :modules="modules" :breakpoints="{ 768: { slidesPerView: 2 }, 1024: { slidesPerView: 3 } }"
+      @breakpoint="renderPagination()">
+      <swiper-slide class="swiper-slide" v-for="test in tests" :key="test.id_test">
+        <VTestCard :id="parseInt(test.id_test)" :title="test.name" :description="test.description"
+          :duration="parseInt(test.durationTime)" :recurringTime="parseInt(test.recurringTime)"
+          :applicatedTests="test.applicatedTests" />
       </swiper-slide>
-    </Swiper>
+    </Swiper> -->
+    <Popover ref="op">
+      <div v-if="selectedTest" class="rounded flex flex-col  w-24rem lg:w-40rem">
+
+        <div class="pt-4">
+          <div class="flex flex-col justify-between text-sm text-justify items-start gap-2 mb-4">
+            <div>
+              <span font-bold>Nombre: </span>
+              <span class="font-medium text-surface-500  ">{{ selectedTest.name
+                }}</span>
+            </div>
+            <div>
+              <span font-bold>Disponibilidad: </span>
+              <span class="font-medium text-secondary ">Disponible</span>
+            </div>
+            <div>
+              <span font-bold>Descripción: </span>
+              <span class="font-medium text-surface-500  ">{{ selectedTest.description
+                }}</span>
+            </div>
+
+          </div>
+            <Button label="Aceptar" outlined @click="hidePopover"></Button>
+        </div>
+      </div>
+    </Popover>
   </section>
   <VLoading v-else />
 </template>
-<style>
-.swiper {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  height: 60rem;
-}
-
-.swiper-slide {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 52rem;
-}
-
-.swiper-button-next,
-.swiper-button-prev {
-  color: white;
-  transition: all ease 0.2s;
-}
-.swiper-pagination-bullet:hover,
-.swiper-button-next:hover,
-.swiper-button-prev:hover {
-  transform: scale(1.2);
-}
-
-.swiper-button-next:active,
-.swiper-button-prev:active {
-  transform: scale(1);
-  opacity: 0.5;
-}
-.swiper-pagination-bullets {
-  gap: 0.5rem;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  height: 10rem;
-  overflow: auto;
-}
-.swiper-pagination-bullet {
-  height: 3rem;
-  width: 3rem;
-  transition: all ease 0.3s;
-  background: rgb(231, 231, 231);
-  font-size: 1.8rem;
-  color: black;
-  opacity: 1;
-}
-
-.swiper-pagination-bullet-active {
-  background: black;
-  color: white;
+<style scoped>
+.test-img {
+  background: -webkit-linear-gradient(0deg, #3faee4, black)
 }
 </style>

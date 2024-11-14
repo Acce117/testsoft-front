@@ -37,11 +37,11 @@ window.scrollTo(0, 0);
         </div>
         <form action="" @submit.prevent="login.login(credentials)" centered gap-27px flex-col>
 
-          <VInput required id="user-input" :max="8" v-model="credentials.username" text="login.user">
+          <VInput name="username"  id="user-input" :max="8" v-model="credentials.username" label="login.user">
             <span class="pi pi-user"></span>
           </VInput>
-          <VInput required id="password-input" :max="8" w-full type="password" v-model="credentials.password"
-            text="login.password">
+          <VInput name="password"  id="password-input" :max="8" type="password" v-model="credentials.password"
+          label="login.password">
             <i class="pi pi-lock"></i>
 
           </VInput>

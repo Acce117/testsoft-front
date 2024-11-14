@@ -1,76 +1,56 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router";
 import { ref } from "vue";
+import Button from "primevue/button";
 const router = useRouter();
 const props = defineProps({
-  id: Number,
-  title: String,
-  duration: Number,
-  description: String,
-  recurringTime: Number,
-  applicatedTests: Array,
+  test: { type: Object, required: true },
+  infoCb:{ type: Function, required: true }
 });
 const executeTest = () => {
-  router.push(`/execute-test/${props.id}`);
+  router.push(`/execute-test/${props.test.id_test}`);
 };
-const showImage = ref(true);
 const isAvailable = ref(false);
 const now = new Date();
-const getAvailabilityTime = () => {
-  let availabilityTime = 0;
-  if (props.applicatedTests[0]) {
-    const lastDate = new Date(props.applicatedTests[0].date);
-    lastDate.setFullYear(lastDate.getFullYear() + props.recurringTime);
-    availabilityTime = lastDate.getTime() - now.getTime();
-  }
-  return availabilityTime;
-};
-const availabilityTime = getAvailabilityTime();
+// const getAvailabilityTime = () => {
+//   let availabilityTime = 0;
+//   if (props.applicatedTests[0]) {
+//     const lastDate = new Date(props.applicatedTests[0].date);
+//     lastDate.setFullYear(lastDate.getFullYear() + props.recurringTime);
+//     availabilityTime = lastDate.getTime() - now.getTime();
+//   }
+//   return availabilityTime;
+// };
+//const availabilityTime = getAvailabilityTime();
 </script>
 
 <template>
   <div
-    class="test-card"
-    shadow-box
-    :class="{
-      'not-disponible': !isAvailable,
-    }"
-    @mouseover="showImage = false"
-    @mouseleave="showImage = true"
-  >
+    class="border h-10rem border-surface-200 bg-white overflow-hidden flex flex-col justify-between rounded-xl m-2  p-4">
+
+    <div class="mb-4 font-semibold text-xl text-secondary h-8rem overflow-scroll">{{ props.test.name }}</div>
+    <div class="flex justify-between items-center">
+      <div class="mt-0  text-xl"><i class="pi pi-stopwatch mr-2"></i>{{ props.test.time_duration > 0 ? props.test.time_duration +
+        " min" : "Por series" }}</div>
+      <span>
+        <Button severity="secondary" icon="pi pi-eye" @click="infoCb($event, props.test)" />
+        <Button icon="pi pi-file-edit" ml-2 @click="executeTest()" />
+      </span>
+    </div>
+  </div>
+  <!-- <div class="test-card" :class="{
+    'not-disponible': !isAvailable,
+  }" @mouseover="showImage = false" @mouseleave="showImage = true">
     <div class="test-card__header" centered>
-      <transition name="fast-fade">
-        <img v-if="showImage" filter-invert w-5rem src="/img/test_icon.svg" />
-      </transition>
 
-      <h2>{{ props.title }}</h2>
+
       <h2 v-if="!isAvailable && showImage">{{ $t('select-test.test-card.not-available') }}</h2>
-    </div>
-    <div class="test-card__description" v-if="isAvailable">
-      <span
-        >{{ $t('select-test.test-card.duration') }}:
-        {{ props.duration > 0 ? props.duration + " min" : "Por series" }}</span
-      >
-      <p>
-        <span>{{ $t('select-test.test-card.description') }}: </span>
-        {{ props.description }}
-      </p>
-    </div>
+    </div> -->
 
-    
-    <button
-    v-if="isAvailable"
-      v-ripple
-      class="p-ripple"
-      black-button
-      text-8
-      w-10rem
-      m-6
-      @click="executeTest()"
-    >
-    {{ $t('global.execute') }}
-    </button>
-    <vue-countdown
+
+
+
+    <!-- <vue-countdown
       :time="availabilityTime"
       v-slot="{ days, hours, minutes, seconds }"
       @end="isAvailable = true"
@@ -84,8 +64,8 @@ const availabilityTime = getAvailabilityTime();
         <span v-if="minutes > 0">{{ minutes }} minutos<br /> </span>
         <span v-if="seconds >= 0">{{ seconds }} segundos</span>
       </div>
-    </vue-countdown>
-  </div>
+    </vue-countdown> -->
+  <!-- </div> -->
 </template>
 
 <style>
@@ -129,12 +109,13 @@ const availabilityTime = getAvailabilityTime();
   height: 17rem;
   overflow: auto;
 }
+
 .test-card__description span,
 .test-card__header h2 {
   font-weight: bold;
 }
 
-.test-card__description > span {
+.test-card__description>span {
   margin: 0 1rem;
 }
 
@@ -142,6 +123,7 @@ const availabilityTime = getAvailabilityTime();
   text-align: justify;
   padding: 0 1rem;
 }
+
 .test-card:hover .test-card__description {
   opacity: 1;
 }
@@ -168,9 +150,11 @@ const availabilityTime = getAvailabilityTime();
 .test-card.p-disabled img {
   display: none;
 }
+
 .test-card.not-disponible .test-card__header {
   height: 100%;
 }
+
 .test-card:hover .test-card__header {
   height: 30%;
 }

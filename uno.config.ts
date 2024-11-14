@@ -30,7 +30,6 @@ export default defineConfig({
     [
       "page-title",
       {
-        color: "white",
         "text-align": "center",
         animation: ".8s fade-in",
         "margin-top": "7rem",
@@ -40,7 +39,6 @@ export default defineConfig({
     [
       "page-subtitle",
       {
-        color: "white",
         "text-align": "center",
         animation: ".8s fade-in",
         "font-size": "2rem",
