@@ -5,7 +5,7 @@
       <h2 text-3xl m-0 text-center font-poppins>
         {{ $t('home.subtitle') }}
       </h2>
-      <Button v-ripple mt-2rem rounded border-none w-12rem iconPos="right"   label="Comenzar" icon="pi pi-arrow-right">
+      <Button v-ripple mt-2rem rounded border-none w-12rem iconPos="right" @click="router.push('/select-test')"  label="Comenzar" icon="pi pi-arrow-right">
 
       </Button>
     </div>
@@ -16,4 +16,5 @@
 import VButton from "@/components/VButton.vue";
 import VPresentation from "./components/VPresentation.vue";
 import Button from "primevue/button";
+import router from "@/router";
 </script>
