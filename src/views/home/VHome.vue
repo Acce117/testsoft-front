@@ -13,7 +13,6 @@
   </section>
 </template>
 <script setup lang="ts">
-import VButton from "@/components/VButton.vue";
 import VPresentation from "./components/VPresentation.vue";
 import Button from "primevue/button";
 import router from "@/router";

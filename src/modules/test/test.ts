@@ -28,13 +28,10 @@ export function getAsignedTests() {
 }
 
 export function getTest(idTest: number | string) {
-    const url = `${import.meta.env.VITE_API_PATH}/gestion/test/view/${idTest}`;
-    const queryParams = {
-        attr: {
-            id_test: idTest
-        },
-        relations: ["arrayserie.arrayquestion.arrayanswer", "arrayserie.arrayquestion.arrayquestion_top_value"]
-    };
-    return useSendRequest(true, url, queryParams);
+    
+    return useSendRequest(true, `${import.meta.env.VITE_API_PATH}/psi_test/${idTest}`, {
+        
+        relations:["series.questions.answers"]
+    });
 }
 

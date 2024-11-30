@@ -44,6 +44,9 @@ useEvents().addListener("confirm", (event: CustomEventInit) => {
     },
   });
 });
+useEvents().addListener("clean-toast", () => {
+  toast.removeAllGroups()
+});
 </script>
 <template>
 

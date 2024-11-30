@@ -19,11 +19,12 @@ if(!test.questions[`${props.id_question}`])
 </script>
 <template>
   <div
-    class="radio-button-answer answer"
+    class="radio-button-answer answer text-red"
     gap-
     v-for="answer in props.possible_answers"
     :key="answer.id_answer"
   >
+  {{ "possible_answers" }}
     <label :for="answer.id_answer" flex  gap-1rem flex-items-center w-full h-full>
       <RadioButton
         v-model="test.questions[`${props.id_question}`].answer"

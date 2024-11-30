@@ -16,7 +16,7 @@ const products = ref();
 <template>
   
   <main bg-sky-300 w-screen h-screen flex anim-fade-in-1>
-     <aside class=" xl:flex ">
+     <aside class="hidden xl:flex ">
       <AdminSideBar />
 
     </aside>

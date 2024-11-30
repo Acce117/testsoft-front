@@ -4,7 +4,7 @@ import { BaseModel } from "@/core/BaseModel";
 const url = "psi_test";
 
 
-export class AssignedTest extends BaseModel {
+export class Test extends BaseModel {
   id_test;
   name;
   description;
@@ -41,9 +41,7 @@ export class AssignedTest extends BaseModel {
   public getURL(): string {
     return url;
   }
-  public getID(): string {
-    return this.id_test;
-  }
+ 
   
   
 

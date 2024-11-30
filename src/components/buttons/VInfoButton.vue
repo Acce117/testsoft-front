@@ -9,7 +9,6 @@
     @click="visible = true"
     ><img src="/img/info.svg" alt="info" />
   </VWhiteButton>
-  <Dialog> </Dialog>
   <Dialog
     v-model:visible="visible"
     modal

@@ -9,7 +9,7 @@ const props = defineProps({
   serie: Object,
 });
 const emit = defineEmits(['time-serie-over'])
-const validatedTestFirstTime = inject("validatedTestFirstTime");
+const validatedTestFirstTime = inject('executeTest').validatedTestFirstTime
 const test = inject<Test>("test");
 
 </script>
@@ -17,11 +17,11 @@ const test = inject<Test>("test");
 <template>
   <div >
     <VQuestion
-      v-for="(question, index) in props.serie?.arrayquestion"
+      v-for="(question, index) in props.serie?.questions"
       :key="question.id_question"
       :id_question="question.id_question"
       :question_index="index + 1"
-      :possible_answers="question.arrayanswer"
+      :possible_answers="question.answers"
       :title="question.statement"
       :class="{
         'invalid-input': validatedTestFirstTime

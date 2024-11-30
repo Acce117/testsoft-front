@@ -54,9 +54,7 @@ export class Group extends BaseModel {
   public getURL(): string {
     return url;
   }
-  public getID(): string {
-    return this.id_group;
-  }
+
   public getColumns() {
     return columns;
   }

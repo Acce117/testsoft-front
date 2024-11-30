@@ -1,53 +1,46 @@
 <template>
-  <div class="test__header">
-    <h2 page-title w-20rem h-6rem m-l-0.5rem lg:w-50rem>
-      {{ props.result?.name }}
-    </h2>
-    <div centered gap-1rem flex-1 mb-1rem mt-4rem>
-      <button
-        class="white-button p-ripple"
+  <div class="test__header" bg-white rounded-xl>
+    <div  justify-between flex p-3 w-full >
+      <Button
+        class=" p-ripple"
+        icon="pi pi-arrow-left"
+
         v-ripple
-        :class="{
-          'p-disabled': !(serieIndex > 0),
-        }"
-        v-if="props.result?.navigable == 1"
+        :disabled="!(serieIndex > 0)"
+        v-if="props.data?.navigable == 1"
         @click="prevSerie()"
         v-tooltip.bottom="t('execute-test.tooltips.prev')"
         placeholder="Bottom"
-      >
-        <img src="/img/arrow.svg" alt="serie anterior" rotate-180deg />
-      </button>
-      <Steps
-        :model="getSeriesNames()"
-        v-model:activeStep="serieIndex"
-        :readonly="props.result?.navigable != 1"
       />
-      <button
-        :class="{
-          'p-disabled': !(serieIndex < props.result?.arrayserie.length - 1),
-        }"
-        v-if="props.result?.arrayserie.length > 1"
-        class="p-ripple white-button"
+      <slot name="timer"></slot>
+
+      
+      <Button
+        :disabled=" !(serieIndex < props.data?.series.length - 1)"
+        v-if="props.data?.series.length > 1"
+        class="p-ripple "
+        icon="pi pi-arrow-right"
         v-ripple
         @click="nextSerie()"
         v-tooltip.bottom="t('execute-test.tooltips.next')"
         placeholder="Bottom"
-      >
-        <img src="/img/arrow.svg" alt="siguiente serie" />
-      </button>
+      />
+        
+      
     </div>
   </div>
 </template>
 <script setup lang="ts">
+import Button from "primevue/button";
 import Steps from "primevue/steps";
-import {  watch, inject } from "vue";
+import {  inject, watch } from "vue";
 import { useI18n } from "vue-i18n";
 const { t } = useI18n()
 const props = defineProps({
-  result: Object,
+  data: Object,
 });
 const emit = defineEmits(['next-serie'])
-const serieIndex = inject("serieIndex");
+const serieIndex = inject('executeTest').serieIndex
 //SERIE NAVIGATION
 
 const nextSerie=()=>{
@@ -59,8 +52,8 @@ const prevSerie = () => {
 
 const getSeriesNames = () => {
   let names = Array();
-  if (props.result) {
-    props.result.arrayserie.forEach((serie: { name: string }) => {
+  if (props.data) {
+    props.data.series.forEach((serie: { name: string }) => {
       names.push({ label: serie.name });
     });
   }
@@ -74,16 +67,7 @@ watch(
 </script>
 <style>
 .test__header {
-  position: absolute;
-  display: flex;
-  background-color: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(1.2rem);
-  -webkit-backdrop-filter: blur(1.2rem);
-  z-index: 1;
-  width: 100%;
-  top: 0;
-  height: 15rem;
-  box-shadow: var(--shadow);
   animation: slide-in-from-top 0.5s ease;
 }
+
 </style>

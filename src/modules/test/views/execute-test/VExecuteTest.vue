@@ -2,7 +2,6 @@
 import VTestSerie from "./VTestSerie.vue";
 import VTestHeader from "./VTestHeader.vue";
 import { onBeforeRouteLeave, useRouter } from "vue-router";
-import Dialog from "primevue/dialog";
 import {
   provide,
   markRaw,
@@ -12,7 +11,6 @@ import {
   defineAsyncComponent,
   onUnmounted,
 } from "vue";
-import { getTest } from "@/modules/test/test";
 import { Test } from "../../classes/test-class";
 import VButtonsContainer from "@/components/buttons/VButtonsContainer.vue";
 import VWhiteButton from "@/components/buttons/VWhiteButton.vue";
@@ -21,6 +19,13 @@ import { useToast } from "primevue/usetoast";
 import { useConfirm } from "primevue/useconfirm";
 import { useDialog } from "primevue/usedialog";
 import { useI18n } from "vue-i18n";
+import { useTestToExecute } from "../../composables/useTestToExecute";
+import ExecuteTestSideBar from "./components/ExecuteTestSideBar.vue";
+import Drawer from "primevue/drawer";
+import AdminNavbar from "@/layouts/admin/components/AdminNavbar.vue";
+import { useExecuteTest } from "../../useExecuteTest";
+import Dialog from "primevue/dialog";
+import Button from "primevue/button";
 const { t } = useI18n();
 const VDialogFooter = defineAsyncComponent(
   () => import("@/components/dialog/VDialogFooter.vue")
@@ -33,25 +38,31 @@ const dialog = useDialog();
 const toast = useToast();
 const confirm = useConfirm();
 const router = useRouter();
-const { result, loading, error } = getTest(
+const executeTest = useExecuteTest()
+
+const { data, isSuccess, isError } = useTestToExecute(
   router.currentRoute.value.params.id_test as string
 );
 const test = reactive(new Test(router.currentRoute.value.params.id_test[0]));
 
+const serieIndex = executeTest.serieIndex
+
+provide("executeTest", executeTest);
+
+
 provide<Test>("test", test);
 
-const serieIndex = ref(0);
-provide("serieIndex", serieIndex);
 
 //TIMER
 
 let timeCountdown = ref();
 
-watch(result, (newValue) => {
+watch(data, (newValue) => {
   if (newValue) {
+    executeTest.setData(data)
     let time: number;
     if (newValue.time_duration > 0) time = newValue.time_duration;
-    else time = newValue.arrayserie[0].time_serie_duration;
+    else time = newValue.series[0].time_serie_duration;
     timeCountdown.value = time * 60001;
     test.name = newValue.name;
     test.type = newValue.fk_id_type_test;
@@ -66,7 +77,7 @@ const setNewTime = (time: number) => {
 let hasSecondOpportunity = true;
 const timeOver = () => {
   try {
-    if (result.value.time_duration > 0) {
+    if (data.value.time_duration > 0) {
       if (hasSecondOpportunity) {
         setNewTime(300000);
         hasSecondOpportunity = false;
@@ -78,10 +89,10 @@ const timeOver = () => {
         });
       } else throw new Error("Time Over");
     } else {
-      if (serieIndex.value < result.value.arrayserie.length - 1) {
+      if (serieIndex.value < data.value.series.length - 1) {
         serieIndex.value += 1;
         setNewTime(
-          result.value.arrayserie[serieIndex.value].time_serie_duration * 60000
+          data.value.series[serieIndex.value].time_serie_duration * 60000
         );
         toast.removeAllGroups();
         toast.add({
@@ -94,65 +105,20 @@ const timeOver = () => {
     }
   } catch (e: any) {
     if (e.message === "Time Over") {
-      confirmExit = true;
+      executeTest.confirmExit.value = true;
       router.push("/select-test");
       timeOverDialog();
     } else console.error(e);
   }
 };
 
-const nextSerie = () => {
-  if (result.value.navigable == 1) serieIndex.value += 1;
-  else if (result.value.result?.completed == 1) {
-    if (validateSerie(result.value.arrayserie[serieIndex.value]))
-      nextSerieConfirm();
-  } else nextSerieConfirm();
-};
-const nextSerieConfirm = () => {
-  useConfirm().require({
-    message: t("execute-test.dialogs.confirm-next-serie.message"),
-    header: t("execute-test.dialogs.confirm-next-serie.title"),
-    rejectLabel: t("global.cancel"),
-    acceptLabel: t("global.confirm"),
-    accept: () => {
-      serieIndex.value += 1;
-      setNewTime(
-        result.value.arrayserie[serieIndex.value].time_serie_duration * 60000
-      );
-      validatedTestFirstTime.value = false;
-    },
-  });
-};
+
 //DIALOGS
 const infoVisible = ref(false);
 provide("dialogRef", dialog);
 
-const exitTestConfirm = (route: string) => {
-  confirm.require({
-    message: t("execute-test.dialogs.confirm-exit-test.message"),
-    header: t("execute-test.dialogs.confirm-exit-test.title"),
-    rejectLabel: t("global.cancel"),
-    acceptLabel: t("global.confirm"),
-    accept: () => {
-      exitTest(route);
-    },
-  });
-};
-const sendTestConfirm = () => {
-  confirm.require({
-    message: t("execute-test.dialogs.confirm-save-test.message"),
-    header: t("execute-test.dialogs.confirm-save-test.title"),
-    rejectLabel: t("global.cancel"),
-    acceptLabel: t("global.confirm"),
-    accept: () => {
-      showResults();
-      exitTest("");
-    },
-    reject: () => {
-      confirmExit = false;
-    },
-  });
-};
+
+
 const showResults = () => {
   dialog.open(VTestResult, {
     props: {
@@ -178,186 +144,106 @@ const timeOverDialog = () => {
   });
 };
 
-//TEST VALIDATION
-const validatedTestFirstTime = ref(false);
-provide("validatedTestFirstTime", validatedTestFirstTime);
 
-const validateSerie = (serie: any) => {
-  let isValid = true;
-  const questionsNotAnswered = test.getQuestionsNotAnswered(
-    serie.arrayquestion
-  );
-  if (questionsNotAnswered.length > 0) {
-    isValid = false;
-    getErrorMessages(questionsNotAnswered).forEach((error) => {
-      toast.add({
-        severity: "error",
-        summary: "Error: " + serie.name,
-        detail: error,
-        life: 3000,
-      });
-    });
-  }
-  validatedTestFirstTime.value = true;
-  return isValid;
-};
-
-const validateTest = () => {
-  //for each serie, this function returns the incorrect answers. This is for managing questions and series in toast
-  toast.removeAllGroups();
-  let isValid = true;
-  if (result.value.completed == 1) {
-    result.value.arrayserie.forEach((serie: any) => {
-      if (!validateSerie(serie)) isValid = false;
-    });
-  }
-  if (isValid) sendTestConfirm();
-};
-
-//ROUTER
-let confirmExit = false;
-onBeforeRouteLeave((to, from) => {
-  if (!error.value) {
-    if (!confirmExit && to.name) {
-      exitTestConfirm(to.name.toString());
+onBeforeRouteLeave((to) => {
+  if (!isError.value) {
+    if (!executeTest.confirmExit.value && to.name) {
+      executeTest.exitTestConfirm(to.name.toString());
       return false;
     }
   }
   confirm.close();
 });
 
-const exitTest = (route: string) => {
-  confirmExit = true;
-  router.push(`/` + route);
-};
+
 
 onUnmounted(() => {
   toast.removeAllGroups();
 });
 
-const questionsNotAnswered = {
-  "2": Array(),
-  "5": Array(),
-};
 
-const pushQuestionsNotAnswered = (questions: any[]) => {
-  questions.forEach((question) => {
-    switch (parseInt(question.question.fk_id_type_question)) {
-      case 2:
-        questionsNotAnswered["2"].push(question);
-        break;
-      case 5:
-        questionsNotAnswered["5"].push(question);
-        break;
-      //ADD OTHERS QUESTION TYPES
-    }
-  });
-};
 
-const getErrorMessages = (questions: any[]) => {
-  let errorMessages = Array();
-  pushQuestionsNotAnswered(questions);
-  for (let key in questionsNotAnswered) {
-    if (questionsNotAnswered[key].length > 0) {
-      let error = t(`execute-test.error.${key}`) + " ";
-      if (questionsNotAnswered[key].length == 1)
-        error += `${t("execute-test.error.in-question")} `;
-      else error += `${t("execute-test.error.in-question")}s `;
-      questionsNotAnswered[key].forEach((question: any, index: number) => {
-        if (index > 0) {
-          if (index == questionsNotAnswered[key].length - 1)
-            error += ` ${t("global.and")} `;
-          else error += ", ";
-        }
-        error += question.questionIndex;
-      });
-      errorMessages.push(error);
-      questionsNotAnswered[key].splice(0, questionsNotAnswered[key].length);
-    }
-  }
-  return errorMessages;
-};
+const visibleSideBar = ref(false)
+const visibleTimer = ref(false)
+
 </script>
 <template>
-  <VError v-if="error" />
-  <div v-else style="width: 100vw; height: 100vh">
-    <div class="test" v-if="!loading">
-      <VTestHeader :result="result" @next-serie="nextSerie()" />
-      <div class="test__content" relative mt-64>
-        <h3 page-subtitle>
-          {{ result.arrayserie[serieIndex].description }}
-        </h3>
-        <div
-          class="test__timer"
-          ref="timer"
-          hover:left-1rem
-          hover:cursor-pointer
-        >
-          <vue-countdown
-            :time="timeCountdown"
-            v-slot="{ minutes, seconds }"
-            @end="timeOver()"
-          >
+  <main bg-sky-300 w-screen h-screen flex anim-fade-in-1>
+    <aside class="hidden xl:flex ">
+      <ExecuteTestSideBar :data="data" />
+
+    </aside>
+
+    <aside class="card flex justify-center">
+      <Drawer v-model:visible="visibleSideBar" class="!w-fit">
+        <template #container>
+          <ExecuteTestSideBar :data="data" />
+
+        </template>
+
+      </Drawer>
+
+    </aside>
+
+
+
+    <section h-full w-full flex-col flex gap-2 p-2>
+      <AdminNavbar>
+        <template #sidebar-button>
+          <div xl:hidden block>
+            <Button icon="pi pi-arrow-right" h-fit severity="secondary" @click="visibleSideBar = true" />
+
+          </div>
+        </template>
+      </AdminNavbar>
+      <VTestHeader :data="data" @next-serie="executeTest.nextSerie()">
+        <template #timer>
+          <div h-10 flex gap-2 items-center justify-between w-7rem>
+            <vue-countdown :class="visibleTimer?'opacity-0':'opacity-100'" text-xl :time="timeCountdown" v-slot="{ minutes, seconds }" @end="timeOver()">
             {{ minutes > 9 ? minutes : `0` + minutes }}:{{
               seconds > 9 ? seconds : `0` + seconds
             }}
           </vue-countdown>
-          <img
-            src="/img/timer.svg"
-            alt="tiempo restante"
-            filter-invert
-            w-3rem
-          />
-        </div>
-        <VButtonsContainer>
-          <VWhiteButton
-            @click="validateTest()"
-            v-tooltip.right="t('execute-test.tooltips.save')"
-          >
-            <img src="/img/test_completed.svg" alt="terminar test" />
-          </VWhiteButton>
-          <VInfoButton
-            @click="infoVisible = true"
-          >
-            <span font-bold
-              >{{ $t("execute-test.dialogs.description.title") }}:</span
-            >
-            {{ result.description }} <br />{{
-              $t("execute-test.dialogs.description.message")
-            }}
-          </VInfoButton>
-          <VWhiteButton
-            @click="exitTestConfirm('select-test')"
-            v-tooltip.right="t('execute-test.tooltips.exit')"
-          >
-            <img src="/img/cancel.svg" alt="cancelar test" />
-          </VWhiteButton>
-        </VButtonsContainer>
+          <Button w-3rem @click="visibleTimer=!visibleTimer" icon="pi pi-clock" severity="secondary"></Button>
+          </div>
+         
+        </template>
+      </VTestHeader>
+      <div h-full overflow-auto max-w-full rounded-xl w-full>
 
-        <VTestSerie :serie="result.arrayserie[serieIndex]" />
+        <VError v-if="isError" />
+        <div v-else style="width: 100%; height: 100vh">
+          <div class="test" v-if="isSuccess">
+
+
+
+            <div class="test__content" relative>
+              <h3 text-xl>
+                {{ data.series[executeTest.serieIndex.value].description }}
+              </h3>
+
+
+
+
+
+              <VTestSerie :serie="data.series[executeTest.serieIndex.value]" />
+            </div>
+          </div>
+          <VLoading v-else />
+        </div>
       </div>
-    </div>
-    <VLoading v-else />
-  </div>
+      <Dialog v-model:visible="executeTest.infoVisible.value" modal :header="t('global.info')" style="width: 50%">
+        <span class="modal__long-message">
+          <span font-bold>{{ $t("execute-test.dialogs.description.title") }}:</span>
+          {{ data.description }} <br />{{
+            $t("execute-test.dialogs.description.message")
+          }} </span>
+      </Dialog>
+
+    </section>
+
+
+  </main>
 </template>
 
-<style>
-.test__timer {
-  background-color: white;
-  border-radius: 1.5rem;
-  box-shadow: var(--shadow);
-  display: flex;
-  position: fixed;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.5rem;
-  font-size: 2rem;
-  width: 11rem;
-  height: 6rem;
-  top: 18rem;
-  left: -7rem;
-  transition: all ease 0.5s;
-  z-index: 2;
-}
-</style>
 @/common/utils/validateAnswers ./getErrorMessages

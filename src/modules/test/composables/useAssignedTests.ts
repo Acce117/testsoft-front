@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/vue-query'
-import { AssignedTest } from '../models/assigned-test.model'
+import {Test } from '../models/test.model'
 
 export const useAssignedTests = () => {
   const {
@@ -12,7 +12,7 @@ export const useAssignedTests = () => {
     isError
   } = useQuery({
     queryKey: ['tests'],
-    queryFn:()=> new AssignedTest().getAll()
+    queryFn:()=> new Test().getAll()
   })
   return { tests, isPending, isSuccess, error, isError, refetch, isRefetching }
 }

@@ -48,9 +48,7 @@ export class Country extends BaseModel {
   public getURL(): string {
     return url;
   }
-  public getID(): string {
-    return this.country_id;
-  }
+  
   public getColumns() {
     return columns;
   }

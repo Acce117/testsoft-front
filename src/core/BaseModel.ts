@@ -7,7 +7,7 @@ export class BaseModel {
   }
 
   public getID() {
-    return "";
+    return this[this.getFieldAsID()];
   }
   
 

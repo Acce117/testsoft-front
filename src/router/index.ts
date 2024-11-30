@@ -72,13 +72,7 @@ const router = createRouter({
           component: VSelecTest,
           //meta: { requiresAuth: true }
         },
-        {
-          path: '/execute-test/:id_test',
-          name: 'execute-test',
-          component: VExecuteTest,
-          meta: { requiresAuth: true },
-          beforeEnter: (to, from, next) => validateTestExecutionPermission(to, from, next)
-        },
+        
         {
           path: '/profile',
           name: 'profile',
@@ -106,6 +100,13 @@ const router = createRouter({
           meta: { requiresAuth: true }
         },
       ]
+    },
+    {
+      path: '/execute-test/:id_test',
+      name: 'execute-test',
+      component: VExecuteTest,
+      //meta: { requiresAuth: true },
+      //beforeEnter: (to, from, next) => validateTestExecutionPermission(to, from, next)
     },
     {
       path: "/:catchAll(.*)",
