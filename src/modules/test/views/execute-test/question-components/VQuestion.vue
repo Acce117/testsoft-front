@@ -21,7 +21,7 @@ const props = defineProps({
 }
 .invalid-input {
   transition: all ease 0.5s;
-  box-shadow: 0 0 0.3rem 0.3rem rgba(255, 0, 0, 0.7);
+  box-shadow: 0 0 0.2rem 0.2rem rgba(255, 0, 0, 0.7);
 }
 .answer {
   transition: all ease 0.2s;

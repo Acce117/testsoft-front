@@ -3,6 +3,7 @@ import { i18n } from "@/plugins/i18n";
 import router from "@/router";
 import { ref, type Ref } from "vue";
 import type { TestAplication } from "./classes/testAplication";
+import VTestResult from "./views/execute-test/VTestResult.vue";
 const { t } = i18n.global;
 
 export const useExecuteTest = () => {
@@ -29,12 +30,13 @@ export const useExecuteTest = () => {
     );
     if (questionsNotAnswered.length > 0) {
       isValid = false;
-      console.log(getErrorMessages(questionsNotAnswered))
       getErrorMessages(questionsNotAnswered).forEach((error) => {
         useEvents().dispatch("error", {
           severity: "error",
           summary: "Error: " + serie.name,
           detail: error,
+          life: 5000,
+
         });
       });
     }
@@ -69,6 +71,7 @@ export const useExecuteTest = () => {
       },
     });
   };
+  
 
   const sendTestConfirm = () => {
     useEvents().dispatch("confirm", {
@@ -77,7 +80,7 @@ export const useExecuteTest = () => {
       rejectLabel: t("global.cancel"),
       acceptLabel: t("global.confirm"),
       accept: () => {
-        showResults();
+        useEvents().dispatch('dialog-results')
         exitTest("");
       },
       reject: () => {
@@ -114,9 +117,9 @@ export const useExecuteTest = () => {
   };
 
   const pushQuestionsNotAnswered = (questions: []) => {
-    console.log(questions)
     questions.forEach((question) => {
-      switch (parseInt(question.question.fk_id_type_question)) {
+
+      switch (parseInt(question.question.type.id_type_question)) {
         case 2:
           questionsNotAnswered["2"].push(question);
           break;

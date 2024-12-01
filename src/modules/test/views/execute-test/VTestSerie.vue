@@ -26,10 +26,8 @@ const test = inject<Test>("test");
           : false,
       }">
 
-      <VSingleOptionQuestion :id_question="question.id_question" :possible_answers="question.answers" />
-      <VSingleOptionQuestion v-if="question.fk_id_type_question == 2" />
-
-      <VMultipleOptionsValueSetted v-else-if="question.fk_id_type_question == 5" :id_question="question.id_question"
+      <VSingleOptionQuestion v-if="question.type.id_type_question == 2" :id_question="question.id_question" :possible_answers="question.answers" />
+      <VMultipleOptionsValueSetted v-else-if="question.type.id_type_question == 5" :id_question="question.id_question"
         :possible_answers="question.answers" :question_index="index + 1"
         :maxPoints="question.arrayquestion_top_value[0]?.top_value" />
     </VQuestion>

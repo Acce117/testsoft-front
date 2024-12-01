@@ -52,7 +52,7 @@ const getSeriesNames = () => {
 
 watch(
   serieIndex,
-  () => (document.getElementsByTagName("main")[0].scrollTop = 0)
+  () => (document.getElementsByClassName("test__container")[0].scrollTop = 0)
 );
 </script>
 <style>

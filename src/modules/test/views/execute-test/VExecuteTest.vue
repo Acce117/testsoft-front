@@ -22,6 +22,7 @@ import AdminNavbar from "@/layouts/admin/components/AdminNavbar.vue";
 import { useExecuteTest } from "../../useExecuteTest";
 import Dialog from "primevue/dialog";
 import Button from "primevue/button";
+import useEvents from "@/common/utils/useEvents";
 const { t } = useI18n();
 const VDialogFooter = defineAsyncComponent(
   () => import("@/components/dialog/VDialogFooter.vue")
@@ -36,7 +37,7 @@ const confirm = useConfirm();
 const router = useRouter();
 const executeTest = useExecuteTest()
 
-const { data, isSuccess, isError } = useTestToExecute(
+const { data, isSuccess, isError, isPending } = useTestToExecute(
   router.currentRoute.value.params.id_test as string
 );
 const test = reactive(new TestAplication(router.currentRoute.value.params.id_test[0]));
@@ -127,6 +128,10 @@ const showResults = () => {
     },
   });
 };
+useEvents().addListener("dialog-results", (event: CustomEventInit) => {
+  
+  showResults()
+});
 
 const timeOverDialog = () => {
   dialog.open(VDialogMessage, {
@@ -163,15 +168,15 @@ const visibleTimer = ref(false)
 
 </script>
 <template>
-  <section bg-sky-200 w-screen h-screen flex-col gap-2 p-2 flex anim-fade-in-1>
+  <main bg-sky-200 w-screen h-screen flex-col gap-2 p-2 flex anim-fade-in-1>
     <AdminNavbar>
 
     </AdminNavbar>
-    <VTestHeader :data="data" @next-serie="executeTest.nextSerie()">
+    <VTestHeader v-if="isSuccess" :data="data" @next-serie="executeTest.nextSerie()">
       <template #timer>
         <div h-10 flex gap-2 items-center justify-between w-7rem>
-          <vue-countdown text-slate-600 :class="visibleTimer ? 'opacity-0' : 'opacity-100'" text-xl :time="timeCountdown"
-            v-slot="{ minutes, seconds }" @end="timeOver()">
+          <vue-countdown text-slate-600 :class="visibleTimer ? 'opacity-0' : 'opacity-100'" text-xl
+            :time="timeCountdown" v-slot="{ minutes, seconds }" @end="timeOver()">
             {{ minutes > 9 ? minutes : `0` + minutes }}:{{
               seconds > 9 ? seconds : `0` + seconds
             }}
@@ -181,31 +186,25 @@ const visibleTimer = ref(false)
 
       </template>
     </VTestHeader>
-    <div relative h-full overflow-auto max-w-full px-4 lg:px-16 py-2 rounded-xl w-full>
-
-      <VError v-if="isError" />
-      <div v-else style="width: 100%; height: 100vh">
-
-        <div class="test" v-if="isSuccess">
 
 
+    <VLoading v-if="isPending" />
 
-          <div class="test__content">
-            <VButtonsContainer>
-              <Button fluid @click="executeTest.validateTest(test)" icon="pi pi-file-check"
-                v-tooltip.right="t('execute-test.tooltips.save')" />
+    <VError v-if="isError" />
 
-              <Button @click="executeTest.exitTestConfirm('select-test')"
-                v-tooltip.right="t('execute-test.tooltips.exit')" icon="pi pi-times" />
-            </VButtonsContainer>
+    <div v-if="isSuccess" class="test__container" h-full overflow-auto max-w-full px-4 lg:px-16 py-2 rounded-xl w-full>
+
+      <VButtonsContainer>
+        <Button fluid @click="executeTest.validateTest(test)" icon="pi pi-file-check"
+          v-tooltip.right="t('execute-test.tooltips.save')" />
+
+        <Button @click="executeTest.exitTestConfirm('select-test')" v-tooltip.right="t('execute-test.tooltips.exit')"
+          icon="pi pi-times" />
+      </VButtonsContainer>
 
 
-            <VTestSerie :serie="data.series[executeTest.serieIndex.value]" />
+      <VTestSerie :serie="data.series[executeTest.serieIndex.value]" />
 
-          </div>
-        </div>
-        <VLoading v-else />
-      </div>
     </div>
     <Dialog v-model:visible="executeTest.infoVisible.value" modal :header="t('global.info')" style="width: 50%">
       <span class="modal__long-message">
@@ -215,7 +214,7 @@ const visibleTimer = ref(false)
         }} </span>
     </Dialog>
 
-  </section>
+  </main>
 
 
 </template>
