@@ -1,16 +1,16 @@
 <script setup lang="ts">
 const props = defineProps({
-  id_question: String,
+  id_question: Number,
   question_index: Number,
   title: String,
 });
 </script>
 <template>
   <Transition name="fade">
-    <div class="question"  flex flex-col w-full overflow-hidden bg-white rounded-lg my-8 :id="props.id_question">
-      <h4 p-2 m-0   text-lg w-full  text-slate-800 >{{ props.question_index + `-` + props.title }}</h4>
-      <div relative flex m-1rem flex-col gap-1rem>
-        <slot :id_question :question_index></slot>
+    <div class="question "  flex flex-col bg-white p-4 overflow-hidden  rounded-lg my-4 :id="props.id_question">
+      <h4 m m-0 mb-4  text-lg w-full   text-black >{{ props.question_index + `-` + props.title }}</h4>
+      <div relative flex flex-col gap-4>
+        <slot ></slot>
       </div>
     </div>
   </Transition>
@@ -24,14 +24,13 @@ const props = defineProps({
   box-shadow: 0 0 0.3rem 0.3rem rgba(255, 0, 0, 0.7);
 }
 .answer {
-  font-size: 1.5rem;
   transition: all ease 0.2s;
-  border-radius: var(--bradius);
-  padding: 0.4rem;
+
+  
 }
-.answer:has(input:not(:checked)):hover {
+/* .answer:has(input:not(:checked)):hover {
   box-shadow: var(--shadow);
-}
+} */
 
 @media (min-width: 768px) {
  

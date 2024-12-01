@@ -2,6 +2,7 @@ import useEvents from "@/common/utils/useEvents";
 import { i18n } from "@/plugins/i18n";
 import router from "@/router";
 import { ref, type Ref } from "vue";
+import type { TestAplication } from "./classes/testAplication";
 const { t } = i18n.global;
 
 export const useExecuteTest = () => {
@@ -11,22 +12,24 @@ export const useExecuteTest = () => {
 
   const serieIndex = ref(0);
   let data = ref();
-  const test = ref();
+  let test = ref();
  
-   const setData=(d:any)=>{data=d;
-    console.log(data)
-   }
+   const setData=(d:any)=>data=d;
+   const setTest=(d:any)=>test=d;
+
+   
 
 
 
 
-  const validateSerie = (serie: any, test) => {
+  const validateSerie = (serie: any, test:TestAplication) => {
     let isValid = true;
     const questionsNotAnswered = test.getQuestionsNotAnswered(
-      serie.arrayquestion
+      serie.questions
     );
     if (questionsNotAnswered.length > 0) {
       isValid = false;
+      console.log(getErrorMessages(questionsNotAnswered))
       getErrorMessages(questionsNotAnswered).forEach((error) => {
         useEvents().dispatch("error", {
           severity: "error",
@@ -39,13 +42,13 @@ export const useExecuteTest = () => {
     return isValid;
   };
 
-  const validateTest = () => {
+  const validateTest = (test:TestAplication) => {
     //for each serie, this function returns the incorrect answers. This is for managing questions and series in toast
     useEvents().dispatch("clean-toast");
     let isValid = true;
     if (data.value.completed == 1) {
       data.value.series.forEach((serie: any) => {
-        if (!validateSerie(serie)) isValid = false;
+        if (!validateSerie(serie, test)) isValid = false;
       });
     }
     if (isValid) sendTestConfirm();
@@ -111,6 +114,7 @@ export const useExecuteTest = () => {
   };
 
   const pushQuestionsNotAnswered = (questions: []) => {
+    console.log(questions)
     questions.forEach((question) => {
       switch (parseInt(question.question.fk_id_type_question)) {
         case 2:
@@ -127,7 +131,7 @@ export const useExecuteTest = () => {
   const getErrorMessages = (questions: []) => {
     const errorMessages = [];
     pushQuestionsNotAnswered(questions);
-    for (let key in questionsNotAnswered) {
+    for (const key in questionsNotAnswered) {
       if (questionsNotAnswered[key].length > 0) {
         let error = t(`execute-test.error.${key}`) + " ";
         if (questionsNotAnswered[key].length == 1)
@@ -150,6 +154,8 @@ export const useExecuteTest = () => {
   return {
     setData,
     data,
+    setTest,
+    test,
     sendTestConfirm,
     exitTestConfirm,
     exitTest,

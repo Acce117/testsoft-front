@@ -11,17 +11,13 @@ import {
   defineAsyncComponent,
   onUnmounted,
 } from "vue";
-import { Test } from "../../classes/test-class";
+import { TestAplication } from "../../classes/testAplication";
 import VButtonsContainer from "@/components/buttons/VButtonsContainer.vue";
-import VWhiteButton from "@/components/buttons/VWhiteButton.vue";
-import VInfoButton from "@/components/buttons/VInfoButton.vue";
 import { useToast } from "primevue/usetoast";
 import { useConfirm } from "primevue/useconfirm";
 import { useDialog } from "primevue/usedialog";
 import { useI18n } from "vue-i18n";
 import { useTestToExecute } from "../../composables/useTestToExecute";
-import ExecuteTestSideBar from "./components/ExecuteTestSideBar.vue";
-import Drawer from "primevue/drawer";
 import AdminNavbar from "@/layouts/admin/components/AdminNavbar.vue";
 import { useExecuteTest } from "../../useExecuteTest";
 import Dialog from "primevue/dialog";
@@ -43,14 +39,14 @@ const executeTest = useExecuteTest()
 const { data, isSuccess, isError } = useTestToExecute(
   router.currentRoute.value.params.id_test as string
 );
-const test = reactive(new Test(router.currentRoute.value.params.id_test[0]));
+const test = reactive(new TestAplication(router.currentRoute.value.params.id_test[0]));
 
 const serieIndex = executeTest.serieIndex
 
 provide("executeTest", executeTest);
 
 
-provide<Test>("test", test);
+provide<TestAplication>("test", test);
 
 
 //TIMER
@@ -114,7 +110,7 @@ const timeOver = () => {
 
 
 //DIALOGS
-const infoVisible = ref(false);
+
 provide("dialogRef", dialog);
 
 
@@ -163,87 +159,65 @@ onUnmounted(() => {
 
 
 
-const visibleSideBar = ref(false)
 const visibleTimer = ref(false)
 
 </script>
 <template>
-  <main bg-sky-300 w-screen h-screen flex anim-fade-in-1>
-    <aside class="hidden xl:flex ">
-      <ExecuteTestSideBar :data="data" />
+  <section bg-sky-200 w-screen h-screen flex-col gap-2 p-2 flex anim-fade-in-1>
+    <AdminNavbar>
 
-    </aside>
-
-    <aside class="card flex justify-center">
-      <Drawer v-model:visible="visibleSideBar" class="!w-fit">
-        <template #container>
-          <ExecuteTestSideBar :data="data" />
-
-        </template>
-
-      </Drawer>
-
-    </aside>
-
-
-
-    <section h-full w-full flex-col flex gap-2 p-2>
-      <AdminNavbar>
-        <template #sidebar-button>
-          <div xl:hidden block>
-            <Button icon="pi pi-arrow-right" h-fit severity="secondary" @click="visibleSideBar = true" />
-
-          </div>
-        </template>
-      </AdminNavbar>
-      <VTestHeader :data="data" @next-serie="executeTest.nextSerie()">
-        <template #timer>
-          <div h-10 flex gap-2 items-center justify-between w-7rem>
-            <vue-countdown :class="visibleTimer?'opacity-0':'opacity-100'" text-xl :time="timeCountdown" v-slot="{ minutes, seconds }" @end="timeOver()">
+    </AdminNavbar>
+    <VTestHeader :data="data" @next-serie="executeTest.nextSerie()">
+      <template #timer>
+        <div h-10 flex gap-2 items-center justify-between w-7rem>
+          <vue-countdown text-slate-600 :class="visibleTimer ? 'opacity-0' : 'opacity-100'" text-xl :time="timeCountdown"
+            v-slot="{ minutes, seconds }" @end="timeOver()">
             {{ minutes > 9 ? minutes : `0` + minutes }}:{{
               seconds > 9 ? seconds : `0` + seconds
             }}
           </vue-countdown>
-          <Button w-3rem @click="visibleTimer=!visibleTimer" icon="pi pi-clock" severity="secondary"></Button>
-          </div>
-         
-        </template>
-      </VTestHeader>
-      <div h-full overflow-auto max-w-full rounded-xl w-full>
-
-        <VError v-if="isError" />
-        <div v-else style="width: 100%; height: 100vh">
-          <div class="test" v-if="isSuccess">
-
-
-
-            <div class="test__content" relative>
-              <h3 text-xl>
-                {{ data.series[executeTest.serieIndex.value].description }}
-              </h3>
-
-
-
-
-
-              <VTestSerie :serie="data.series[executeTest.serieIndex.value]" />
-            </div>
-          </div>
-          <VLoading v-else />
+          <Button w-3rem @click="visibleTimer = !visibleTimer" icon="pi pi-clock" severity="secondary"></Button>
         </div>
+
+      </template>
+    </VTestHeader>
+    <div relative h-full overflow-auto max-w-full px-4 lg:px-16 py-2 rounded-xl w-full>
+
+      <VError v-if="isError" />
+      <div v-else style="width: 100%; height: 100vh">
+
+        <div class="test" v-if="isSuccess">
+
+
+
+          <div class="test__content">
+            <VButtonsContainer>
+              <Button fluid @click="executeTest.validateTest(test)" icon="pi pi-file-check"
+                v-tooltip.right="t('execute-test.tooltips.save')" />
+
+              <Button @click="executeTest.exitTestConfirm('select-test')"
+                v-tooltip.right="t('execute-test.tooltips.exit')" icon="pi pi-times" />
+            </VButtonsContainer>
+
+
+            <VTestSerie :serie="data.series[executeTest.serieIndex.value]" />
+
+          </div>
+        </div>
+        <VLoading v-else />
       </div>
-      <Dialog v-model:visible="executeTest.infoVisible.value" modal :header="t('global.info')" style="width: 50%">
-        <span class="modal__long-message">
-          <span font-bold>{{ $t("execute-test.dialogs.description.title") }}:</span>
-          {{ data.description }} <br />{{
-            $t("execute-test.dialogs.description.message")
-          }} </span>
-      </Dialog>
+    </div>
+    <Dialog v-model:visible="executeTest.infoVisible.value" modal :header="t('global.info')" style="width: 50%">
+      <span class="modal__long-message">
+        <span font-bold>{{ $t("execute-test.dialogs.description.title") }}:</span>
+        {{ data.description }} <br />{{
+          $t("execute-test.dialogs.description.message")
+        }} </span>
+    </Dialog>
 
-    </section>
+  </section>
 
 
-  </main>
 </template>
 
 @/common/utils/validateAnswers ./getErrorMessages

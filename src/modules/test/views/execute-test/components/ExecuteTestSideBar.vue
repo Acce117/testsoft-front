@@ -1,6 +1,6 @@
 <template>
 
-    <div class="card flex   justify-center h-screen ">
+    <div class="card flex   justify-center h-screen  ">
         <Menu :model="items" overflow-auto >
             <template #start>
                 <span class="inline-flex items-center gap-1 px-2 py-5">
@@ -24,7 +24,7 @@
                 </a>
 
             </template>
-            <template #end>
+            <!-- <template #end>
                 <div p-4 h-full flex flex-col >
                     <span font-bold>
                         Series
@@ -33,7 +33,7 @@
                         :readonly="data?.navigable != 1" />
                 </div>
 
-            </template>
+            </template> -->
 
         </Menu>
 
@@ -66,13 +66,13 @@ const items = ref([
                 icon: 'pi pi-user',
                 command: () => executeTest.validateTest()
             },
-            {
-                label: 'Información',
-                icon: 'pi pi-users',
-                command: () => executeTest.infoVisible.value = true
+            // {
+            //     label: 'Información',
+            //     icon: 'pi pi-users',
+            //     command: () => executeTest.infoVisible.value = true
 
 
-            },
+            // },
             {
                 label: 'Salir',
                 icon: 'pi pi-file',
@@ -98,7 +98,7 @@ const getSeriesNames = () => {
 };
 
 </script>
-<style>
+<style scoped>
 .p-menu-submenu-label {
     margin-top: 1rem !important;
 }

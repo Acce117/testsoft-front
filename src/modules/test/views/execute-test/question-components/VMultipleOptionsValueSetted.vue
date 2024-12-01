@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Test } from "@/modules/test/classes/test-class";
+import type { TestAplication } from "@/modules/test/classes/testAplication";
 import { computed, inject, ref } from "vue";
 import VInputNumber from "./VInputNumber.vue";
 import { useToast } from "primevue/usetoast";
@@ -10,7 +10,7 @@ const { t } = useI18n()
 const toast = useToast();
 const props = defineProps({
   id_question: {
-    type: String,
+    type: Number,
     required: true
   },
   question_index: Number,
@@ -20,7 +20,7 @@ const props = defineProps({
     required: true,
   },
 });
-const test = inject<Test>("test");
+const test = inject<TestAplication>("test");
 
 if(!test.questions[`${props.id_question}`]) 
   test.questions[`${props.id_question}`] = new MultipleOptionsValueSettedQuestion(props.id_question, props.maxPoints);

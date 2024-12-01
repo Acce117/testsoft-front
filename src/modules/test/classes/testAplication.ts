@@ -3,7 +3,7 @@ import { userStore } from "@/modules/security/store/user-store";
 import type { Question } from "./question-class";
 import { useSendRequest } from "@/common/utils/fetch";
 
-export class Test {
+export class TestAplication {
     questions: { [key: string]: Question<any> };
     name: string | undefined;
     type: string | number | undefined
@@ -39,12 +39,7 @@ export class Test {
 
 
     validateComponent(id_question: string | number) {
-        let isComponentValid
-        if (!this.questions.hasOwnProperty(id_question))
-            isComponentValid = false
-        else
-            isComponentValid = this.questions[id_question].validateQuestion();
-        return isComponentValid
+        return !this.questions.hasOwnProperty(id_question)? false:this.questions[id_question].validateQuestion();
     };
 
 }
