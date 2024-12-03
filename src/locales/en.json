@@ -17,6 +17,7 @@
         "option7": "Manage groups",
         "option8": "Manage users"
     },
+    
     "select-test": {
         "title": "Select a test",
         "dialogs": {},
@@ -176,14 +177,10 @@
                 "message": "Do you want to logout?"
             }
         },
-        "users": {
-            "name": "Users",
-            "manage-users": "Manage Users"
-        },
-        "groups": {
-            "name": "Groups",
-            "manage-groups": "Manage Groups",
-            "assign-test": "Assign Test"
+        "management":{
+            "name":"Management",
+            "users":"Users",
+            "groups":"Groups"
         }
     },
     "error": {

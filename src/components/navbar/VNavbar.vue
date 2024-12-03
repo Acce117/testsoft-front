@@ -68,8 +68,8 @@ const itemsTestExecutor = [
 ];
 const itemsAnalist = [
   {
-    label: "Users",
-    i18n: "users",
+    label: "Management",
+    i18n: "management",
 
     items: [
       {
@@ -97,21 +97,45 @@ const itemsAnalist = [
 ];
 const itemsDefault = [
   {
-    label: "Users",
-    i18n: "users",
+    label: "Management",
+    i18n: "management",
 
     items: [
       {
         label: " ",
-        i18n: "manage-users",
+        i18n: "users",
         command: () => router.push("/users"),
-      }
+      },
+      {
+        label: " ",
+        i18n: "groups",
+        command: () => router.push("/groups"),
+      },
     ],
   },
   {
     label: " ",
-    i18n: "execute",
-    command: () => router.push("/select-test"),
+    i18n: "test",
+    items: [
+      {
+        label: " ",
+        i18n: "execute",
+        command: () => router.push("/select-test"),
+      },
+      {
+        label: " ",
+        i18n: "roles",
+      },
+      {
+        label: " ",
+        i18n: "compatibility",
+      },
+      {
+        label: " ",
+        i18n: "results",
+        command: () => router.push("/results"),
+      },
+    ]
   },
   {
     label: " ",

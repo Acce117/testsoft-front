@@ -17,6 +17,7 @@
         "option7": "Gestiona grupos",
         "option8": "Gestiona los usuarios"
     },
+    
     "select-test": {
         "title": "Seleccione un test",
         "dialogs": {},
@@ -181,15 +182,10 @@
                 "message": "¿Desea cerrar sesión?"
             }
         },
-        "users": {
-            "name": "Usuarios",
-            "manage-users":"Gestionar Usuarios"
-        },
-        "groups": {
-            "name": "Grupos",
-            "manage-groups":"Gestionar Grupos",
-            "assign-test":"Asignar Test"
-            
+        "management":{
+            "name":"Gestión",
+            "users":"Usuarios",
+            "groups":"Grupos"
         }
     },
     "error": {
