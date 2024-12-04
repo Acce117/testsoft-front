@@ -13,11 +13,9 @@ export const useExecuteTest = () => {
 
   const serieIndex = ref(0);
   let data: { completed: number; series: any[]; time_duration: number; navigable: number; data: { completed: number; }; value: { series: any[]; }; } ;
-  let test = ref();
   const timeCountdown = ref(10000);
 
   const setData = (d: any) => (data = d);
-  const setTest = (d: any) => (test = d);
 
   const validateSerie = (serie: any, test: TestAplication) => {
     let isValid = true;
@@ -193,8 +191,6 @@ export const useExecuteTest = () => {
   };
   return {
     setData,
-    setTest,
-    test,
     exitTestConfirm,
     validateTest,
     confirmExit,
