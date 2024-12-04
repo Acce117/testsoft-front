@@ -19,16 +19,10 @@ import { useI18n } from "vue-i18n";
 import { useTestToExecute } from "../../composables/useTestToExecute";
 import AdminNavbar from "@/layouts/admin/components/AdminNavbar.vue";
 import { useExecuteTest } from "../../useExecuteTest";
-import Dialog from "primevue/dialog";
 import Button from "primevue/button";
 import useEvents from "@/common/utils/useEvents";
 const { t } = useI18n();
-const VDialogFooter = defineAsyncComponent(
-  () => import("@/components/dialog/VDialogFooter.vue")
-);
-const VDialogMessage = defineAsyncComponent(
-  () => import("@/components/dialog/VDialogMessage.vue")
-);
+
 const VTestResult = defineAsyncComponent(() => import("./VTestResult.vue"));
 const dialog = useDialog();
 const toast = useToast();
@@ -74,24 +68,9 @@ const showResults = () => {
   });
 };
 useEvents().addListener("dialog-results", () => {
-
   showResults()
 });
 
-const timeOverDialog = () => {
-  dialog.open(VDialogMessage, {
-    props: {
-      header: t("results.test"),
-      modal: true,
-    },
-    templates: {
-      footer: markRaw(VDialogFooter),
-    },
-  });
-};
-useEvents().addListener("dialog-timeover", () => {
-  timeOverDialog()
-});
 
 
 onBeforeRouteLeave((to) => {
@@ -154,13 +133,7 @@ const visibleTimer = ref(false)
       <VTestSerie :serie="data.series[executeTest.serieIndex.value]" />
 
     </div>
-    <Dialog v-model:visible="executeTest.infoVisible.value" modal :header="t('global.info')" style="width: 50%">
-      <span class="modal__long-message">
-        <span font-bold>{{ $t("execute-test.dialogs.description.title") }}:</span>
-        {{ data.description }} <br />{{
-          $t("execute-test.dialogs.description.message")
-        }} </span>
-    </Dialog>
+    
 
   </main>
 

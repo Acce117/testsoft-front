@@ -10,12 +10,16 @@ import { useToast } from "primevue/usetoast";
 import { useConfirm } from "primevue/useconfirm";
 
 import { useI18n } from "vue-i18n";
+import { ref } from "vue";
+import Dialog from "primevue/dialog";
 
 const router = useRouter();
 const toast = useToast();
 const confirm = useConfirm();
 const { t } = useI18n();
-
+const infoDialog=ref(
+  {message:'',visible:true}
+)
 useEvents().addListener("error", (event: CustomEventInit) => {
   const eventDetail = event.detail;
   if (eventDetail.i18n) {
@@ -35,15 +39,22 @@ useEvents().addListener("confirm", (event: CustomEventInit) => {
   confirm.require({
     ...event.detail,
     rejectProps: {
-      label:  t('global.cancel'),
+      label: t('global.cancel'),
       severity: 'secondary',
       outlined: true
     },
     acceptProps: {
-      label:t('global.confirm'),
+      label: t('global.confirm'),
     },
   });
 });
+useEvents().addListener("info", (event: CustomEventInit) => {
+  infoDialog.value.message = event.detail.message
+  infoDialog.value.visible=true
+});
+
+
+
 useEvents().addListener("clean-toast", () => {
   toast.removeAllGroups()
 });
@@ -56,4 +67,7 @@ useEvents().addListener("clean-toast", () => {
   <ConfirmPopup group="popup" />
   <DynamicDialog />
   <VueQueryDevtools />
+  <Dialog v-model:visible="infoDialog.visible" modal :header="t('global.info')">
+    {{ infoDialog.message }}
+  </Dialog>
 </template>

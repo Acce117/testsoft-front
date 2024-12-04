@@ -87,7 +87,6 @@ export const useExecuteTest = () => {
   };
   const timeOver = () => {
     try {
-      console.log(data)
       if (data.time_duration > 0) {
         if (hasSecondOpportunity) {
           setNewTime(300000);
@@ -119,7 +118,10 @@ export const useExecuteTest = () => {
       if (e.message === "Time Over") {
         confirmExit.value = true;
         router.push("/select-test");
-        useEvents().dispatch("dialog-timeover");
+        
+        useEvents().dispatch("info", {
+          message: t('execute-test.dialogs.test-ended'),          
+        });
       } else console.error(e);
     }
   };
