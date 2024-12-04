@@ -1,17 +1,16 @@
 <template>
-  <button
-    class="p-confirm-dialog-reject p-button-text p-ripple"
-    type="button"
-    v-ripple
-    @click="closeDialog()"
-  >
-    <span class="p-button-label" data-pc-section="label">{{$t('global.confirm')}}</span>
-  </button>
+  <div w-full flex  justify-center>
+    <Button :label="t('global.confirm')" v-ripple @click="closeDialog()" />
+
+  </div>
+
 </template>
 <script setup lang="ts">
-const emit = defineEmits(["accept"]);
+import Button from "primevue/button";
 import { inject } from "vue";
+import { useI18n } from "vue-i18n";
 const dialogRef = inject("dialogRef");
+const { t }  = useI18n()
 const closeDialog = () => {
   dialogRef.value.close()
 };

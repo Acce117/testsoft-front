@@ -13,9 +13,10 @@ export interface UserInterface {
 }
 
 export const userStore = defineStore('user', {
-    state: (): UserInterface => {
+    state:  (): UserInterface => {
         let user = siteStore().loadUser();
         let state: UserInterface;
+        console.log(user)
         user ?
             state = user :
             state = {

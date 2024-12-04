@@ -1,4 +1,8 @@
-.p-dialog {
+.p-dialog-footer {
+  justify-content: space-between !important;
+}
+
+/* .p-dialog {
   position: relative;
   width: 31rem;
   overflow: auto;
@@ -25,11 +29,7 @@
   width: 100%;
 }
 
-.p-dialog-footer {
-  padding: 2rem;
-  justify-content: center;
-  gap: 30%;
-}
+ 
 
 .modal__long-message {
   margin: 0 2rem;
@@ -106,4 +106,4 @@
   .p-dialog-footer button {
     font-size: 2rem;
   }
-}
+} */

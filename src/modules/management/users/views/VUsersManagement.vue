@@ -16,7 +16,6 @@ import { useI18n } from "vue-i18n";
 import CustomTable from "@/components/CustomTable.vue";
 import ViewUser from "./components/ViewUser.vue";
 import AddUser from "./components/AddUser.vue";
-import AdminLayout from "@/layouts/admin/AdminLayout.vue";
 const { t } = useI18n();
 
 let user = ref(new User())

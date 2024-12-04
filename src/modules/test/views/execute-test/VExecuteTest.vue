@@ -7,7 +7,6 @@ import {
   markRaw,
   reactive,
   ref,
-  watch,
   defineAsyncComponent,
   onUnmounted,
 } from "vue";
@@ -37,78 +36,24 @@ const confirm = useConfirm();
 const router = useRouter();
 const executeTest = useExecuteTest()
 
+const setInitialData = (d: { time_duration: number; series: { time_serie_duration: number; }[]; name: string | undefined; fk_id_type_test: string | number | undefined; }) => {
+  executeTest.setData(d)
+  let time: number;
+  time = d.time_duration > 0 ? d.time_duration : d.series[0].time_serie_duration;
+  executeTest.timeCountdown.value = time * 60001;
+  test.name = d.name;
+  test.type = d.fk_id_type_test;
+}
+
 const { data, isSuccess, isError, isPending } = useTestToExecute(
   router.currentRoute.value.params.id_test as string
-);
-const test = reactive(new TestAplication(router.currentRoute.value.params.id_test[0]));
+  , setInitialData);
 
-const serieIndex = executeTest.serieIndex
+const test = reactive(new TestAplication(router.currentRoute.value.params.id_test[0]));
 
 provide("executeTest", executeTest);
 
-
 provide<TestAplication>("test", test);
-
-
-//TIMER
-
-let timeCountdown = ref();
-
-watch(data, (newValue) => {
-  if (newValue) {
-    executeTest.setData(data)
-    let time: number;
-    if (newValue.time_duration > 0) time = newValue.time_duration;
-    else time = newValue.series[0].time_serie_duration;
-    timeCountdown.value = time * 60001;
-    test.name = newValue.name;
-    test.type = newValue.fk_id_type_test;
-  }
-});
-const setNewTime = (time: number) => {
-  timeCountdown.value = time + 1;
-  setTimeout(() => {
-    timeCountdown.value = time;
-  }, 0);
-};
-let hasSecondOpportunity = true;
-const timeOver = () => {
-  try {
-    if (data.value.time_duration > 0) {
-      if (hasSecondOpportunity) {
-        setNewTime(300000);
-        hasSecondOpportunity = false;
-        toast.add({
-          severity: "warn",
-          summary: t("global.warning") + ":",
-          detail: t("execute-test.dialogs.test-ended-first-time"),
-          life: 5000,
-        });
-      } else throw new Error("Time Over");
-    } else {
-      if (serieIndex.value < data.value.series.length - 1) {
-        serieIndex.value += 1;
-        setNewTime(
-          data.value.series[serieIndex.value].time_serie_duration * 60000
-        );
-        toast.removeAllGroups();
-        toast.add({
-          severity: "warn",
-          summary: t("global.warning") + ":",
-          detail: t("execute-test.dialogs.serie-ended"),
-          life: 5000,
-        });
-      } else throw new Error("Time Over");
-    }
-  } catch (e: any) {
-    if (e.message === "Time Over") {
-      executeTest.confirmExit.value = true;
-      router.push("/select-test");
-      timeOverDialog();
-    } else console.error(e);
-  }
-};
-
 
 //DIALOGS
 
@@ -128,8 +73,8 @@ const showResults = () => {
     },
   });
 };
-useEvents().addListener("dialog-results", (event: CustomEventInit) => {
-  
+useEvents().addListener("dialog-results", () => {
+
   showResults()
 });
 
@@ -144,6 +89,9 @@ const timeOverDialog = () => {
     },
   });
 };
+useEvents().addListener("dialog-timeover", () => {
+  timeOverDialog()
+});
 
 
 onBeforeRouteLeave((to) => {
@@ -172,11 +120,11 @@ const visibleTimer = ref(false)
     <AdminNavbar>
 
     </AdminNavbar>
-    <VTestHeader v-if="isSuccess" :data="data" @next-serie="executeTest.nextSerie()">
+    <VTestHeader v-if="isSuccess" :data="data" @next-serie="executeTest.nextSerie(test)">
       <template #timer>
         <div h-10 flex gap-2 items-center justify-between w-7rem>
-          <vue-countdown text-slate-600 :class="visibleTimer ? 'opacity-0' : 'opacity-100'" text-xl
-            :time="timeCountdown" v-slot="{ minutes, seconds }" @end="timeOver()">
+          <vue-countdown  text-slate-600 :class="visibleTimer ? 'opacity-0' : 'opacity-100'" text-xl
+            :time="executeTest.timeCountdown.value" v-slot="{ minutes, seconds }" @end="executeTest.timeOver()">
             {{ minutes > 9 ? minutes : `0` + minutes }}:{{
               seconds > 9 ? seconds : `0` + seconds
             }}
@@ -219,4 +167,3 @@ const visibleTimer = ref(false)
 
 </template>
 
-@/common/utils/validateAnswers ./getErrorMessages

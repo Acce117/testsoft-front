@@ -163,7 +163,7 @@ const props = defineProps({
     },
 
 })
-
+const fieldAsID= props.model.getFieldAsID()
 const queryKey = props.model.constructor.name
 const confirm = useConfirm();
 const toast = useToast();

@@ -1,33 +1,27 @@
 import useEvents from "@/common/utils/useEvents";
 import { i18n } from "@/plugins/i18n";
 import router from "@/router";
-import { ref, type Ref } from "vue";
+import { ref } from "vue";
 import type { TestAplication } from "./classes/testAplication";
-import VTestResult from "./views/execute-test/VTestResult.vue";
 const { t } = i18n.global;
 
 export const useExecuteTest = () => {
   const confirmExit = ref(false);
   const validatedTestFirstTime = ref(false);
   const infoVisible = ref(false);
+  let hasSecondOpportunity = true;
 
   const serieIndex = ref(0);
-  let data = ref();
+  let data: { completed: number; series: any[]; time_duration: number; navigable: number; data: { completed: number; }; value: { series: any[]; }; } ;
   let test = ref();
- 
-   const setData=(d:any)=>data=d;
-   const setTest=(d:any)=>test=d;
+  const timeCountdown = ref(10000);
 
-   
+  const setData = (d: any) => (data = d);
+  const setTest = (d: any) => (test = d);
 
-
-
-
-  const validateSerie = (serie: any, test:TestAplication) => {
+  const validateSerie = (serie: any, test: TestAplication) => {
     let isValid = true;
-    const questionsNotAnswered = test.getQuestionsNotAnswered(
-      serie.questions
-    );
+    const questionsNotAnswered = test.getQuestionsNotAnswered(serie.questions);
     if (questionsNotAnswered.length > 0) {
       isValid = false;
       getErrorMessages(questionsNotAnswered).forEach((error) => {
@@ -36,7 +30,6 @@ export const useExecuteTest = () => {
           summary: "Error: " + serie.name,
           detail: error,
           life: 5000,
-
         });
       });
     }
@@ -44,12 +37,12 @@ export const useExecuteTest = () => {
     return isValid;
   };
 
-  const validateTest = (test:TestAplication) => {
+  const validateTest = (test: TestAplication) => {
     //for each serie, this function returns the incorrect answers. This is for managing questions and series in toast
     useEvents().dispatch("clean-toast");
     let isValid = true;
-    if (data.value.completed == 1) {
-      data.value.series.forEach((serie: any) => {
+    if (data.completed == 1) {
+      data.series.forEach((serie: any) => {
         if (!validateSerie(serie, test)) isValid = false;
       });
     }
@@ -71,7 +64,6 @@ export const useExecuteTest = () => {
       },
     });
   };
-  
 
   const sendTestConfirm = () => {
     useEvents().dispatch("confirm", {
@@ -80,7 +72,7 @@ export const useExecuteTest = () => {
       rejectLabel: t("global.cancel"),
       acceptLabel: t("global.confirm"),
       accept: () => {
-        useEvents().dispatch('dialog-results')
+        useEvents().dispatch("dialog-results");
         exitTest("");
       },
       reject: () => {
@@ -88,14 +80,60 @@ export const useExecuteTest = () => {
       },
     });
   };
+
+  const setNewTime = (time: number) => {
+    timeCountdown.value = time + 1;
+    setTimeout(() => {
+      timeCountdown.value = time;
+    }, 0);
+  };
+  const timeOver = () => {
+    try {
+      console.log(data)
+      if (data.time_duration > 0) {
+        if (hasSecondOpportunity) {
+          setNewTime(300000);
+          hasSecondOpportunity = false;
+          useEvents().dispatch("error", {
+            severity: "warn",
+            summary: t("global.warning") + ":",
+
+            detail: t("execute-test.dialogs.test-ended-first-time"),
+            life: 5000,
+          });
+        } else throw new Error("Time Over");
+      } else {
+        if (serieIndex.value < data.series.length - 1) {
+          serieIndex.value += 1;
+          setNewTime(
+            data.series[serieIndex.value].time_serie_duration * 60000
+          );
+          useEvents().dispatch("clean-toast");
+          useEvents().dispatch("error", {
+            severity: "warn",
+            summary: t("global.warning") + ":",
+            detail: t("execute-test.dialogs.serie-ended"),
+            life: 5000,
+          });
+        } else throw new Error("Time Over");
+      }
+    } catch (e: any) {
+      if (e.message === "Time Over") {
+        confirmExit.value = true;
+        router.push("/select-test");
+        useEvents().dispatch("dialog-timeover");
+      } else console.error(e);
+    }
+  };
+
   const questionsNotAnswered = {
     "2": [],
     "5": [],
   };
 
-  const nextSerie = () => {
-    if (data.value.navigable == 1) serieIndex.value += 1;
-    else if (data.value.data?.completed == 1) {
+  const nextSerie = (test: TestAplication) => {
+    if (data.navigable == 1) serieIndex.value += 1;
+    else if (data.data?.completed == 1) {
       if (validateSerie(data.value.series[serieIndex.value], test))
         nextSerieConfirm();
     } else nextSerieConfirm();
@@ -109,7 +147,7 @@ export const useExecuteTest = () => {
       accept: () => {
         serieIndex.value += 1;
         setNewTime(
-          data.value.series[serieIndex.value].time_serie_duration * 60000
+          data.series[serieIndex.value].time_serie_duration * 60000
         );
         validatedTestFirstTime.value = false;
       },
@@ -118,7 +156,6 @@ export const useExecuteTest = () => {
 
   const pushQuestionsNotAnswered = (questions: []) => {
     questions.forEach((question) => {
-
       switch (parseInt(question.question.type.id_type_question)) {
         case 2:
           questionsNotAnswered["2"].push(question);
@@ -156,19 +193,16 @@ export const useExecuteTest = () => {
   };
   return {
     setData,
-    data,
     setTest,
     test,
-    sendTestConfirm,
     exitTestConfirm,
-    exitTest,
     validateTest,
-    validateSerie,
     confirmExit,
     validatedTestFirstTime,
     serieIndex,
     infoVisible,
-    getErrorMessages,
-    nextSerie
+    nextSerie,
+    timeOver,
+    timeCountdown
   };
 };

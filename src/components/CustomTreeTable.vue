@@ -1,10 +1,8 @@
 <template>
-    <Card >
+    <Card>
         <template #content>
-
-            <TreeTable  removableSort ref="dt" size="small"  tableStyle="min-width: 50rem"
-                :globalFilterFields="props.model.getColumns().map((c) => c.field)" v-model:filters="filters"
-                filterDisplay="row" paginator :value="data" :rows="5" :rowsPerPageOptions="[5, 10, 20, 50]">
+            <TreeTable sortMode="multiple" removableSort ref="dt" size="small" tableStyle="min-width: 50rem" paginator
+                :value="data" :rows="5" :rowsPerPageOptions="[5, 10, 20, 50]">
 
 
                 <template #header>
@@ -32,25 +30,39 @@
                     </div>
 
                 </template>
-                <Column v-for="(col, index) in props.model.getColumns()" :key="index" sortable :field="col.field"
-                    :header="col.header">
+                <Column expander :field="fiedAsExpander.field" :header="fiedAsExpander.header">
 
-
-                    <template #body="slotProps">
+                    <template #body=slotProps>
 
                         <Skeleton v-if="isRefetching || isPending" width="60%" borderRadius=".4rem" height="1.5rem" />
                         <div overflow-auto text-sm v-else>
-                            <Rating v-if="col.isRating" :modelValue="slotProps.data[col.field]" readonly />
-                            <span v-else-if="col.isBoolean || col.field === fieldAsActive">{{
-                                slotProps.data[col.field] == true ? t('yes') : t('no') }}</span>
-                            <span v-else-if="slotProps.data[col.field] !== undefined">{{ typeof
-                                slotProps.data[col.field] == 'string' ? slotProps.data[col.field].length < 20 ?
-                                slotProps.data[col.field] : slotProps.data[col.field].substring(0, 20) +'...':
-                                    slotProps.data[col.field] }}</span>
+                            <span v-if="slotProps.node[fiedAsExpander.field] !== undefined">{{ typeof
+                                slotProps.node[fiedAsExpander.field] == 'string' ?
+                                slotProps.node[fiedAsExpander.field].length < 20 ? slotProps.node[fiedAsExpander.field]
+                                    : slotProps.node[fiedAsExpander.field].substring(0, 20) + '...' :
+                                    slotProps.node[fiedAsExpander.field] }}</span>
                                     <span v-else>-</span>
                         </div>
-
                     </template>
+
+                </Column>
+
+
+                <Column v-for="(col, index) in props.model.getColumns().filter(c => !c.expander)" :key="index" sortable
+                    :field="col.field" :header="col.header">
+                    <template #body=slotProps>
+
+                        <Skeleton v-if="isRefetching || isPending" width="60%" borderRadius=".4rem" height="1.5rem" />
+                        <div overflow-auto text-sm v-else>
+
+                            <span v-if="slotProps.node[col.field] !== undefined">{{ typeof
+                                slotProps.node[col.field] == 'string' ? slotProps.node[col.field].length < 20 ?
+                                slotProps.node[col.field] : slotProps.node[col.field].substring(0, 20) + '...' :
+                                slotProps.node[col.field] }}</span>
+                                    <span v-else>-</span>
+                        </div>
+                    </template>
+
 
                 </Column>
                 <Column :field="fieldAsID" :header="$t('table.actions')">
@@ -60,9 +72,9 @@
 
                         <div v-else class="custom-table-actions">
                             <i class="pi pi-eye" v-tooltip="$t('table.view_information')"
-                                @click="showElement(slotProps.data)" />
+                                @click="showElement(slotProps.node)" />
                             <i class="pi pi-file-edit" v-tooltip="$t('table.update')"
-                                @click="showUpdate(slotProps.data)" />
+                                @click="showUpdate(slotProps.node)" />
 
                             <!-- <i v-if="!props.fieldAsActive" v-tooltip="$t('table.delete')"
                                 @click="deleteElement($event, slotProps.data)" class="pi pi-trash" />
@@ -77,7 +89,7 @@
                 </Column>
                 <template #empty> {{ $t('table.no_results') }} </template>
 
-            </TreeTable >
+            </TreeTable>
             <!-- <h2 v-else-if="isError" class="error">{{ $t('table.something_wrong') }}</h2> -->
         </template>
     </Card>
@@ -124,6 +136,8 @@
         <span>{{ $t('table.update_element') }}</span>
         <div class="dialog-form">
             <slot name="form-add"></slot>
+            {{ model }}
+
         </div>
         <div class="dialog-footer">
             <Button type="button" :label="$t('table.cancel')" severity="secondary"
@@ -146,7 +160,6 @@ import Button from 'primevue/button';
 import { useConfirm } from "primevue/useconfirm";
 import { useToast } from "primevue/usetoast";
 import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query';
-import Rating from 'primevue/rating';
 import Menu from 'primevue/menu';
 import { useI18n } from 'vue-i18n';
 import { BaseModel } from '@/core/BaseModel';
@@ -164,6 +177,10 @@ const props = defineProps({
 
 })
 
+const fieldAsID = props.model.getFieldAsID()
+
+const fiedAsExpander = props.model.getColumns().filter(c => c.expander)[0]
+
 const queryKey = props.model.constructor.name
 const confirm = useConfirm();
 const toast = useToast();
@@ -173,8 +190,8 @@ const toggle = (event) => {
 };
 const { data, isPending, isSuccess, isError, isRefetching, refetch } = useQuery({
     queryKey: [queryKey],
-    queryFn: () => {
-        return props.model.getAll()
+    queryFn: async () => {
+        return props.model.getElementsForTreeTable()
     }
 })
 
@@ -261,7 +278,6 @@ const showAddDialog = ref(false)
 
 
 const addElement = (values) => {
-    console.log(values)
     mutateAdd(props.model)
 }
 const updateElement = () => {
@@ -448,8 +464,4 @@ const { mutate: mutateDelete } = useMutation({
     align-items: center;
     justify-content: center;
 }
-
-
-
-
 </style>

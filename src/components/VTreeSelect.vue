@@ -2,7 +2,8 @@
     <div w-full>
         <Field v-model="model" :name="props.name" v-slot="{ meta, errors }">
             <FloatLabel variant="on">
-                <TreeSelect :invalid="meta.validated && !meta.valid" @change="updateModel($event)" v-bind="{ ...$attrs }" showClear  filter w-full v-model="childModel" />
+                <TreeSelect :invalid="meta.validated && !meta.valid" @change="updateModel($event)"
+                    v-bind="{ ...$attrs }" showClear filter w-full v-model="childModel" />
                 <label for="" flex items-center justify-center gap-2>
                     <slot name="icon"></slot>{{ $t(props.label) }}
                 </label>
@@ -11,6 +12,7 @@
                 <small text-red v-if="meta.validated && !meta.valid">{{ errors[0] }}</small>
             </Transition>
         </Field>
+        
     </div>
 </template>
 
@@ -28,16 +30,23 @@ const props = defineProps({
 });
 
 const model = defineModel();
-const childModel = ref()
 
-const updateModel =(value)=>{
-    const newValue = Object.keys(value)[0]
-    console.log(newValue)
-    
-  if(!newValue)
-    model.value = undefined
-  else
-    model.value = newValue
+const childModel = ref({})
+if (model.value)
+    childModel.value[model.value] = true
+const updateModel = (value) => {
+    if (value) {
+
+
+        const newValue = Object.keys(value)[0]
+
+        if (!newValue)
+            model.value = undefined
+        else
+            model.value = newValue
+    }
 }
+console.log(model.value)
+
 
 </script>

@@ -22,3 +22,27 @@ export function renameTree(tree, label:string,key:string) {
   // Devuelve el árbol modificado
   return tree;
 }
+
+export function renameTreeForTreeTable(tree){
+    // Recorre cada nodo del árbol
+    for (let i = 0; i < tree.length; i++) {
+      const node = tree[i];
+  
+      // Cambia la clave 'name_group' a 'name' si existe
+      if (node['id_group']) {
+        node.key = node.id_group
+
+        node.data = {
+          name_group : node.name_group,
+          father_group : node.father_group
+
+        }
+      }
+  
+      // Recorre recursivamente los hijos si existen
+      if (Object.prototype.hasOwnProperty.call(node, 'children') && Array.isArray(node.children)) {
+        renameTreeForTreeTable(node.children); // Llamada recursiva para los hijos
+      }
+    }
+    return tree
+}

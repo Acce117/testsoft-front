@@ -80,11 +80,7 @@ const prueba = ref();
 const selection = ref([]);
 </script>
 <style>
-.p-treetable td {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
+
 .p-checkbox-box,
 .p-checkbox {
   height: 2rem;
