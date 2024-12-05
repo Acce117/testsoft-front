@@ -18,7 +18,7 @@ const toast = useToast();
 const confirm = useConfirm();
 const { t } = useI18n();
 const infoDialog=ref(
-  {message:'',visible:true}
+  {message:'',visible:false}
 )
 useEvents().addListener("error", (event: CustomEventInit) => {
   const eventDetail = event.detail;

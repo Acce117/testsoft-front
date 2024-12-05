@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { inject } from "vue";
 import VQuestion from "./question-components/VQuestion.vue";
 import VMultipleOptionsValueSetted from "./question-components/VMultipleOptionsValueSetted.vue";
 import VSingleOptionQuestion from "./question-components/VSingleOptionQuestion.vue";
-import type { Test } from "../../classes/testAplication";
+import VMultipleOptionQuestion from "./question-components/VMultipleOptionQuestion.vue";
+import VWrittenResponseQuestion from "./question-components/VWrittenResponseQuestion.vue";
 
 const props = defineProps({
-  serie: Object,
+  serie: {
+    type: Object,
+    required: true
+  }
 });
-const emit = defineEmits(['time-serie-over'])
-const validatedTestFirstTime = inject('executeTest').validatedTestFirstTime
-const test = inject<Test>("test");
 
 </script>
 
@@ -20,16 +20,20 @@ const test = inject<Test>("test");
       {{ serie.description }}
     </h3>
     <VQuestion v-for="(question, index) in props.serie?.questions" :key="question.id_question"
-      :id_question="question.id_question" :question_index="index + 1" :title="question.statement" :class="{
-        'invalid-input': validatedTestFirstTime
-          ? !test?.validateComponent(question.id_question)
-          : false,
-      }">
+      :id_question="question.id_question" :question_index="index + 1" :title="question.statement">
+      <template #default="{ changeInvalid }">
+        <VMultipleOptionQuestion v-if="question.type.id_type_question == 1" :changeInvalid
+          :id_question="question.id_question" :possible_answers="question.answers" />
 
-      <VSingleOptionQuestion v-if="question.type.id_type_question == 2" :id_question="question.id_question" :possible_answers="question.answers" />
-      <VMultipleOptionsValueSetted v-else-if="question.type.id_type_question == 5" :id_question="question.id_question"
-        :possible_answers="question.answers" :question_index="index + 1"
-        :maxPoints="question.arrayquestion_top_value[0]?.top_value" />
+        <VSingleOptionQuestion v-else-if="question.type.id_type_question == 2" :changeInvalid
+          :id_question="question.id_question" :possible_answers="question.answers" />
+        <VMultipleOptionsValueSetted v-else-if="question.type.id_type_question == 5" :changeInvalid
+          :id_question="question.id_question" :possible_answers="question.answers" :question_index="index + 1"
+          :maxPoints="question.arrayquestion_top_value[0]?.top_value" />
+        <VWrittenResponseQuestion v-else-if="question.type.id_type_question == 6" :changeInvalid
+          :id_question="question.id_question" />
+      </template>
+
     </VQuestion>
   </div>
 </template>

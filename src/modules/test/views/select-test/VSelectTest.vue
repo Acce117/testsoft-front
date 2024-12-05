@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import VTestCard from "./components/VTestCard.vue";
-import { nextTick, ref, watch } from "vue";
-import "swiper/css";
-import "swiper/css/pagination";
-import "swiper/css/navigation";
+import { nextTick, ref } from "vue";
+
 import { userStore } from "@/modules/security/store/user-store";
 const user = userStore();
 import { useAssignedTests } from "../../composables/useAssignedTests";
@@ -65,7 +63,6 @@ const displayProduct = (event, test) => {
   op.value.hide();
 
   selectedTest.value = test;
-  console.log('asdsad')
 
   nextTick(() => {
     op.value.show(event);
@@ -83,7 +80,7 @@ const hidePopover = () => {
   <section v-else-if="!isPending">
     <h2 text-slate-800 page-title>{{ $t('select-test.title') }}</h2>
 
-    <Carousel :value="tests" :numVisible="3" :numScroll="1" :responsiveOptions="responsiveOptions" circular>
+    <Carousel :value="tests" :numVisible="3" :numScroll="1" :responsiveOptions circular>
       <template #item="slotProps">
         <VTestCard :test="slotProps.data" :infoCb="displayProduct" />
       </template>

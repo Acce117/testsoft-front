@@ -3,6 +3,7 @@ import { i18n } from "@/plugins/i18n";
 import router from "@/router";
 import { ref } from "vue";
 import type { TestAplication } from "./classes/testAplication";
+import type { Question } from "./classes/question-class";
 const { t } = i18n.global;
 
 export const useExecuteTest = () => {
@@ -127,8 +128,12 @@ export const useExecuteTest = () => {
   };
 
   const questionsNotAnswered = {
+    "1": [],
     "2": [],
+    "3": [],
+    "4": [],
     "5": [],
+    "6": [],
   };
 
   const nextSerie = (test: TestAplication) => {
@@ -155,17 +160,7 @@ export const useExecuteTest = () => {
   };
 
   const pushQuestionsNotAnswered = (questions: []) => {
-    questions.forEach((question) => {
-      switch (parseInt(question.question.type.id_type_question)) {
-        case 2:
-          questionsNotAnswered["2"].push(question);
-          break;
-        case 5:
-          questionsNotAnswered["5"].push(question);
-          break;
-        //ADD OTHERS QUESTION TYPES
-      }
-    });
+    questions.forEach(question => questionsNotAnswered[question.question.type.id_type_question+''].push(question))
   };
 
   const getErrorMessages = (questions: []) => {
@@ -191,6 +186,14 @@ export const useExecuteTest = () => {
     }
     return errorMessages;
   };
+
+  const isAnswerInvalidInQuestion = (question:Question, changeInvalid:Function) => {
+    const invalid = validatedTestFirstTime.value
+      ? !question.validateQuestion()
+      : false
+    changeInvalid(invalid)
+    return invalid
+  }
   return {
     setData,
     exitTestConfirm,
@@ -201,6 +204,7 @@ export const useExecuteTest = () => {
     infoVisible,
     nextSerie,
     timeOver,
-    timeCountdown
+    timeCountdown,
+    isAnswerInvalidInQuestion
   };
 };

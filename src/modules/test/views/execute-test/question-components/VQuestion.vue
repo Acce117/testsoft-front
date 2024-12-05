@@ -1,16 +1,25 @@
 <script setup lang="ts">
+import {  ref } from 'vue';
+
 const props = defineProps({
   id_question: Number,
   question_index: Number,
   title: String,
 });
+
+const invalid = ref(false)
+const changeInvalid = (value:boolean)=>invalid.value = value
+
 </script>
 <template>
   <Transition name="fade">
-    <div class="question "  flex flex-col bg-white p-4 overflow-hidden  rounded-lg my-4 :id="props.id_question">
+    <div :class="{
+        'invalid-input': invalid,
+          'question':true
+      }" flex flex-col bg-white p-4 overflow-hidden  rounded-lg my-4 :id="props.id_question">
       <h4 m m-0 mb-4  text-lg w-full   text-black >{{ props.question_index + `-` + props.title }}</h4>
       <div relative flex flex-col gap-4>
-        <slot ></slot>
+        <slot  :changeInvalid ></slot>
       </div>
     </div>
   </Transition>

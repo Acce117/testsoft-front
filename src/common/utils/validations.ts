@@ -23,9 +23,7 @@ export function validateCI(text: string) {
   else if (Number(text.charAt(6)) >= 6 && Number(text.charAt(6)) <= 8)
     y = "20" + y
   let date = y + '-' + m + '-' + d
-  console.log(date)
-
-  console.log(new Date(date))
+  
   if (isNaN(Date.parse(y + '-' + m + '-' + d)))
     throw new Error('error.ci_date')
 }

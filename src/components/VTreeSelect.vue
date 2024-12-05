@@ -46,7 +46,6 @@ const updateModel = (value) => {
             model.value = newValue
     }
 }
-console.log(model.value)
 
 
 </script>

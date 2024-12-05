@@ -261,7 +261,6 @@ const showAddDialog = ref(false)
 
 
 const addElement = (values) => {
-    console.log(values)
     mutateAdd(props.model)
 }
 const updateElement = () => {

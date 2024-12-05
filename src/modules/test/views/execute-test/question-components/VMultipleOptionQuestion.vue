@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { computed, inject } from "vue";
 
-import RadioButton from "primevue/radiobutton";
 import type { TestAplication } from "@/modules/test/classes/testAplication";
-import { SingleOptionQuestion } from "@/modules/test/classes/singleOptionQuestion-class";
+import { MultipleOptionQuestion } from "@/modules/test/classes/multipleOptionQuestion-class";
+import Checkbox from "primevue/checkbox";
 
 const props = defineProps({
   id_question: {
@@ -17,8 +17,9 @@ const props = defineProps({
 const test = inject<TestAplication>("test");
 const executeTest = inject('executeTest')
 
+
 if (!test.questions[`${props.id_question}`])
-  test.questions[`${props.id_question}`] = new SingleOptionQuestion(props.id_question);
+  test.questions[`${props.id_question}`] = new MultipleOptionQuestion(props.id_question);
 let question = test.questions[`${props.id_question}`]
 
 const invalid = computed(() =>
@@ -27,19 +28,18 @@ const invalid = computed(() =>
 
 </script>
 <template>
-  <div class="radio-button-answer answer" v-for="answer in props.possible_answers" :key="answer.id_answer">
+  <div class="checkbox-answer answer" v-for="answer in props.possible_answers" :key="answer.id_answer">
     <label cursor-pointer :for="answer.id_answer" flex text-lg text-slate-800 gap-2 flex-items-center w-fit h-full>
-      <RadioButton v-model="question.answer" :inputId="answer.id_answer + ''" :name="props.id_question + ''"
+      <Checkbox v-model="question.answer" :inputId="answer.id_answer + ''" :name="props.id_question + ''"
         :value="answer.id_answer" :invalid />
       {{ answer.text }}
     </label>
   </div>
 </template>
 <style>
-.radio-button-answer {
+.checkbox-answer {
   width: 100%;
   display: flex;
   align-items: center;
 }
-
 </style>
