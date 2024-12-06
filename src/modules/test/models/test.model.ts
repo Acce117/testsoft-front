@@ -1,7 +1,20 @@
 
 import { BaseModel } from "@/core/BaseModel";
+import { sendRequest } from "@/core/sendRequest";
+import { schema } from "@/modules/management/test/schemas/test.schema";
 
 const url = "psi_test";
+const columns = [
+ 
+  {
+    field: "name",
+    header: "Nombre",
+  },
+  {
+    field: "time_duration",
+    header: "Tiempo de Duración (min)",
+  },
+]
 
 
 export class Test extends BaseModel {
@@ -42,11 +55,22 @@ export class Test extends BaseModel {
     return url;
   }
  
-  
+  public getColumns() {
+    return columns;
+  }
+  public getSchema() {
+    return schema;
+  }
   
 
   public getFieldAsID(): string {
     return "id_test";
+  }
+
+  public async getAssignedTests(user_id:string){
+    return await sendRequest({
+      url: `${import.meta.env.VITE_API_PATH}/user/${user_id}/tests`
+    });
   }
 
   

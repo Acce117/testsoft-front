@@ -2,8 +2,8 @@ import useEvents from "@/common/utils/useEvents";
 import { i18n } from "@/plugins/i18n";
 import router from "@/router";
 import { ref } from "vue";
-import type { TestAplication } from "./classes/testAplication";
-import type { Question } from "./classes/question-class";
+import type { TestAplication } from "../../../classes/testAplication";
+import type { Question } from "../../../classes/question-class";
 const { t } = i18n.global;
 
 export const useExecuteTest = () => {

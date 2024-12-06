@@ -6,6 +6,8 @@ import { siteStore } from "@/common/site/siteStore";
 import Button from "primevue/button";
 import VButton from "@/components/VButton.vue";
 import VInput from "@/components/VInput.vue";
+import { Form } from "vee-validate";
+import { loginSchema } from "./loginSchema";
 const { t } = useI18n();
 
 const credentials = ref({
@@ -35,14 +37,21 @@ window.scrollTo(0, 0);
             {{ $t("login.title") }}
           </h1>
         </div>
-        <form action="" @submit.prevent="login.login(credentials)" centered gap-27px flex-col>
+        <Form @submit="login.login(credentials)" centered gap-27px flex-col :validation-schema="loginSchema">
 
-          <VInput name="username"  id="user-input" :max="8" v-model="credentials.username" label="login.user">
-            <span class="pi pi-user"></span>
+
+          <VInput name="username" id="user-input" :max="8" v-model="credentials.username" label="login.user">
+            <template #icon>
+              <span class="pi pi-user"></span>
+
+            </template>
           </VInput>
-          <VInput name="password"  id="password-input" :max="8" type="password" v-model="credentials.password"
-          label="login.password">
-            <i class="pi pi-lock"></i>
+          <VInput name="password" id="password-input" :max="8" type="password" v-model="credentials.password"
+            label="login.password">
+            <template #icon>
+              <i class="pi pi-lock"></i>
+
+            </template>
 
           </VInput>
 
@@ -50,7 +59,7 @@ window.scrollTo(0, 0);
             <span v-if="!login.loading">{{ $t("login.login") }} <span class="pi pi-arrow-right"></span></span>
             <VLoading v-else />
           </VButton>
-        </form>
+        </Form>
       </div>
     </section>
   </main>

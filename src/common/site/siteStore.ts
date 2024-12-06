@@ -15,16 +15,14 @@ const { t } = i18n.global;
 
 export const siteStore = defineStore("site", {
   actions: {
-     loadUser() {
-      const token: string | null = TokenHandler.getToken();
-      console.log(token)
+      getUserInLocal() {
       let user
       try {
-        // if (token) {
-        //   user = await sendRequest({
-        //     url: `${import.meta.env.VITE_API_PATH}/me`,
-        //   });
-        // }else throw new Error('Not Authenticated')
+        const userStorage = localStorage.getItem('user')
+        if(userStorage)
+          user = JSON.parse(userStorage)
+        else throw new Error('Not Authenticated')
+
       } catch (err) {
         console.log(err);
       }
@@ -32,17 +30,35 @@ export const siteStore = defineStore("site", {
       return user;
     },
 
+    async loadUser() {
+      const token: string | null = TokenHandler.getToken();
+      let user
+      try {
+        if (token) {
+          user = await sendRequest({
+            url: `${import.meta.env.VITE_API_PATH}/me`,
+          });
+          localStorage.setItem('user',JSON.stringify(user))
+        }else throw new Error('Not Authenticated')
+      } catch (err) {
+        console.log(err);
+      }
+
+      return user;
+    },
+
+
     useLogin() {
       const request = useSendRequest();
 
-      const loginRequestHandler = (() => {
+      const  loginRequestHandler = (async () => {
         if (!request.error.value) {
           TokenHandler.storeRefreshToken(request.result.value.refreshToken);
           TokenHandler.storeToken(request.result.value.token);
 
-          const user = this.loadUser();
-          console.log(user)
+          const user = await this.loadUser();
           userStore().$patch(user);
+
           useEvents().dispatch("redirect", "/");
         } else {
           useEvents().dispatch("error", {
@@ -78,6 +94,7 @@ export const siteStore = defineStore("site", {
 
         accept: () => {
           userStore().$reset();
+          localStorage.removeItem('user')
           TokenHandler.removeRefreshToken();
           TokenHandler.removeToken();
           useEvents().dispatch("redirect", "/login");

@@ -24,6 +24,9 @@
 
         <RouterLink to="/" size-10> <img src="/img/logo.png" size-10 /></RouterLink>
       </template>
+      <template #end>
+        <UserAvatar/>
+      </template>
     </Menubar>
   </div>
 
@@ -37,7 +40,13 @@ import { ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { userStore } from "@/modules/security/store/user-store";
 import { siteStore } from "@/common/site/siteStore";
+
+import UserAvatar from "./components/UserAvatar.vue";
 const { t, locale } = useI18n();
+
+
+
+
 
 const router = useRouter();
 const itemsTestExecutor = [
@@ -70,6 +79,8 @@ const itemsAnalist = [
   {
     label: "Management",
     i18n: "management",
+    icon: 'pi pi-cog',
+
 
     items: [
       {
@@ -99,6 +110,8 @@ const itemsDefault = [
   {
     label: "Management",
     i18n: "management",
+    icon: 'pi pi-cog',
+
 
     items: [
       {
@@ -116,6 +129,8 @@ const itemsDefault = [
   {
     label: " ",
     i18n: "test",
+    icon: 'pi pi-file-edit',
+
     items: [
       {
         label: " ",
@@ -137,33 +152,19 @@ const itemsDefault = [
       },
     ]
   },
-  {
-    label: " ",
-    i18n: "profile",
-    items: [
 
-      {
-        label: " ",
-        i18n: "user",
-        command: () => router.push("/profile"),
-      },
-      {
-        label: " ",
-        i18n: "close-session",
-        command: () => siteStore().logout(),
-      },
-    ],
-  },
   {
     label: " ",
     i18n: "info",
+    icon: 'pi pi-info-circle',
+
     command: () => router.push("/info"),
   },
 ];
 const items = ref([]);
-if (userStore().role.includes("Estudiante"))
-  items.value.push(...itemsTestExecutor);
-if (userStore().role.includes("Analista")) items.value.push(...itemsAnalist);
+// if (userStore().role.includes("Estudiante"))
+//   items.value.push(...itemsTestExecutor);
+// if (userStore().role.includes("Analista")) items.value.push(...itemsAnalist);
 items.value.push(...itemsDefault);
 const updateNavbarLabels = () => {
   items.value.forEach((item: any) => {

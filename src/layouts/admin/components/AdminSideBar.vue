@@ -12,7 +12,7 @@
                 <span class="text-primary font-semibold">{{ item.label }}</span>
             </template>
             <template #item="{ item, props }">
-                <a v-ripple class="flex items-center" v-bind="props.action">
+                <a v-ripple class="flex items-center"  v-bind="props.action">
                     <span :class="item.icon" />
                     <span font-bold>{{ item.label }}</span>
                     
@@ -24,9 +24,17 @@
 </template>
 <script setup lang="ts">
 
+import { siteStore } from "@/common/site/siteStore";
 import router from "@/router";
 import Menu from "primevue/menu";
 import { ref } from "vue";
+
+const emit = defineEmits(['close'])
+
+const navigateTo=(route:string)=>{
+    router.push(route)
+    emit('close')
+}
 
 const items = ref([
     {
@@ -38,19 +46,19 @@ const items = ref([
             {
                 label: 'Usuarios',
                 icon: 'pi pi-user',
-                command:()=>router.push('/users')
+                command:()=>navigateTo('/users')
             },
             {
                 label: 'Grupos',
                 icon: 'pi pi-users',
-                command:()=>router.push('/groups')
+                command:()=>navigateTo('/groups')
 
 
             }, 
             {
                 label: 'Test',
-                icon: 'pi pi-file',
-                command:()=>router.push('/tests')
+                icon: 'pi pi-file-edit',
+                command:()=>navigateTo('/test')
 
 
             }
@@ -63,7 +71,7 @@ const items = ref([
             {
                 label: 'Cerrar Sesión',
                 icon: 'pi pi-sign-out',
-
+                command:()=>siteStore().logout()
             }
         ]
     },

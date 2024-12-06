@@ -4,6 +4,8 @@
     <span><span text-primary>Apellidos: </span>{{ user.last_name }}</span>
     <span><span text-primary>Nombre de Usuario: </span>{{ user.username }}</span>
     <span><span text-primary>Email: </span>{{ user.email }}</span>
+    <span><span text-primary>País: </span>{{ user.country.name }}</span>
+
   </div>
 </template>
 <script setup lang="ts">

@@ -18,7 +18,7 @@ import { useDialog } from "primevue/usedialog";
 import { useI18n } from "vue-i18n";
 import { useTestToExecute } from "../../composables/useTestToExecute";
 import AdminNavbar from "@/layouts/admin/components/AdminNavbar.vue";
-import { useExecuteTest } from "../../useExecuteTest";
+import { useExecuteTest } from "./composables/useExecuteTest";
 import Button from "primevue/button";
 import useEvents from "@/common/utils/useEvents";
 const { t } = useI18n();
@@ -128,7 +128,6 @@ const visibleTimer = ref(false)
         <Button @click="executeTest.exitTestConfirm('select-test')" v-tooltip.right="t('execute-test.tooltips.exit')"
           icon="pi pi-times" />
       </VButtonsContainer>
-
 
       <VTestSerie :serie="data.series[executeTest.serieIndex.value]" />
 

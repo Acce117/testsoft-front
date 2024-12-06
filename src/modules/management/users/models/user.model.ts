@@ -34,7 +34,7 @@ const columns = [
     header: "Tipo de Usuario",
   },
   {
-    field: "country_id",
+    field: "country.name",
     header: "País",
   },
   
@@ -52,6 +52,7 @@ export class User extends BaseModel {
   sex;
   user_type;
   country_id;
+  country;
 
   constructor(data: any = null) {
     super();
@@ -68,6 +69,8 @@ export class User extends BaseModel {
       this.sex = data.sex;
       this.user_type = data.user_type;
       this.country_id = data.country_id;
+      this.country = data.country;
+
 
     }
   }
@@ -82,7 +85,9 @@ export class User extends BaseModel {
     this.email = data.email;
     this.sex = data.sex;
     this.user_type = data.user_type;
-    this.country_id = data.country_id;
+    this.country_id = data.country.country_id;
+    this.country = data.country;
+
 
   }
 
@@ -97,6 +102,8 @@ export class User extends BaseModel {
     this.sex = undefined;
     this.user_type = undefined;
     this.country_id = undefined;
+    this.country = undefined;
+
 
   }
 

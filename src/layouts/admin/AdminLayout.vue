@@ -24,7 +24,7 @@ const products = ref();
     <aside class="card flex justify-center">
       <Drawer v-model:visible="visible" class="!w-fit">
         <template #container>
-          <AdminSideBar />
+          <AdminSideBar @close="visible=false" />
 
         </template>
 
@@ -38,7 +38,7 @@ const products = ref();
       <AdminNavbar >
         <template #sidebar-button >
           <div xl:hidden block>
-            <Button  icon="pi pi-arrow-right" h-fit severity="secondary" @click="visible = true" />
+            <Button  icon="pi pi-bars" h-fit severity="secondary" @click="visible = true" />
 
           </div>
         </template>

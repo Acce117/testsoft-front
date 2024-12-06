@@ -80,11 +80,17 @@ const hidePopover = () => {
   <section v-else-if="!isPending">
     <h2 text-slate-800 page-title>{{ $t('select-test.title') }}</h2>
 
-    <Carousel :value="tests" :numVisible="3" :numScroll="1" :responsiveOptions circular>
+    <Carousel v-if="tests.length>0" :value="tests" :numVisible="3" :numScroll="1" :responsiveOptions circular>
       <template #item="slotProps">
         <VTestCard :test="slotProps.data" :infoCb="displayProduct" />
       </template>
     </Carousel>
+    <section v-else w-full mx-2 items-center flex justify-center> 
+      <h3>
+        No existen test para ejecutar
+      </h3>
+      
+    </section>
     <!-- <Swiper :spaceBetween="30" :slidesPerView="1" :loop="true" :pagination="pagination" :navigation="true"
       :modules="modules" :breakpoints="{ 768: { slidesPerView: 2 }, 1024: { slidesPerView: 3 } }"
       @breakpoint="renderPagination()">

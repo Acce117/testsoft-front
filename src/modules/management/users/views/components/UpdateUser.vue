@@ -7,7 +7,6 @@
   <VInput v-model="user.last_name" name="last_name" label="Apellidos" />
 
   <VInput v-model="user.username" name="username" label="Nombre de Usuario" />
-  <VInput v-model="user.password" password name="password" label="Contraseña" />
 
   <VInput v-model="user.email" name="email" label="Email" />
   <VSelect v-model="user.country_id" name="country_id" label="País" :options="countries" optionLabel="name" />
@@ -21,6 +20,7 @@ import VInput from "@/components/VInput.vue";
 import VSelect from "@/components/VSelect.vue";
 import { useCountries } from "@/modules/management/country/composables/useCountries";
 import { useGroups } from "@/modules/management/group/composables/useGroups";
+import { ref } from "vue";
 import VTreeSelect from "@/components/VTreeSelect.vue";
 import VRadioButton from "@/components/VRadioButton.vue";
 

@@ -8,14 +8,14 @@ const user = userStore();
   <h2 class="page-title">{{ $t("profile.title") }}</h2>
   <VUserCard
     m-auto
-    mt-10rem
-    :name="user.name"
+    mt-4rem
+    :name="user.name +' '+ user.last_name"
     :role="user.role"
     :id="user.ci"
     :username="user.username"
+    :mail="user.email"
+
     :group="user.groupName"
-    lg:scale-125
-    w-30vw
   />
   
   

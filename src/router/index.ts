@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import VLogin from '@/layouts/login/VLogin.vue'
+import VLogin from '@/modules/security/views/login/VLogin.vue'
 import VHome from '@/views/home/VHome.vue'
 import VSelecTest from '@/modules/test/views/select-test/VSelectTest.vue'
 import VProfile from '@/modules/security/views/profile/VProfile.vue'
@@ -14,6 +14,7 @@ import VInfo from '@/views/info/VInfo.vue'
 import useEvents from '@/common/utils/useEvents'
 import AdminLayout from '@/layouts/admin/AdminLayout.vue'
 import VGroups from '@/modules/management/group/views/VGroups.vue'
+import VTestManagement from '@/modules/management/test/views/VTestManagement.vue'
 const notAuthorizedToastError = {
   severity: "error",
   summary: "Error:",
@@ -47,6 +48,14 @@ const router = createRouter({
           path: '/groups',
           name: 'groups',
           component: VGroups,
+          meta: { requiresAuth: true },
+          //beforeEnter: (to, from, next) => { validateAdminRole(next) }
+    
+        },
+        {
+          path: '/test',
+          name: 'test',
+          component: VTestManagement,
           meta: { requiresAuth: true },
           //beforeEnter: (to, from, next) => { validateAdminRole(next) }
     

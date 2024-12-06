@@ -109,7 +109,6 @@
             <div class="dialog-form">
                 <slot name="form-add"></slot>
 
-                {{ model }}
             </div>
 
             <div class="dialog-footer">
@@ -123,7 +122,7 @@
     <Dialog v-model:visible="showUpdateDialog" modal :header="$t('table.update')" class="w-4/5 max-w-50rem min-w-25rem">
         <span>{{ $t('table.update_element') }}</span>
         <div class="dialog-form">
-            <slot name="form-add"></slot>
+            <slot name="form-update"></slot>
         </div>
         <div class="dialog-footer">
             <Button type="button" :label="$t('table.cancel')" severity="secondary"
@@ -158,9 +157,7 @@ useQueryClient()
 const props = defineProps({
     title: String,
     model: BaseModel,
-    queryOptions: {
-        requestPDF: Function
-    },
+    queryOptions: Object
 
 })
 const fieldAsID= props.model.getFieldAsID()
@@ -174,14 +171,14 @@ const toggle = (event) => {
 const { data, isPending, isSuccess, isError, isRefetching, refetch } = useQuery({
     queryKey: [queryKey],
     queryFn: () => {
-        return props.model.getAll()
+        return props.model.getAll(props.queryOptions)
     }
 })
 
 const { data: dataOfOne, isPending: isPendingOfOne, isSuccess: isSuccessOfOne, isRefetching: isRefetchingOfOne, refetch: refetchOfOne } = useQuery({
     queryKey: [queryKey + '-one'],
     queryFn: () => {
-        return props.model.getOne()
+        return props.model.getOne(props.queryOptions)
     },
     enabled: false
 })

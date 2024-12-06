@@ -23,7 +23,7 @@ export class TestAplication {
   public getQuestionsNotAnswered(questions: Array<any>) {
     let questionsNotAnswered = Array();
     questions.forEach((question, index) => {
-      if (!this.validateComponent(question.id_question))
+      if (!this.validateSpecificQuestion(question.id_question))
         questionsNotAnswered.push({
           questionIndex: index + 1,
           question: question,
@@ -32,8 +32,8 @@ export class TestAplication {
     return questionsNotAnswered;
   }
 
-  validateComponent(id_question: string | number) {
-    return !this.questions.hasOwnProperty(id_question)
+  validateSpecificQuestion(id_question: string | number) {
+    return !Object.prototype.hasOwnProperty.call(this.questions, id_question)
       ? false
       : this.questions[id_question].validateQuestion();
   }

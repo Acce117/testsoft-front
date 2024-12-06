@@ -2,6 +2,7 @@ import { siteStore } from "@/common/site/siteStore";
 import { defineStore } from "pinia";
 
 export interface UserInterface {
+    user_id:'',
     ci: '',
     name:'',
     username: '',
@@ -14,12 +15,13 @@ export interface UserInterface {
 
 export const userStore = defineStore('user', {
     state:  (): UserInterface => {
-        let user = siteStore().loadUser();
+        const user =  siteStore().getUserInLocal();
         let state: UserInterface;
         console.log(user)
         user ?
             state = user :
             state = {
+                user_id:'',
                 ci: '',
                 name:'',
                 username: '',

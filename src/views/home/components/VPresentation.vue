@@ -8,8 +8,8 @@
     lg:w-50rem
     lg:gap-6.5rem
   >
-    <VPresentationButtonsTestExecutor v-if="user.role.includes('Estudiante')" />
-    <VPresentationButtonsAnalist v-else-if="user.role.includes('Analista')" />
+    <!-- <VPresentationButtonsTestExecutor v-if="user.role.includes('Estudiante')" />
+    <VPresentationButtonsAnalist v-else-if="user.role.includes('Analista')" /> -->
   </div>
 </template>
 <script setup lang="ts">

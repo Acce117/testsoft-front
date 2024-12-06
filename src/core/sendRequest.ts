@@ -24,7 +24,7 @@ export const sendRequest = async (options: {
       headers:
         requiresAuth && token !== null
           ? {
-              Authorization: token
+              Authorization: `Bearer ${token}`
             }
           : {}
     }

@@ -66,8 +66,4 @@ app.use(DialogService);
 app.use(i18n);
 app.use(createPinia());
 app.mount("#app");
-/*
-if (!isUserAuthenticated())
-    router.push('/login')
-
-*/
+if (!isUserAuthenticated()) router.push("/login");
