@@ -29,7 +29,7 @@ const props = defineProps({
           :id_question="question.id_question" :possible_answers="question.answers" />
         <VMultipleOptionsValueSetted v-else-if="question.type.id_type_question == 5" :changeInvalid
           :id_question="question.id_question" :possible_answers="question.answers" :question_index="index + 1"
-          :maxPoints="question.arrayquestion_top_value[0]?.top_value" />
+          :maxPoints="question.top_value.top_value" />
         <VWrittenResponseQuestion v-else-if="question.type.id_type_question == 6" :changeInvalid
           :id_question="question.id_question" />
       </template>

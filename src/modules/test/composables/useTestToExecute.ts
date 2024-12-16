@@ -19,6 +19,9 @@ export const useTestToExecute = (id: string, cb:(d)=>void) => {
                     },
                     {
                       name: "answers",
+                    },
+                    {
+                      name: 'top_value'
                     }
                   ]
                 }
