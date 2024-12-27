@@ -1,6 +1,6 @@
 <template>
 
-  <CustomTable title="Test" :model="test" >
+  <CustomTable title="Test" :model="test" :customAddFunction="()=>router.push('/create-test')" >
     <!-- <template #form-add>
       <AddUser v-model="user" />
     </template>
@@ -16,7 +16,7 @@
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 import CustomTable from "@/components/CustomTable.vue";
-
+import router from "@/router";
 import { Test } from "@/modules/test/models/test.model";
 import ViewTest from "./components/ViewTest.vue";
 const { t } = useI18n();

@@ -40,6 +40,7 @@ import MultiSelect from 'primevue/multiselect';
 const props = defineProps({
   label: { type: String, required: true },
   name: { type: String, required: true },
+  optionId:{type:String, default:'id'},
   loading: { type: Boolean },
   multi: { type: Boolean },
 });
@@ -52,7 +53,6 @@ const childModel = ref()
 const updateModel =(value)=>{
   if(!value)
     model.value = undefined
-  else if(value[props.name])
-    model.value = value[props.name]
+  else model.value = value[props.optionId]
 }
 </script>

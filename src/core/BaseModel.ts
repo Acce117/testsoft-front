@@ -5,6 +5,14 @@ export class BaseModel {
   public getURL() {
     return "";
   }
+  public getColumns() {
+    return null;
+  }
+  public setData(data:unknown) {
+  }
+  public clearData() {
+
+  }
 
   public getID() {
     return this[this.getFieldAsID()];
@@ -26,14 +34,14 @@ export class BaseModel {
       url: `${import.meta.env.VITE_API_PATH}/${this.getURL()}/${this.getID()}`,body:params
     });
   }
-   async create(body:object) {
+   async create() {
     return await sendRequest({method:'POST',
-      url: `${import.meta.env.VITE_API_PATH}/${this.getURL()}`, body:body
+      url: `${import.meta.env.VITE_API_PATH}/${this.getURL()}`, body:this
     });
   }
-   async update(body:object) {
+   async update() {
     return await sendRequest({method:'PATCH',
-      url: `${import.meta.env.VITE_API_PATH}/${this.getURL()}/${this.getID()}`, body:body
+      url: `${import.meta.env.VITE_API_PATH}/${this.getURL()}/${this.getID()}`, body:this
     });
   }
    async delete() {

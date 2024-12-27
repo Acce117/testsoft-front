@@ -15,6 +15,7 @@ import useEvents from '@/common/utils/useEvents'
 import AdminLayout from '@/layouts/admin/AdminLayout.vue'
 import VGroups from '@/modules/management/group/views/VGroups.vue'
 import VTestManagement from '@/modules/management/test/views/VTestManagement.vue'
+import AddTest from '@/modules/management/test/views/components/AddTest.vue'
 const notAuthorizedToastError = {
   severity: "error",
   summary: "Error:",
@@ -58,8 +59,8 @@ const router = createRouter({
           component: VTestManagement,
           meta: { requiresAuth: true },
           //beforeEnter: (to, from, next) => { validateAdminRole(next) }
-    
-        }
+        },
+        
       ]
     },
     
@@ -101,6 +102,14 @@ const router = createRouter({
           component: VAssignTest,
           meta: { requiresAuth: true },
           beforeEnter: (to, from, next) => { validateAdminRole(next) }
+        },
+        {
+          path: '/create-test',
+          name: 'create-test',
+          component: AddTest,
+          meta: { requiresAuth: true },
+          //beforeEnter: (to, from, next) => { validateAdminRole(next) }
+    
         },
         {
           path: '/info',

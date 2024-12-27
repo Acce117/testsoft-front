@@ -277,11 +277,11 @@ const showUpdate = (data) => {
 const showAddDialog = ref(false)
 
 
-const addElement = (values) => {
-    mutateAdd(props.model)
+const addElement = () => {
+    mutateAdd()
 }
 const updateElement = () => {
-    mutateUpdate(props.model)
+    mutateUpdate()
 }
 
 const deleteElement = (event, data) => {
@@ -364,7 +364,7 @@ const activateElement = (event, data) => {
 
 const { mutate: mutateAdd } = useMutation({
     mutationKey: [`${queryKey}-add`],
-    mutationFn: (data) => props.model.create(data),
+    mutationFn: () => props.model.create(),
     onSuccess: async () => {
         await refetch()
         toast.add({ severity: 'info', summary: t('table.confirmation'), detail: t('table.element_ok_added'), life: 5000 });
@@ -379,7 +379,7 @@ const { mutate: mutateAdd } = useMutation({
 
 const { mutate: mutateUpdate } = useMutation({
     mutationKey: [`${queryKey}-update`],
-    mutationFn: (data) => props.model.update(data),
+    mutationFn: () => props.model.update(),
     onSuccess: async () => {
         await refetch()
         toast.add({ severity: 'info', summary: t('table.confirmation'), detail: t('table.element_ok_updated'), life: 5000 });

@@ -1,8 +1,8 @@
 <template>
-    <Card >
+    <Card>
         <template #content>
 
-            <DataTable removableSort ref="dt" size="small"  tableStyle="min-width: 50rem"
+            <DataTable removableSort ref="dt" size="small" tableStyle="min-width: 50rem"
                 :globalFilterFields="props.model.getColumns().map((c) => c.field)" v-model:filters="filters"
                 filterDisplay="row" paginator :value="data" :rows="5" :rowsPerPageOptions="[5, 10, 20, 50]">
 
@@ -45,8 +45,8 @@
                                 slotProps.data[col.field] == true ? t('yes') : t('no') }}</span>
                             <span v-else-if="slotProps.data[col.field] !== undefined">{{ typeof
                                 slotProps.data[col.field] == 'string' ? slotProps.data[col.field].length < 20 ?
-                                slotProps.data[col.field] : slotProps.data[col.field].substring(0, 20) +'...':
-                                    slotProps.data[col.field] }}</span>
+                                slotProps.data[col.field] : slotProps.data[col.field].substring(0, 20) + '...' :
+                                slotProps.data[col.field] }}</span>
                                     <span v-else>-</span>
                         </div>
 
@@ -156,11 +156,15 @@ import VError from './VError.vue';
 useQueryClient()
 const props = defineProps({
     title: String,
-    model: BaseModel,
+    model: {
+        type: BaseModel,
+        required: true
+    },
+    customAddFunction: Function,
     queryOptions: Object
 
 })
-const fieldAsID= props.model.getFieldAsID()
+const fieldAsID = props.model.getFieldAsID()
 const queryKey = props.model.constructor.name
 const confirm = useConfirm();
 const toast = useToast();
@@ -236,8 +240,10 @@ const selectedRowInfo = ref()
 const showInfoDialog = ref(false)
 
 const showAdd = () => {
-
-    showAddDialog.value = true
+    if (props.customAddFunction)
+        props.customAddFunction()
+    else
+        showAddDialog.value = true
     props.model.clearData()
 }
 
@@ -258,10 +264,10 @@ const showAddDialog = ref(false)
 
 
 const addElement = (values) => {
-    mutateAdd(props.model)
+    mutateAdd()
 }
 const updateElement = () => {
-    mutateUpdate(props.model)
+    mutateUpdate()
 }
 
 const deleteElement = (event, data) => {
@@ -344,7 +350,7 @@ const activateElement = (event, data) => {
 
 const { mutate: mutateAdd } = useMutation({
     mutationKey: [`${queryKey}-add`],
-    mutationFn: (data) => props.model.create(data),
+    mutationFn: () => props.model.create(),
     onSuccess: async () => {
         await refetch()
         toast.add({ severity: 'info', summary: t('table.confirmation'), detail: t('table.element_ok_added'), life: 5000 });
@@ -359,7 +365,7 @@ const { mutate: mutateAdd } = useMutation({
 
 const { mutate: mutateUpdate } = useMutation({
     mutationKey: [`${queryKey}-update`],
-    mutationFn: (data) => props.model.update(data),
+    mutationFn: () => props.model.update(),
     onSuccess: async () => {
         await refetch()
         toast.add({ severity: 'info', summary: t('table.confirmation'), detail: t('table.element_ok_updated'), life: 5000 });
@@ -444,8 +450,4 @@ const { mutate: mutateDelete } = useMutation({
     align-items: center;
     justify-content: center;
 }
-
-
-
-
 </style>

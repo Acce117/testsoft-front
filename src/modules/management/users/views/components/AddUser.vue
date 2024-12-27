@@ -10,9 +10,8 @@
   <VInput v-model="user.password" password name="password" label="Contraseña" />
 
   <VInput v-model="user.email" name="email" label="Email" />
-  <VSelect v-model="user.country_id" name="country_id" label="País" :options="countries" optionLabel="name" />
+  <VSelect v-model="user.country_id" name="country_id"  label="País" :options="countries" optionLabel="name" optionId="country_id"/>
   <VTreeSelect v-model="user.group_id" :options="groups" name="group_id" label="Grupo" />
-
 </template>
 <script setup lang="ts">
 import "vue3-treeselect/dist/vue3-treeselect.css";

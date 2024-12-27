@@ -36,15 +36,13 @@ if (model.value)
     childModel.value[model.value] = true
 const updateModel = (value) => {
     if (value) {
-
-
-        const newValue = Object.keys(value)[0]
+        const newValue =  parseInt(Object.keys(value)[0])
 
         if (!newValue)
             model.value = undefined
         else
             model.value = newValue
-    }
+    }else model.value = undefined
 }
 
 

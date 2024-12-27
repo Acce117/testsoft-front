@@ -1,36 +1,99 @@
 <template>
-  <VInput v-model="user.CI" name="CI" mask="99999999999" label="Carnet de Identidad" />
-  <VRadioButton label="Sexo" v-model="user.sex" name="sex" :options="['F', 'M']" />
+  <div bg-white mt-6rem flex flex-col gap-4 mx-6 rounded-xl pa-.8rem>
+    <h2 my-0 text-slate-600 font-bold>Crea un test</h2>
 
-  <VInput v-model="user.name" name="name" label="Nombres" />
 
-  <VInput v-model="user.last_name" name="last_name" label="Apellidos" />
+    <Stepper value="1" h-full>
+      <StepList>
+        <Step value="1">Datos Generales</Step>
+        <Step value="2">Categorías y Elementos</Step>
+        <Step value="3">Series y Preguntas</Step>
+        <Step value="4">Visualización de Resultados</Step>
+        <Step value="5">Clasificación de Resultados</Step>
+        <Step value="6">Cerrar Test</Step>
+      </StepList>
+      <StepPanels>
+        <GeneralData/>
 
-  <VInput v-model="user.username" name="username" label="Nombre de Usuario" />
-  <VInput v-model="user.password" password name="password" label="Contraseña" />
+        
+        <StepPanel v-slot="{ activateCallback }" value="2">
+          <div flex gap-6 flex-col>
+            <h3 my-0 text-slate-600>Inserta las categorías y sus elementos</h3>
 
-  <VInput v-model="user.email" name="email" label="Email" />
-  <VSelect v-model="user.country_id" name="country_id" label="País" :options="countries" optionLabel="name" />
-  <VTreeSelect v-model="user.group_id" :options="groups" name="group_id" label="Grupo" />
+            
+            <div class="flex pt-6 justify-between">
+              <Button label="Back" severity="secondary" icon="pi pi-arrow-left" @click="activateCallback('1')" />
+              <Button label="Next" icon="pi pi-arrow-right" iconPos="right" @click="activateCallback('3')" />
+            </div>
+          </div>
 
+        </StepPanel>
+        <SeriesAndQuestions/>
+
+        
+        <StepPanel v-slot="{ activateCallback }" value="4">
+          <div flex gap-6 flex-col>
+            <h3 my-0 text-slate-600>Configure la visualización de resultados</h3>
+
+            
+            <div class="flex pt-6 justify-between">
+              <Button label="Back" severity="secondary" icon="pi pi-arrow-left" @click="activateCallback('3')" />
+              <Button label="Next" icon="pi pi-arrow-right" iconPos="right" @click="activateCallback('5')" />
+            </div>
+          </div>
+        </StepPanel>
+        <StepPanel v-slot="{ activateCallback }" value="5">
+          <div flex gap-6 flex-col>
+            <h3 my-0 text-slate-600>Configure la clasificación de resultados</h3>
+
+            <VInput v-model="test.name" name="name" label="Nombre del Test" />
+            <VInput v-model="test.description" rows="3" textarea name="description" label="Descripción" />
+
+            <div class="flex pt-6 justify-between">
+              <Button label="Back" severity="secondary" icon="pi pi-arrow-left" @click="activateCallback('4')" />
+              <Button label="Next" icon="pi pi-arrow-right" iconPos="right" @click="activateCallback('6')" />
+            </div>
+          </div>
+        </StepPanel>
+        <StepPanel v-slot="{ activateCallback }" value="6">
+          <div flex gap-6 flex-col>
+            <h3 my-0 text-slate-600>Cerrar el test</h3>
+
+          
+            <div class="flex pt-6 justify-between">
+              <Button label="Back" severity="secondary" icon="pi pi-arrow-left" @click="activateCallback('5')" />
+            </div>
+          </div>
+        </StepPanel>
+      </StepPanels>
+    </Stepper>
+
+  </div>
 </template>
 <script setup lang="ts">
-import "vue3-treeselect/dist/vue3-treeselect.css";
 import { useI18n } from "vue-i18n";
 import VInput from "@/components/VInput.vue";
-import VSelect from "@/components/VSelect.vue";
-import { useCountries } from "@/modules/management/country/composables/useCountries";
-import { useGroups } from "@/modules/management/group/composables/useGroups";
-import VTreeSelect from "@/components/VTreeSelect.vue";
-import VRadioButton from "@/components/VRadioButton.vue";
 
-const user = defineModel()
+import { provide, ref } from "vue";
+import { Test } from "@/modules/test/models/test.model";
+import Stepper from "primevue/stepper";
+import StepList from "primevue/steplist";
+import Step from 'primevue/step';
+import StepPanel from 'primevue/steppanel';
+import StepPanels from 'primevue/steppanels';
+import Button from "primevue/button";
+import VRadioButton from "@/components/VRadioButton.vue";
+import VYesNoQuestion from "@/components/VYesNoQuestion.vue";
+import GeneralData from "../../test-creation/steps/GeneralData.vue";
+import SeriesAndQuestions from "../../test-creation/steps/SeriesAndQuestions.vue";
+
 
 
 const { t } = useI18n();
 
-const { countries, isPending } = useCountries()
-const { groups } = useGroups()
+let test = ref(new Test({fk_id_type_test:null, done:false, series:[]}))
+provide('test',test)
+
 
 
 
