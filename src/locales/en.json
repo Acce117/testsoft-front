@@ -54,7 +54,9 @@
             "next": "Next Series",
             "prev": "Previous Serie",
             "exit": "Cancel Test",
-            "save": "Finish Test",
+            "save": "Finish",
+            "hide":"Hide",
+            "show":"Show",
             "info": "Information"
         },
         "question-components": {

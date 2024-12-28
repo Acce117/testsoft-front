@@ -3,7 +3,7 @@
   <div w-full>
     <Field v-model="model" :name="props.name" v-slot="{ meta, errors }">
       <FloatLabel variant="on">
-        <InputNumber v-if="props.number" v-model="model" v-bind="{ ...$attrs }" fluid
+        <InputNumber v-if="props.number" v-model="model" showButtons  v-bind="{ ...$attrs }" fluid
           :invalid="meta.validated && !meta.valid" />
         <Textarea v-else-if="props.textarea" v-bind="{ ...$attrs }" fluid v-model="model"
           :invalid="meta.validated && !meta.valid" />

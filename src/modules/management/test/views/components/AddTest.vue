@@ -2,7 +2,6 @@
   <div bg-white mt-6rem flex flex-col gap-4 mx-6 rounded-xl pa-.8rem>
     <h2 my-0 text-slate-600 font-bold>Crea un test</h2>
 
-
     <Stepper value="1" h-full>
       <StepList>
         <Step value="1">Datos Generales</Step>
@@ -13,14 +12,14 @@
         <Step value="6">Cerrar Test</Step>
       </StepList>
       <StepPanels>
-        <GeneralData/>
+        <GeneralData />
 
-        
+
         <StepPanel v-slot="{ activateCallback }" value="2">
           <div flex gap-6 flex-col>
             <h3 my-0 text-slate-600>Inserta las categorías y sus elementos</h3>
 
-            
+
             <div class="flex pt-6 justify-between">
               <Button label="Back" severity="secondary" icon="pi pi-arrow-left" @click="activateCallback('1')" />
               <Button label="Next" icon="pi pi-arrow-right" iconPos="right" @click="activateCallback('3')" />
@@ -28,27 +27,16 @@
           </div>
 
         </StepPanel>
-        <SeriesAndQuestions/>
+        <SeriesAndQuestions />
+        <ResultVisualization />
 
-        
-        <StepPanel v-slot="{ activateCallback }" value="4">
-          <div flex gap-6 flex-col>
-            <h3 my-0 text-slate-600>Configure la visualización de resultados</h3>
 
-            
-            <div class="flex pt-6 justify-between">
-              <Button label="Back" severity="secondary" icon="pi pi-arrow-left" @click="activateCallback('3')" />
-              <Button label="Next" icon="pi pi-arrow-right" iconPos="right" @click="activateCallback('5')" />
-            </div>
-          </div>
-        </StepPanel>
+
         <StepPanel v-slot="{ activateCallback }" value="5">
           <div flex gap-6 flex-col>
             <h3 my-0 text-slate-600>Configure la clasificación de resultados</h3>
 
-            <VInput v-model="test.name" name="name" label="Nombre del Test" />
-            <VInput v-model="test.description" rows="3" textarea name="description" label="Descripción" />
-
+            
             <div class="flex pt-6 justify-between">
               <Button label="Back" severity="secondary" icon="pi pi-arrow-left" @click="activateCallback('4')" />
               <Button label="Next" icon="pi pi-arrow-right" iconPos="right" @click="activateCallback('6')" />
@@ -59,7 +47,7 @@
           <div flex gap-6 flex-col>
             <h3 my-0 text-slate-600>Cerrar el test</h3>
 
-          
+
             <div class="flex pt-6 justify-between">
               <Button label="Back" severity="secondary" icon="pi pi-arrow-left" @click="activateCallback('5')" />
             </div>
@@ -72,7 +60,6 @@
 </template>
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
-import VInput from "@/components/VInput.vue";
 
 import { provide, ref } from "vue";
 import { Test } from "@/modules/test/models/test.model";
@@ -82,17 +69,19 @@ import Step from 'primevue/step';
 import StepPanel from 'primevue/steppanel';
 import StepPanels from 'primevue/steppanels';
 import Button from "primevue/button";
-import VRadioButton from "@/components/VRadioButton.vue";
-import VYesNoQuestion from "@/components/VYesNoQuestion.vue";
+
 import GeneralData from "../../test-creation/steps/GeneralData.vue";
 import SeriesAndQuestions from "../../test-creation/steps/SeriesAndQuestions.vue";
+import ResultVisualization from "../../test-creation/steps/ResultVisualization.vue";
+import { TestBuilder } from "../../classes/TestBuilder";
 
 
 
 const { t } = useI18n();
 
-let test = ref(new Test({fk_id_type_test:null, done:false, series:[]}))
-provide('test',test)
+
+const testBuilder = ref(new TestBuilder(new Test({ time_duration:0, recurring_time:0, fk_id_type_test: null, done: false, series: [] })))
+provide('testBuilder', testBuilder)
 
 
 

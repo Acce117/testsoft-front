@@ -1,24 +1,28 @@
 <template>
-  <div class="test__header" bg-white rounded-xl>
+  <section class="test__header" bg-white rounded-xl>
     <div justify-between h-full flex p-3 w-full items-center>
-      <Button severity="secondary" class=" p-ripple h-1/2" icon="pi pi-arrow-left" v-ripple :disabled="!(serieIndex > 0)"
-        v-if="props.data?.navigable == 1" @click="prevSerie()" v-tooltip.bottom="t('execute-test.tooltips.prev')"
-        placeholder="Bottom" />
-        <div flex items-center w-full flex-col>
-          
-      <Steps mt-4 flex-1 :model="getSeriesNames()" v-model:activeStep="serieIndex"
-        :readonly="data?.navigable != 1" />
-        <slot name="timer"></slot> 
+      <Button severity="secondary" class=" p-ripple h-1/2" icon="pi pi-arrow-left" v-ripple
+        :disabled="!(serieIndex > 0)" v-if="props.data?.navigable == 1" @click="prevSerie()"
+        v-tooltip.bottom="t('execute-test.tooltips.prev')" placeholder="Bottom" />
+      <div flex items-center w-full flex-col>
 
+        <Steps mt-4 flex-1 :model="getSeriesNames()" v-model:activeStep="serieIndex" :readonly="data?.navigable != 1" />
+        <div flex gap-8 items-center> 
+
+          <slot name="timer"></slot>
+          <Button fluid @click="executeTest.validateTest(test)" icon="pi pi-file-check"
+            :label="t('execute-test.tooltips.save')" />
         </div>
 
-      <Button :disabled="!(serieIndex < props.data?.series.length - 1)" severity="secondary" v-if="props.data?.series.length > 1"
-        class="p-ripple h-1/2 "  icon="pi pi-arrow-right" v-ripple @click="nextSerie()"
-        v-tooltip.bottom="t('execute-test.tooltips.next')" placeholder="Bottom" />
+      </div>
+
+      <Button :disabled="!(serieIndex < props.data?.series.length - 1)" severity="secondary"
+        v-if="props.data?.series.length > 1" class="p-ripple h-1/2 " icon="pi pi-arrow-right" v-ripple
+        @click="nextSerie()" v-tooltip.bottom="t('execute-test.tooltips.next')" placeholder="Bottom" />
 
 
     </div>
-  </div>
+  </section>
 </template>
 <script setup lang="ts">
 import Button from "primevue/button";
@@ -30,7 +34,10 @@ const props = defineProps({
   data: Object,
 });
 const emit = defineEmits(['next-serie'])
-const serieIndex = inject('executeTest').serieIndex
+const executeTest = inject('executeTest')
+const test = inject('test')
+
+const serieIndex = executeTest.serieIndex
 //SERIE NAVIGATION
 
 const nextSerie = () => {
@@ -59,8 +66,8 @@ watch(
 .test__header {
   animation: slide-in-from-top 0.5s ease;
 }
-.p-steps{
+
+.p-steps {
   width: 100% !important;
 }
-
 </style>

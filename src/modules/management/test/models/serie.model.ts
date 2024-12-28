@@ -8,6 +8,7 @@ export class Serie extends BaseModel {
   name;
   description;
   time_serie_duration;
+  questions = [];
 
   constructor(data: any = null) {
     super();
@@ -17,6 +18,7 @@ export class Serie extends BaseModel {
       this.name = data.name;
       this.description = data.description;
       this.time_serie_duration = data.time_serie_duration;
+      this.questions = data.questions;
     }
   }
 
@@ -25,6 +27,8 @@ export class Serie extends BaseModel {
     this.name = data.name;
     this.description = data.description;
     this.time_serie_duration = data.time_serie_duration;
+    this.questions = data.questions;
+
   }
 
   public clearData() {
@@ -32,6 +36,8 @@ export class Serie extends BaseModel {
     this.name = undefined;
     this.description = undefined;
     this.time_serie_duration = undefined;
+    this.questions = [];
+
   }
 
   public getURL(): string {

@@ -53,8 +53,9 @@
         "tooltips": {
             "next": "Siguiente Serie",
             "prev": "Serie Anterior",
-            "exit": "Cancelar Test",
-            "save": "Terminar Test",
+            "save": "Finalizar",
+            "hide":"Ocultar",
+            "show":"Mostrar",
             "info": "Información"
         },
         "question-components": {

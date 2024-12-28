@@ -3,7 +3,7 @@
     class="relative overflow-hidden w-full border-0 p-0  bg-transparent flex items-center h-10  hover:bg-surface-100 dark:hover:bg-surface-800 rounded-none cursor-pointer transition-colors duration-200">
     <Avatar :label="user.username.charAt(0).toUpperCase()" style="background-color: #bae6fd; color: #0369a1;"
       class="mr-2" shape="circle" />
-    <span class="hidden lg:inline-flex flex-col items-start">
+    <span class="hidden text-slate-800 lg:inline-flex flex-col items-start">
       <span class="font-bold">{{ user.username }}</span>
       <span class="text-sm">Admin</span>
     </span>

@@ -1,0 +1,26 @@
+import { useQuery } from "@tanstack/vue-query";
+import { QuestionType } from "../models/question-type.model";
+
+export const useQuestionTypes = () => {
+  const {
+    data: questionTypes,
+    isPending,
+    isSuccess,
+    error,
+    isRefetching,
+    refetch,
+    isError,
+  } = useQuery({
+    queryKey: ["question-types"],
+    queryFn: async () => await new QuestionType().getAll(),
+  });
+  return {
+    questionTypes,
+    isPending,
+    isSuccess,
+    error,
+    isError,
+    refetch,
+    isRefetching,
+  };
+};

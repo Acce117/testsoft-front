@@ -124,6 +124,11 @@ const itemsDefault = [
         i18n: "groups",
         command: () => router.push("/groups"),
       },
+      {
+        label: " ",
+        i18n: "test",
+        command: () => router.push("/test"),
+      },
     ],
   },
   {
