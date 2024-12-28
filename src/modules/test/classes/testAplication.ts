@@ -14,7 +14,7 @@ export class TestAplication {
   public sendTest() {
     return useSendRequest(
       true,
-      `${import.meta.env.VITE_API_PATH}/execute_test/execute_Test`,
+      `${import.meta.env.VITE_API_PATH}/execute_test`,
       { id_test: parseInt(this.id_test), answers: Object.values(this.questions) },
       "POST"
     );
