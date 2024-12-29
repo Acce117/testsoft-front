@@ -6,7 +6,6 @@
                 Series<Button w-fit @click="visibleSerieDialog = true" icon="pi pi-plus" />
 
             </h4>
-            {{test}}
             <section v-if="test.series.length > 0" bg-slate-200 flex flex-col gap-4 pa-3 rounded-xl>
 
                 <div v-for="(serie, serieIndex) in test.series" :key="serieIndex" shadow-md rounded-lg pa-2
@@ -158,6 +157,8 @@ const createSeriesAndQuestions = (activateCallback: Function) => {
             if (serie.questions.length == 0)
                 throw new Error("Todas las series deben poseer al menos una pregunta")
         });
+        testBuilder.value.setSeriesAndQuestions()
+
         activateCallback('4')
 
     } catch (e: any) {

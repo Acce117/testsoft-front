@@ -15,18 +15,7 @@
         <GeneralData />
 
 
-        <StepPanel v-slot="{ activateCallback }" value="2">
-          <div flex gap-6 flex-col>
-            <h3 my-0 text-slate-600>Inserta las categorías y sus elementos</h3>
-
-
-            <div class="flex pt-6 justify-between">
-              <Button label="Back" severity="secondary" icon="pi pi-arrow-left" @click="activateCallback('1')" />
-              <Button label="Next" icon="pi pi-arrow-right" iconPos="right" @click="activateCallback('3')" />
-            </div>
-          </div>
-
-        </StepPanel>
+        <CategoriesAndItems/>
         <SeriesAndQuestions />
         <ResultVisualization />
 
@@ -74,6 +63,7 @@ import GeneralData from "../../test-creation/steps/GeneralData.vue";
 import SeriesAndQuestions from "../../test-creation/steps/SeriesAndQuestions.vue";
 import ResultVisualization from "../../test-creation/steps/ResultVisualization.vue";
 import { TestBuilder } from "../../classes/TestBuilder";
+import CategoriesAndItems from "../../test-creation/steps/CategoriesAndItems.vue";
 
 
 
