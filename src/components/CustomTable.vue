@@ -121,14 +121,16 @@
     </Dialog>
     <Dialog v-model:visible="showUpdateDialog" modal :header="$t('table.update')" class="w-4/5 max-w-50rem min-w-25rem">
         <span>{{ $t('table.update_element') }}</span>
-        <div class="dialog-form">
-            <slot name="form-update"></slot>
-        </div>
-        <div class="dialog-footer">
-            <Button type="button" :label="$t('table.cancel')" severity="secondary"
-                @click="showUpdateDialog = false"></Button>
-            <Button type="button" :label="$t('table.save')" @click="updateElement()"></Button>
-        </div>
+        <Form @submit="updateElement" :validation-schema="props.model.getUpdateSchema?props.model.getUpdateSchema(): props.model.getSchema()">
+            <div class="dialog-form">
+                <slot name="form-update"></slot>
+            </div>
+            <div class="dialog-footer">
+                <Button type="button" :label="$t('table.cancel')" severity="secondary"
+                    @click="showUpdateDialog = false"></Button>
+                <Button type="submit" :label="$t('table.save')"></Button>
+            </div>
+        </Form>
     </Dialog>
 </template>
 <script setup lang="ts">
@@ -161,6 +163,7 @@ const props = defineProps({
         required: true
     },
     customAddFunction: Function,
+    customUpdateFunction: Function,
     queryOptions: Object
 
 })
@@ -257,13 +260,18 @@ const showUpdateDialog = ref(false)
 
 const showUpdate = (data) => {
     props.model.setData(data)
-    showUpdateDialog.value = true
+
+    if (props.customUpdateFunction)
+        props.customUpdateFunction(props.model.getID())
+    else
+        showUpdateDialog.value = true
+
 }
 
 const showAddDialog = ref(false)
 
 
-const addElement = (values) => {
+const addElement = () => {
     mutateAdd()
 }
 const updateElement = () => {
@@ -313,7 +321,7 @@ const desactivateElement = (event, data) => {
             //         updateObject[key] = parseDate(updateObject[key]);
             // }
 
-            updateObject[props.fieldAsActive] = false;
+            //updateObject[props.fieldAsActive] = false;
             mutateUpdate({ id: data[props.fieldAsID], data: updateObject })
         },
     });
@@ -340,7 +348,7 @@ const activateElement = (event, data) => {
             //         updateObject[key] = parseDate(updateObject[key]);
             // }
 
-            updateObject[props.fieldAsActive] = true;
+            //updateObject[props.fieldAsActive] = true;
             mutateUpdate({ id: data[props.fieldAsID], data: updateObject })
         },
     });

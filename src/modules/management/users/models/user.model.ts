@@ -28,15 +28,7 @@ const columns = [
   {
     field: "sex",
     header: "Sexo",
-  },
-  {
-    field: "user_type",
-    header: "Tipo de Usuario",
-  },
-  {
-    field: "country.name",
-    header: "País",
-  },
+  }
   
 ];
 

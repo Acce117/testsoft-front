@@ -19,9 +19,7 @@
                             <div flex gap-2>
                                 <Button icon="pi pi-plus" @click="showAdd()" />
 
-                                <Button icon="pi pi-external-link" @click="toggle" aria-haspopup="true"
-                                    aria-controls="overlay_menu" severity="secondary" />
-                                <Menu ref="menu" id="overlay_menu" :model="exportOptions" :popup="true" />
+                                
 
                                 <Button icon="pi pi-refresh" severity="secondary" @click="refetch()" />
                             </div>
@@ -160,7 +158,6 @@ import Button from 'primevue/button';
 import { useConfirm } from "primevue/useconfirm";
 import { useToast } from "primevue/usetoast";
 import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query';
-import Menu from 'primevue/menu';
 import { useI18n } from 'vue-i18n';
 import { BaseModel } from '@/core/BaseModel';
 import Skeleton from 'primevue/skeleton';
@@ -184,10 +181,7 @@ const fiedAsExpander = props.model.getColumns().filter(c => c.expander)[0]
 const queryKey = props.model.constructor.name
 const confirm = useConfirm();
 const toast = useToast();
-const menu = ref();
-const toggle = (event) => {
-    menu.value.toggle(event);
-};
+
 const { data, isPending, isSuccess, isError, isRefetching, refetch } = useQuery({
     queryKey: [queryKey],
     queryFn: async () => {
@@ -213,18 +207,6 @@ const dt = ref();
 
 const { t } = useI18n();
 
-const exportOptions = ref([
-    {
-        label: t('table.options'),
-        items: [
-            {
-                label: 'CSV',
-                icon: 'pi pi-file-excel',
-                command: () => dt.value.exportCSV()
-            }
-        ]
-    }
-]);
 
 
 // const parseData = (data) => {
@@ -327,7 +309,7 @@ const desactivateElement = (event, data) => {
             //         updateObject[key] = parseDate(updateObject[key]);
             // }
 
-            updateObject[props.fieldAsActive] = false;
+            //updateObject[props.fieldAsActive] = false;
             mutateUpdate({ id: data[props.fieldAsID], data: updateObject })
         },
     });
@@ -354,7 +336,7 @@ const activateElement = (event, data) => {
             //         updateObject[key] = parseDate(updateObject[key]);
             // }
 
-            updateObject[props.fieldAsActive] = true;
+            //updateObject[props.fieldAsActive] = true;
             mutateUpdate({ id: data[props.fieldAsID], data: updateObject })
         },
     });

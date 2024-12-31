@@ -9,7 +9,7 @@
   <VInput v-model="user.username" name="username" label="Nombre de Usuario" />
 
   <VInput v-model="user.email" name="email" label="Email" />
-  <VSelect v-model="user.country_id" name="country_id" label="País" optionId="country_id" :options="countries" optionLabel="name" />
+  <VSelect :loading="isPending" v-model="user.country_id" :defaultValue="defaultCountry" name="country_id" label="País" optionId="country_id" :options="countries" optionLabel="name" />
   <VTreeSelect v-model="user.group_id" :options="groups" name="group_id" label="Grupo" />
 
 </template>
@@ -26,6 +26,7 @@ import VRadioButton from "@/components/VRadioButton.vue";
 
 const user = defineModel()
 
+const defaultCountry =  ref( user.value.country)
 
 const { t } = useI18n();
 

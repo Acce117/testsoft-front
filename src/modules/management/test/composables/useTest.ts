@@ -1,13 +1,19 @@
 import { useQuery } from "@tanstack/vue-query";
 import { Test } from "../models/test.model";
 
-export const useTestToExecute = (id: string, cb:(d)=>void) => {
+export const useTest = (id: string, cb:(d)=>void) => {
   const { data, isPending, isSuccess, error, isRefetching, refetch, isError } =
     useQuery({
-      queryKey: ["test-to-execute"],
+      queryKey: ["test"],
       queryFn: async () =>{
         const test= await new Test({ id_test: id }).getOne({
           relations: [
+            {
+              name:'type_psi_test'
+            },
+            {
+              name:'display_parameters'
+            },
             {
               name: "series",
               relations: [
@@ -29,6 +35,7 @@ export const useTestToExecute = (id: string, cb:(d)=>void) => {
             }
           ]
         })
+        test.fk_id_type_test= test.type_psi_test.id_type_test
         cb(test)
         return test
       },

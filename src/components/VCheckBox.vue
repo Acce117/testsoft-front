@@ -18,7 +18,7 @@
 
 
       <Transition name="fast-fade">
-        <small text-red v-if="meta.validated && !meta.valid">{{ errors[0] }}</small>
+        <small text-red v-if="meta.validated && !meta.valid">{{ errors[0]?$t(errors[0]):'' }}</small>
       </Transition>
     </Field>
   </div>

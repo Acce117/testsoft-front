@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/vue-query'
-import {Test } from '../models/test.model'
+import {Test } from '../../management/test/models/test.model'
 import { userStore } from '@/modules/security/store/user-store'
 
 export const useAssignedTests = () => {

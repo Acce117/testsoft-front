@@ -1,7 +1,8 @@
-import type { Test } from "@/modules/test/models/test.model";
+import type { Test } from "@/modules/management/test/models/test.model";
 import type { ParameterDisplayResult } from "../models/parameter-display-result.model";
-import type { Serie } from "../models/serie.model";
-import type { Category } from "../models/category.model";
+import { Serie } from "../models/serie.model";
+import { Category } from "../models/category.model";
+import { Question } from "../models/question.model";
 
 export class TestBuilder {
   private test: Test;
@@ -15,15 +16,35 @@ export class TestBuilder {
   }
 
   public async setGeneralData(){
-     const response = await this.test.create()
-     this.test.id_test =  response.identifiers[0].id_test
+     const response = await this.test.update()
       //IMPLEMENT FORMULE CREATION
 
   }
 
-  public setSeriesAndQuestions() {
-    //IMPLEMENT SERIES CREATION
-    console.log(this.test.series);
+  public async createSerie(serie: Serie) {
+    serie.fk_id_test=this.test.id_test
+    return await serie.create()
+  }
+  public async deleteSerie(id: number) {
+    return await new Serie().delete(id)
+  }
+
+  public async createCategory(category: Category) {
+    category.fk_id_test=this.test.id_test
+    return await category.create()
+  }
+  public async deleteCategory(id: number) {
+    return await new Category().delete(id)
+  }
+
+
+
+  public async createQuestion(question: Question, id_serie:number) {
+    question.fk_id_serie=id_serie
+    return await question.create()
+  }
+  public async deleteQuestion(id: number) {
+    return await new Question().delete(id)
   }
 
   public setCategoriesAndItems(categories: Category[]) {
@@ -31,8 +52,11 @@ export class TestBuilder {
     console.log(categories);
   }
   
-  public async setParameterDisplayResult(parameterDisplayResult: ParameterDisplayResult) {
-    parameterDisplayResult.fk_id_test=this.test.getID()
-    return await parameterDisplayResult.create()
+  public async createParameterDisplayResult() {
+    this.test.display_parameters.fk_id_test=this.test.getID()
+    return await this.test.display_parameters.create()
+  }
+  public async updateParameterDisplayResult() {
+    return await this.test.display_parameters.update()
   }
 }

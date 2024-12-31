@@ -116,20 +116,23 @@ const visibleItemDialog = ref(false)
 const selectedCategoryIndex = ref(-1)
 
 const testBuilder: Ref<TestBuilder> = inject('testBuilder')
-const categories: Ref<Category[]> = ref([])
+
+const makeAction:Function = inject('makeAction')
+
 const category = ref(new Category())
 const item = ref(new Item())
-
+const categories = ref([])
 const showItemDialog = (index: number) => {
     selectedCategoryIndex.value = index
     visibleItemDialog.value = true
 }
 
-const createCategory = () => {
-    categories.value.push({ ...category.value })
+const createCategory = async () => await makeAction(testBuilder.value.createCategory(category.value), () => {
     visibleCategoryDialog.value = false
     category.value.clearData()
-}
+})
+
+//
 const deleteCategory = (index: number) => {
     categories.value = categories.value.filter((c: Category, i: number) => i != index)
 }

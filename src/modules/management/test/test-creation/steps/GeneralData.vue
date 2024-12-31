@@ -14,22 +14,19 @@
                     label="Tiempo para poder repetir el test (Años)" />
 
 
-                <VYesNoQuestion v-model="test.navigable" label="¿Es posible navegar por las diferentes series del test?"
+                <VYesNoQuestion numbersAsValues v-model="test.navigable" label="¿Es posible navegar por las diferentes series del test?"
                     name="navigable" />
-                <VYesNoQuestion v-model="test.completed"
+                <VYesNoQuestion numbersAsValues v-model="test.completed"
                     label="¿Es necesario chequear el completamiento para que el procesamiento del test sea correcto?"
                     name="completed" />
-                <VSelect v-model="test.fk_id_type_test" optionId="id_type_test" name="fk_id_type_test"
-                    label="Tipo de Test" :options="testTypes" optionLabel="type_test_name" />
-                <VSelect v-model="test.language" name="language" label="Idioma" :options="[{
-                    name: 'Español', id: 'es'
-                },
-                {
-                    name: 'Inglés', id: 'en'
-                }]" optionLabel="name" />
+                <VSelect v-model="test.fk_id_type_test" optionId="id_type_test" :defaultValue="test.type_psi_test"
+                    name="fk_id_type_test" label="Tipo de Test" :options="testTypes" optionLabel="type_test_name" />
+                <VSelect v-model="test.language" name="language" :defaultValue="languages.filter((l) => l.id == test.language)[0]" label="Idioma"
+                    :options="languages" optionLabel="name" />
+                    
                 <VInput v-model="test.formule" name="formule" label="Formula" />
                 <div class="flex pt-6 justify-end">
-                    <Button :disabled="isPending || testCreationLoading" label="Next" icon="pi pi-arrow-right" iconPos="right" type="submit" />
+                    <Button :disabled="isPending" label="Next" icon="pi pi-arrow-right" iconPos="right" type="submit" />
                 </div>
 
             </div>
@@ -47,37 +44,32 @@ import Button from 'primevue/button';
 import StepPanel from 'primevue/steppanel';
 import { inject, ref, type Ref } from 'vue';
 import { useTestTypes } from '../../composables/useTestTypes';
-import type { Test } from '@/modules/test/models/test.model';
+import type { Test } from '@/modules/management/test/models/test.model';
 import type { TestBuilder } from '../../classes/TestBuilder';
 import { Form } from 'vee-validate';
 import useEvents from '@/common/utils/useEvents';
 import { useI18n } from 'vue-i18n';
 
-const {t}=useI18n()
-const testCreationLoading = ref(false)
+const languages = [{
+    name: 'Español', id: 'es'
+},
+{
+    name: 'Inglés', id: 'en'
+}]
+
+const { t } = useI18n()
+const loading = inject('loading')
+const makeAction:Function = inject('makeAction')
+
 
 const testBuilder: Ref<TestBuilder> = inject('testBuilder')
-const test: Test = testBuilder.value.getTest()
+const test: Test = testBuilder.value.test
 const { testTypes, isPending } = useTestTypes()
 
-const  setGeneralData =  (activateCallback: Function) => {
-    testCreationLoading.value=true
-    testBuilder.value.setGeneralData().then(()=>{
-        activateCallback('2')
 
+const setGeneralData = async (activateCallback: Function) => await makeAction(testBuilder.value.setGeneralData(), () => {
+    activateCallback('2')
+})
 
-    }).catch(()=>{
-        useEvents().dispatch("error", {
-            severity: "error",
-            summary: "Error",
-            detail: t('algo ha salido mal'),
-            life: 3000,
-        });
-    }).finally(()=>{
-        testCreationLoading.value=false
-    })
-    
-
-}
 
 </script>

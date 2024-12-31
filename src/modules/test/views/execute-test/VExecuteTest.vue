@@ -4,23 +4,21 @@ import VTestHeader from "./VTestHeader.vue";
 import { onBeforeRouteLeave, useRouter } from "vue-router";
 import {
   provide,
-  markRaw,
   reactive,
   ref,
   defineAsyncComponent,
   onUnmounted,
 } from "vue";
 import { TestAplication } from "../../classes/testAplication";
-import VButtonsContainer from "@/components/buttons/VButtonsContainer.vue";
 import { useToast } from "primevue/usetoast";
 import { useConfirm } from "primevue/useconfirm";
 import { useDialog } from "primevue/usedialog";
 import { useI18n } from "vue-i18n";
-import { useTestToExecute } from "../../composables/useTestToExecute";
 import AdminNavbar from "@/layouts/admin/components/AdminNavbar.vue";
 import { useExecuteTest } from "./composables/useExecuteTest";
 import Button from "primevue/button";
 import useEvents from "@/common/utils/useEvents";
+import { useTest } from "@/modules/management/test/composables/useTest";
 const { t } = useI18n();
 
 const VTestResult = defineAsyncComponent(() => import("./VTestResult.vue"));
@@ -39,7 +37,7 @@ const setInitialData = (d: { time_duration: number; series: { time_serie_duratio
   test.type = d.fk_id_type_test;
 }
 
-const { data, isSuccess, isError, isPending } = useTestToExecute(
+const { data, isSuccess, isError, isPending } = useTest(
   router.currentRoute.value.params.id_test as string
   , setInitialData);
 

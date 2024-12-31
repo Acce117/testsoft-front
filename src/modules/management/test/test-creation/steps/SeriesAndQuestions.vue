@@ -1,5 +1,6 @@
 <template>
     <StepPanel v-slot="{ activateCallback }" value="3">
+
         <div flex gap-4 flex-col>
             <h3 my-0 text-slate-600 font-bold>Inserta las series y sus preguntas</h3>
             <h4 m-0 flex gap-4 items-center>
@@ -8,13 +9,13 @@
             </h4>
             <section v-if="test.series.length > 0" bg-slate-200 flex flex-col gap-4 pa-3 rounded-xl>
 
-                <div v-for="(serie, serieIndex) in test.series" :key="serieIndex" shadow-md rounded-lg pa-2
-                    shadow-slate-500 bg-white>
+                <div v-for="serie in test.series" :key="serie.id_serie" shadow-md rounded-lg pa-2 shadow-slate-500
+                    bg-white>
                     <div flex mb-2 items-center justify-between>
                         <span font-bold>{{ serie.name }}</span>
                         <div flex gap-2>
                             <Button icon="pi pi-eye" severity="secondary" />
-                            <Button severity="danger" @click="deleteSerie(serieIndex)" icon="pi pi-minus" />
+                            <Button severity="danger" @click="deleteSerie(serie.id_serie)" icon="pi pi-minus" />
 
                         </div>
 
@@ -22,7 +23,7 @@
                     <hr border-solid border-1 border-slate-400 />
                     <div shadow-md rounded-lg pa-2 shadow-slate-200 bg-white>
                         <h3 mt-0 flex gap-4 text-sm items-center>
-                            Preguntas<Button w-fit @click="showQuestionDialog(serieIndex)" icon="pi pi-plus" />
+                            Preguntas<Button w-fit @click="showQuestionDialog(serie.id_serie)" icon="pi pi-plus" />
 
                         </h3>
                         <section v-if="serie.questions.length > 0" bg-slate-200 pa-3 flex flex-col gap-4 rounded-xl>
@@ -36,7 +37,7 @@
 
                                     <div flex gap-2>
                                         <Button icon="pi pi-eye" severity="secondary" />
-                                        <Button severity="danger" @click="deleteQuestion(serieIndex, questionIndex)"
+                                        <Button severity="danger" @click="deleteQuestion(question.id_question)"
                                             icon="pi pi-minus" />
                                     </div>
                                 </div>
@@ -57,7 +58,7 @@
             <div class="flex pt-6 justify-between">
                 <Button label="Back" severity="secondary" icon="pi pi-arrow-left" @click="activateCallback('2')" />
                 <Button label="Next" icon="pi pi-arrow-right" iconPos="right"
-                    @click="createSeriesAndQuestions(activateCallback)" />
+                    @click="nextStep(activateCallback)" />
             </div>
         </div>
     </StepPanel>
@@ -99,7 +100,7 @@
 </template>
 <script setup lang="ts">
 import VInput from '@/components/VInput.vue';
-import type { Test } from '@/modules/test/models/test.model';
+import type { Test } from '@/modules/management/test/models/test.model';
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import StepPanel from 'primevue/steppanel';
@@ -112,15 +113,22 @@ import { useQuestionTypes } from '../../composables/useQuestionTypes';
 import useEvents from '@/common/utils/useEvents';
 import { useI18n } from 'vue-i18n';
 import type { TestBuilder } from '../../classes/TestBuilder';
+
+
+const testBuilder: Ref<TestBuilder> = inject('testBuilder')
+const test: Test = testBuilder.value.getTest()
+
 const { t } = useI18n()
+
+const makeAction:Function = inject('makeAction')
+
 const visibleSerieDialog = ref(false)
 const visibleQuestionDialog = ref(false)
 
 const selectedSerieIndex = ref(-1)
 
 const { questionTypes, isPending } = useQuestionTypes()
-const testBuilder: Ref<TestBuilder> = inject('testBuilder')
-const test: Test = testBuilder.value.getTest()
+
 const serie = ref(new Serie())
 const question = ref(new Question())
 
@@ -129,26 +137,25 @@ const showQuestionDialog = (index: number) => {
     visibleQuestionDialog.value = true
 }
 
-const createSerie = () => {
-    test.series.push({ ...serie.value })
+
+
+const createSerie = async () => await makeAction(testBuilder.value.createSerie(serie.value), () => {
     visibleSerieDialog.value = false
     serie.value.clearData()
-}
-const deleteSerie = (index: number) => {
-    test.series = test.series.filter((s: Serie, i: number) => i != index)
-}
+})
 
-const createQuestion = () => {
-    test.series[selectedSerieIndex.value].questions.push({ ...question.value })
+const deleteSerie = async (id: number) => await makeAction(testBuilder.value.deleteSerie(id), () => { })
+
+const createQuestion = async () => await makeAction(testBuilder.value.createQuestion(question.value, selectedSerieIndex.value), () => {
     visibleQuestionDialog.value = false
     question.value.clearData()
-}
+})
 
-const deleteQuestion = (serieIndex: number, questionIndex: number) => {
-    test.series[serieIndex].questions = test.series[serieIndex].questions.filter((s: Question, i: number) => i != questionIndex)
-}
+const deleteQuestion = async (id: number) => await makeAction(testBuilder.value.deleteQuestion(id), () => { })
 
-const createSeriesAndQuestions = (activateCallback: Function) => {
+
+
+const nextStep = (activateCallback: Function) => {
     try {
         if (test.series.length == 0) {
             throw new Error("series.lengthmayor que 0")
@@ -157,8 +164,6 @@ const createSeriesAndQuestions = (activateCallback: Function) => {
             if (serie.questions.length == 0)
                 throw new Error("Todas las series deben poseer al menos una pregunta")
         });
-        testBuilder.value.setSeriesAndQuestions()
-
         activateCallback('4')
 
     } catch (e: any) {

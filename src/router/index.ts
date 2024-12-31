@@ -104,8 +104,16 @@ const router = createRouter({
           beforeEnter: (to, from, next) => { validateAdminRole(next) }
         },
         {
-          path: '/create-test',
+          path: '/create-test/:id_test',
           name: 'create-test',
+          component: AddTest,
+          meta: { requiresAuth: true },
+          //beforeEnter: (to, from, next) => { validateAdminRole(next) }
+    
+        },
+        {
+          path: '/update-test/:id_test',
+          name: 'update-test',
           component: AddTest,
           meta: { requiresAuth: true },
           //beforeEnter: (to, from, next) => { validateAdminRole(next) }

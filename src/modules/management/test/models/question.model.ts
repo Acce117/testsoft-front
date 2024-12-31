@@ -6,7 +6,7 @@ const url = "question";
 export class Question extends BaseModel {
   id_question;
   statement;
-  image;
+  image=0;
 
   fk_id_serie;
   fk_id_type_question;
@@ -37,7 +37,7 @@ export class Question extends BaseModel {
     this.statement = undefined;
     this.fk_id_serie = undefined;
     this.fk_id_type_question = undefined;
-    this.image = undefined;
+    this.image = 0;
   }
 
   public getURL(): string {

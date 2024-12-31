@@ -11,8 +11,8 @@
 
                 <VYesNoQuestion v-model="parameterDisplayResult.global_result"
                     label="¿Es necesario mostrar el resultado global del test?" name="global_result" />
-                <VRadioButton label="Los elementos que procesa el test se deben mostrar:"
-                    v-model="parameter_order" name="parameter_order"
+                <VRadioButton label="Los elementos que procesa el test se deben mostrar:" v-model="parameter_order"
+                    name="parameter_order"
                     :options="['Ordenados por su valor', 'Ordenados por su valor agrupados por Categoría']" />
 
                 <VYesNoQuestion v-model="parameterDisplayResult.tops_values" @update:model-value="resetCounts($value)"
@@ -36,7 +36,7 @@
 
     </StepPanel>
 
-
+    {{ parameterDisplayResult }}
 
 </template>
 <script setup lang="ts">
@@ -52,27 +52,32 @@ import VInput from '@/components/VInput.vue';
 import type { TestBuilder } from '../../classes/TestBuilder';
 const parameter_order = ref('')
 const testBuilder: Ref<TestBuilder> = inject('testBuilder')
-
-const parameterDisplayResult = ref(new ParameterDisplayResult({count_max:0,count_min:0}))
+console.log(testBuilder.value.getTest().display_parameters)
+const parameterDisplayResult = ref(testBuilder.value.getTest().display_parameters)
+if (testBuilder.value.getTest().display_parameters.getID())
+    parameter_order.value = parameterDisplayResult.value.all_element_value ? 'Ordenados por su valor' : 'Ordenados por su valor agrupados por Categoría'
 
 const setParameterDisplayResult = (activateCallback: Function) => {
-    if( parameter_order.value==='Ordenados por su valor'){
-        parameterDisplayResult.value.all_element_value=true
-        parameterDisplayResult.value.element_by_category=false
-    }else {
-        parameterDisplayResult.value.all_element_value=false
-        parameterDisplayResult.value.element_by_category=true
+    if (parameter_order.value === 'Ordenados por su valor') {
+        parameterDisplayResult.value.all_element_value = true
+        parameterDisplayResult.value.element_by_category = false
+    } else {
+        parameterDisplayResult.value.all_element_value = false
+        parameterDisplayResult.value.element_by_category = true
     }
-    testBuilder.value.setParameterDisplayResult(parameterDisplayResult.value)
+    if (testBuilder.value.getTest().display_parameters.getID())
+        testBuilder.value.updateParameterDisplayResult()
+    else testBuilder.value.createParameterDisplayResult()
+
     //activateCallback('5')
 }
 
-const resetCounts = (topsValuesFlag:boolean)=>{
-    if(!topsValuesFlag){
-        parameterDisplayResult.value.count_max=0
-        parameterDisplayResult.value.count_min=0
+const resetCounts = (topsValuesFlag: boolean) => {
+    if (!topsValuesFlag) {
+        parameterDisplayResult.value.count_max = 0
+        parameterDisplayResult.value.count_min = 0
     }
-        
+
 }
 
 </script>

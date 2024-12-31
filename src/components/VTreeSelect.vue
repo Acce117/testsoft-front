@@ -9,7 +9,7 @@
                 </label>
             </FloatLabel>
             <Transition name="fast-fade">
-                <small text-red v-if="meta.validated && !meta.valid">{{ errors[0] }}</small>
+                <small text-red v-if="meta.validated && !meta.valid">{{ errors[0]?$t(errors[0]):'' }}</small>
             </Transition>
         </Field>
         
@@ -35,6 +35,7 @@ const childModel = ref({})
 if (model.value)
     childModel.value[model.value] = true
 const updateModel = (value) => {
+    console.log(value)
     if (value) {
         const newValue =  parseInt(Object.keys(value)[0])
 

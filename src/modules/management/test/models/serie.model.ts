@@ -1,14 +1,16 @@
 import { BaseModel } from "@/core/BaseModel";
 import { schema } from "../schemas/serie.schema";
+import type { Question } from "./question.model";
 
-const url = "serie";
+const url = "test_serie";
 
 export class Serie extends BaseModel {
   id_serie;
   name;
   description;
   time_serie_duration;
-  questions = [];
+  questions:Question[] = [];
+  fk_id_test;
 
   constructor(data: any = null) {
     super();
@@ -19,6 +21,7 @@ export class Serie extends BaseModel {
       this.description = data.description;
       this.time_serie_duration = data.time_serie_duration;
       this.questions = data.questions;
+      this.fk_id_test = data.fk_id_test;
     }
   }
 
@@ -28,7 +31,7 @@ export class Serie extends BaseModel {
     this.description = data.description;
     this.time_serie_duration = data.time_serie_duration;
     this.questions = data.questions;
-
+    this.fk_id_test = data.fk_id_test;
   }
 
   public clearData() {
@@ -37,7 +40,7 @@ export class Serie extends BaseModel {
     this.description = undefined;
     this.time_serie_duration = undefined;
     this.questions = [];
-
+    this.fk_id_test = undefined;
   }
 
   public getURL(): string {

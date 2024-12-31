@@ -1,8 +1,9 @@
 <template>
-  <div bg-white mt-6rem flex flex-col gap-4 mx-6 rounded-xl pa-.8rem>
-    <h2 my-0 text-slate-600 font-bold>Crea un test</h2>
 
-    <Stepper value="1" h-full>
+  <div bg-white mt-6rem flex flex-col gap-4 mx-6 rounded-xl pa-.8rem relative min-h-40rem>
+    <h2 my-0 text-slate-600 font-bold>Crea un test</h2>
+    <LoadingPanel :loading="isTestPending || loading" :error="isError || error" :refetch="refetch" />
+    <Stepper @update:value="refetch" value="1" h-full v-if="isSuccess">
       <StepList>
         <Step value="1">Datos Generales</Step>
         <Step value="2">Categorías y Elementos</Step>
@@ -15,7 +16,7 @@
         <GeneralData />
 
 
-        <CategoriesAndItems/>
+        <CategoriesAndItems />
         <SeriesAndQuestions />
         <ResultVisualization />
 
@@ -25,7 +26,7 @@
           <div flex gap-6 flex-col>
             <h3 my-0 text-slate-600>Configure la clasificación de resultados</h3>
 
-            
+
             <div class="flex pt-6 justify-between">
               <Button label="Back" severity="secondary" icon="pi pi-arrow-left" @click="activateCallback('4')" />
               <Button label="Next" icon="pi pi-arrow-right" iconPos="right" @click="activateCallback('6')" />
@@ -51,7 +52,7 @@
 import { useI18n } from "vue-i18n";
 
 import { provide, ref } from "vue";
-import { Test } from "@/modules/test/models/test.model";
+import { Test } from "@/modules/management/test/models/test.model";
 import Stepper from "primevue/stepper";
 import StepList from "primevue/steplist";
 import Step from 'primevue/step';
@@ -64,14 +65,48 @@ import SeriesAndQuestions from "../../test-creation/steps/SeriesAndQuestions.vue
 import ResultVisualization from "../../test-creation/steps/ResultVisualization.vue";
 import { TestBuilder } from "../../classes/TestBuilder";
 import CategoriesAndItems from "../../test-creation/steps/CategoriesAndItems.vue";
-
-
-
+import { useTest } from "../../composables/useTest";
+import router from "@/router";
+import LoadingPanel from "@/components/LoadingPanel.vue";
+import useEvents from "@/common/utils/useEvents";
 const { t } = useI18n();
 
+const testBuilder = ref(new TestBuilder(new Test()))
+const loading = ref(false)
+const error = ref(false)
 
-const testBuilder = ref(new TestBuilder(new Test({ time_duration:0, recurring_time:0, fk_id_type_test: null, done: false, series: [] })))
+
+const { isError, isSuccess, isPending: isTestPending, refetch } = useTest(
+  router.currentRoute.value.params.id_test as string
+  , (test: Test) =>
+    testBuilder.value.getTest().setData(test.name == '' ? { id_test: test.id_test, time_duration: 0, recurring_time: 0, done: false, series: [] } : test)
+);
+
+const makeAction = async (action: Promise, callBackOnSuccess: Function) => {
+  loading.value = true
+  action.then(() => {
+    refetch()
+    callBackOnSuccess()
+  }).catch(() => {
+    useEvents().dispatch("error", {
+      severity: "error",
+      summary: "Error",
+      detail: t('algo ha salido mal'),
+      life: 3000,
+    });
+  }).finally(() => {
+    loading.value = false
+  })
+}
+
 provide('testBuilder', testBuilder)
+provide('loading', loading)
+provide('error', error)
+provide('refetch', refetch)
+provide('makeAction', makeAction)
+
+
+
 
 
 

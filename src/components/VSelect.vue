@@ -24,14 +24,15 @@
         </label>
       </FloatLabel>
       <Transition name="fast-fade">
-        <small text-red v-if="meta.validated && !meta.valid">{{ errors[0] }}</small>
+        <small text-red v-if="meta.validated && !meta.valid">{{ errors[0]?$t(errors[0]):'' }}</small>
       </Transition>
     </Field>
+    {{ model }}
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import {  ref } from 'vue';
 import { Field } from 'vee-validate';
 import FloatLabel from 'primevue/floatlabel';
 import Select from 'primevue/select';
@@ -51,8 +52,10 @@ const model = defineModel();
 const childModel = ref()
 
 const updateModel =(value)=>{
+  console.log(value)
   if(!value)
     model.value = undefined
   else model.value = value[props.optionId]
 }
+
 </script>
