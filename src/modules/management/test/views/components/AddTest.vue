@@ -2,7 +2,7 @@
 
   <div bg-white mt-6rem flex flex-col gap-4 mx-6 rounded-xl pa-.8rem relative min-h-40rem>
     <h2 my-0 text-slate-600 font-bold>Crea un test</h2>
-    <LoadingPanel :loading="isTestPending || loading" :error="isError || error" :refetch="refetch" />
+    <LoadingPanel :loading="isTestPending || loading || isRefetching" :error="isError || error" :refetch="refetch" />
     <Stepper @update:value="refetch" value="1" h-full v-if="isSuccess">
       <StepList>
         <Step value="1">Datos Generales</Step>
@@ -76,7 +76,7 @@ const loading = ref(false)
 const error = ref(false)
 
 
-const { isError, isSuccess, isPending: isTestPending, refetch } = useTest(
+const { isError, isSuccess, isRefetching, isPending: isTestPending, refetch } = useTest(
   router.currentRoute.value.params.id_test as string
   , (test: Test) =>
     testBuilder.value.getTest().setData(test.name == '' ? { id_test: test.id_test, time_duration: 0, recurring_time: 0, done: false, series: [] } : test)

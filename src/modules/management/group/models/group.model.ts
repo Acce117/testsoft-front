@@ -20,32 +20,12 @@ export class Group extends BaseModel {
   children;
   mpath;
 
-  constructor(data: any = null) {
-    super();
-
-    if (data) {
-      this.id_group = data.id_group;
-      this.name_group = data.name_group;
-      this.father_group = data.father_group;
-      this.mpath = data.mpath;
-      this.children = data.children;
-    }
+  constructor(data: object = {}) {
+    super(data);
+    if (data) this.setData(data);
   }
-
-  public setData(data: any) {
-    this.id_group = data.id_group;
-    this.name_group = data.name_group;
-    this.father_group = data.father_group;
-    this.mpath = data.mpath;
-    this.children = data.children;
-  }
-
-  public clearData() {
-    this.id_group = undefined;
-    this.name_group = undefined;
-    this.father_group = undefined;
-    this.mpath = undefined;
-    this.children = undefined;
+  public setData(data: object) {
+    super.setData(data, this);
   }
 
   public getURL(): string {

@@ -57,8 +57,7 @@
 
             <div class="flex pt-6 justify-between">
                 <Button label="Back" severity="secondary" icon="pi pi-arrow-left" @click="activateCallback('2')" />
-                <Button label="Next" icon="pi pi-arrow-right" iconPos="right"
-                    @click="nextStep(activateCallback)" />
+                <Button label="Next" icon="pi pi-arrow-right" iconPos="right" @click="nextStep(activateCallback)" />
             </div>
         </div>
     </StepPanel>
@@ -96,7 +95,7 @@
                 <Button type="submit" :label="$t('table.save')"></Button>
             </div>
         </Form>
-    </Dialog>
+    </Dialog> 
 </template>
 <script setup lang="ts">
 import VInput from '@/components/VInput.vue';
@@ -106,10 +105,10 @@ import Dialog from 'primevue/dialog';
 import StepPanel from 'primevue/steppanel';
 import { Form } from 'vee-validate';
 import { inject, ref, type Ref, } from 'vue';
-import { Serie } from '../../models/serie.model';
+import { Serie } from '../../modules/serie/serie.model';
 import { Question } from '../../models/question.model';
 import VSelect from '@/components/VSelect.vue';
-import { useQuestionTypes } from '../../composables/useQuestionTypes';
+import { useQuestionTypes } from '../../modules/question-type/useQuestionTypes';
 import useEvents from '@/common/utils/useEvents';
 import { useI18n } from 'vue-i18n';
 import type { TestBuilder } from '../../classes/TestBuilder';
@@ -120,7 +119,7 @@ const test: Test = testBuilder.value.getTest()
 
 const { t } = useI18n()
 
-const makeAction:Function = inject('makeAction')
+const makeAction: Function = inject('makeAction')
 
 const visibleSerieDialog = ref(false)
 const visibleQuestionDialog = ref(false)
@@ -138,7 +137,6 @@ const showQuestionDialog = (index: number) => {
 }
 
 
-
 const createSerie = async () => await makeAction(testBuilder.value.createSerie(serie.value), () => {
     visibleSerieDialog.value = false
     serie.value.clearData()
@@ -146,13 +144,12 @@ const createSerie = async () => await makeAction(testBuilder.value.createSerie(s
 
 const deleteSerie = async (id: number) => await makeAction(testBuilder.value.deleteSerie(id), () => { })
 
-const createQuestion = async () => await makeAction(testBuilder.value.createQuestion(question.value, selectedSerieIndex.value), () => {
+const createQuestion = async () => await makeAction(testBuilder.value.createQuestion({ ...question.value, image: 0 }, selectedSerieIndex.value), () => {
     visibleQuestionDialog.value = false
     question.value.clearData()
 })
 
 const deleteQuestion = async (id: number) => await makeAction(testBuilder.value.deleteQuestion(id), () => { })
-
 
 
 const nextStep = (activateCallback: Function) => {

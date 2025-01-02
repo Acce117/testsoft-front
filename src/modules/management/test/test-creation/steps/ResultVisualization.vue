@@ -1,7 +1,7 @@
 <template>
     <StepPanel v-slot="{ activateCallback }" value="4">
         <Form @submit="setParameterDisplayResult(activateCallback)"
-            :validation-schema="parameterDisplayResult.getSchema()">
+            :validation-schema="test.display_parameters.getSchema()">
 
             <div flex gap-6 flex-col>
                 <h3 my-0 text-slate-600 font-bold>Configure la visualización de resultados</h3>
@@ -9,18 +9,18 @@
 
 
 
-                <VYesNoQuestion v-model="parameterDisplayResult.global_result"
+                <VYesNoQuestion v-model="test.display_parameters.global_result"
                     label="¿Es necesario mostrar el resultado global del test?" name="global_result" />
                 <VRadioButton label="Los elementos que procesa el test se deben mostrar:" v-model="parameter_order"
                     name="parameter_order"
                     :options="['Ordenados por su valor', 'Ordenados por su valor agrupados por Categoría']" />
 
-                <VYesNoQuestion v-model="parameterDisplayResult.tops_values" @update:model-value="resetCounts($value)"
+                <VYesNoQuestion v-model="test.display_parameters.tops_values" @update:model-value="resetCounts($value)"
                     label="¿Mostrar los elementos con valores máximos y mínimos?" name="tops_values" />
-                <div v-if="parameterDisplayResult.tops_values" flex gap-6 flex-col max-w-15rem>
-                    <VInput v-model="parameterDisplayResult.count_max" min="0" number name="count_max"
+                <div v-if="test.display_parameters.tops_values" flex gap-6 flex-col max-w-15rem>
+                    <VInput v-model="test.display_parameters.count_max" min="0" number name="count_max"
                         label="Cantidad de máximos" />
-                    <VInput v-model="parameterDisplayResult.count_min" min="0" number name="count_min"
+                    <VInput v-model="test.display_parameters.count_min" min="0" number name="count_min"
                         label="Cantidad de mínimos" />
                 </div>
 
@@ -36,7 +36,6 @@
 
     </StepPanel>
 
-    {{ parameterDisplayResult }}
 
 </template>
 <script setup lang="ts">
@@ -46,26 +45,25 @@ import Button from 'primevue/button';
 import StepPanel from 'primevue/steppanel';
 import { inject, ref, type Ref } from 'vue';
 import VRadioButton from '@/components/VRadioButton.vue';
-import { ParameterDisplayResult } from '../../models/parameter-display-result.model';
 import { Form } from 'vee-validate';
 import VInput from '@/components/VInput.vue';
 import type { TestBuilder } from '../../classes/TestBuilder';
 const parameter_order = ref('')
 const testBuilder: Ref<TestBuilder> = inject('testBuilder')
-console.log(testBuilder.value.getTest().display_parameters)
-const parameterDisplayResult = ref(testBuilder.value.getTest().display_parameters)
-if (testBuilder.value.getTest().display_parameters.getID())
-    parameter_order.value = parameterDisplayResult.value.all_element_value ? 'Ordenados por su valor' : 'Ordenados por su valor agrupados por Categoría'
+const test = ref(testBuilder.value.getTest())
+
+if (test.value.display_parameters.getID())
+    parameter_order.value = test.value.display_parameters.all_element_value ? 'Ordenados por su valor' : 'Ordenados por su valor agrupados por Categoría'
 
 const setParameterDisplayResult = (activateCallback: Function) => {
     if (parameter_order.value === 'Ordenados por su valor') {
-        parameterDisplayResult.value.all_element_value = true
-        parameterDisplayResult.value.element_by_category = false
+        test.value.all_element_value = true
+        test.value.display_parameters.element_by_category = false
     } else {
-        parameterDisplayResult.value.all_element_value = false
-        parameterDisplayResult.value.element_by_category = true
+        test.value.display_parameters.all_element_value = false
+        test.value.display_parameters.element_by_category = true
     }
-    if (testBuilder.value.getTest().display_parameters.getID())
+    if (test.value.display_parameters.getID())
         testBuilder.value.updateParameterDisplayResult()
     else testBuilder.value.createParameterDisplayResult()
 
@@ -74,8 +72,8 @@ const setParameterDisplayResult = (activateCallback: Function) => {
 
 const resetCounts = (topsValuesFlag: boolean) => {
     if (!topsValuesFlag) {
-        parameterDisplayResult.value.count_max = 0
-        parameterDisplayResult.value.count_min = 0
+        test.value.display_parameters.count_max = 0
+        test.value.display_parameters.count_min = 0
     }
 
 }

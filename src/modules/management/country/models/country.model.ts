@@ -19,31 +19,14 @@ export class Country extends BaseModel {
   code;
   name;
 
-  constructor(data: any = null) {
-    super();
-
-    if (data) {
-      this.country_id = data.country_id;
-      this.name = data.name;
-      this.code = data.code;
-
-    }
+  constructor(data: object = {}) {
+    super(data);
+    if (data) this.setData(data);
+  }
+  public setData(data: object) {
+    super.setData(data, this);
   }
 
-  public setData(data: any) {
-    this.country_id = data.country_id;
-    this.name = data.name;
-    this.code = data.code;
-
-  }
-
-  public clearData() {
-    this.name = undefined;
-    this.code = undefined;
-
-    this.country_id = undefined;
-
-  }
 
   public getURL(): string {
     return url;

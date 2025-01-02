@@ -43,7 +43,7 @@ import VYesNoQuestion from '@/components/VYesNoQuestion.vue';
 import Button from 'primevue/button';
 import StepPanel from 'primevue/steppanel';
 import { inject, ref, type Ref } from 'vue';
-import { useTestTypes } from '../../composables/useTestTypes';
+import { useTestTypes } from '../../modules/test-type/useTestTypes';
 import type { Test } from '@/modules/management/test/models/test.model';
 import type { TestBuilder } from '../../classes/TestBuilder';
 import { Form } from 'vee-validate';

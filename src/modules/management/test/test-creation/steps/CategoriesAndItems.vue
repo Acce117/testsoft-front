@@ -107,8 +107,8 @@ import { inject, ref, type Ref, } from 'vue';
 import useEvents from '@/common/utils/useEvents';
 import { useI18n } from 'vue-i18n';
 import type { TestBuilder } from '../../classes/TestBuilder';
-import { Category } from '../../models/category.model';
-import { Item } from '../../models/item.model';
+import { Category } from '../../modules/category/category.model';
+import { Item } from '../../modules/item/item.model';
 const { t } = useI18n()
 const visibleCategoryDialog = ref(false)
 const visibleItemDialog = ref(false)

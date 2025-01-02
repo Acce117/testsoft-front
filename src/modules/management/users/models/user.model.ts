@@ -46,57 +46,12 @@ export class User extends BaseModel {
   country_id;
   country;
 
-  constructor(data: any = null) {
-    super();
-
-    if (data) {
-      this.user_id = data.user_id;
-      this.name = data.name;
-      this.CI = data.CI;
-      this.password = data.password;
-
-      this.username = data.username;
-      this.last_name = data.last_name;
-      this.email = data.email;
-      this.sex = data.sex;
-      this.user_type = data.user_type;
-      this.country_id = data.country_id;
-      this.country = data.country;
-
-
-    }
+  constructor(data: object = {}) {
+    super(data);
+    if (data) this.setData(data);
   }
-
-  public setData(data: any) {
-    this.user_id = data.user_id;
-    this.CI = data.CI;
-    this.name = data.name;
-    this.password = data.password;
-    this.username = data.username;
-    this.last_name = data.last_name;
-    this.email = data.email;
-    this.sex = data.sex;
-    this.user_type = data.user_type;
-    this.country_id = data.country.country_id;
-    this.country = data.country;
-
-
-  }
-
-  public clearData() {
-    this.user_id = undefined;
-    this.CI = undefined;
-    this.name = undefined;
-    this.password = undefined;
-    this.username = undefined;
-    this.last_name = undefined;
-    this.email = undefined;
-    this.sex = undefined;
-    this.user_type = undefined;
-    this.country_id = undefined;
-    this.country = undefined;
-
-
+  public setData(data: object) {
+    super.setData(data, this);
   }
 
   public getURL(): string {

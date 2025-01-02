@@ -1,7 +1,7 @@
 import type { Test } from "@/modules/management/test/models/test.model";
-import type { ParameterDisplayResult } from "../models/parameter-display-result.model";
-import { Serie } from "../models/serie.model";
-import { Category } from "../models/category.model";
+import type { ParameterDisplayResult } from "../modules/parameter-display-result/parameter-display-result.model";
+import { Serie } from "../modules/serie/serie.model";
+import { Category } from "../modules/category/category.model";
 import { Question } from "../models/question.model";
 
 export class TestBuilder {
