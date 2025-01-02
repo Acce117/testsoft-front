@@ -3,6 +3,7 @@ import { sendRequest } from "@/core/sendRequest";
 import { schema } from "@/modules/management/test/schemas/test.schema";
 import type { Serie } from "../modules/serie/serie.model";
 import { ParameterDisplayResult } from "../modules/parameter-display-result/parameter-display-result.model";
+import type { Category } from "../modules/category/category.model";
 
 const url = "psi_test";
 const columns = [
@@ -29,6 +30,7 @@ export class Test extends BaseModel {
   fk_id_type_test;
   type_psi_test;
   series: Serie[];
+  category: Category[];
   display_parameters;
 
   constructor(data: any = null) {
@@ -37,6 +39,7 @@ export class Test extends BaseModel {
       this.setData(data);
     } else {
       this.series = [];
+      this.category = [];
       this.display_parameters = new ParameterDisplayResult({
         count_max: 0,
         count_min: 0,
@@ -45,7 +48,7 @@ export class Test extends BaseModel {
   }
 
   public setData(data: any) {
-    super.setData(data, this);
+    super.setData(data);
     this.display_parameters = data.display_parameters
       ? new ParameterDisplayResult(data.display_parameters)
       : new ParameterDisplayResult();

@@ -3,19 +3,19 @@
         <div flex gap-4 flex-col>
             <h3 my-0 text-slate-600 font-bold>Inserta las categorías y sus elementos</h3>
             <h4 m-0 flex gap-4 items-center>
-                Categorías<Button w-fit @click="visibleCategoryDialog = true" icon="pi pi-plus" />
+                Categorías<Button w-fit @click="showCategoryDialog" icon="pi pi-plus" />
 
             </h4>
-            {{ categories }}
-            <section v-if="categories.length > 0" bg-slate-200 flex flex-col gap-4 pa-3 rounded-xl>
+            {{ test.category }}
+            <section v-if="test.category.length > 0" bg-slate-200 flex flex-col gap-4 pa-3 rounded-xl>
 
-                <div v-for="(category, categoryIndex) in categories" :key="categoryIndex" shadow-md rounded-lg pa-2
+                <div v-for="category in test.category" :key="category.id_category" shadow-md rounded-lg pa-2
                     shadow-slate-500 bg-white>
                     <div flex mb-2 items-center justify-between>
                         <span font-bold>{{ category.name }}</span>
                         <div flex gap-2>
                             <Button icon="pi pi-eye" severity="secondary" />
-                            <Button severity="danger" @click="deleteCategory(categoryIndex)" icon="pi pi-minus" />
+                            <Button severity="danger" @click="deleteCategory(category.id_category)" icon="pi pi-minus" />
 
                         </div>
 
@@ -23,10 +23,10 @@
                     <hr border-solid border-1 border-slate-400 />
                     <div shadow-md rounded-lg pa-2 shadow-slate-200 bg-white>
                         <h3 mt-0 flex gap-4 text-sm items-center>
-                            Elementos<Button w-fit @click="showItemDialog(categoryIndex)" icon="pi pi-plus" />
+                            Elementos<Button w-fit @click="showItemDialog(category.id_category)" icon="pi pi-plus" />
 
                         </h3>
-                        <section v-if="category.items.length > 0" bg-slate-200 pa-3 flex flex-col gap-4 rounded-xl>
+                        <!-- <section v-if="category.items.length > 0" bg-slate-200 pa-3 flex flex-col gap-4 rounded-xl>
 
                             <div v-for="(item, itemIndex) in category.items" :key="itemIndex" shadow-md rounded-lg pa-2
                                 shadow-slate-500 bg-white>
@@ -37,7 +37,7 @@
 
                                     <div flex gap-2>
                                         <Button icon="pi pi-eye" severity="secondary" />
-                                        <Button severity="danger" @click="deleteItem(categoryIndex, itemIndex)"
+                                        <Button severity="danger" @click="deleteItem(category.id_category)"
                                             icon="pi pi-minus" />
                                     </div>
                                 </div>
@@ -45,7 +45,7 @@
 
                             </div>
                         </section>
-                        <span v-else>No existen elementos</span>
+                        <span v-else>No existen elementos</span> -->
 
                     </div>
                 </div>
@@ -58,11 +58,11 @@
             <div class="flex pt-6 justify-between">
                 <Button label="Back" severity="secondary" icon="pi pi-arrow-left" @click="activateCallback('1')" />
                 <Button label="Next" icon="pi pi-arrow-right" iconPos="right"
-                    @click="createCategoriesAndItems(activateCallback)" />
+                    @click="nextStep(activateCallback)" />
             </div>
         </div>
     </StepPanel>
-    <Dialog v-model:visible="visibleCategoryDialog" modal :header="$t('table.update')"
+    <!-- <Dialog v-model:visible="visibleCategoryDialog" modal :header="$t('table.update')"
         class="w-4/5 max-w-50rem min-w-25rem">
         <Form @submit="createCategory" :validation-schema="category.getSchema()">
             <div class="dialog-form">
@@ -78,30 +78,15 @@
                 <Button type="submit" :label="$t('table.save')"></Button>
             </div>
         </Form>
-    </Dialog>
-    <Dialog v-model:visible="visibleItemDialog" modal :header="$t('table.update')"
-        class="w-4/5 max-w-50rem min-w-25rem">
-        <Form @submit="createItem" :validation-schema="item.getSchema()">
-            <div class="dialog-form">
-
-                <VInput v-model="item.name" name="name" label="Nombre" />
-                <VInput v-model="item.description" rows="3" textarea name="description" label="Descripción" />
-            </div>
-
-            <div class="dialog-footer">
-                <Button type="button" :label="$t('table.cancel')" severity="secondary"
-                    @click="visibleItemDialog = false"></Button>
-                <Button type="submit" :label="$t('table.save')"></Button>
-            </div>
-        </Form>
-    </Dialog>
+    </Dialog> -->
+    <CategoryDialog v-model="category" :submit-function="createCategory" ref="categoryDialog" :success-function="() => refetch()"/>
+    
+    <ItemDialog v-model="category" :submit-function="createItem" ref="categoryItem" :success-function="() => refetch()"/> 
+    
 </template>
 <script setup lang="ts">
-import VInput from '@/components/VInput.vue';
 import Button from 'primevue/button';
-import Dialog from 'primevue/dialog';
 import StepPanel from 'primevue/steppanel';
-import { Form } from 'vee-validate';
 import { inject, ref, type Ref, } from 'vue';
 
 import useEvents from '@/common/utils/useEvents';
@@ -109,54 +94,57 @@ import { useI18n } from 'vue-i18n';
 import type { TestBuilder } from '../../classes/TestBuilder';
 import { Category } from '../../modules/category/category.model';
 import { Item } from '../../modules/item/item.model';
+import type { Test } from '../../models/test.model';
+import CategoryDialog from '../../modules/category/CategoryDialog.vue';
+import ItemDialog from '../../modules/item/ItemDialog.vue';
 const { t } = useI18n()
-const visibleCategoryDialog = ref(false)
-const visibleItemDialog = ref(false)
+const categoryDialog = ref()
+const itemDialog = ref()
+
+
+const testBuilder: Ref<TestBuilder> = inject('testBuilder')
+const refetch: Function = inject('refetch')
+const makeAction: Function = inject('makeAction')
+
 
 const selectedCategoryIndex = ref(-1)
 
-const testBuilder: Ref<TestBuilder> = inject('testBuilder')
+const test: Test = testBuilder.value.getTest()
 
-const makeAction:Function = inject('makeAction')
+const showCategoryDialog = ()=>{
+    categoryDialog.value.show()
+}
+
+
 
 const category = ref(new Category())
 const item = ref(new Item())
-const categories = ref([])
 const showItemDialog = (index: number) => {
     selectedCategoryIndex.value = index
-    visibleItemDialog.value = true
+    itemDialog.value.show()
 }
 
-const createCategory = async () => await makeAction(testBuilder.value.createCategory(category.value), () => {
-    visibleCategoryDialog.value = false
-    category.value.clearData()
-})
+const createCategory = async () => testBuilder.value.createCategory(category.value)
 
-//
-const deleteCategory = (index: number) => {
-    categories.value = categories.value.filter((c: Category, i: number) => i != index)
-}
 
-const createItem = () => {
-    categories.value[selectedCategoryIndex.value].items.push({ ...item.value })
-    visibleItemDialog.value = false
-    item.value.clearData()
-}
+const deleteCategory = async (id: number) => await makeAction(testBuilder.value.deleteCategory(id), () => { })
 
-const deleteItem = (categoryIndex: number, itemIndex: number) => {
-    categories.value[categoryIndex].items = categories.value[itemIndex].items.filter((item: Item, i: number) => i != itemIndex)
-}
 
-const createCategoriesAndItems = (activateCallback: Function) => {
+const createItem = async () => testBuilder.value.createItem(item.value, selectedCategoryIndex.value)
+
+const deleteItem = async (id: number) => await makeAction(testBuilder.value.deleteItem(id), () => { })
+
+
+
+const nextStep = (activateCallback: Function) => {
     try {
-        if (categories.value.length == 0) {
+        if (test.category.length == 0) {
             throw new Error("categories.lengthmayor que 0")
         }
-        categories.value.forEach(serie => {
+        test.category.forEach(serie => {
             if (serie.items.length == 0)
                 throw new Error("Todas las categorias deben poseer al menos un elemento")
         });
-        testBuilder.value.setCategoriesAndItems(categories.value)
         activateCallback('3')
 
     } catch (e: any) {

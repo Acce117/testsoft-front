@@ -41,7 +41,7 @@
                         <Skeleton v-if="isRefetching || isPending" width="60%" borderRadius=".4rem" height="1.5rem" />
                         <div overflow-auto text-sm v-else>
                             <Rating v-if="col.isRating" :modelValue="slotProps.data[col.field]" readonly />
-                            <span v-else-if="col.isBoolean || col.field === fieldAsActive">{{
+                            <span v-else-if="col.isBoolean || col.field === props.model.getFieldAsActive()">{{
                                 slotProps.data[col.field] == true ? t('yes') : t('no') }}</span>
                             <span v-else-if="slotProps.data[col.field] !== undefined">{{ typeof
                                 slotProps.data[col.field] == 'string' ? slotProps.data[col.field].length < 20 ?
@@ -63,14 +63,13 @@
                                 @click="showElement(slotProps.data)" />
                             <i class="pi pi-file-edit" v-tooltip="$t('table.update')"
                                 @click="showUpdate(slotProps.data)" />
-
-                            <!-- <i v-if="!props.fieldAsActive" v-tooltip="$t('table.delete')"
+                             <i v-if="props.model.getFieldAsActive()==''" v-tooltip="$t('table.delete')"
                                 @click="deleteElement($event, slotProps.data)" class="pi pi-trash" />
-                            <i v-if="slotProps.data[props.fieldAsActive] == true" v-tooltip="$t('table.desactivate')"
+                            <i v-else-if="slotProps.data[props.model.getFieldAsActive()] == true || slotProps.data[props.model.getFieldAsActive()] == 1" v-tooltip="$t('table.desactivate')"
                                 @click="desactivateElement($event, slotProps.data)" class="pi pi-trash" />
 
-                            <i v-if="slotProps.data[props.fieldAsActive] == false" v-tooltip="$t('table.recover')"
-                                @click="activateElement($event, slotProps.data)" class="pi pi-history" /> -->
+                            <i v-else-if="slotProps.data[props.model.getFieldAsActive()] == false || slotProps.data[props.model.getFieldAsActive()] == 0" v-tooltip="$t('table.recover')"
+                                @click="activateElement($event, slotProps.data)" class="pi pi-history" />
 
                         </div>
                     </template>
@@ -78,7 +77,7 @@
                 <template #empty> {{ $t('table.no_results') }} </template>
 
             </DataTable>
-            <!-- <h2 v-else-if="isError" class="error">{{ $t('table.something_wrong') }}</h2> -->
+             <!-- <h2 v-if="isError" class="error">{{ $t('table.something_wrong') }}</h2> -->
         </template>
     </Card>
 
@@ -114,21 +113,28 @@
             <div class="dialog-footer">
                 <Button type="button" :label="$t('table.cancel')" severity="secondary"
                     @click="showAddDialog = false"></Button>
-                <Button type="submit" :label="$t('table.save')"></Button>
+                <VButton w-8rem :disabled="isAddPending || isFormDataLoading" type="submit">
+                    <span v-if="!isAddPending || isFormDataLoading">{{ $t("table.save") }} </span>
+                    <VLoading v-else />
+                </VButton>
             </div>
         </Form>
 
     </Dialog>
+
     <Dialog v-model:visible="showUpdateDialog" modal :header="$t('table.update')" class="w-4/5 max-w-50rem min-w-25rem">
         <span>{{ $t('table.update_element') }}</span>
-        <Form @submit="updateElement" :validation-schema="props.model.getUpdateSchema?props.model.getUpdateSchema(): props.model.getSchema()">
+        <Form @submit="updateElement" :validation-schema="props.model.getUpdateSchema()">
             <div class="dialog-form">
                 <slot name="form-update"></slot>
             </div>
             <div class="dialog-footer">
                 <Button type="button" :label="$t('table.cancel')" severity="secondary"
                     @click="showUpdateDialog = false"></Button>
-                <Button type="submit" :label="$t('table.save')"></Button>
+                <VButton w-8rem :disabled="isUpdatePending || isFormDataLoading" type="submit">
+                    <span v-if="!isUpdatePending || isFormDataLoading">{{ $t("table.save") }} </span>
+                    <VLoading v-else />
+                </VButton>
             </div>
         </Form>
     </Dialog>
@@ -154,6 +160,8 @@ import { useI18n } from 'vue-i18n';
 import { BaseModel } from '@/core/BaseModel';
 import Skeleton from 'primevue/skeleton';
 import VError from './VError.vue';
+import VButton from './VButton.vue';
+import VLoading from './VLoading.vue';
 
 useQueryClient()
 const props = defineProps({
@@ -164,7 +172,8 @@ const props = defineProps({
     },
     customAddFunction: Function,
     customUpdateFunction: Function,
-    queryOptions: Object
+    queryOptions: Object,
+    isFormDataLoading: Boolean
 
 })
 const fieldAsID = props.model.getFieldAsID()
@@ -172,8 +181,8 @@ const queryKey = props.model.constructor.name
 const confirm = useConfirm();
 const toast = useToast();
 const menu = ref();
-const toggle = (event) => {
-    menu.value.toggle(event);
+const toggle = (value: MouseEvent) => {
+    menu.value.toggle(value);
 };
 const { data, isPending, isSuccess, isError, isRefetching, refetch } = useQuery({
     queryKey: [queryKey],
@@ -196,6 +205,7 @@ watch(dataOfOne, (newValue) => {
 
 
 const dt = ref();
+
 
 
 const { t } = useI18n();
@@ -248,9 +258,10 @@ const showAdd = () => {
     else
         showAddDialog.value = true
     props.model.clearData()
+
 }
 
-const showElement = (data) => {
+const showElement = (data: object) => {
     props.model.setData(data)
     showInfoDialog.value = true
     refetchOfOne()
@@ -258,7 +269,7 @@ const showElement = (data) => {
 
 const showUpdateDialog = ref(false)
 
-const showUpdate = (data) => {
+const showUpdate = (data: object) => {
     props.model.setData(data)
 
     if (props.customUpdateFunction)
@@ -274,8 +285,8 @@ const showAddDialog = ref(false)
 const addElement = () => {
     mutateAdd()
 }
-const updateElement = () => {
-    mutateUpdate()
+const updateElement = (data:object) => {
+    mutateUpdate(data)
 }
 
 const deleteElement = (event, data) => {
@@ -295,11 +306,10 @@ const deleteElement = (event, data) => {
         accept: () => {
             props.model.setData(data)
             mutateDelete()
-
         },
     });
 };
-const desactivateElement = (event, data) => {
+const desactivateElement = (event, data:object) => {
 
     confirm.require({
         target: event.currentTarget,
@@ -314,19 +324,18 @@ const desactivateElement = (event, data) => {
             label: t('table.accept')
         },
         accept: () => {
-            let updateObject = {}
-            Object.assign(updateObject, data)
+            let updateObject = {...data}
             // for (const key in updateObject) {
             //     if (key.includes('date'))
             //         updateObject[key] = parseDate(updateObject[key]);
             // }
-
-            //updateObject[props.fieldAsActive] = false;
-            mutateUpdate({ id: data[props.fieldAsID], data: updateObject })
+            updateObject[props.model.getFieldAsActive()]=0
+            props.model.setData(updateObject)
+            mutateUpdate(updateObject)
         },
     });
 };
-const activateElement = (event, data) => {
+const activateElement = (event, data:object) => {
 
     confirm.require({
         target: event.currentTarget,
@@ -341,22 +350,23 @@ const activateElement = (event, data) => {
             label: t('table.accept')
         },
         accept: () => {
-            let updateObject = {}
-            Object.assign(updateObject, data)
+            let updateObject = {...data}
             // for (const key in updateObject) {
             //     if (key.includes('date'))
             //         updateObject[key] = parseDate(updateObject[key]);
             // }
 
-            //updateObject[props.fieldAsActive] = true;
-            mutateUpdate({ id: data[props.fieldAsID], data: updateObject })
+            updateObject[props.model.getFieldAsActive()]=1
+            props.model.setData(updateObject)
+
+            mutateUpdate(updateObject)
         },
     });
 };
 
 //
 
-const { mutate: mutateAdd } = useMutation({
+const { mutate: mutateAdd, isPending: isAddPending } = useMutation({
     mutationKey: [`${queryKey}-add`],
     mutationFn: () => props.model.create(),
     onSuccess: async () => {
@@ -371,9 +381,9 @@ const { mutate: mutateAdd } = useMutation({
 })
 
 
-const { mutate: mutateUpdate } = useMutation({
+const { mutate: mutateUpdate, isPending: isUpdatePending } = useMutation({
     mutationKey: [`${queryKey}-update`],
-    mutationFn: () => props.model.update(),
+    mutationFn: (data:object) => props.model.update(data),
     onSuccess: async () => {
         await refetch()
         toast.add({ severity: 'info', summary: t('table.confirmation'), detail: t('table.element_ok_updated'), life: 5000 });
@@ -390,7 +400,7 @@ const { mutate: mutateUpdate } = useMutation({
 
 const { mutate: mutateDelete } = useMutation({
     mutationKey: [`${queryKey}-delete`],
-    mutationFn: props.model.delete,
+    mutationFn: ()=>  props.model.delete(),
     onSuccess: async () => {
         await refetch()
         toast.add({ severity: 'info', summary: t('table.confirmation'), detail: t('table.element_ok_deleted'), life: 5000 });

@@ -45,13 +45,14 @@ export class User extends BaseModel {
   user_type;
   country_id;
   country;
+  enabled;
 
   constructor(data: object = {}) {
     super(data);
     if (data) this.setData(data);
   }
   public setData(data: object) {
-    super.setData(data, this);
+    super.setData(data);
   }
 
   public getURL(): string {
@@ -67,6 +68,9 @@ export class User extends BaseModel {
 
   public getFieldAsID(): string {
     return "user_id";
+  }
+  public getFieldAsActive(): string {
+    return "enabled";
   }
 
   

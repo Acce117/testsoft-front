@@ -69,6 +69,7 @@ import { useTest } from "../../composables/useTest";
 import router from "@/router";
 import LoadingPanel from "@/components/LoadingPanel.vue";
 import useEvents from "@/common/utils/useEvents";
+import handlePromise from "@/common/utils/handlePromise";
 const { t } = useI18n();
 
 const testBuilder = ref(new TestBuilder(new Test()))
@@ -83,20 +84,11 @@ const { isError, isSuccess, isRefetching, isPending: isTestPending, refetch } = 
 );
 
 const makeAction = async (action: Promise, callBackOnSuccess: Function) => {
-  loading.value = true
-  action.then(() => {
+  handlePromise(action, loading, () => {
     refetch()
     callBackOnSuccess()
-  }).catch(() => {
-    useEvents().dispatch("error", {
-      severity: "error",
-      summary: "Error",
-      detail: t('algo ha salido mal'),
-      life: 3000,
-    });
-  }).finally(() => {
-    loading.value = false
   })
+
 }
 
 provide('testBuilder', testBuilder)

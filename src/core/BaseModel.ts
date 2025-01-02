@@ -1,19 +1,20 @@
+import { object } from "yup";
 import { sendRequest } from "./sendRequest";
 
 export class BaseModel {
-  constructor(data:object) {
+  constructor(data: object) {
     if (data) {
-      this.setData(data,this)
+      this.setData(data);
     }
   }
   public getURL() {
     return "";
   }
   public getColumns() {
-    return null;
+    return [{field:'', header:''}];
   }
-  public setData(data: object, self:object) {
-    for (const key in data) self[key] = data[key];
+  public setData(data: object) {
+    for (const key in data) this[key] = data[key];
   }
   public clearData() {
     for (const key in this) {
@@ -25,8 +26,22 @@ export class BaseModel {
   public getID() {
     return this[this.getFieldAsID()];
   }
+  public getActive() {
+    return this[this.getFieldAsActive()];
+  }
+
+  public getSchema() {
+    return object();
+  }
+  public getUpdateSchema() {
+    return this.getSchema();
+  }
 
   public getFieldAsID() {
+    return "";
+  }
+
+  public getFieldAsActive() {
     return "";
   }
 
@@ -42,18 +57,18 @@ export class BaseModel {
       body: params,
     });
   }
-  async create() {
+  async create(data?: object) {
     return await sendRequest({
       method: "POST",
       url: `${import.meta.env.VITE_API_PATH}/${this.getURL()}`,
-      body: this,
+      body: data ? data : this,
     });
   }
-  async update() {
+  async update(data?: object) {
     return await sendRequest({
       method: "PATCH",
       url: `${import.meta.env.VITE_API_PATH}/${this.getURL()}/${this.getID()}`,
-      body: this,
+      body: data ? data : this,
     });
   }
   async delete(id?: number) {

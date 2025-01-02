@@ -11,7 +11,8 @@ export class QuestionType extends BaseModel {
     if (data) this.setData(data);
   }
   public setData(data: object) {
-    super.setData(data, this);
+    super.setData(data);
+
   }
 
   public getURL(): string {

@@ -12,6 +12,15 @@ export const useTest = (id: string, cb:(d)=>void) => {
               name:'type_psi_test'
             },
             {
+              name:'category',
+              // relations:{
+              //   name:'item',
+              // }
+            },
+            {
+              name:'classifications',
+            },
+            {
               name:'display_parameters'
             },
             {

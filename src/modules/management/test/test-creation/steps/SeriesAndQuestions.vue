@@ -4,7 +4,7 @@
         <div flex gap-4 flex-col>
             <h3 my-0 text-slate-600 font-bold>Inserta las series y sus preguntas</h3>
             <h4 m-0 flex gap-4 items-center>
-                Series<Button w-fit @click="visibleSerieDialog = true" icon="pi pi-plus" />
+                Series<Button w-fit @click="showSerieDialog" icon="pi pi-plus" />
 
             </h4>
             <section v-if="test.series.length > 0" bg-slate-200 flex flex-col gap-4 pa-3 rounded-xl>
@@ -51,103 +51,64 @@
                 </div>
             </section>
             <span v-else>No existen series</span>
-
-
-
-
             <div class="flex pt-6 justify-between">
                 <Button label="Back" severity="secondary" icon="pi pi-arrow-left" @click="activateCallback('2')" />
                 <Button label="Next" icon="pi pi-arrow-right" iconPos="right" @click="nextStep(activateCallback)" />
             </div>
         </div>
     </StepPanel>
-    <Dialog v-model:visible="visibleSerieDialog" modal :header="$t('table.update')"
-        class="w-4/5 max-w-50rem min-w-25rem">
-        <Form @submit="createSerie" :validation-schema="serie.getSchema()">
-            <div class="dialog-form">
+    <SerieDialog ref="serieDialog" v-model="serie" :submit-function="createSerie" :success-function="() => refetch()" />
+    <QuestionDialog ref="questionDialog" v-model="question" :submit-function="createQuestion"
+        :success-function="() => refetch()" />
 
-                <VInput v-model="serie.name" name="name" label="Nombre" />
-                <VInput v-model="serie.description" rows="3" textarea name="description" label="Descripción" />
-                <VInput v-model="serie.time_serie_duration" min="0" number name="time_serie_duration"
-                    label="Tiempo de duración (Minutos)" />
-            </div>
 
-            <div class="dialog-footer">
-                <Button type="button" :label="$t('table.cancel')" severity="secondary"
-                    @click="visibleSerieDialog = false"></Button>
-                <Button type="submit" :label="$t('table.save')"></Button>
-            </div>
-        </Form>
-    </Dialog>
-    <Dialog v-model:visible="visibleQuestionDialog" modal :header="$t('table.update')"
-        class="w-4/5 max-w-50rem min-w-25rem">
-        <Form @submit="createQuestion" :validation-schema="question.getSchema()">
-            <div class="dialog-form">
-
-                <VInput v-model="question.statement" textarea name="statement" label="Enunciado" />
-                <VSelect v-model="question.fk_id_type_question" optionId="id_type_question" name="fk_id_type_question"
-                    label="Tipo de Pregunta" :options="questionTypes" optionLabel="name" />
-            </div>
-
-            <div class="dialog-footer">
-                <Button type="button" :label="$t('table.cancel')" severity="secondary"
-                    @click="visibleQuestionDialog = false"></Button>
-                <Button type="submit" :label="$t('table.save')"></Button>
-            </div>
-        </Form>
-    </Dialog> 
 </template>
 <script setup lang="ts">
-import VInput from '@/components/VInput.vue';
 import type { Test } from '@/modules/management/test/models/test.model';
 import Button from 'primevue/button';
-import Dialog from 'primevue/dialog';
 import StepPanel from 'primevue/steppanel';
-import { Form } from 'vee-validate';
 import { inject, ref, type Ref, } from 'vue';
 import { Serie } from '../../modules/serie/serie.model';
-import { Question } from '../../models/question.model';
-import VSelect from '@/components/VSelect.vue';
-import { useQuestionTypes } from '../../modules/question-type/useQuestionTypes';
 import useEvents from '@/common/utils/useEvents';
 import { useI18n } from 'vue-i18n';
 import type { TestBuilder } from '../../classes/TestBuilder';
+import { Question } from '../../modules/question/question.model';
+import SerieDialog from '../../modules/serie/SerieDialog.vue';
+import QuestionDialog from '../../modules/question/QuestionDialog.vue';
+
+const serieDialog = ref()
+const questionDialog = ref()
 
 
 const testBuilder: Ref<TestBuilder> = inject('testBuilder')
+const refetch: Function = inject('refetch')
+
 const test: Test = testBuilder.value.getTest()
 
 const { t } = useI18n()
 
 const makeAction: Function = inject('makeAction')
 
-const visibleSerieDialog = ref(false)
-const visibleQuestionDialog = ref(false)
 
 const selectedSerieIndex = ref(-1)
-
-const { questionTypes, isPending } = useQuestionTypes()
 
 const serie = ref(new Serie())
 const question = ref(new Question())
 
+const showSerieDialog = () => serieDialog.value.show()
+
+
 const showQuestionDialog = (index: number) => {
     selectedSerieIndex.value = index
-    visibleQuestionDialog.value = true
+    questionDialog.value.show()
 }
 
 
-const createSerie = async () => await makeAction(testBuilder.value.createSerie(serie.value), () => {
-    visibleSerieDialog.value = false
-    serie.value.clearData()
-})
+const createSerie = () => testBuilder.value.createSerie(serie.value)
 
 const deleteSerie = async (id: number) => await makeAction(testBuilder.value.deleteSerie(id), () => { })
 
-const createQuestion = async () => await makeAction(testBuilder.value.createQuestion({ ...question.value, image: 0 }, selectedSerieIndex.value), () => {
-    visibleQuestionDialog.value = false
-    question.value.clearData()
-})
+const createQuestion = () => testBuilder.value.createQuestion(question.value, selectedSerieIndex.value)
 
 const deleteQuestion = async (id: number) => await makeAction(testBuilder.value.deleteQuestion(id), () => { })
 

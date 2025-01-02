@@ -19,7 +19,7 @@
                             <div flex gap-2>
                                 <Button icon="pi pi-plus" @click="showAdd()" />
 
-                                
+
 
                                 <Button icon="pi pi-refresh" severity="secondary" @click="refetch()" />
                             </div>
@@ -38,7 +38,7 @@
                                 slotProps.node[fiedAsExpander.field] == 'string' ?
                                 slotProps.node[fiedAsExpander.field].length < 20 ? slotProps.node[fiedAsExpander.field]
                                     : slotProps.node[fiedAsExpander.field].substring(0, 20) + '...' :
-                                    slotProps.node[fiedAsExpander.field] }}</span>
+                                slotProps.node[fiedAsExpander.field] }}</span>
                                     <span v-else>-</span>
                         </div>
                     </template>
@@ -74,13 +74,15 @@
                             <i class="pi pi-file-edit" v-tooltip="$t('table.update')"
                                 @click="showUpdate(slotProps.node)" />
 
-                            <!-- <i v-if="!props.fieldAsActive" v-tooltip="$t('table.delete')"
+                            <i v-if="props.model.getFieldAsActive() == ''" v-tooltip="$t('table.delete')"
                                 @click="deleteElement($event, slotProps.data)" class="pi pi-trash" />
-                            <i v-if="slotProps.data[props.fieldAsActive] == true" v-tooltip="$t('table.desactivate')"
-                                @click="desactivateElement($event, slotProps.data)" class="pi pi-trash" />
+                            <i v-else-if="slotProps.data[props.model.getFieldAsActive()] == true || slotProps.data[props.model.getFieldAsActive()] == 1"
+                                v-tooltip="$t('table.desactivate')" @click="desactivateElement($event, slotProps.data)"
+                                class="pi pi-trash" />
 
-                            <i v-if="slotProps.data[props.fieldAsActive] == false" v-tooltip="$t('table.recover')"
-                                @click="activateElement($event, slotProps.data)" class="pi pi-history" /> -->
+                            <i v-else-if="slotProps.data[props.model.getFieldAsActive()] == false || slotProps.data[props.model.getFieldAsActive()] == 0"
+                                v-tooltip="$t('table.recover')" @click="activateElement($event, slotProps.data)"
+                                class="pi pi-history" />
 
                         </div>
                     </template>
@@ -118,30 +120,36 @@
         <Form @submit="addElement" :validation-schema="props.model.getSchema()">
             <div class="dialog-form">
                 <slot name="form-add"></slot>
-
-                {{ model }}
             </div>
 
             <div class="dialog-footer">
                 <Button type="button" :label="$t('table.cancel')" severity="secondary"
                     @click="showAddDialog = false"></Button>
-                <Button type="submit" :label="$t('table.save')"></Button>
+                <VButton w-8rem :disabled="isAddPending" type="submit">
+                    <span v-if="!isAddPending">{{ $t("table.save") }} </span>
+                    <VLoading v-else />
+                </VButton>
             </div>
         </Form>
 
     </Dialog>
     <Dialog v-model:visible="showUpdateDialog" modal :header="$t('table.update')" class="w-4/5 max-w-50rem min-w-25rem">
         <span>{{ $t('table.update_element') }}</span>
-        <div class="dialog-form">
-            <slot name="form-add"></slot>
-            {{ model }}
+        <Form @submit="updateElement" :validation-schema="props.model.getUpdateSchema()">
 
-        </div>
-        <div class="dialog-footer">
-            <Button type="button" :label="$t('table.cancel')" severity="secondary"
-                @click="showUpdateDialog = false"></Button>
-            <Button type="button" :label="$t('table.save')" @click="updateElement()"></Button>
-        </div>
+            <div class="dialog-form">
+                <slot name="form-add"></slot>
+
+            </div>
+            <div class="dialog-footer">
+                <Button type="button" :label="$t('table.cancel')" severity="secondary"
+                    @click="showUpdateDialog = false"></Button>
+                <VButton w-8rem :disabled="isUpdatePending" type="submit">
+                    <span v-if="!isUpdatePending">{{ $t("table.save") }} </span>
+                    <VLoading v-else />
+                </VButton>
+            </div>
+        </Form>
     </Dialog>
 </template>
 <script setup lang="ts">
@@ -163,6 +171,8 @@ import { BaseModel } from '@/core/BaseModel';
 import Skeleton from 'primevue/skeleton';
 import VError from './VError.vue';
 import TreeTable from 'primevue/treetable';
+import VButton from './VButton.vue';
+import VLoading from './VLoading.vue';
 
 useQueryClient()
 const props = defineProps({
@@ -283,7 +293,6 @@ const deleteElement = (event, data) => {
         accept: () => {
             props.model.setData(data)
             mutateDelete()
-
         },
     });
 };
@@ -344,7 +353,7 @@ const activateElement = (event, data) => {
 
 //
 
-const { mutate: mutateAdd } = useMutation({
+const { mutate: mutateAdd, isPending: isAddPending } = useMutation({
     mutationKey: [`${queryKey}-add`],
     mutationFn: () => props.model.create(),
     onSuccess: async () => {
@@ -359,7 +368,7 @@ const { mutate: mutateAdd } = useMutation({
 })
 
 
-const { mutate: mutateUpdate } = useMutation({
+const { mutate: mutateUpdate, isPending: isUpdatePending } = useMutation({
     mutationKey: [`${queryKey}-update`],
     mutationFn: () => props.model.update(),
     onSuccess: async () => {
@@ -378,7 +387,7 @@ const { mutate: mutateUpdate } = useMutation({
 
 const { mutate: mutateDelete } = useMutation({
     mutationKey: [`${queryKey}-delete`],
-    mutationFn: props.model.delete,
+    mutationFn: () => props.model.delete(),
     onSuccess: async () => {
         await refetch()
         toast.add({ severity: 'info', summary: t('table.confirmation'), detail: t('table.element_ok_deleted'), life: 5000 });

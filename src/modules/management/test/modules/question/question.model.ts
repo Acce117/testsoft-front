@@ -1,6 +1,6 @@
 import { BaseModel } from "@/core/BaseModel";
-import { schema } from "../schemas/question.schema";
-import type { Answer } from "./answer.model";
+import type { Answer } from "../answer/answer.model";
+import { schema } from "./question.schema";
 
 const url = "question";
 
@@ -17,7 +17,8 @@ export class Question extends BaseModel {
     if (data) this.setData(data);
   }
   public setData(data: object) {
-    super.setData(data, this);
+    super.setData(data);
+
   }
 
   public getURL(): string {

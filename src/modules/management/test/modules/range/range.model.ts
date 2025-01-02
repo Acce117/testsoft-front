@@ -16,7 +16,7 @@ export class Range extends BaseModel {
     if (data) this.setData(data);
   }
   public setData(data: object) {
-    super.setData(data, this);
+    super.setData(data);
   }
 
   
