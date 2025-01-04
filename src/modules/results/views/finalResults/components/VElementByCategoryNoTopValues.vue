@@ -2,6 +2,7 @@
   <VByCategory
     v-for="category in props.testResult?.categories"
     :category="category"
+    :key="category.id_category"
   />
 </template>
 <script setup lang="ts">

@@ -2,6 +2,7 @@
   <VByElement
     v-for="element in props.testResult?.categories"
     :element="element"
+    :key="element"
   />
 </template>
 <script setup lang="ts">

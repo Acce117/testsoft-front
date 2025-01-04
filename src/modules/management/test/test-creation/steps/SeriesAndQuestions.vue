@@ -41,6 +41,36 @@
                                             icon="pi pi-minus" />
                                     </div>
                                 </div>
+                                <div shadow-md rounded-lg pa-2 shadow-slate-200 bg-white>
+                                    <h3 mt-0 flex gap-4 text-sm items-center>
+                                        Respuestas<Button w-fit @click="showAnswerDialog(serie.id_serie)"
+                                            icon="pi pi-plus" />
+
+                                    </h3>
+                                    <section v-if="question.answers.length > 0" bg-slate-200 pa-3 flex flex-col gap-4
+                                        rounded-xl>
+
+                                        <div v-for="answer in question.answer" :key="answer.id_answer"
+                                            shadow-md rounded-lg pa-2 shadow-slate-500 bg-white>
+                                            <div flex justify-between items-center>
+
+                                                <span>{{ answer.text }}</span>
+
+
+                                                <div flex gap-2>
+                                                    <Button icon="pi pi-eye" severity="secondary" />
+                                                    <Button severity="danger"
+                                                        @click="deleteQuestion(question.id_question)"
+                                                        icon="pi pi-minus" />
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                    </section>
+                                    <span v-else>No existen respuestas</span>
+
+                                </div>
 
 
                             </div>
@@ -78,7 +108,6 @@ import QuestionDialog from '../../modules/question/QuestionDialog.vue';
 
 const serieDialog = ref()
 const questionDialog = ref()
-
 
 const testBuilder: Ref<TestBuilder> = inject('testBuilder')
 const refetch: Function = inject('refetch')

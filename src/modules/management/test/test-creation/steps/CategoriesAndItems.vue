@@ -26,9 +26,9 @@
                             Elementos<Button w-fit @click="showItemDialog(category.id_category)" icon="pi pi-plus" />
 
                         </h3>
-                        <!-- <section v-if="category.items.length > 0" bg-slate-200 pa-3 flex flex-col gap-4 rounded-xl>
+                         <section v-if="category.items.length > 0" bg-slate-200 pa-3 flex flex-col gap-4 rounded-xl>
 
-                            <div v-for="(item, itemIndex) in category.items" :key="itemIndex" shadow-md rounded-lg pa-2
+                            <div v-for="item in category.items" :key="item.id_item" shadow-md rounded-lg pa-2
                                 shadow-slate-500 bg-white>
                                 <div flex justify-between items-center>
 
@@ -45,7 +45,7 @@
 
                             </div>
                         </section>
-                        <span v-else>No existen elementos</span> -->
+                        <span v-else>No existen elementos</span> 
 
                     </div>
                 </div>
@@ -62,26 +62,9 @@
             </div>
         </div>
     </StepPanel>
-    <!-- <Dialog v-model:visible="visibleCategoryDialog" modal :header="$t('table.update')"
-        class="w-4/5 max-w-50rem min-w-25rem">
-        <Form @submit="createCategory" :validation-schema="category.getSchema()">
-            <div class="dialog-form">
-
-                <VInput v-model="category.name" name="name" label="Nombre" />
-                <VInput v-model="category.description" rows="3" textarea name="description" label="Descripción" />
-
-            </div>
-
-            <div class="dialog-footer">
-                <Button type="button" :label="$t('table.cancel')" severity="secondary"
-                    @click="visibleCategoryDialog = false"></Button>
-                <Button type="submit" :label="$t('table.save')"></Button>
-            </div>
-        </Form>
-    </Dialog> -->
     <CategoryDialog v-model="category" :submit-function="createCategory" ref="categoryDialog" :success-function="() => refetch()"/>
     
-    <ItemDialog v-model="category" :submit-function="createItem" ref="categoryItem" :success-function="() => refetch()"/> 
+    <ItemDialog v-model="category" :submit-function="createItem" ref="itemDialog" :success-function="() => refetch()"/> 
     
 </template>
 <script setup lang="ts">

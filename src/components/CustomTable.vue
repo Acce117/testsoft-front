@@ -19,7 +19,7 @@
                                     :placeholder="$t('table.search')" />
                             </IconField>
                             <div flex gap-2>
-                                <Button icon="pi pi-plus" @click="showAdd()" />
+                                <Button v-if="!props.hideCreate" icon="pi pi-plus" @click="showAdd()" />
 
                                 <Button icon="pi pi-external-link" @click="toggle" aria-haspopup="true"
                                     aria-controls="overlay_menu" severity="secondary" />
@@ -39,6 +39,16 @@
                     <template #body="slotProps">
 
                         <Skeleton v-if="isRefetching || isPending" width="60%" borderRadius=".4rem" height="1.5rem" />
+                        <div overflow-auto text-sm v-else-if="col.fieldGetter">
+                            <Rating v-if="col.isRating" :modelValue="slotProps.data[col.fieldGetter(slotProps.data)]" readonly />
+                            <span v-else-if="col.isBoolean">{{
+                                col.fieldGetter(slotProps.data) == true ? t('yes') : t('no') }}</span>
+                            <span v-else-if="col.fieldGetter(slotProps.data) !== undefined">{{ typeof
+                                col.fieldGetter(slotProps.data) == 'string' ? col.fieldGetter(slotProps.data).length < 20 ?
+                                col.fieldGetter(slotProps.data) : col.fieldGetter(slotProps.data).substring(0, 20) + '...' :
+                                col.fieldGetter(slotProps.data) }}</span>
+                                    <span v-else>-</span>
+                        </div>
                         <div overflow-auto text-sm v-else>
                             <Rating v-if="col.isRating" :modelValue="slotProps.data[col.field]" readonly />
                             <span v-else-if="col.isBoolean || col.field === props.model.getFieldAsActive()">{{
@@ -53,23 +63,30 @@
                     </template>
 
                 </Column>
-                <Column :field="fieldAsID" :header="$t('table.actions')">
+                <Column v-if="!props.hideActions" :field="fieldAsID" :header="$t('table.actions')">
 
                     <template #body=slotProps>
                         <Skeleton v-if="isRefetching || isPending" width="60%" borderRadius=".4rem" height="1.5rem" />
 
                         <div v-else class="custom-table-actions">
-                            <i class="pi pi-eye" v-tooltip="$t('table.view_information')"
+                            <i class="pi pi-eye" v-if="!props.hideShow" v-tooltip="$t('table.view_information')"
                                 @click="showElement(slotProps.data)" />
-                            <i class="pi pi-file-edit" v-tooltip="$t('table.update')"
+                            <i class="pi pi-file-edit" v-if="!props.hideEdit" v-tooltip="$t('table.update')"
                                 @click="showUpdate(slotProps.data)" />
-                             <i v-if="props.model.getFieldAsActive()==''" v-tooltip="$t('table.delete')"
-                                @click="deleteElement($event, slotProps.data)" class="pi pi-trash" />
-                            <i v-else-if="slotProps.data[props.model.getFieldAsActive()] == true || slotProps.data[props.model.getFieldAsActive()] == 1" v-tooltip="$t('table.desactivate')"
-                                @click="desactivateElement($event, slotProps.data)" class="pi pi-trash" />
+                            <div v-if="!props.hideDelete">
 
-                            <i v-else-if="slotProps.data[props.model.getFieldAsActive()] == false || slotProps.data[props.model.getFieldAsActive()] == 0" v-tooltip="$t('table.recover')"
-                                @click="activateElement($event, slotProps.data)" class="pi pi-history" />
+
+                                <i v-if="props.model.getFieldAsActive() == ''" v-tooltip="$t('table.delete')"
+                                    @click="deleteElement($event, slotProps.data)" class="pi pi-trash" />
+                                <i v-else-if="slotProps.data[props.model.getFieldAsActive()] == true || slotProps.data[props.model.getFieldAsActive()] == 1"
+                                    v-tooltip="$t('table.desactivate')"
+                                    @click="desactivateElement($event, slotProps.data)" class="pi pi-trash" />
+
+                                <i v-else-if="slotProps.data[props.model.getFieldAsActive()] == false || slotProps.data[props.model.getFieldAsActive()] == 0"
+                                    v-tooltip="$t('table.recover')" @click="activateElement($event, slotProps.data)"
+                                    class="pi pi-history" />
+                            </div>
+
 
                         </div>
                     </template>
@@ -77,7 +94,7 @@
                 <template #empty> {{ $t('table.no_results') }} </template>
 
             </DataTable>
-             <!-- <h2 v-if="isError" class="error">{{ $t('table.something_wrong') }}</h2> -->
+            <!-- <h2 v-if="isError" class="error">{{ $t('table.something_wrong') }}</h2> -->
         </template>
     </Card>
 
@@ -89,7 +106,7 @@
         </div>
 
         <div v-else-if="isSuccessOfOne" class="dialog-form">
-            <slot name="view-element"></slot>
+            <slot name="view-element" :dataOfOne></slot>
             <div class="flex justify-end gap-2">
                 <Button type="button" :label="$t('table.accepts')" @click="showInfoDialog = false"></Button>
             </div>
@@ -172,8 +189,14 @@ const props = defineProps({
     },
     customAddFunction: Function,
     customUpdateFunction: Function,
+    customGetOneFunction: Function,
     queryOptions: Object,
-    isFormDataLoading: Boolean
+    isFormDataLoading: Boolean,
+    hideActions:Boolean,
+    hideShow:Boolean,
+    hideEdit:Boolean,
+    hideCreate:Boolean,
+    hideDelete:Boolean,
 
 })
 const fieldAsID = props.model.getFieldAsID()
@@ -194,7 +217,7 @@ const { data, isPending, isSuccess, isError, isRefetching, refetch } = useQuery(
 const { data: dataOfOne, isPending: isPendingOfOne, isSuccess: isSuccessOfOne, isRefetching: isRefetchingOfOne, refetch: refetchOfOne } = useQuery({
     queryKey: [queryKey + '-one'],
     queryFn: () => {
-        return props.model.getOne(props.queryOptions)
+        return props.customGetOneFunction? props.customGetOneFunction(props.model.getID()):   props.model.getOne(props.queryOptions)
     },
     enabled: false
 })
@@ -285,7 +308,7 @@ const showAddDialog = ref(false)
 const addElement = () => {
     mutateAdd()
 }
-const updateElement = (data:object) => {
+const updateElement = (data: object) => {
     mutateUpdate(data)
 }
 
@@ -309,7 +332,7 @@ const deleteElement = (event, data) => {
         },
     });
 };
-const desactivateElement = (event, data:object) => {
+const desactivateElement = (event, data: object) => {
 
     confirm.require({
         target: event.currentTarget,
@@ -324,18 +347,18 @@ const desactivateElement = (event, data:object) => {
             label: t('table.accept')
         },
         accept: () => {
-            let updateObject = {...data}
+            let updateObject = { ...data }
             // for (const key in updateObject) {
             //     if (key.includes('date'))
             //         updateObject[key] = parseDate(updateObject[key]);
             // }
-            updateObject[props.model.getFieldAsActive()]=0
+            updateObject[props.model.getFieldAsActive()] = 0
             props.model.setData(updateObject)
             mutateUpdate(updateObject)
         },
     });
 };
-const activateElement = (event, data:object) => {
+const activateElement = (event, data: object) => {
 
     confirm.require({
         target: event.currentTarget,
@@ -350,13 +373,13 @@ const activateElement = (event, data:object) => {
             label: t('table.accept')
         },
         accept: () => {
-            let updateObject = {...data}
+            let updateObject = { ...data }
             // for (const key in updateObject) {
             //     if (key.includes('date'))
             //         updateObject[key] = parseDate(updateObject[key]);
             // }
 
-            updateObject[props.model.getFieldAsActive()]=1
+            updateObject[props.model.getFieldAsActive()] = 1
             props.model.setData(updateObject)
 
             mutateUpdate(updateObject)
@@ -383,7 +406,7 @@ const { mutate: mutateAdd, isPending: isAddPending } = useMutation({
 
 const { mutate: mutateUpdate, isPending: isUpdatePending } = useMutation({
     mutationKey: [`${queryKey}-update`],
-    mutationFn: (data:object) => props.model.update(data),
+    mutationFn: (data: object) => props.model.update(data),
     onSuccess: async () => {
         await refetch()
         toast.add({ severity: 'info', summary: t('table.confirmation'), detail: t('table.element_ok_updated'), life: 5000 });
@@ -400,7 +423,7 @@ const { mutate: mutateUpdate, isPending: isUpdatePending } = useMutation({
 
 const { mutate: mutateDelete } = useMutation({
     mutationKey: [`${queryKey}-delete`],
-    mutationFn: ()=>  props.model.delete(),
+    mutationFn: () => props.model.delete(),
     onSuccess: async () => {
         await refetch()
         toast.add({ severity: 'info', summary: t('table.confirmation'), detail: t('table.element_ok_deleted'), life: 5000 });

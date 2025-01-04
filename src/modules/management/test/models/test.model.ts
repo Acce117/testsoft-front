@@ -4,6 +4,7 @@ import { schema } from "@/modules/management/test/schemas/test.schema";
 import type { Serie } from "../modules/serie/serie.model";
 import { ParameterDisplayResult } from "../modules/parameter-display-result/parameter-display-result.model";
 import type { Category } from "../modules/category/category.model";
+import { Equation } from "../modules/equation/equation.model";
 
 const url = "psi_test";
 const columns = [
@@ -32,6 +33,7 @@ export class Test extends BaseModel {
   series: Serie[];
   category: Category[];
   display_parameters;
+  equation;
 
   constructor(data: any = null) {
     super(data);
@@ -40,6 +42,7 @@ export class Test extends BaseModel {
     } else {
       this.series = [];
       this.category = [];
+      this.equation = new Equation();
       this.display_parameters = new ParameterDisplayResult({
         count_max: 0,
         count_min: 0,
@@ -52,6 +55,9 @@ export class Test extends BaseModel {
     this.display_parameters = data.display_parameters
       ? new ParameterDisplayResult(data.display_parameters)
       : new ParameterDisplayResult();
+    this.equation = data.equation
+      ? new Equation(data.equation)
+      : new Equation();
   }
 
   public getURL(): string {
@@ -71,7 +77,8 @@ export class Test extends BaseModel {
   async update() {
     const clone = { ...this };
     delete clone.series;
-
+    delete clone.category;
+    delete clone.equation;
     delete clone.type_psi_test;
     delete clone.display_parameters;
 

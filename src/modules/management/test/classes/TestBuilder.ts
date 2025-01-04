@@ -16,8 +16,17 @@ export class TestBuilder {
   }
 
   public async setGeneralData() {
-    const response = await this.test.update();
+    await this.test.update();
     //IMPLEMENT FORMULE CREATION
+    this.setEquation();
+  }
+
+  public setEquation() {
+    if (this.test.equation?.equation.fk_id_test) {
+      this.test.equation?.update();
+    } else if (this.test.equation?.equation.trim() != "") {
+      this.test.equation?.create();
+    }
   }
 
   public async createSerie(serie: Serie) {
@@ -46,7 +55,7 @@ export class TestBuilder {
 
   public async createQuestion(question: Question, id_serie: number) {
     question.fk_id_serie = id_serie;
-    question.image = 0
+    question.image = 0;
     return await question.create();
   }
   public async deleteQuestion(id: number) {

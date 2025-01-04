@@ -68,7 +68,6 @@ import CategoriesAndItems from "../../test-creation/steps/CategoriesAndItems.vue
 import { useTest } from "../../composables/useTest";
 import router from "@/router";
 import LoadingPanel from "@/components/LoadingPanel.vue";
-import useEvents from "@/common/utils/useEvents";
 import handlePromise from "@/common/utils/handlePromise";
 const { t } = useI18n();
 
@@ -80,7 +79,7 @@ const error = ref(false)
 const { isError, isSuccess, isRefetching, isPending: isTestPending, refetch } = useTest(
   router.currentRoute.value.params.id_test as string
   , (test: Test) =>
-    testBuilder.value.getTest().setData(test.name == '' ? { id_test: test.id_test, time_duration: 0, recurring_time: 0, done: false, series: [] } : test)
+    testBuilder.value.getTest().setData(test.name == '' ? { id_test: test.id_test, time_duration: 0, recurring_time: 0, done: false, series: [], category:[] } : test)
 );
 
 const makeAction = async (action: Promise, callBackOnSuccess: Function) => {
