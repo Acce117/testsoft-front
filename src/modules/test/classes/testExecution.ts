@@ -2,7 +2,7 @@ import { userStore } from "@/modules/security/store/user-store";
 import type { Question } from "./question-class";
 import { useSendRequest } from "@/common/utils/fetch";
 
-export class TestAplication {
+export class TestExecution {
   questions: { [key: string]: Question<any> };
   name: string | undefined;
   type: string | number | undefined;

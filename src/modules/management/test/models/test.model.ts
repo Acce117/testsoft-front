@@ -74,6 +74,19 @@ export class Test extends BaseModel {
   public getFieldAsID(): string {
     return "id_test";
   }
+
+  async create() {
+    const clone = { ...this };
+    delete clone.equation;
+    delete clone.display_parameters;
+
+    return await sendRequest({
+      method: "POST",
+      url: `${import.meta.env.VITE_API_PATH}/${this.getURL()}`,
+      body: clone,
+    });
+  }
+
   async update() {
     const clone = { ...this };
     delete clone.series;

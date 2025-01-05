@@ -4,7 +4,7 @@
         <div flex gap-4 flex-col>
             <h3 my-0 text-slate-600 font-bold>Inserta las series y sus preguntas</h3>
             <h4 m-0 flex gap-4 items-center>
-                Series<Button w-fit @click="showSerieDialog" icon="pi pi-plus" />
+                Series<Button w-fit @click="showSerieDialog()" icon="pi pi-plus" />
 
             </h4>
             <section v-if="test.series.length > 0" bg-slate-200 flex flex-col gap-4 pa-3 rounded-xl>
@@ -14,7 +14,7 @@
                     <div flex mb-2 items-center justify-between>
                         <span font-bold>{{ serie.name }}</span>
                         <div flex gap-2>
-                            <Button icon="pi pi-eye" severity="secondary" />
+                            <Button icon="pi pi-eye" severity="secondary" @click="showSerieDialog(serie)" />
                             <Button severity="danger" @click="deleteSerie(serie.id_serie)" icon="pi pi-minus" />
 
                         </div>
@@ -50,8 +50,8 @@
                                     <section v-if="question.answers.length > 0" bg-slate-200 pa-3 flex flex-col gap-4
                                         rounded-xl>
 
-                                        <div v-for="answer in question.answer" :key="answer.id_answer"
-                                            shadow-md rounded-lg pa-2 shadow-slate-500 bg-white>
+                                        <div v-for="answer in question.answer" :key="answer.id_answer" shadow-md
+                                            rounded-lg pa-2 shadow-slate-500 bg-white>
                                             <div flex justify-between items-center>
 
                                                 <span>{{ answer.text }}</span>
@@ -88,7 +88,7 @@
         </div>
     </StepPanel>
     <SerieDialog ref="serieDialog" v-model="serie" :submit-function="createSerie" :success-function="() => refetch()" />
-    <QuestionDialog ref="questionDialog" v-model="question" :submit-function="createQuestion"
+    <QuestionDialog ref="questionDialog" v-model="question" :question :submit-function="createQuestion"
         :success-function="() => refetch()" />
 
 
@@ -121,23 +121,32 @@ const makeAction: Function = inject('makeAction')
 
 const selectedSerieIndex = ref(-1)
 
-const serie = ref(new Serie())
+const serie = ref(new Serie({ name: 'juan' }))
+
 const question = ref(new Question())
 
-const showSerieDialog = () => serieDialog.value.show()
+console.log(question)
+
+
+const showSerieDialog = (data?:Serie) => {
+    if(data)
+        serie.value.setData({...data})
+    serieDialog.value.show()
+}
 
 
 const showQuestionDialog = (index: number) => {
     selectedSerieIndex.value = index
+
     questionDialog.value.show()
 }
 
 
-const createSerie = () => testBuilder.value.createSerie(serie.value)
+const createSerie = () => testBuilder.value.saveSerie(serie.value)
 
 const deleteSerie = async (id: number) => await makeAction(testBuilder.value.deleteSerie(id), () => { })
 
-const createQuestion = () => testBuilder.value.createQuestion(question.value, selectedSerieIndex.value)
+const createQuestion = () => testBuilder.value.saveQuestion(question.value, selectedSerieIndex.value)
 
 const deleteQuestion = async (id: number) => await makeAction(testBuilder.value.deleteQuestion(id), () => { })
 

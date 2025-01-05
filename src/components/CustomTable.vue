@@ -106,7 +106,7 @@
         </div>
 
         <div v-else-if="isSuccessOfOne" class="dialog-form">
-            <slot name="view-element" :dataOfOne></slot>
+            <slot name="view-element" :dataOfOne :isPendingOfOne :isErrorOfOne :model></slot>
             <div class="flex justify-end gap-2">
                 <Button type="button" :label="$t('table.accepts')" @click="showInfoDialog = false"></Button>
             </div>
@@ -214,7 +214,7 @@ const { data, isPending, isSuccess, isError, isRefetching, refetch } = useQuery(
     }
 })
 
-const { data: dataOfOne, isPending: isPendingOfOne, isSuccess: isSuccessOfOne, isRefetching: isRefetchingOfOne, refetch: refetchOfOne } = useQuery({
+const { data: dataOfOne, isPending: isPendingOfOne, isSuccess: isSuccessOfOne, isError: isErrorOfOne, isRefetching: isRefetchingOfOne, refetch: refetchOfOne } = useQuery({
     queryKey: [queryKey + '-one'],
     queryFn: () => {
         return props.customGetOneFunction? props.customGetOneFunction(props.model.getID()):   props.model.getOne(props.queryOptions)

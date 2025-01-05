@@ -2,8 +2,8 @@ import useEvents from "@/common/utils/useEvents";
 import { i18n } from "@/plugins/i18n";
 import router from "@/router";
 import { ref } from "vue";
-import type { TestAplication } from "../../../classes/testAplication";
 import type { Question } from "../../../classes/question-class";
+import type { TestExecution } from "@/modules/test/classes/testExecution";
 const { t } = i18n.global;
 
 export const useExecuteTest = () => {
@@ -18,7 +18,7 @@ export const useExecuteTest = () => {
 
   const setData = (d: any) => (data = d);
 
-  const validateSerie = (serie: any, test: TestAplication) => {
+  const validateSerie = (serie: any, test: TestExecution) => {
     let isValid = true;
     const questionsNotAnswered = test.getQuestionsNotAnswered(serie.questions);
     if (questionsNotAnswered.length > 0) {
@@ -36,7 +36,7 @@ export const useExecuteTest = () => {
     return isValid;
   };
 
-  const validateTest = (test: TestAplication) => {
+  const validateTest = (test: TestExecution) => {
     //for each serie, this function returns the incorrect answers. This is for managing questions and series in toast
     useEvents().dispatch("clean-toast");
     let isValid = true;
@@ -51,6 +51,8 @@ export const useExecuteTest = () => {
   const exitTest = (route: string) => {
     confirmExit.value = true;
     router.push(`/` + route);
+    data= undefined
+    serieIndex.value = 0
   };
   const exitTestConfirm = (route: string) => {
     useEvents().dispatch("confirm", {
@@ -136,7 +138,7 @@ export const useExecuteTest = () => {
     "6": [],
   };
 
-  const nextSerie = (test: TestAplication) => {
+  const nextSerie = (test: TestExecution) => {
     if (data.navigable == 1) serieIndex.value += 1;
     else if (data.data?.completed == 1) {
       if (validateSerie(data.value.series[serieIndex.value], test))

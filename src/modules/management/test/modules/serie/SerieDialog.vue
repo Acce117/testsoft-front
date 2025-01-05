@@ -5,6 +5,7 @@
             <VInput v-model="model.description" rows="3" textarea name="description" label="Descripción" />
             <VInput v-model="model.time_serie_duration" min="0" number name="time_serie_duration"
                 label="Tiempo de duración (Minutos)" />
+                {{ model }}
         </template>
     </FormDialog>
 </template>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import VTestSerie from "./VTestSerie.vue";
-import VTestHeader from "./VTestHeader.vue";
+import VTestSerie from "./components/VTestSerie.vue";
+import VTestHeader from "./components/VTestHeader.vue";
 import { onBeforeRouteLeave, useRouter } from "vue-router";
 import {
   provide,
@@ -9,7 +9,7 @@ import {
   defineAsyncComponent,
   onUnmounted,
 } from "vue";
-import { TestAplication } from "../../classes/testAplication";
+import { TestExecution } from "../../classes/testExecution";
 import { useToast } from "primevue/usetoast";
 import { useConfirm } from "primevue/useconfirm";
 import { useDialog } from "primevue/usedialog";
@@ -21,7 +21,7 @@ import useEvents from "@/common/utils/useEvents";
 import { useTest } from "@/modules/management/test/composables/useTest";
 const { t } = useI18n();
 
-const VTestResult = defineAsyncComponent(() => import("./VTestResult.vue"));
+const VTestResult = defineAsyncComponent(() => import("../../../results/views/VTestResult.vue"));
 const dialog = useDialog();
 const toast = useToast();
 const confirm = useConfirm();
@@ -41,11 +41,11 @@ const { data, isSuccess, isError, isPending } = useTest(
   router.currentRoute.value.params.id_test as string
   , setInitialData);
 
-const test = reactive(new TestAplication(router.currentRoute.value.params.id_test[0]));
+const test = reactive(new TestExecution(router.currentRoute.value.params.id_test[0]));
 
 provide("executeTest", executeTest);
 
-provide<TestAplication>("test", test);
+provide<TestExecution>("test", test);
 
 //DIALOGS
 
@@ -93,11 +93,11 @@ const visibleTimer = ref(false)
 
 </script>
 <template>
-  <main bg-sky-200 w-screen h-screen flex-col gap-2 p-2 flex anim-fade-in-1>
+  <main  bg-sky-200 w-screen h-screen flex-col gap-2 p-2 flex anim-fade-in-1>
     <AdminNavbar>
 
     </AdminNavbar>
-    <VTestHeader v-if="isSuccess" :data="data" @next-serie="executeTest.nextSerie(test)">
+    <VTestHeader v-if="isSuccess && router.currentRoute.value.params.id_test ==data.id_test" :data="data" @next-serie="executeTest.nextSerie(test)">
       <template #timer>
         <div h-10 flex gap-2 items-center justify-between >
           <vue-countdown  text-slate-600 w-5rem :class="visibleTimer ? 'opacity-0' : 'opacity-100'" text-xl
@@ -117,11 +117,11 @@ const visibleTimer = ref(false)
 
     <VError v-if="isError" />
 
-    <div v-if="isSuccess" class="test__container" h-full overflow-auto max-w-full px-4 lg:px-16 py-2 rounded-xl w-full>
+    <div  class="test__container" h-full overflow-auto max-w-full px-4 lg:px-16 py-2 rounded-xl w-full>
 
       
 
-      <VTestSerie :serie="data.series[executeTest.serieIndex.value]" />
+      <VTestSerie v-if="isSuccess && router.currentRoute.value.params.id_test ==data.id_test" :serie="data.series[executeTest.serieIndex.value]" />
 
     </div>
     

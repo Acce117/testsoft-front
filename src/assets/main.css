@@ -3,7 +3,6 @@
 @import url(./dialog.css);
 
 @layer reset, primevue;
-@import url(./primevue-modified.css);
 
 
 @font-face {

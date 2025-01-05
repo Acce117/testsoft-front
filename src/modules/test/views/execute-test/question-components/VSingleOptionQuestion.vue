@@ -2,7 +2,7 @@
 import { computed, inject } from "vue";
 
 import RadioButton from "primevue/radiobutton";
-import type { TestAplication } from "@/modules/test/classes/testAplication";
+import type { TestExecution } from "@/modules/test/classes/testExecution";
 import { SingleOptionQuestion } from "@/modules/test/classes/singleOptionQuestion-class";
 
 const props = defineProps({
@@ -14,7 +14,7 @@ const props = defineProps({
   changeInvalid: { type: Function, required: true }
 });
 
-const test = inject<TestAplication>("test");
+const test = inject<TestExecution>("test");
 const executeTest = inject('executeTest')
 
 if (!test.questions[`${props.id_question}`])

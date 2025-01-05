@@ -18,24 +18,44 @@ export class TestBuilder {
   public async setGeneralData() {
     await this.test.update();
     //IMPLEMENT FORMULE CREATION
-    this.setEquation();
+    await this.setEquation();
   }
 
-  public setEquation() {
-    if (this.test.equation?.equation.fk_id_test) {
-      this.test.equation?.update();
+  public async setEquation() {
+    if (this.test.equation?.fk_id_test) {
+      await this.test.equation?.update();
     } else if (this.test.equation?.equation.trim() != "") {
-      this.test.equation?.create();
+      this.test.equation.fk_id_test = this.test.id_test;
+      await this.test.equation?.create();
     }
   }
+  //SERIE
 
-  public async createSerie(serie: Serie) {
-    serie.fk_id_test = this.test.id_test;
-    return await serie.create();
+  public async saveSerie(serie: Serie) {
+    if (serie.id_serie) {
+      await serie.update();
+    } else {
+      serie.fk_id_test = this.test.id_test;
+      await serie.create();
+    }
   }
   public async deleteSerie(id: number) {
     return await new Serie().delete(id);
   }
+
+  //QUESTION
+
+
+  public async saveQuestion(question: Question, id_serie: number) {
+    question.fk_id_serie = id_serie;
+    await question.create();
+    if (question.id_question == 5) await this.setTopValue(question);
+  }
+  public async deleteQuestion(id: number) {
+    return await new Question().delete(id);
+  }
+  //
+  
 
   public async createCategory(category: Category) {
     category.fk_id_test = this.test.id_test;
@@ -53,14 +73,18 @@ export class TestBuilder {
     return await new Item().delete(id);
   }
 
-  public async createQuestion(question: Question, id_serie: number) {
-    question.fk_id_serie = id_serie;
-    question.image = 0;
-    return await question.create();
+  
+
+  public async setTopValue(question: Question) {
+    if (question.top_value.id_top_value) {
+      await question.top_value.update();
+    } else {
+      question.top_value.fk_id_question = question.id_question;
+      await question.top_value.create();
+    }
   }
-  public async deleteQuestion(id: number) {
-    return await new Question().delete(id);
-  }
+
+  
 
   public setCategoriesAndItems(categories: Category[]) {
     //IMPLEMENT Categories CREATION

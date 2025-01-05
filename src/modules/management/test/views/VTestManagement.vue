@@ -22,7 +22,7 @@ const { t } = useI18n();
 let test = ref(new Test({ name: '', description: '', time_duration: 0, recurring_time: 0, navigable: false, done: false, completed: false, language: 'es', fk_id_type_test: 1 }))
 const addFunction = async () => {
   const newTest = await test.value.create()
-  router.push(`/create-test/${newTest.identifiers[0].id_test}`)
+  router.push(`/create-test/${newTest.id_test}`)
 }
 
 const updateFunction = async (id:number) => {

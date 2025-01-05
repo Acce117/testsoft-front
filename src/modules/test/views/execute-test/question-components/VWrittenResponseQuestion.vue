@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, inject } from "vue";
 
-import type { TestAplication } from "@/modules/test/classes/testAplication";
+import type { TestExecution } from "@/modules/test/classes/testExecution";
 import { WrittenResponseQuestion } from "@/modules/test/classes/writtenResponseQuestion-class";
 import Textarea from "primevue/textarea";
 
@@ -13,7 +13,7 @@ const props = defineProps({
   changeInvalid: { type: Function, required: true }
 });
 
-const test = inject<TestAplication>("test");
+const test = inject<TestExecution>("test");
 const executeTest = inject('executeTest')
 
 if (!test.questions[`${props.id_question}`])

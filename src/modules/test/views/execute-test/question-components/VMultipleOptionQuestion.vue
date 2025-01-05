@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { computed, inject } from "vue";
 
-import type { TestAplication } from "@/modules/test/classes/testAplication";
 import { MultipleOptionQuestion } from "@/modules/test/classes/multipleOptionQuestion-class";
 import Checkbox from "primevue/checkbox";
+import type { TestExecution } from "@/modules/test/classes/testExecution";
 
 const props = defineProps({
   id_question: {
@@ -14,7 +14,7 @@ const props = defineProps({
   changeInvalid: { type: Function, required: true }
 });
 
-const test = inject<TestAplication>("test");
+const test = inject<TestExecution>("test");
 const executeTest = inject('executeTest')
 
 

@@ -58,8 +58,8 @@ const visible = ref(false)
 
 
 const show = () => {
-    if (!props.forUpdate)
-        props.model.clearData()
+    // if (!props.forUpdate)
+    //     props.model.clearData()
     visible.value = true
 }
 

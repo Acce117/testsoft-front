@@ -74,7 +74,7 @@ const cleanEquationField = (value:number|string)=>{
 }
 
 
-const setGeneralData = async (activateCallback: Function) => await makeAction(testBuilder.value.setGeneralData(), () => {
+const setGeneralData = async (activateCallback: Function) => await makeAction(async ()=> await testBuilder.value.setGeneralData(), () => {
     activateCallback('2')
 })
 

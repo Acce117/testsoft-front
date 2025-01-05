@@ -1,9 +1,9 @@
 <template>
 
-  <div class="error-sending" v-if="isError">
+  <div class="error-sending" v-if="error">
     <VError></VError>
   </div>
-  <div v-else-if="!isPending" class="modal__long-message">
+  <div v-else-if="!loading" class="modal__long-message">
 
     <div class="test-results" text-slate-600  id="test-results" text-black>
       <div flex gap-4 > 
@@ -46,19 +46,19 @@ import VElementByCategoryNoTopValues from "./components/VElementByCategoryNoTopV
 import { useI18n } from "vue-i18n";
 import html2pdf from "html2pdf.js";
 import useEvents from "@/common/utils/useEvents";
-import { useResults } from "@/modules/results/composables/useResults";
 import { computed } from "vue";
 import Button from "primevue/button";
 const { t } = useI18n();
 
 const props = defineProps({
-  testAppId: { type: Number, required: true },
-  testResult: Object,
+  testResult: { type: Object, required: true },
+  loading: { type: Boolean, required: true },
+  error: { type: Boolean, required: true },
   testName: String,
   testType: Number,
 });
 
-const { testResult, isPending, isError } = useResults(props.testAppId)
+
 
 
 
@@ -103,12 +103,12 @@ const confirmPDF = (event: any) => {
 const getGlobalResult = computed(() => {
   let result = "";
   if (props.testType == 2) {
-    console.log(testResult)
+    console.log(props.testResult)
     if (
-      testResult.categories
+      props.testResult.categories
     ) {
 
-      const categories = Object.keys(testResult.categories)
+      const categories = Object.keys(props.testResult.categories)
       if (categories.length > 0)
 
         categories.forEach(
@@ -121,7 +121,7 @@ const getGlobalResult = computed(() => {
                 result += ` ` + t("global.and") + ` `;
               else result += ", ";
             }
-            result += testResult.categories[category].items[0].name;
+            result += props.testResult.categories[category].items[0].name;
           }
         );
     }

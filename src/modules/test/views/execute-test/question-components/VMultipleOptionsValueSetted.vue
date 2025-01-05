@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type { TestAplication } from "@/modules/test/classes/testAplication";
 import { computed, inject, ref } from "vue";
 import VInputNumber from "./VInputNumber.vue";
 import { useToast } from "primevue/usetoast";
 import { MultipleOptionsValueSettedQuestion } from "@/modules/test/classes/multipleOptionValueSettedQuestion-class";
 import { useI18n } from "vue-i18n";
+import type { TestExecution } from "@/modules/test/classes/testExecution";
 const { t } = useI18n()
 
 const toast = useToast();
@@ -22,7 +22,7 @@ const props = defineProps({
   changeInvalid: { type: Function, required: true }
 
 });
-const test = inject<TestAplication>("test");
+const test = inject<TestExecution>("test");
 const executeTest = inject('executeTest')
 
 

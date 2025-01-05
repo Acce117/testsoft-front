@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import VQuestion from "./question-components/VQuestion.vue";
-import VMultipleOptionsValueSetted from "./question-components/VMultipleOptionsValueSetted.vue";
-import VSingleOptionQuestion from "./question-components/VSingleOptionQuestion.vue";
-import VMultipleOptionQuestion from "./question-components/VMultipleOptionQuestion.vue";
-import VWrittenResponseQuestion from "./question-components/VWrittenResponseQuestion.vue";
+import VMultipleOptionQuestion from '../question-components/VMultipleOptionQuestion.vue';
+import VMultipleOptionsValueSetted from '../question-components/VMultipleOptionsValueSetted.vue';
+import VQuestion from '../question-components/VQuestion.vue';
+import VSingleOptionQuestion from '../question-components/VSingleOptionQuestion.vue';
+import VWrittenResponseQuestion from '../question-components/VWrittenResponseQuestion.vue';
+
+
 
 const props = defineProps({
   serie: {
@@ -15,7 +17,6 @@ const props = defineProps({
 </script>
 
 <template>
-  <div>
     <h3 text-xl w-full text-center mb-2 mt-0 text-black>
       {{ serie.description }}
     </h3>
@@ -35,6 +36,5 @@ const props = defineProps({
       </template>
 
     </VQuestion>
-  </div>
 </template>
 <style></style>

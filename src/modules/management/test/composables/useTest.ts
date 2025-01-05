@@ -29,17 +29,7 @@ export const useTest = (id: string, cb: (d) => void) => {
               relations: [
                 {
                   name: "questions",
-                  relations: [
-                    {
-                      name: "type",
-                    },
-                    {
-                      name: "answers",
-                    },
-                    {
-                      name: "top_value",
-                    },
-                  ],
+                  relations: [ "type","answers", "top_value"],
                 },
               ],
             },
