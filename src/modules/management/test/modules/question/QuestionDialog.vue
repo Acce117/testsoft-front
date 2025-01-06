@@ -8,7 +8,6 @@
             <VInput v-if="model.fk_id_type_question == 5 || model.type.id_type_question == 5" :min="1" v-model="model.top_value.top_value" number name="top_value"
                 label="Cantidad de puntos máxima a distribuir" />
                 {{ model }}
-
         </template>
     </FormDialog>
 </template>
@@ -32,12 +31,13 @@ const props = defineProps({
     }
 })
 const model: Ref<Question> = defineModel()
-//model.value.statement='ad'
 
 const dialog = ref()
 
 const show = () => {
     dialog.value.show()
+    model.value.fk_id_type_question=model.value.type.id_type_question
+
 }
 defineExpose({ show })
 
