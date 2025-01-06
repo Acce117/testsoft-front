@@ -40,13 +40,14 @@
 
                         <Skeleton v-if="isRefetching || isPending" width="60%" borderRadius=".4rem" height="1.5rem" />
                         <div overflow-auto text-sm v-else-if="col.fieldGetter">
-                            <Rating v-if="col.isRating" :modelValue="slotProps.data[col.fieldGetter(slotProps.data)]" readonly />
+                            <Rating v-if="col.isRating" :modelValue="slotProps.data[col.fieldGetter(slotProps.data)]"
+                                readonly />
                             <span v-else-if="col.isBoolean">{{
                                 col.fieldGetter(slotProps.data) == true ? t('yes') : t('no') }}</span>
                             <span v-else-if="col.fieldGetter(slotProps.data) !== undefined">{{ typeof
-                                col.fieldGetter(slotProps.data) == 'string' ? col.fieldGetter(slotProps.data).length < 20 ?
-                                col.fieldGetter(slotProps.data) : col.fieldGetter(slotProps.data).substring(0, 20) + '...' :
-                                col.fieldGetter(slotProps.data) }}</span>
+                                col.fieldGetter(slotProps.data) == 'string' ? col.fieldGetter(slotProps.data).length <
+                                    20 ? col.fieldGetter(slotProps.data) : col.fieldGetter(slotProps.data).substring(0,
+                                        20) + '...' : col.fieldGetter(slotProps.data) }}</span>
                                     <span v-else>-</span>
                         </div>
                         <div overflow-auto text-sm v-else>
@@ -99,23 +100,16 @@
     </Card>
 
     <Dialog v-model:visible="showInfoDialog" modal :header="$t('table.information')"
-        class="w-4/5 max-w-50rem min-w-25rem">
-        <div w-full h-32 flex items-center justify-center v-if="isRefetchingOfOne || isPendingOfOne">
-            <i class="pi pi-spinner pi-spin" style="font-size: 3rem" text-primary></i>
+        class="w-4/5 max-w-50rem min-w-25rem min-h-15rem">
 
-        </div>
+        <LoadingPanel v-if="isPendingOfOne || isRefetchingOfOne || isErrorOfOne" centered relative :loading="isPendingOfOne || isRefetchingOfOne" :error="isErrorOfOne"
+            :refetch="refetchOfOne" />
 
         <div v-else-if="isSuccessOfOne" class="dialog-form">
             <slot name="view-element" :dataOfOne :isPendingOfOne :isErrorOfOne :model></slot>
             <div class="flex justify-end gap-2">
                 <Button type="button" :label="$t('table.accepts')" @click="showInfoDialog = false"></Button>
             </div>
-        </div>
-        <div v-else>
-            <VError mode="primary">
-                <Button type="button" icon="pi pi-refresh" :label="$t('table.retry')" @click="refetchOfOne()"></Button>
-            </VError>
-
         </div>
     </Dialog>
     <Dialog v-model:visible="showAddDialog" modal :header="$t('table.add')" class="w-4/5 max-w-50rem min-w-25rem">
@@ -176,9 +170,8 @@ import Menu from 'primevue/menu';
 import { useI18n } from 'vue-i18n';
 import { BaseModel } from '@/core/BaseModel';
 import Skeleton from 'primevue/skeleton';
-import VError from './VError.vue';
 import VButton from './VButton.vue';
-import VLoading from './VLoading.vue';
+import LoadingPanel from './LoadingPanel.vue';
 
 useQueryClient()
 const props = defineProps({
@@ -192,11 +185,11 @@ const props = defineProps({
     customGetOneFunction: Function,
     queryOptions: Object,
     isFormDataLoading: Boolean,
-    hideActions:Boolean,
-    hideShow:Boolean,
-    hideEdit:Boolean,
-    hideCreate:Boolean,
-    hideDelete:Boolean,
+    hideActions: Boolean,
+    hideShow: Boolean,
+    hideEdit: Boolean,
+    hideCreate: Boolean,
+    hideDelete: Boolean,
 
 })
 const fieldAsID = props.model.getFieldAsID()
@@ -217,7 +210,7 @@ const { data, isPending, isSuccess, isError, isRefetching, refetch } = useQuery(
 const { data: dataOfOne, isPending: isPendingOfOne, isSuccess: isSuccessOfOne, isError: isErrorOfOne, isRefetching: isRefetchingOfOne, refetch: refetchOfOne } = useQuery({
     queryKey: [queryKey + '-one'],
     queryFn: () => {
-        return props.customGetOneFunction? props.customGetOneFunction(props.model.getID()):   props.model.getOne(props.queryOptions)
+        return props.customGetOneFunction ? props.customGetOneFunction(props.model.getID()) : props.model.getOne(props.queryOptions)
     },
     enabled: false
 })

@@ -1,6 +1,5 @@
 <template>
-  <VFinalResults :loading="testResult.loading" :error="testResult.error" :testResult="testResult.result" :testName="data.test.name" :testType="data.test.type"> 
-    <Button  @click="resendTest()" :label="t('global.resend')" icon="pi pi-refresh"/>
+  <VFinalResults :loading="testResult.loading" :error="testResult.error" :refetch="resendTest" :testResult="testResult.result" :testName="data.test.name" :testType="data.test.type"> 
   </VFinalResults>
 </template>
 <script setup lang="ts">

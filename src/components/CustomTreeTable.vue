@@ -95,11 +95,9 @@
     </Card>
 
     <Dialog v-model:visible="showInfoDialog" modal :header="$t('table.information')"
-        class="w-4/5 max-w-50rem min-w-25rem">
-        <div w-full h-32 flex items-center justify-center v-if="isRefetchingOfOne || isPendingOfOne">
-            <i class="pi pi-spinner pi-spin" style="font-size: 3rem" text-primary></i>
-
-        </div>
+        class="w-4/5 max-w-50rem min-w-25rem min-h-15rem">
+        <LoadingPanel v-if="isPendingOfOne || isRefetchingOfOne || isErrorOfOne" centered relative :loading="isPendingOfOne || isRefetchingOfOne" :error="isErrorOfOne"
+            :refetch="refetchOfOne" />
 
         <div v-else-if="isSuccessOfOne" class="dialog-form">
             <slot name="view-element"></slot>
@@ -107,12 +105,7 @@
                 <Button type="button" :label="$t('table.accepts')" @click="showInfoDialog = false"></Button>
             </div>
         </div>
-        <div v-else>
-            <VError mode="primary">
-                <Button type="button" icon="pi pi-refresh" :label="$t('table.retry')" @click="refetchOfOne()"></Button>
-            </VError>
-
-        </div>
+        
     </Dialog>
     <Dialog v-model:visible="showAddDialog" modal :header="$t('table.add')" class="w-4/5 max-w-50rem min-w-25rem">
 
@@ -169,10 +162,8 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query';
 import { useI18n } from 'vue-i18n';
 import { BaseModel } from '@/core/BaseModel';
 import Skeleton from 'primevue/skeleton';
-import VError from './VError.vue';
 import TreeTable from 'primevue/treetable';
 import VButton from './VButton.vue';
-import VLoading from './VLoading.vue';
 
 useQueryClient()
 const props = defineProps({

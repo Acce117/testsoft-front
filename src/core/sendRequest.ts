@@ -30,10 +30,13 @@ export const sendRequest = async (options: {
     }
     method === 'GET' ? (axiosConfig.params = body) : (axiosConfig.data = body)
     const res: AxiosResponse = await axiosInstance.request(axiosConfig)
-    if (res.status === 200 || res.status === 201) {
-      console.log(res)
-      return res.data
-    }
+    if(res){
+      if (res.status === 200 || res.status === 201) {
+        console.log(res)
+        return res.data
+      }
+    }else throw new HttpError('Servidor no responde', 500)
+    
   } catch (err) {
     console.log(err)
     if (isAxiosError(err)) throw new HttpError(err.message, err.status ?? 500)

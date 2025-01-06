@@ -26,7 +26,6 @@ import { Form } from 'vee-validate';
 import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import VButton from './VButton.vue';
-import VLoading from './VLoading.vue';
 import handlePromise from '@/common/utils/handlePromise';
 
 const { t } = useI18n()

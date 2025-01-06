@@ -1,11 +1,11 @@
 <template>
 
-  <div class="error-sending" v-if="error">
-    <VError></VError>
-  </div>
-  <div v-else-if="!loading" class="modal__long-message">
+  
 
-    <div class="test-results" text-slate-600  id="test-results" text-black>
+  <div  class="modal__long-message" min-w-20rem min-h-10rem>
+    <LoadingPanel  relative :loading :error :refetch/>
+
+    <div v-if="!loading && !error" class="test-results" text-slate-600  id="test-results" text-black>
       <div flex gap-4 > 
         <h1 font-bold text-slate-800 text-left font-size-1.5rem my-0 >Test: {{ props.testName }}</h1><Button icon="pi pi-file-pdf" @click="confirmPDF"
           label="Exportar"></Button>
@@ -18,6 +18,8 @@
             : ''}${testResult.categories[category].items[0].name}` }}
         </span>
       </h2>
+      <hr  w-full/>
+
       <VAllElementsTopValues v-if="
         testResult.parameters.all_element_value == 1 &&
         testResult.parameters.tops_values == 1
@@ -36,7 +38,6 @@
       " :testResult />
     </div>
   </div>
-  <VLoading v-else style="height: 30rem" />
 </template>
 <script setup lang="ts">
 import VAllElementsTopValues from "./components/VAllElementsTopValues.vue";
@@ -48,6 +49,7 @@ import html2pdf from "html2pdf.js";
 import useEvents from "@/common/utils/useEvents";
 import { computed } from "vue";
 import Button from "primevue/button";
+import LoadingPanel from "@/components/LoadingPanel.vue";
 const { t } = useI18n();
 
 const props = defineProps({
@@ -56,6 +58,7 @@ const props = defineProps({
   error: { type: Boolean, required: true },
   testName: String,
   testType: Number,
+  refetch:Function
 });
 
 
@@ -139,17 +142,13 @@ strong {
 
 .error-sending {
   width: 100%;
-  height: 30rem;
-  filter: invert();
 }
 
 .results__test-title {
   text-align: left;
 }
 
-.error-sending button {
-  font-size: 1.5rem;
-}
+
 
 strong {
   font-weight: bold;
@@ -161,9 +160,5 @@ strong {
   gap: .5rem;
 }
 
-@media (min-width: 768px) {
-  .error-sending button {
-    font-size: 2rem;
-  }
-}
+
 </style>

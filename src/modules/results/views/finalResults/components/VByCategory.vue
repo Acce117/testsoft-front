@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <h2>
+  <div my-4>
+    <h2 text-xl mt-0>
       {{ $t('results.by-category.1') }} <strong>{{ props.category?.name }}</strong> {{ $t('results.by-category.2') }}:
     </h2>
     <p v-for="item in category?.items" :key="item.id_item">
@@ -20,6 +20,7 @@
       {{ props.category?.description }}
     </span>
   </div>
+  <hr/>
 </template>
 <script setup lang="ts">
 const props = defineProps({

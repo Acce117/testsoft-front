@@ -19,6 +19,7 @@ import { useExecuteTest } from "./composables/useExecuteTest";
 import Button from "primevue/button";
 import useEvents from "@/common/utils/useEvents";
 import { useTest } from "@/modules/management/test/composables/useTest";
+import LoadingPanel from "@/components/LoadingPanel.vue";
 const { t } = useI18n();
 
 const VTestResult = defineAsyncComponent(() => import("../../../results/views/VTestResult.vue"));
@@ -37,7 +38,7 @@ const setInitialData = (d: { time_duration: number; series: { time_serie_duratio
   test.type = d.fk_id_type_test;
 }
 
-const { data, isSuccess, isError, isPending } = useTest(
+const { data, isSuccess, isError, isPending, refetch } = useTest(
   router.currentRoute.value.params.id_test as string
   , setInitialData);
 
@@ -97,6 +98,8 @@ const visibleTimer = ref(false)
     <AdminNavbar>
 
     </AdminNavbar>
+    <LoadingPanel centered :loading="isPending" :error="isError" :refetch="refetch"/>
+
     <VTestHeader v-if="isSuccess && router.currentRoute.value.params.id_test ==data.id_test" :data="data" @next-serie="executeTest.nextSerie(test)">
       <template #timer>
         <div h-10 flex gap-2 items-center justify-between >
@@ -112,10 +115,6 @@ const visibleTimer = ref(false)
       </template>
     </VTestHeader>
 
-
-    <VLoading v-if="isPending" />
-
-    <VError v-if="isError" />
 
     <div  class="test__container" h-full overflow-auto max-w-full px-4 lg:px-16 py-2 rounded-xl w-full>
 

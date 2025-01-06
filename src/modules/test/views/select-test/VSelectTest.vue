@@ -8,9 +8,10 @@ import { useAssignedTests } from "../../composables/useAssignedTests";
 import Carousel from "primevue/carousel";
 import Button from "primevue/button";
 import Popover from "primevue/popover";
+import LoadingPanel from "@/components/LoadingPanel.vue";
 
 
-const { tests, isPending, isError } = useAssignedTests()
+const { tests,isSuccess, isPending, isError, refetch } = useAssignedTests()
 
 
 // watch(tests, (newValue) => {
@@ -76,8 +77,8 @@ const hidePopover = () => {
 
 </script>
 <template>
-  <VError v-if="isError" />
-  <section v-else-if="!isPending">
+  <LoadingPanel centered :loading="isPending" :error="isError" :refetch="refetch"/>
+  <section v-if="isSuccess">
     <h2 text-slate-800 page-title>{{ $t('select-test.title') }}</h2>
 
     <Carousel v-if="tests.length>0" :value="tests" :numVisible="3" :numScroll="1" :responsiveOptions circular>
@@ -126,7 +127,6 @@ const hidePopover = () => {
       </div>
     </Popover>
   </section>
-  <VLoading v-else />
 </template>
 <style scoped>
 .test-img {

@@ -1,10 +1,11 @@
 <template>
-  <div centered w-full h-full gap-3 >
+  <div centered w-full h-full gap-3 text >
     <div class="dot"></div>
     <div class="dot"></div>
     <div class="dot"></div>
   </div>
 </template>
+
 <style>
 @keyframes opac {
   0% {
