@@ -23,7 +23,7 @@
                 <VSelect v-model="test.language" name="language" :defaultValue="languages.filter((l) => l.id == test.language)[0]" label="Idioma"
                     :options="languages" optionLabel="name" />
                     
-                <VInput v-if="test.fk_id_type_test==2" v-model="test.equation.equation" name="equation" label="Formula" />
+                <VInput v-if="test.fk_id_type_test==1" v-model="test.equation.equation" name="equation" label="Formula" />
                 <div class="flex pt-6 justify-end">
                     <Button :disabled="isPending" label="Next" icon="pi pi-arrow-right" iconPos="right" type="submit" />
                 </div>

@@ -1,8 +1,9 @@
 <template>
+  <LoadingPanel centered :loading="isTestPending || loading || isRefetching" :error="isError || error"
+    :refetch="refetch" />
 
   <div bg-white mt-6rem flex flex-col gap-4 mx-6 rounded-xl pa-.8rem relative min-h-40rem>
     <h2 my-0 text-slate-600 font-bold>Crea un test</h2>
-    <LoadingPanel :loading="isTestPending || loading || isRefetching" :error="isError || error" :refetch="refetch" />
     <Stepper @update:value="refetch" value="1" h-full v-if="isSuccess">
       <StepList>
         <Step value="1">Datos Generales</Step>
@@ -14,25 +15,14 @@
       </StepList>
       <StepPanels>
         <GeneralData />
-
-
         <CategoriesAndItems />
         <SeriesAndQuestions />
         <ResultVisualization />
+        <ClassificationsAndRanges />
 
 
 
-        <StepPanel v-slot="{ activateCallback }" value="5">
-          <div flex gap-6 flex-col>
-            <h3 my-0 text-slate-600>Configure la clasificación de resultados</h3>
 
-
-            <div class="flex pt-6 justify-between">
-              <Button label="Back" severity="secondary" icon="pi pi-arrow-left" @click="activateCallback('4')" />
-              <Button label="Next" icon="pi pi-arrow-right" iconPos="right" @click="activateCallback('6')" />
-            </div>
-          </div>
-        </StepPanel>
         <StepPanel v-slot="{ activateCallback }" value="6">
           <div flex gap-6 flex-col>
             <h3 my-0 text-slate-600>Cerrar el test</h3>
@@ -69,6 +59,7 @@ import { useTest } from "../../composables/useTest";
 import router from "@/router";
 import LoadingPanel from "@/components/LoadingPanel.vue";
 import handlePromise from "@/common/utils/handlePromise";
+import ClassificationsAndRanges from "../../test-creation/steps/ClassificationsAndRanges.vue";
 const { t } = useI18n();
 
 const testBuilder = ref(new TestBuilder(new Test()))
@@ -78,8 +69,12 @@ const error = ref(false)
 
 const { isError, isSuccess, isRefetching, isPending: isTestPending, refetch } = useTest(
   router.currentRoute.value.params.id_test as string
-  , (test: Test) =>
-    testBuilder.value.getTest().setData(test.name == '' ? { id_test: test.id_test, time_duration: 0, recurring_time: 0, done: false, series: [], category:[] } : test)
+  , (test: Test) => {
+    let newKeys = {...test}
+    delete newKeys.name
+    delete newKeys.description
+    testBuilder.value.getTest().setData(test.name == '' ? newKeys : test)
+  }
 );
 
 const makeAction = async (action: Promise, callBackOnSuccess: Function) => {

@@ -36,21 +36,22 @@
 
 
                                     <div flex gap-2>
-                                        <Button icon="pi pi-eye" severity="secondary" />
+                                        <Button icon="pi pi-eye" severity="secondary"
+                                            @click="showQuestionDialog(serie.id_serie, question)" />
                                         <Button severity="danger" @click="deleteQuestion(question.id_question)"
                                             icon="pi pi-minus" />
                                     </div>
                                 </div>
                                 <div shadow-md rounded-lg pa-2 shadow-slate-200 bg-white>
                                     <h3 mt-0 flex gap-4 text-sm items-center>
-                                        Respuestas<Button w-fit @click="showAnswerDialog(serie.id_serie)"
+                                        Respuestas<Button w-fit @click="showAnswerDialog(question.id_question)"
                                             icon="pi pi-plus" />
 
                                     </h3>
                                     <section v-if="question.answers.length > 0" bg-slate-200 pa-3 flex flex-col gap-4
                                         rounded-xl>
 
-                                        <div v-for="answer in question.answer" :key="answer.id_answer" shadow-md
+                                        <div v-for="answer in question.answers" :key="answer.id_answer" shadow-md
                                             rounded-lg pa-2 shadow-slate-500 bg-white>
                                             <div flex justify-between items-center>
 
@@ -58,9 +59,9 @@
 
 
                                                 <div flex gap-2>
-                                                    <Button icon="pi pi-eye" severity="secondary" />
-                                                    <Button severity="danger"
-                                                        @click="deleteQuestion(question.id_question)"
+                                                    <Button icon="pi pi-eye" severity="secondary"
+                                                        @click="showAnswerDialog(question.id_question, answer)" />
+                                                    <Button severity="danger" @click="deleteAnswer(answer.id_answer)"
                                                         icon="pi pi-minus" />
                                                 </div>
                                             </div>
@@ -87,8 +88,10 @@
             </div>
         </div>
     </StepPanel>
-    <SerieDialog ref="serieDialog" v-model="serie" :submit-function="createSerie" :success-function="() => refetch()" />
-    <QuestionDialog ref="questionDialog" v-model="question" :question :submit-function="createQuestion"
+    <SerieDialog ref="serieDialog" v-model="serie" :submit-function="saveSerie" :success-function="() => refetch()" />
+    <QuestionDialog ref="questionDialog" v-model="question" :submit-function="saveQuestion"
+        :success-function="() => refetch()" />
+    <AnswerDialog ref="answerDialog" v-model="answer" :submit-function="saveAnswer"
         :success-function="() => refetch()" />
 
 
@@ -105,9 +108,21 @@ import type { TestBuilder } from '../../classes/TestBuilder';
 import { Question } from '../../modules/question/question.model';
 import SerieDialog from '../../modules/serie/SerieDialog.vue';
 import QuestionDialog from '../../modules/question/QuestionDialog.vue';
+import AnswerDialog from '../../modules/answer/AnswerDialog.vue';
+import { Answer } from '../../modules/answer/answer.model';
 
 const serieDialog = ref()
 const questionDialog = ref()
+const answerDialog = ref()
+const selectedSerieIndex = ref(-1)
+const selectedQuestionIndex = ref(-1)
+
+const serie = ref(new Serie())
+
+const question = ref(new Question())
+
+const answer = ref(new Answer())
+
 
 const testBuilder: Ref<TestBuilder> = inject('testBuilder')
 const refetch: Function = inject('refetch')
@@ -119,36 +134,45 @@ const { t } = useI18n()
 const makeAction: Function = inject('makeAction')
 
 
-const selectedSerieIndex = ref(-1)
-
-const serie = ref(new Serie({ name: 'juan' }))
-
-const question = ref(new Question())
-
-console.log(question)
 
 
-const showSerieDialog = (data?:Serie) => {
-    if(data)
-        serie.value.setData({...data})
+
+
+
+const showSerieDialog = (data?: Serie) => {
+    if (data)
+        serie.value.setData({ ...data })
     serieDialog.value.show()
 }
 
 
-const showQuestionDialog = (index: number) => {
+const showQuestionDialog = (index: number, data?: Question) => {
+    if (data)
+        question.value.setData({ ...data })
     selectedSerieIndex.value = index
-
     questionDialog.value.show()
 }
 
+const showAnswerDialog = (index: number, data?: Answer) => {
+    if (data)
+        answer.value.setData({ ...data })
+    selectedQuestionIndex.value = index
+    answerDialog.value.show()
+}
 
-const createSerie = () => testBuilder.value.saveSerie(serie.value)
+
+const saveSerie = () => testBuilder.value.saveSerie(serie.value)
 
 const deleteSerie = async (id: number) => await makeAction(testBuilder.value.deleteSerie(id), () => { })
 
-const createQuestion = () => testBuilder.value.saveQuestion(question.value, selectedSerieIndex.value)
+const saveQuestion = () => testBuilder.value.saveQuestion(question.value, selectedSerieIndex.value)
 
 const deleteQuestion = async (id: number) => await makeAction(testBuilder.value.deleteQuestion(id), () => { })
+
+const saveAnswer = () => testBuilder.value.saveAnswer(answer.value, selectedQuestionIndex.value)
+
+const deleteAnswer = async (id: number) => await makeAction(testBuilder.value.deleteAnswer(id), () => { })
+
 
 
 const nextStep = (activateCallback: Function) => {
@@ -159,6 +183,10 @@ const nextStep = (activateCallback: Function) => {
         test.series.forEach(serie => {
             if (serie.questions.length == 0)
                 throw new Error("Todas las series deben poseer al menos una pregunta")
+            serie.questions.forEach(question => {
+                if (question.answers.length == 0)
+                    throw new Error("Todas las preguntas deben poseer al menos una respuesta")
+            });
         });
         activateCallback('4')
 

@@ -1,7 +1,10 @@
 <template>
     <FormDialog :model :submit-function :success-function ref="dialog">
         <template #form>
-            <VInput v-model="model.text" name="text" label="Texto" />
+            <VInput v-model="model.indicator" name="indicator" label="Indicador" />
+            <VInput v-model="model.description" name="description" label="Descripción" />
+            <VInput v-model="model.min_val" min="0" number name="min_val" label="Valor mínimo" />
+            <VInput v-model="model.max_val" min="0" number name="max_val" label="Valor máximo" />
         </template>
     </FormDialog>
 </template>
@@ -9,7 +12,7 @@
 import VInput from '@/components/VInput.vue';
 import FormDialog from '@/components/FormDialog.vue';
 import { ref, type Ref } from 'vue';
-import type { Answer } from './answer.model';
+import type { TestRange } from './test_range.model';
 
 const props = defineProps({
     submitFunction: {
@@ -20,7 +23,7 @@ const props = defineProps({
         type: Function
     }
 })
-const model: Ref<Answer> = defineModel()
+const model: Ref<TestRange> = defineModel()
 
 const dialog = ref()
 

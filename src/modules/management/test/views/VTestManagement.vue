@@ -1,10 +1,13 @@
 <template>
 
-  <CustomTable title="Test" :model="test" :customAddFunction="addFunction" :customUpdateFunction="updateFunction">
-    <!-- 
-<template #form-update>
-      <UpdateUser v-model="user" />
-    </template>-->
+  <CustomTable title="Test" :model="test" :query-options="{
+    relations: [
+      {
+        name: 'type_psi_test'
+      }
+    ]
+  }" :customAddFunction="addFunction" :customUpdateFunction="updateFunction">
+    
     <template #view-element>
       <ViewTest v-model="test" />
     </template>
@@ -25,7 +28,7 @@ const addFunction = async () => {
   router.push(`/create-test/${newTest.id_test}`)
 }
 
-const updateFunction = async (id:number) => {
+const updateFunction = async (id: number) => {
   router.push(`/update-test/${id}`)
 }
 

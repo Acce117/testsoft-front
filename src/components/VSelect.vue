@@ -11,12 +11,12 @@
             </div>
           </template>
         </MultiSelect>
-        <Select v-else checkmark filter   showClear :loading="props.loading" v-bind="{ ...$attrs }" w-full v-model="childModel"
+        <Select v-else checkmark filter    showClear :loading="props.loading" v-bind="{ ...$attrs }" w-full v-model="childModel"
           :invalid="meta.validated && !meta.valid" @change="updateModel($event.value)">
           <template #footer>
-            <div class="p-3 w-full">
+            <!-- <div class="p-3 w-full">
               <Button  fluid severity="secondary" text size="small" icon="pi pi-plus" />
-            </div>
+            </div> -->
           </template>
         </Select>
         <label for="" flex items-center justify-center gap-2>
@@ -27,12 +27,11 @@
         <small text-red v-if="meta.validated && !meta.valid">{{ errors[0]?$t(errors[0]):'' }}</small>
       </Transition>
     </Field>
-    {{ model }}
   </div>
 </template>
 
 <script setup lang="ts">
-import {  ref } from 'vue';
+import {  ref, useAttrs } from 'vue';
 import { Field } from 'vee-validate';
 import FloatLabel from 'primevue/floatlabel';
 import Select from 'primevue/select';
@@ -46,6 +45,8 @@ const props = defineProps({
   multi: { type: Boolean },
 });
 
+const options = useAttrs().options
+
 const error = ref('error.error')
 const model = defineModel();
 
@@ -57,5 +58,7 @@ const updateModel =(value)=>{
     model.value = undefined
   else model.value = value[props.optionId]
 }
+
+const getDefaultValue = ()=>options[0]
 
 </script>

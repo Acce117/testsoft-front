@@ -2,11 +2,12 @@
     <FormDialog :model :submit-function :success-function ref="dialog" :is-data-loading="isPending">
         <template #form>
             <VInput v-model="model.statement" textarea name="statement" label="Enunciado" />
-            <VSelect @update:model-value="(value) => handleTopValueField(value)" v-model="model.fk_id_type_question"
+            <VSelect :disabled="model.id_question" @update:model-value="(value) => handleTopValueField(value)" v-model="model.fk_id_type_question" :defaultValue="model.type.id_type_question?model.type:null"
                 optionId="id_type_question" name="fk_id_type_question" label="Tipo de Pregunta" :options="questionTypes"
                 optionLabel="name" />
-            <VInput v-if="model.fk_id_type_question == 5" :min="0" v-model="model.top_value.top_value" number name="top_value"
+            <VInput v-if="model.fk_id_type_question == 5 || model.type.id_type_question == 5" :min="1" v-model="model.top_value.top_value" number name="top_value"
                 label="Cantidad de puntos máxima a distribuir" />
+                {{ model }}
 
         </template>
     </FormDialog>

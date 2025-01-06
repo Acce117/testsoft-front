@@ -1,7 +1,7 @@
 <template>
     <FormDialog :model :submit-function :success-function ref="dialog">
         <template #form>
-            <VInput v-model="model.text" name="text" label="Texto" />
+            <VInput v-model="model.name_classification" name="name_classification" label="Nombre" />
         </template>
     </FormDialog>
 </template>
@@ -9,7 +9,7 @@
 import VInput from '@/components/VInput.vue';
 import FormDialog from '@/components/FormDialog.vue';
 import { ref, type Ref } from 'vue';
-import type { Answer } from './answer.model';
+import type { Classification } from './classification.model';
 
 const props = defineProps({
     submitFunction: {
@@ -20,7 +20,7 @@ const props = defineProps({
         type: Function
     }
 })
-const model: Ref<Answer> = defineModel()
+const model: Ref<Classification> = defineModel()
 
 const dialog = ref()
 

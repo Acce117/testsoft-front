@@ -5,6 +5,7 @@ import type { Serie } from "../modules/serie/serie.model";
 import { ParameterDisplayResult } from "../modules/parameter-display-result/parameter-display-result.model";
 import type { Category } from "../modules/category/category.model";
 import { Equation } from "../modules/equation/equation.model";
+import type { Classification } from "../modules/classification/classification.model";
 
 const url = "psi_test";
 const columns = [
@@ -15,6 +16,22 @@ const columns = [
   {
     field: "time_duration",
     header: "Tiempo de Duración (min)",
+  },
+  {
+    field: "navigable",
+    header: "¿Es posible navegar por las diferentes series del test?",
+    isBoolean: true,
+  },
+  {
+    field: "completed",
+    header:
+      "¿Es necesario chequear el completamiento para que el procesamiento del test sea correcto?",
+    isBoolean: true,
+  },
+  {
+    field: "type_psi_test.type_test_name",
+    fieldGetter: (value: Test) => value.type_psi_test.type_test_name,
+    header: "Tipo de Test",
   },
 ];
 
@@ -30,8 +47,9 @@ export class Test extends BaseModel {
   language;
   fk_id_type_test;
   type_psi_test;
-  series: Serie[];
-  category: Category[];
+  series: Serie[] =[];
+  category: Category[] =[];
+  classifications: Classification[] =[];
   display_parameters;
   equation;
 
@@ -40,8 +58,6 @@ export class Test extends BaseModel {
     if (data) {
       this.setData(data);
     } else {
-      this.series = [];
-      this.category = [];
       this.equation = new Equation();
       this.display_parameters = new ParameterDisplayResult({
         count_max: 0,
@@ -91,6 +107,7 @@ export class Test extends BaseModel {
     const clone = { ...this };
     delete clone.series;
     delete clone.category;
+    delete clone.classifications
     delete clone.equation;
     delete clone.type_psi_test;
     delete clone.display_parameters;

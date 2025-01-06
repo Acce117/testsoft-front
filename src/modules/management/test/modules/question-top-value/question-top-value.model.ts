@@ -1,6 +1,6 @@
 import { BaseModel } from "@/core/BaseModel";
 
-const url = "question_top_value";
+const url = "question_value";
 
 export class QuestionTopValue extends BaseModel {
   id_top_value;

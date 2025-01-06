@@ -10,15 +10,15 @@
         <div flex items-center justify-center gap-2  >
           <RadioButton inputId="yes" :value="positiveValue" v-bind="{ ...$attrs }" v-model="model"
             :invalid="meta.validated && !meta.valid" />
-          <label :for="option" flex items-center justify-center gap-2>
-            Sí
+          <label for="yes" flex items-center justify-center gap-2>
+            {{ props.yesOption?props.yesOption:'Sí' }} 
           </label>
         </div>
         <div flex items-center justify-center gap-2 >
           <RadioButton inputId="no" :value="negativeValue" v-bind="{ ...$attrs }" v-model="model"
             :invalid="meta.validated && !meta.valid" />
-          <label :for="option" flex items-center justify-center gap-2>
-            No
+          <label for="yes" flex items-center justify-center gap-2>
+            {{ props.noOption?props.noOption:'No' }} 
           </label>
         </div>
       </div>
@@ -39,6 +39,8 @@ const props = defineProps({
   label: { type: String, required: true },
   name: { type: String, required: true },
   numbersAsValues: { type: Boolean, default:false },
+  yesOption: { type: String},
+  noOption: { type: String},
 
 });
 const error = ref('error.error')

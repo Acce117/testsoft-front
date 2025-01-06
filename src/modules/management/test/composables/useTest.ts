@@ -20,6 +20,8 @@ export const useTest = (id: string, cb: (d) => void) => {
             },
             {
               name: "classifications",
+              relations: ["ranges"],
+
             },
             {
               name: "display_parameters",

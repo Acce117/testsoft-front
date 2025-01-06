@@ -28,7 +28,17 @@ const columns = [
   {
     field: "sex",
     header: "Sexo",
-  }
+  },
+  {
+      field: "country.type_test_name",
+      fieldGetter: (value: User) => value.country.name,
+      header: "País",
+    },
+    {
+      field: "enabled",
+      header:'Habilitado',
+      isBoolean: true,
+    },
   
 ];
 
