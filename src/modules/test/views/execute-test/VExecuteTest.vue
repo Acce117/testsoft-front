@@ -40,7 +40,21 @@ const setInitialData = (d: { time_duration: number; series: { time_serie_duratio
 
 const { data, isSuccess, isError, isPending, refetch } = useTest(
   router.currentRoute.value.params.id_test as string
-  , setInitialData);
+  , setInitialData, () => [
+    {
+      name: "type_psi_test",
+    },
+    {
+      name: "series",
+      relations: [
+        {
+          name: "questions",
+          relations: ["type", "answers", "top_value"],
+        },
+      ],
+    },
+  ]
+);
 
 const test = reactive(new TestExecution(router.currentRoute.value.params.id_test[0]));
 
@@ -94,39 +108,41 @@ const visibleTimer = ref(false)
 
 </script>
 <template>
-  <main  bg-sky-200 w-screen h-screen flex-col gap-2 p-2 flex anim-fade-in-1>
+  <main bg-sky-200 w-screen h-screen flex-col gap-2 p-2 flex anim-fade-in-1>
     <AdminNavbar>
 
     </AdminNavbar>
-    <LoadingPanel centered :loading="isPending" :error="isError" :refetch="refetch"/>
+    <LoadingPanel centered :loading="isPending" :error="isError" :refetch="refetch" />
 
-    <VTestHeader v-if="isSuccess && router.currentRoute.value.params.id_test ==data.id_test" :data="data" @next-serie="executeTest.nextSerie(test)">
+    <VTestHeader v-if="isSuccess && router.currentRoute.value.params.id_test == data.id_test" :data="data"
+      @next-serie="executeTest.nextSerie(test)">
       <template #timer>
-        <div h-10 flex gap-2 items-center justify-between >
-          <vue-countdown  text-slate-600 w-5rem :class="visibleTimer ? 'opacity-0' : 'opacity-100'" text-xl
+        <div h-10 flex gap-2 items-center justify-between>
+          <vue-countdown text-slate-600 w-5rem :class="visibleTimer ? 'opacity-0' : 'opacity-100'" text-xl
             :time="executeTest.timeCountdown.value" v-slot="{ minutes, seconds }" @end="executeTest.timeOver()">
             {{ minutes > 9 ? minutes : `0` + minutes }}:{{
               seconds > 9 ? seconds : `0` + seconds
             }}
           </vue-countdown>
-          <Button :label="visibleTimer ? 'Mostrar' : 'Ocultar'"  @click="visibleTimer = !visibleTimer" icon="pi pi-clock" severity="secondary"></Button>
+          <Button :label="visibleTimer ? 'Mostrar' : 'Ocultar'" @click="visibleTimer = !visibleTimer" icon="pi pi-clock"
+            severity="secondary"></Button>
         </div>
 
       </template>
     </VTestHeader>
 
 
-    <div  class="test__container" h-full overflow-auto max-w-full px-4 lg:px-16 py-2 rounded-xl w-full>
+    <div class="test__container" h-full overflow-auto max-w-full px-4 lg:px-16 py-2 rounded-xl w-full>
 
-      
 
-      <VTestSerie v-if="isSuccess && router.currentRoute.value.params.id_test ==data.id_test" :serie="data.series[executeTest.serieIndex.value]" />
+
+      <VTestSerie v-if="isSuccess && router.currentRoute.value.params.id_test == data.id_test"
+        :serie="data.series[executeTest.serieIndex.value]" />
 
     </div>
-    
+
 
   </main>
 
 
 </template>
-
