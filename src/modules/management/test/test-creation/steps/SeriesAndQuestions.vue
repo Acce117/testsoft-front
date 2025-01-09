@@ -7,15 +7,19 @@
                 Series<Button w-fit @click="showSerieDialog()" icon="pi pi-plus" />
 
             </h4>
-            <section v-if="test.series.length > 0" bg-slate-200 flex flex-col gap-4 pa-3 rounded-xl>
+            <section v-if="test.series.length > 0" bg-slate-200 flex flex-col gap-4 pa-3 rounded-xl overflow-hidden>
+                <div w-full pb-4 overflow-auto>
 
-                <div v-for="serie in test.series" :key="serie.id_serie" shadow-md rounded-lg pa-2 shadow-slate-500
-                    bg-white>
+                    <Steps :readonly="false" flex-1 :model="getSeriesNames()" v-model:activeStep="selectedSerieIndex" />
+                </div>
+
+                <div shadow-md rounded-lg pa-2 shadow-slate-500 bg-white>
                     <div flex mb-2 items-center justify-between>
-                        <span font-bold>{{ serie.name }}</span>
+                        <span font-bold>{{ test.series[selectedSerieIndex].name }}</span>
                         <div flex gap-2>
-                            <Button icon="pi pi-eye" severity="secondary" @click="showSerieDialog(serie)" />
-                            <Button severity="danger" @click="deleteSerie(serie.id_serie)" icon="pi pi-minus" />
+                            <Button icon="pi pi-eye" severity="secondary"
+                                @click="showSerieDialog(test.series[selectedSerieIndex])" />
+                            <Button severity="danger" @click="deleteSerie()" icon="pi pi-minus" />
 
                         </div>
 
@@ -23,13 +27,14 @@
                     <hr border-solid border-1 border-slate-400 />
                     <div shadow-md rounded-lg pa-2 shadow-slate-200 bg-white>
                         <h3 mt-0 flex gap-4 text-sm items-center>
-                            Preguntas<Button w-fit @click="showQuestionDialog(serie.id_serie)" icon="pi pi-plus" />
+                            Preguntas<Button w-fit @click="showQuestionDialog()" icon="pi pi-plus" />
 
                         </h3>
-                        <section v-if="serie.questions.length > 0" bg-slate-200 pa-3 flex flex-col gap-4 rounded-xl>
+                        <section v-if="test.series[selectedSerieIndex].questions.length > 0" bg-slate-200 pa-3 flex
+                            flex-col gap-4 rounded-xl>
 
-                            <div v-for="(question, questionIndex) in serie.questions" :key="questionIndex" shadow-md
-                                rounded-lg pa-2 shadow-slate-500 bg-white>
+                            <div v-for="(question, questionIndex) in test.series[selectedSerieIndex].questions"
+                                :key="questionIndex" shadow-md rounded-lg pa-2 shadow-slate-500 bg-white>
                                 <div flex justify-between items-center>
 
                                     <span>{{ question.statement }}</span>
@@ -37,7 +42,7 @@
 
                                     <div flex gap-2>
                                         <Button icon="pi pi-eye" severity="secondary"
-                                            @click="showQuestionDialog(serie.id_serie, question)" />
+                                            @click="showQuestionDialog(question)" />
                                         <Button severity="danger" @click="deleteQuestion(question.id_question)"
                                             icon="pi pi-minus" />
                                     </div>
@@ -91,7 +96,7 @@
     <SerieDialog ref="serieDialog" v-model="serie" :submit-function="saveSerie" :success-function="() => refetch()" />
     <QuestionDialog ref="questionDialog" v-model="question" :submit-function="saveQuestion"
         :success-function="() => refetch()" />
-    <AnswerDialog ref="answerDialog" v-model="answer" :submit-function="saveAnswer"
+    <AnswerDialog ref="answerDialog" v-model="answer" :options="getItems()" :submit-function="saveAnswer"
         :success-function="() => refetch()" />
 
 
@@ -110,11 +115,12 @@ import SerieDialog from '../../modules/serie/SerieDialog.vue';
 import QuestionDialog from '../../modules/question/QuestionDialog.vue';
 import AnswerDialog from '../../modules/answer/AnswerDialog.vue';
 import { Answer } from '../../modules/answer/answer.model';
+import Steps from 'primevue/steps';
 
 const serieDialog = ref()
 const questionDialog = ref()
 const answerDialog = ref()
-const selectedSerieIndex = ref(-1)
+const selectedSerieIndex = ref(0)
 const selectedQuestionIndex = ref(-1)
 
 const serie = ref(new Serie())
@@ -134,7 +140,16 @@ const { t } = useI18n()
 const makeAction: Function = inject('makeAction')
 
 
-
+const getItems = () => {
+    const items = []
+    if (test.equation.equation) {
+        items.push({ id_item: 62, name: 'correctas' }, { id_item: 63, name: 'incorrectas' })
+    } else
+        test.category.forEach(c => {
+            items.push(...c.items)
+        })
+    return items
+}
 
 
 
@@ -146,10 +161,9 @@ const showSerieDialog = (data?: Serie) => {
 }
 
 
-const showQuestionDialog = (index: number, data?: Question) => {
+const showQuestionDialog = (data?: Question) => {
     if (data)
         question.value.setData({ ...data })
-    selectedSerieIndex.value = index
     questionDialog.value.show()
 }
 
@@ -163,9 +177,9 @@ const showAnswerDialog = (index: number, data?: Answer) => {
 
 const saveSerie = () => testBuilder.value.saveSerie(serie.value)
 
-const deleteSerie = async (id: number) => await makeAction(testBuilder.value.deleteSerie(id), () => { })
+const deleteSerie = async () => await makeAction(testBuilder.value.deleteSerie(test.series[selectedSerieIndex.value].id_serie), () => { })
 
-const saveQuestion = () => testBuilder.value.saveQuestion(question.value, selectedSerieIndex.value)
+const saveQuestion = () => testBuilder.value.saveQuestion(question.value, test.series[selectedSerieIndex.value].id_serie)
 
 const deleteQuestion = async (id: number) => await makeAction(testBuilder.value.deleteQuestion(id), () => { })
 
@@ -199,6 +213,14 @@ const nextStep = (activateCallback: Function) => {
         });
     }
 }
+
+const getSeriesNames = () => {
+    let names = Array();
+    test.series.forEach((serie: { name: string }) => {
+        names.push({ label: serie.name });
+    });
+    return names;
+};
 
 
 

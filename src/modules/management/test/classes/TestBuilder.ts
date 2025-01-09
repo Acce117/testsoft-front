@@ -6,6 +6,7 @@ import { Item } from "../modules/item/item.model";
 import { Answer } from "../modules/answer/answer.model";
 import { Classification } from "../modules/classification/classification.model";
 import { TestRange } from "../modules/test_range/test_range.model";
+import { Range } from "../modules/range/range.model";
 
 export class TestBuilder {
   private test: Test;
@@ -20,7 +21,6 @@ export class TestBuilder {
 
   public async setGeneralData() {
     await this.test.update();
-    //IMPLEMENT FORMULE CREATION
     await this.setEquation();
   }
 
@@ -86,27 +86,48 @@ export class TestBuilder {
   public async deleteAnswer(id: number) {
     return await new Answer().delete(id);
   }
+  //CATEGORY
 
-  public async createCategory(category: Category) {
-    category.fk_id_test = this.test.id_test;
-    return await category.create();
+  public async saveCategory(category: Category) {
+    if (category.id_category) {
+      await category.update();
+    } else {
+      category.test=[ this.test.id_test];
+      await category.create();
+    }
   }
   public async deleteCategory(id: number) {
     return await new Category().delete(id);
   }
 
-  public async createItem(item: Item, id_category: number) {
-    item.fk_category = id_category;
-    return await item.create();
+  //ITEM
+
+  public async saveItem(item: Item, id_category: number) {
+    if (item.id_item) {
+      await item.update();
+    } else {
+      item.fk_category = id_category;
+      await item.create();
+    }
   }
   public async deleteItem(id: number) {
     return await new Item().delete(id);
   }
 
-  public setCategoriesAndItems(categories: Category[]) {
-    //IMPLEMENT Categories CREATION
-    console.log(categories);
+   //ANSWER
+   public async saveRange(range: Range, id_item: number) {
+    if (range.id_range) {
+      await range.update();
+    } else {
+      range.fk_id_item = id_item;
+      await range.create();
+    }
   }
+  public async deleteRange(id: number) {
+    return await new Range().delete(id);
+  }
+
+ 
 
   //CLASSIFICATION
 

@@ -1,15 +1,10 @@
 import { BaseModel } from "@/core/BaseModel";
-import { schema } from "./range.schema";
 
-const url = "range";
+const url = "correct_answer";
 
-export class Range extends BaseModel {
-  id_range;
-  min_val;
-  max_val;
-  indicator;
-  description;
-  fk_id_item;
+export class CorrectAnswer extends BaseModel {
+  id_correct_answer;
+  fk_id_answer;
 
   constructor(data: object = {}) {
     super(data);
@@ -17,18 +12,14 @@ export class Range extends BaseModel {
   }
   public setData(data: object) {
     super.setData(data);
-  }
 
-  
+  }
 
   public getURL(): string {
     return url;
   }
-  public getSchema() {
-    return schema;
-  }
 
   public getFieldAsID(): string {
-    return "id_range";
+    return "id_correct_answer";
   }
 }

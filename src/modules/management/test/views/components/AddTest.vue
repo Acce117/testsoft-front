@@ -3,13 +3,13 @@
     :refetch="refetch" />
   <div bg-white mt-6rem flex flex-col gap-4 mx-6 rounded-xl pa-.8rem relative min-h-40rem>
     <h2 my-0 text-slate-600 font-bold>Crea un test</h2>
-    <Stepper @update:value="(index) => reloadData(index)" value="1" h-full v-if="isSuccess">
+    <Stepper pb-4 @update:value="(index) => reloadData(index)" value="1" h-full v-if="isSuccess">
       <StepList>
         <Step value="1">Datos Generales</Step>
-        <Step value="2">Categorías y Elementos</Step>
+        <Step v-if="!testBuilder.getTest().equation?.equation" value="2">Categorías y Elementos</Step>
         <Step value="3">Series y Preguntas</Step>
         <Step value="4">Visualización de Resultados</Step>
-        <Step value="5">Clasificación de Resultados</Step>
+        <Step v-if="testBuilder.getTest().type_psi_test?.id_type_test==1" value="5">Clasificación de Resultados</Step>
         <Step value="6">Cerrar Test</Step>
       </StepList>
       <StepPanels>
@@ -74,27 +74,6 @@ const relations = ref([{
 {
   name: "equation",
 },
-  //   {
-  //     name: "category",
-  //     relations: ["items"],
-  //   },
-  //   {
-  //     name: "classifications",
-  //     relations: ["ranges"],
-
-  //   },
-  //   {
-  //     name: "display_parameters",
-  //   },
-  //   {
-  //     name: "series",
-  //     relations: [
-  //       {
-  //         name: "questions",
-  //         relations: ["type", "answers", "top_value"],
-  //       },
-  //     ],
-  //   },
 ])
 
 const { isError, isSuccess, isRefetching, isPending: isTestPending, refetch } = useTest(
@@ -131,16 +110,24 @@ const reloadData = (index: string) => {
     })
       break;
     case 2: relations.value.push({
-      name: "classifications",
-      relations: ["ranges"],
+      name: "category",
+      relations: [
+        {
+          name: "items",
+          relations: ['ranges']
+        }],
     })
 
       break;
 
     case 3: relations.value.push({
-      name: "classifications",
-      relations: ["ranges"],
-    }, {
+      name: "category",
+      relations: ["items"],
+    },
+    {
+      name: "equation",
+    },
+     {
       name: "series",
       relations: [
         {
@@ -154,7 +141,7 @@ const reloadData = (index: string) => {
       name: "display_parameters"
     })
       break;
-      case 5: relations.value.push({
+    case 5: relations.value.push({
       name: "classifications",
       relations: ["ranges"],
 
@@ -168,3 +155,9 @@ const reloadData = (index: string) => {
 
 
 </script>
+
+<style>
+.p-steps-list{
+  gap:2rem !important
+}
+</style>

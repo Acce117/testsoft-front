@@ -8,7 +8,7 @@ export class Category extends BaseModel {
   id_category;
   name;
   description;
-  items: Item[];
+  items: Item[] = [];
 
   constructor(data: object = {} ) {
     super(data);
