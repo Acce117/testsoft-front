@@ -12,6 +12,7 @@ export class Answer extends BaseModel {
   fk_id_question;
   correct_answer;
   tribute;
+  image = null;
 
   constructor(data: object = {}) {
     super(data);
@@ -33,24 +34,29 @@ export class Answer extends BaseModel {
     return schema;
   }
   async create() {
-    const clone = { ...this };
-    delete clone.correct_answer;
-    delete clone.tribute;
+    const form = new FormData();
+    if (this.image) form.append("file", this.image);
+    form.append("text", this.text);
+    form.append("fk_id_question", this.fk_id_question);
+
     return await sendRequest({
+      url: `${import.meta.env.VITE_API_PATH}/${this.getURL()}?_method=PATCH`,
       method: "POST",
-      url: `${import.meta.env.VITE_API_PATH}/${this.getURL()}`,
-      body: clone,
+      body: form,
+      isFormData:true
     });
   }
 
   async update() {
-    const clone = { ...this };
-    delete clone.correct_answer;
-    delete clone.tribute;
+    const form = new FormData();
+    if (this.image) form.append("file", this.image);
+    form.append("text", this.text);
+    form.append("fk_id_question", this.fk_id_question);
     return await sendRequest({
       method: "PATCH",
       url: `${import.meta.env.VITE_API_PATH}/${this.getURL()}/${this.getID()}`,
-      body: clone,
+      body: form,
+      isFormData:true
     });
   }
 

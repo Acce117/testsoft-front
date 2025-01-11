@@ -2,13 +2,13 @@
     <FormDialog :model :submit-function :success-function ref="dialog">
         <template #form>
             <VInput v-model="model.text" name="text" label="Texto" />
-            <VYesNoQuestion numbersAsValues v-model="isCorrect"
-                    label="¿Se puede considerar correcta esta respuesta?" name="isCorrect" />
-                    <VSelect   v-model="model.tribute.fk_id_item" :defaultValue="model.tribute.fk_id_answer?model.tribute:null"
-                optionId="id_item" name="id_item" label="Elemento al que tributa" :options
-                optionLabel="name" />
-                    <VInput v-model="model.tribute.tribute_value"  number name="tribute_value" label="Cantidad de puntos que tributa" />
-
+            <VYesNoQuestion numbersAsValues v-model="isCorrect" label="¿Se puede considerar correcta esta respuesta?"
+                name="isCorrect" />
+            <VSelect v-model="model.tribute.fk_id_item" :defaultValue="model.tribute.fk_id_answer ? model.tribute : null"
+                optionId="id_item" name="fk_id_item" label="Elemento al que tributa" :options optionLabel="name" />
+            <VInput v-model="model.tribute.tribute_value" number name="tribute_value"
+                label="Cantidad de puntos que tributa" />
+            <VFileUpload v-model="model.image" name="image" label="Imagen asociada a la respuesta" />
         </template>
     </FormDialog>
 </template>
@@ -19,6 +19,7 @@ import { ref, type Ref } from 'vue';
 import type { Answer } from './answer.model';
 import VYesNoQuestion from '@/components/VYesNoQuestion.vue';
 import VSelect from '@/components/VSelect.vue';
+import VFileUpload from '@/components/VFileUpload.vue';
 
 const props = defineProps({
     submitFunction: {
@@ -35,7 +36,7 @@ const props = defineProps({
 })
 const model: Ref<Answer> = defineModel()
 
-const isCorrect = ref(model.value.correct_answer!==null)
+const isCorrect = ref(model.value.correct_answer !== null)
 
 const dialog = ref()
 

@@ -80,9 +80,21 @@ export class TestBuilder {
       await answer.update();
     } else {
       answer.fk_id_question = id_question;
-      await answer.create();
+      const response = await answer.create();
+      answer.id_answer = response.id_answer;
+    }
+    if (answer.tribute.fk_id_item) await this.setTribute(answer);
+  }
+
+  public async setTribute(answer: Answer) {
+    if (answer.tribute.id_tribute) {
+      await answer.tribute.update();
+    } else {
+      answer.tribute.fk_id_answer = answer.id_answer;
+      await answer.tribute.create();
     }
   }
+
   public async deleteAnswer(id: number) {
     return await new Answer().delete(id);
   }
@@ -92,7 +104,7 @@ export class TestBuilder {
     if (category.id_category) {
       await category.update();
     } else {
-      category.test=[ this.test.id_test];
+      category.tests = [this.test.id_test];
       await category.create();
     }
   }
@@ -114,8 +126,8 @@ export class TestBuilder {
     return await new Item().delete(id);
   }
 
-   //ANSWER
-   public async saveRange(range: Range, id_item: number) {
+  //ANSWER
+  public async saveRange(range: Range, id_item: number) {
     if (range.id_range) {
       await range.update();
     } else {
@@ -126,8 +138,6 @@ export class TestBuilder {
   public async deleteRange(id: number) {
     return await new Range().delete(id);
   }
-
- 
 
   //CLASSIFICATION
 
@@ -159,7 +169,6 @@ export class TestBuilder {
 
   //PARAMETER_DISPLAY_RESULT
 
-  
   public async saveParameterDisplayResult() {
     if (this.test.display_parameters.id_parameter_display) {
       await this.test.display_parameters.update();

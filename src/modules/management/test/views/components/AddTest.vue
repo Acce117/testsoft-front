@@ -9,7 +9,7 @@
         <Step v-if="!testBuilder.getTest().equation?.equation" value="2">Categorías y Elementos</Step>
         <Step value="3">Series y Preguntas</Step>
         <Step value="4">Visualización de Resultados</Step>
-        <Step v-if="testBuilder.getTest().type_psi_test?.id_type_test==1" value="5">Clasificación de Resultados</Step>
+        <Step v-if="testBuilder.getTest().type_psi_test?.id_type_test == 1" value="5">Clasificación de Resultados</Step>
         <Step value="6">Cerrar Test</Step>
       </StepList>
       <StepPanels>
@@ -124,18 +124,29 @@ const reloadData = (index: string) => {
       name: "category",
       relations: ["items"],
     },
-    {
-      name: "equation",
-    },
-     {
-      name: "series",
-      relations: [
-        {
-          name: "questions",
-          relations: ["type", "answers", "top_value"],
-        },
-      ],
-    })
+      {
+        name: "equation",
+      },
+      {
+        name: "series",
+        relations: [
+          {
+            name: "questions",
+            relations: [{
+              name: "type",
+            }, 
+            {
+              name: "answers",
+              relations: [ "tribute","correct_answer"],
+            }, 
+            {
+              name: "top_value",
+            },
+          ]
+          },
+
+        ],
+      })
       break;
     case 4: relations.value.push({
       name: "display_parameters"
@@ -157,7 +168,7 @@ const reloadData = (index: string) => {
 </script>
 
 <style>
-.p-steps-list{
-  gap:2rem !important
+.p-steps-list {
+  gap: 2rem !important
 }
 </style>

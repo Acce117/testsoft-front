@@ -37,32 +37,35 @@ export class Question extends BaseModel {
   public getSchema() {
     return schema;
   }
+  
   async create() {
-    const clone = { ...this };
-    delete clone.answers;
-    delete clone.top_value;
-    delete clone.type;
+    const form = new FormData();
+    form.append("statement", this.statement);
+    form.append("fk_id_serie", this.fk_id_serie);
+    form.append("fk_id_type_question", this.fk_id_type_question);
+    if (this.image) form.append("file", this.image);
 
-    clone.image = 0;
+
     return await sendRequest({
+      url: `${import.meta.env.VITE_API_PATH}/${this.getURL()}?_method=PATCH`,
       method: "POST",
-      url: `${import.meta.env.VITE_API_PATH}/${this.getURL()}`,
-      body: clone,
+      body: form,
+      isFormData:true
     });
   }
 
   async update() {
-    const clone = { ...this };
-    delete clone.answers;
-    delete clone.top_value;
-    delete clone.type;
-
-    clone.image = 0;
+    const form = new FormData();
+    form.append("statement", this.statement);
+    form.append("fk_id_serie", this.fk_id_serie);
+    form.append("fk_id_type_question", this.fk_id_type_question);
+    if (this.image) form.append("file", this.image);
 
     return await sendRequest({
       method: "PATCH",
       url: `${import.meta.env.VITE_API_PATH}/${this.getURL()}/${this.getID()}`,
-      body: clone,
+      body: form,
+      isFormData:true
     });
   }
   public clearData() {

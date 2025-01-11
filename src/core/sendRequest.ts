@@ -8,6 +8,7 @@ export const sendRequest = async (options: {
   method?: 'GET' | 'POST' | 'DELETE' | 'PATCH'
   requiresAuth?: boolean
   body?: Record<string, any>
+  isFormData?:boolean
   onSuccessFunction?: () => void
 }) => {
   try {
@@ -17,6 +18,7 @@ export const sendRequest = async (options: {
       method = 'GET',
       requiresAuth = true,
       body = {},
+      isFormData
     } = options
     const axiosConfig: AxiosRequestConfig = {
       url: url,
@@ -24,7 +26,9 @@ export const sendRequest = async (options: {
       headers:
         requiresAuth && token !== null
           ? {
-              Authorization: `Bearer ${token}`
+              Authorization: `Bearer ${token}`,
+              'Content-Type': isFormData? 'multipart/form-data':'application/json',
+              Accept:'*/*'
             }
           : {}
     }

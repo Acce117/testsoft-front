@@ -105,6 +105,8 @@ export class Test extends BaseModel {
 
   async update() {
     const clone = { ...this };
+    delete clone.id_test;
+
     delete clone.series;
     delete clone.category;
     delete clone.classifications
