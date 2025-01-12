@@ -11,7 +11,8 @@ import useEvents from "./useEvents";
             life: 3000,
         });
         callBackOnSuccess()
-    }).catch(() => {
+    }).catch((e) => {
+        console.log(e)
         useEvents().dispatch("error", {
             severity: "error",
             summary: "Error",

@@ -20,6 +20,7 @@ export class TestBuilder {
   }
 
   public async setGeneralData() {
+    this.test.done = false
     await this.test.update();
     await this.setEquation();
   }
@@ -27,7 +28,7 @@ export class TestBuilder {
   public async setEquation() {
     if (this.test.equation?.fk_id_test) {
       await this.test.equation?.update();
-    } else if (this.test.equation?.equation.trim() != "") {
+    } else if (this.test.equation.equation && this.test.equation?.equation.trim() != "") {
       this.test.equation.fk_id_test = this.test.id_test;
       await this.test.equation?.create();
     }
@@ -84,14 +85,24 @@ export class TestBuilder {
       answer.id_answer = response.id_answer;
     }
     if (answer.tribute.fk_id_item) await this.setTribute(answer);
+    if (this.test.type_psi_test.id_type_test==1) await this.setCorrectAnswer(answer);
+
   }
 
   public async setTribute(answer: Answer) {
-    if (answer.tribute.id_tribute) {
+    if (answer.tribute.fk_id_answer) {
       await answer.tribute.update();
     } else {
       answer.tribute.fk_id_answer = answer.id_answer;
       await answer.tribute.create();
+    }
+  }
+  public async setCorrectAnswer(answer: Answer) {
+    if (answer.is_correct) {
+      answer.correct_answer.fk_id_answer = answer.id_answer;
+      await answer.correct_answer.create();
+    } else if(answer.correct_answer.id_correct_answer) {
+      await answer.correct_answer.delete()
     }
   }
 

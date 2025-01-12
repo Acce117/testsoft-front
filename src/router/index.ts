@@ -16,6 +16,7 @@ import AdminLayout from '@/layouts/admin/AdminLayout.vue'
 import VGroups from '@/modules/management/group/views/VGroups.vue'
 import VTestManagement from '@/modules/management/test/views/VTestManagement.vue'
 import AddTest from '@/modules/management/test/views/components/AddTest.vue'
+import VMyResults from '@/modules/results/views/VMyResults.vue'
 const notAuthorizedToastError = {
   severity: "error",
   summary: "Error:",
@@ -49,6 +50,22 @@ const router = createRouter({
           path: '/groups',
           name: 'groups',
           component: VGroups,
+          meta: { requiresAuth: true },
+          //beforeEnter: (to, from, next) => { validateAdminRole(next) }
+    
+        },
+        {
+          path: '/results',
+          name: 'results',
+          component: VResults,
+          meta: { requiresAuth: true },
+          //beforeEnter: (to, from, next) => { validateAdminRole(next) }
+    
+        },
+        {
+          path: '/clients',
+          name: 'clients',
+          component: VResults,
           meta: { requiresAuth: true },
           //beforeEnter: (to, from, next) => { validateAdminRole(next) }
     
@@ -90,9 +107,9 @@ const router = createRouter({
           meta: { requiresAuth: true }
         },
         {
-          path: '/results',
-          name: 'results',
-          component: VResults,
+          path: '/my-results',
+          name: 'my-results',
+          component: VMyResults,
           meta: { requiresAuth: true }
         },
         

@@ -3,8 +3,8 @@
         <template #form>
             <VInput v-model="model.indicator" name="indicator" label="Indicador" />
             <VInput v-model="model.description" name="description" label="Descripción" />
-            <VInput v-model="model.min_val" min="0" number name="min_val" label="Valor mínimo" />
-            <VInput v-model="model.max_val" min="0" number name="max_val" label="Valor máximo" />
+            <VInput v-model="model.min_val" number name="min_val" label="Valor mínimo" />
+            <VInput v-model="model.max_val" number name="max_val" label="Valor máximo" />
         </template>
     </FormDialog>
 </template>

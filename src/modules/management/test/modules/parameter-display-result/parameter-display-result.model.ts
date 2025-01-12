@@ -16,6 +16,7 @@ export class ParameterDisplayResult extends BaseModel {
 
   constructor(data: object = {}) {
     super(data);
+    console.log(data)
     if (data) this.setData(data);
   }
   public setData(data: object) {

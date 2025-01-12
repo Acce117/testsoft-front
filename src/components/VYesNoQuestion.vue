@@ -41,10 +41,13 @@ const props = defineProps({
   numbersAsValues: { type: Boolean, default:false },
   yesOption: { type: String},
   noOption: { type: String},
+  default:{type:Boolean}
 
 });
 const error = ref('error.error')
 const model = defineModel();
+if(props.default!==undefined)
+  model.value = props.default
 const positiveValue = computed(()=>props.numbersAsValues?1:true)
 const negativeValue = computed(()=>props.numbersAsValues?0:false)
 

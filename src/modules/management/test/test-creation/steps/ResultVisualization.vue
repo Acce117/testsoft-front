@@ -1,6 +1,6 @@
 <template>
     <StepPanel v-slot="{ activateCallback }" value="4">
-        <Form @submit="setParameterDisplayResult(activateCallback)"
+        <Form  v-if="test.display_parameters" @submit="setParameterDisplayResult(activateCallback)"
             :validation-schema="test.display_parameters.getSchema()">
 
             <div flex gap-6 flex-col>
@@ -20,7 +20,6 @@
                     <VInput v-model="test.display_parameters.count_min" min="0" number name="count_min"
                         label="Cantidad de mínimos" />
                 </div>
-
 
 
                 <div class="flex pt-6 justify-between">

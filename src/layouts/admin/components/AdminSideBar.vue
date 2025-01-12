@@ -61,7 +61,21 @@ const items = ref([
                 command:()=>navigateTo('/test')
 
 
-            }
+            },
+            {
+                label: 'Resultados',
+                icon: 'pi pi-users',
+                command:()=>navigateTo('/results')
+
+
+            }, 
+            {
+                label: 'Clientes',
+                icon: 'pi pi-briefcase',
+                command:()=>navigateTo('/clients')
+
+
+            }, 
         ]
     },
     {

@@ -1,7 +1,10 @@
 <template>
+  <section mt-6rem pa-2>
 
-    <CustomTable :title="t('results.title')" :custom-get-one-function="(id_test_application:number)=>new TestResult({id_test_application:id_test_application}).getOne()" hideEdit hideDelete hideCreate :model="result"  :query-options="{
-    
+    <CustomTable :title="t('my-results.title')" :custom-get-one-function="(id_test_application:number)=>new TestResult({id_test_application:id_test_application}).getOne()" hideEdit hideDelete hideCreate :model="result"  :query-options="{
+      where: {
+        fk_id_user: userStore().user_id
+      },
       relations: [
         {
           name: 'test',
@@ -15,6 +18,7 @@
       </template>
     </CustomTable>
 
+  </section>
 
 </template>
 <script setup lang="ts">

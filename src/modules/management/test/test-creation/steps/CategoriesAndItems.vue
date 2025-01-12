@@ -48,7 +48,7 @@
                                 </div>
                                 <div shadow-md rounded-lg pa-2 shadow-slate-200 bg-white>
                                     <h3 mt-0 flex gap-4 text-sm items-center>
-                                        Rangos<Button w-fit @click="showItemDialog(item.id_item)" icon="pi pi-plus" />
+                                        Rangos<Button w-fit @click="showRangeDialog(item.id_item)" icon="pi pi-plus" />
 
                                     </h3>
                                     <section v-if="item.ranges && item.ranges.length > 0" bg-slate-200 pa-3 flex
@@ -84,6 +84,7 @@
             <span v-else>No existen categorías</span>
 
 
+            <VConditions ref="condition" :conditions />
 
 
             <div class="flex pt-6 justify-between">
@@ -115,10 +116,13 @@ import ItemDialog from '../../modules/item/ItemDialog.vue';
 import { Range } from '../../modules/range/range.model';
 import Steps from 'primevue/steps';
 import RangeDialog from '../../modules/range/RangeDialog.vue';
+import VConditions from './VConditions.vue';
 const { t } = useI18n()
 const categoryDialog = ref()
 const itemDialog = ref()
 const rangeDialog = ref()
+const condition = ref()
+
 
 
 const category = ref(new Category())
@@ -134,6 +138,42 @@ const makeAction: Function = inject('makeAction')
 const selectedCategoryIndex = ref(0)
 const selectedItemIndex = ref(-1)
 
+
+const conditions = ref([
+    {
+        text: 'Existe al menos una categoría',
+        satisfied: () => test.category.length > 0
+    },
+    {
+        text: 'Existe al menos un elemento en cada categoría',
+        satisfied: () => {
+            if (test.category.length == 0)
+                return false
+            for (let i = 0; i < test.category.length; i++) {
+                if (test.category[i].items.length == 0)
+                    return false
+            }
+            return true
+        }
+    },
+    {
+        text: 'Existe al menos un rango en cada elemento',
+        satisfied: () => {
+            if (test.category.length == 0)
+                return false
+            for (let i = 0; i < test.category.length; i++) {
+                if (test.category[i].items.length == 0)
+                    return false
+                for (let j = 0; j < test.category[i].items.length; j++) {
+                    if (test.category[i].items[j].ranges && test.category[i].items[j].ranges.length == 0)
+                        return false
+                }
+            }
+            return true
+        }
+    }
+]
+)
 
 const test: Test = testBuilder.value.getTest()
 
@@ -178,18 +218,9 @@ const deleteRange = async (id: number) => await makeAction(testBuilder.value.del
 
 const nextStep = (activateCallback: Function) => {
     try {
-        if (test.category.length == 0) {
-            throw new Error("categories.lengthmayor que 0")
-        }
-        test.category.forEach(category => {
-            if (category.items.length == 0)
-                throw new Error("Todas las categorias deben poseer al menos un elemento")
-            category.items.forEach(item => {
-                if (item.ranges.length == 0)
-                    throw new Error("Todas los elementos deben poseer al menos un rango")
-            });
-        });
-        activateCallback('3')
+        if (condition.value.verify())
+            activateCallback('3')
+        else throw new Error("existen condiciones no satisfechas")
 
     } catch (e: any) {
         useEvents().dispatch("error", {

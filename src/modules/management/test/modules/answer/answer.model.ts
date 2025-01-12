@@ -12,6 +12,7 @@ export class Answer extends BaseModel {
   fk_id_question;
   correct_answer;
   tribute;
+  is_correct;
   image = null;
 
   constructor(data: object = {}) {
@@ -32,6 +33,14 @@ export class Answer extends BaseModel {
   }
   public getSchema() {
     return schema;
+  }
+
+  public clearData() {
+    super.clearData()
+    this.tribute =  new Tribute();
+    this.correct_answer = new CorrectAnswer();
+
+
   }
   async create() {
     const form = new FormData();

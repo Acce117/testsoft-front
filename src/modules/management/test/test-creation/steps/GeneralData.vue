@@ -13,9 +13,9 @@
                     label="Tiempo para poder repetir el test (Años)" />
 
 
-                <VYesNoQuestion numbersAsValues v-model="test.navigable"
+                <VYesNoQuestion  v-model="test.navigable"
                     label="¿Es posible navegar por las diferentes series del test?" name="navigable" />
-                <VYesNoQuestion numbersAsValues v-model="test.completed"
+                <VYesNoQuestion  v-model="test.completed"
                     label="¿Es necesario chequear el completamiento para que el procesamiento del test sea correcto?"
                     name="completed" />
                 <VSelect :disabled="forUpdate" @update:model-value="(value) => cleanEquationField(value)"

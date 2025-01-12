@@ -87,9 +87,12 @@
                 </div>
             </section>
             <span v-else>No existen series</span>
+            <VConditions ref="condition" :conditions />
+
             <div class="flex pt-6 justify-between">
                 <Button label="Back" severity="secondary" icon="pi pi-arrow-left" @click="activateCallback('2')" />
-                <Button label="Next" icon="pi pi-arrow-right" iconPos="right" @click="nextStep(activateCallback)" />
+                <Button label="Next" :disabled="canSubmit" icon="pi pi-arrow-right" iconPos="right"
+                    @click="nextStep(activateCallback)" />
             </div>
         </div>
     </StepPanel>
@@ -116,12 +119,53 @@ import QuestionDialog from '../../modules/question/QuestionDialog.vue';
 import AnswerDialog from '../../modules/answer/AnswerDialog.vue';
 import { Answer } from '../../modules/answer/answer.model';
 import Steps from 'primevue/steps';
+import VConditions from './VConditions.vue';
 
 const serieDialog = ref()
 const questionDialog = ref()
 const answerDialog = ref()
+const condition = ref()
+
 const selectedSerieIndex = ref(0)
 const selectedQuestionIndex = ref(-1)
+
+const canSubmit = ref(false)
+
+const conditions = ref([
+    {
+        text: 'Existe al menos una serie',
+        satisfied: () => test.series.length > 0
+    },
+    {
+        text: 'Existe al menos una pregunta en cada serie',
+        satisfied: () => {
+            if (test.series.length == 0)
+                return false
+            for (let i = 0; i < test.series.length; i++) {
+                if (test.series[i].questions.length == 0)
+                    return false
+            }
+            return true
+        }
+    },
+    {
+        text: 'Existe al menos una respuesta en cada pregunta',
+        satisfied: () => {
+            if (test.series.length == 0)
+                return false
+            for (let i = 0; i < test.series.length; i++) {
+                if (test.series[i].questions.length == 0)
+                    return false
+                for (let j = 0; j < test.series[i].questions.length; j++) {
+                    if (test.series[i].questions[j].answers.length == 0)
+                        return false
+                }
+            }
+            return true
+        }
+    }
+]
+)
 
 const serie = ref(new Serie())
 
@@ -142,7 +186,7 @@ const makeAction: Function = inject('makeAction')
 
 const getItems = () => {
     const items = []
-    if (test.equation.equation) {
+    if (test.equation && test.equation.equation) {
         items.push({ id_item: 62, name: 'correctas' }, { id_item: 63, name: 'incorrectas' })
     } else
         test.category.forEach(c => {
@@ -191,18 +235,9 @@ const deleteAnswer = async (id: number) => await makeAction(testBuilder.value.de
 
 const nextStep = (activateCallback: Function) => {
     try {
-        if (test.series.length == 0) {
-            throw new Error("series.lengthmayor que 0")
-        }
-        test.series.forEach(serie => {
-            if (serie.questions.length == 0)
-                throw new Error("Todas las series deben poseer al menos una pregunta")
-            serie.questions.forEach(question => {
-                if (question.answers.length == 0)
-                    throw new Error("Todas las preguntas deben poseer al menos una respuesta")
-            });
-        });
-        activateCallback('4')
+        if (condition.value.verify())
+            activateCallback('4')
+        else throw new Error("existen condiciones no satisfechas")
 
     } catch (e: any) {
         useEvents().dispatch("error", {

@@ -129,6 +129,15 @@ const itemsDefault = [
         i18n: "test",
         command: () => router.push("/test"),
       },
+      {
+        label: " ",
+        i18n: "results",
+        command: () => router.push("/results"),
+      },{
+        label: " ",
+        i18n: "client",
+        command: () => router.push("/clients"),
+      },
     ],
   },
   {
@@ -153,7 +162,7 @@ const itemsDefault = [
       {
         label: " ",
         i18n: "results",
-        command: () => router.push("/results"),
+        command: () => router.push("/my-results"),
       },
     ]
   },

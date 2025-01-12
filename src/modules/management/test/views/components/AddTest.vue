@@ -3,7 +3,7 @@
     :refetch="refetch" />
   <div bg-white mt-6rem flex flex-col gap-4 mx-6 rounded-xl pa-.8rem relative min-h-40rem>
     <h2 my-0 text-slate-600 font-bold>Crea un test</h2>
-    <Stepper pb-4 @update:value="(index) => reloadData(index)" value="1" h-full v-if="isSuccess">
+    <Stepper  pb-4 @update:value="(index) => reloadData(index)" value="1" h-full v-if="isSuccess">
       <StepList>
         <Step value="1">Datos Generales</Step>
         <Step v-if="!testBuilder.getTest().equation?.equation" value="2">Categorías y Elementos</Step>
@@ -142,6 +142,7 @@ const reloadData = (index: string) => {
             {
               name: "top_value",
             },
+            
           ]
           },
 

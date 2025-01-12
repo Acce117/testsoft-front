@@ -2,9 +2,9 @@
     <FormDialog :model :submit-function :success-function ref="dialog">
         <template #form>
             <VInput v-model="model.text" name="text" label="Texto" />
-            <VYesNoQuestion numbersAsValues v-model="isCorrect" label="¿Se puede considerar correcta esta respuesta?"
-                name="isCorrect" />
-            <VSelect v-model="model.tribute.fk_id_item" :defaultValue="model.tribute.fk_id_answer ? model.tribute : null"
+            <VYesNoQuestion  v-model="model.is_correct" label="¿Se puede considerar correcta esta respuesta?"
+                name="is_correct" :default="model.correct_answer.id_correct_answer !== undefined" />
+            <VSelect v-model="model.tribute.fk_id_item" :defaultValue="model.tribute.fk_id_answer ? defaultItem : null"
                 optionId="id_item" name="fk_id_item" label="Elemento al que tributa" :options optionLabel="name" />
             <VInput v-model="model.tribute.tribute_value" number name="tribute_value"
                 label="Cantidad de puntos que tributa" />
@@ -15,7 +15,7 @@
 <script setup lang="ts">
 import VInput from '@/components/VInput.vue';
 import FormDialog from '@/components/FormDialog.vue';
-import { ref, type Ref } from 'vue';
+import { computed, ref, type Ref } from 'vue';
 import type { Answer } from './answer.model';
 import VYesNoQuestion from '@/components/VYesNoQuestion.vue';
 import VSelect from '@/components/VSelect.vue';
@@ -36,7 +36,8 @@ const props = defineProps({
 })
 const model: Ref<Answer> = defineModel()
 
-const isCorrect = ref(model.value.correct_answer !== null)
+const defaultItem = computed(()=>props.options.filter((i)=>i.id_item == model.value.tribute.fk_id_item)[0])
+
 
 const dialog = ref()
 

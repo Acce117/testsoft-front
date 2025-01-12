@@ -55,15 +55,15 @@ export class Test extends BaseModel {
 
   constructor(data: any = null) {
     super(data);
-    if (data) {
+    if (data) 
       this.setData(data);
-    } else {
-      this.equation = new Equation();
-      this.display_parameters = new ParameterDisplayResult({
-        count_max: 0,
-        count_min: 0,
-      });
-    }
+    // } else {
+    //   this.equation = new Equation();
+    //   this.display_parameters = new ParameterDisplayResult({
+    //     count_max: 0,
+    //     count_min: 0,
+    //   });
+    // }
   }
 
   public setData(data: any) {
