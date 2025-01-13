@@ -1,6 +1,10 @@
 <template>
 
-  <CustomTable title="Test" :model="test" :query-options="{
+  <CustomTable title="Test" :model="test" :extra-options="[{
+    icon:'pi pi-paperclip',
+    tooltip:'table.assign',
+    action:(value)=> console.log(value)
+  }]" :query-options="{
     relations: [
       {
         name: 'type_psi_test'

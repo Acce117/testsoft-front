@@ -58,7 +58,7 @@
                                             pa-2 shadow-slate-500 bg-white>
                                             <div flex justify-between items-center>
 
-                                                <span>{{ range.indicator }}</span>
+                                                <span>{{ range.indicator }} (de {{ range.min_val }} a {{ range.max_val }})</span>
 
                                                 <div flex gap-2>
                                                     <Button icon="pi pi-eye" severity="secondary"
@@ -157,16 +157,29 @@ const conditions = ref([
         }
     },
     {
-        text: 'Existe al menos un rango en cada elemento',
+        text: 'Existe al menos un rango en cada elemento, y cada valor máximo de un rango es menor que el valor mínimo del siguiente',
         satisfied: () => {
             if (test.category.length == 0)
                 return false
             for (let i = 0; i < test.category.length; i++) {
-                if (test.category[i].items.length == 0)
+                let category = test.category[i]
+                if (category.items.length == 0)
                     return false
-                for (let j = 0; j < test.category[i].items.length; j++) {
-                    if (test.category[i].items[j].ranges && test.category[i].items[j].ranges.length == 0)
+                for (let j = 0; j < category.items.length; j++) {
+                    let item = category.items[j]
+
+                    if (!item.ranges ||(item.ranges && item.ranges.length == 0))
                         return false
+                    for (let k = 0; k < item.ranges.length; k++) {
+                        let range = item.ranges[k]
+                        let nextRange;
+                        if(item.ranges[k+1]){
+                            nextRange=item.ranges[k+1]               
+                            if (range.max_val>=nextRange.min_val)
+                                return false
+                        }
+                        
+                    }
                 }
             }
             return true

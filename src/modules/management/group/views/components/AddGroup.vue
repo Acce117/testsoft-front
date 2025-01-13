@@ -1,8 +1,7 @@
 <template>
   <VInput v-model="group.name_group" name="name_group" label="Nombre" />
-  <VTreeSelect v-model="group.father_group" :options="groups" name="father_group" :defaultValue="defaultGroup"  label="Grupo al que Pertenece"  />
+  <VTreeSelect v-if="!group.id_group" v-model="group.father_group" :options="groups" name="father_group" :defaultValue="defaultGroup"  label="Grupo al que Pertenece"  />
 
-{{ defaultGroup }}
 </template>
 <script setup lang="ts">
 import "vue3-treeselect/dist/vue3-treeselect.css";

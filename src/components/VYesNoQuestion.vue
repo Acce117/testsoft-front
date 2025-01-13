@@ -1,7 +1,7 @@
 <template>
 
   <div w-full text-left flex flex-col gap-4>
-    <Field v-model="model" :name="props.name" v-slot="{ meta, errors }">
+    <Field v-model="model"  :name="props.name" v-slot="{ meta, errors }">
       <label for="" >
         <slot name="icon"></slot>{{ $t(props.label) }}
       </label>
@@ -9,14 +9,14 @@
 
         <div flex items-center justify-center gap-2  >
           <RadioButton inputId="yes" :value="positiveValue" v-bind="{ ...$attrs }" v-model="model"
-            :invalid="meta.validated && !meta.valid" />
+            :invalid="canValidate && meta.validated && !meta.valid" />
           <label for="yes" flex items-center justify-center gap-2>
             {{ props.yesOption?props.yesOption:'Sí' }} 
           </label>
         </div>
         <div flex items-center justify-center gap-2 >
           <RadioButton inputId="no" :value="negativeValue" v-bind="{ ...$attrs }" v-model="model"
-            :invalid="meta.validated && !meta.valid" />
+            :invalid="canValidate && meta.validated && !meta.valid" />
           <label for="yes" flex items-center justify-center gap-2>
             {{ props.noOption?props.noOption:'No' }} 
           </label>
@@ -25,7 +25,7 @@
 
 
       <Transition name="fast-fade">
-        <small text-red v-if="meta.validated && !meta.valid">{{ errors[0]?$t(errors[0]):'' }}</small>
+        <small text-red v-if="canValidate && meta.validated && !meta.valid">{{ errors[0]?$t(errors[0]):'' }}</small>
       </Transition>
     </Field>
   </div>
@@ -41,8 +41,8 @@ const props = defineProps({
   numbersAsValues: { type: Boolean, default:false },
   yesOption: { type: String},
   noOption: { type: String},
-  default:{type:Boolean}
-
+  default:{type:Boolean},
+  canValidate:{type:Boolean, default:true}
 });
 const error = ref('error.error')
 const model = defineModel();

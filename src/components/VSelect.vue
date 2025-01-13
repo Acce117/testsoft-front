@@ -53,7 +53,6 @@ const model = defineModel();
 const childModel = ref()
 
 const updateModel =(value)=>{
-  console.log(value)
   if(!value)
     model.value = undefined
   else model.value = value[props.optionId]

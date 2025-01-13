@@ -8,7 +8,6 @@ export const useTest = (id: string, cb: (d) => void, getRelationsCb: () => []) =
       queryFn: async () => {
         const relations =getRelationsCb()
         
-        console.log(relations)
         const test = await new Test({ id_test: id }).getOne({
           relations: relations});
         test.fk_id_type_test = test.type_psi_test.id_type_test;

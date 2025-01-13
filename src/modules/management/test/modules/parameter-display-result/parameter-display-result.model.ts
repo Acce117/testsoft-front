@@ -14,9 +14,8 @@ export class ParameterDisplayResult extends BaseModel {
   count_max;
   count_min;
 
-  constructor(data: object = {}) {
+  constructor(data: object={}) {
     super(data);
-    console.log(data)
     if (data) this.setData(data);
   }
   public setData(data: object) {

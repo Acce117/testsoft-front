@@ -106,7 +106,6 @@ const confirmPDF = (event: any) => {
 const getGlobalResult = computed(() => {
   let result = "";
   if (props.testType == 2) {
-    console.log(props.testResult)
     if (
       props.testResult.categories
     ) {

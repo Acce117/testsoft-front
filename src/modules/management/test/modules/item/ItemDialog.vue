@@ -3,6 +3,8 @@
         <template #form>
             <VInput v-model="model.name" name="name" label="Nombre" />
             <VInput v-model="model.description" rows="3" textarea name="description" label="Descripción" />
+            <VInput v-model="model.priority" number min="0" name="priority" label="Prioridad" />
+
         </template>
     </FormDialog>
 </template>

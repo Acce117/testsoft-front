@@ -64,7 +64,7 @@ const items = ref([
             },
             {
                 label: 'Resultados',
-                icon: 'pi pi-users',
+                icon: 'pi pi-list-check',
                 command:()=>navigateTo('/results')
 
 

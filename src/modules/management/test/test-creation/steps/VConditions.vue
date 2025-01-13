@@ -3,7 +3,7 @@
     <div v-for="condition in conditions" :key="condition.text">
 
         <div v-if="condition.satisfied()" flex items-center gap-2>
-            <div bg-green-6 size-3 rounded-full></div>
+            <div bg-green-6 size-4 min-w-4 rounded-full></div>
             <span color-green-6>
                 {{ condition.text }}
             </span>

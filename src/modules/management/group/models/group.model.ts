@@ -1,6 +1,6 @@
 import { renameTree, renameTreeForTreeTable } from "@/common/utils/renameTree";
 import { BaseModel } from "@/core/BaseModel";
-import { schema } from "../schemas/group.schema";
+import { schema, updateSchema } from "../schemas/group.schema";
 import { sendRequest } from "@/core/sendRequest";
 
 const url = "groups";
@@ -49,6 +49,9 @@ export class Group extends BaseModel {
 
   public getSchema() {
     return schema;
+  }
+  public getUpdateSchema() {
+    return updateSchema;
   }
 
   public getFieldAsID(): string {

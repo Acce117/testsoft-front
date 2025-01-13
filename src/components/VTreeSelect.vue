@@ -35,7 +35,6 @@ const childModel = ref({})
 if (model.value)
     childModel.value[model.value] = true
 const updateModel = (value) => {
-    console.log(value)
     if (value) {
         const newValue =  parseInt(Object.keys(value)[0])
 

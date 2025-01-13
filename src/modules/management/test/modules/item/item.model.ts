@@ -10,6 +10,7 @@ export class Item extends BaseModel {
   name;
   description;
   fk_category;
+  priority;
   ranges: Range[] = [];
 
 

@@ -70,6 +70,8 @@
                         <Skeleton v-if="isRefetching || isPending" width="60%" borderRadius=".4rem" height="1.5rem" />
 
                         <div v-else class="custom-table-actions">
+                            <i v-for="option in props.extraOptions" :key="option.tooltip" :class="option.icon" v-tooltip="$t(option.tooltip)"
+                                @click="option.action(slotProps.data)" />
                             <i class="pi pi-eye" v-if="!props.hideShow" v-tooltip="$t('table.view_information')"
                                 @click="showElement(slotProps.data)" />
                             <i class="pi pi-file-edit" v-if="!props.hideEdit" v-tooltip="$t('table.update')"
@@ -184,6 +186,7 @@ const props = defineProps({
     customUpdateFunction: Function,
     customGetOneFunction: Function,
     queryOptions: Object,
+    extraOptions:Array,
     isFormDataLoading: Boolean,
     hideActions: Boolean,
     hideShow: Boolean,

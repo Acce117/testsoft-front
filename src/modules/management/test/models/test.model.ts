@@ -126,4 +126,13 @@ export class Test extends BaseModel {
       url: `${import.meta.env.VITE_API_PATH}/user/${user_id}/tests`,
     });
   }
+  public isPsicometricTest(){
+    return this.type_psi_test.id_type_test==1
+  }
+  public isPsicometricTestWithEquation(){
+    return this.type_psi_test.id_type_test==1 && this.equation.equation && this.equation.equation.trim()!=''
+  }
+  public isPersonalityTest(){
+    return this.type_psi_test.id_type_test==2
+  }
 }
