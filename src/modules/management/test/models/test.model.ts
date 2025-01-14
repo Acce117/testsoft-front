@@ -33,6 +33,11 @@ const columns = [
     fieldGetter: (value: Test) => value.type_psi_test.type_test_name,
     header: "Tipo de Test",
   },
+  {
+    field: "type_psi_test.done",
+    fieldGetter: (value: Test) => value.done==1?'Cerrado':'Abierto',
+    header: "Estado",
+  },
 ];
 
 export class Test extends BaseModel {
