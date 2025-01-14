@@ -8,14 +8,14 @@
       <div w-full flex gap-4 flex-wrap>
 
         <div flex items-center justify-center gap-2  >
-          <RadioButton inputId="yes" :value="positiveValue" v-bind="{ ...$attrs }" v-model="model"
+          <RadioButton  inputId="yes" :value="true" v-bind="{ ...$attrs }" v-model="model"
             :invalid="canValidate && meta.validated && !meta.valid" />
           <label for="yes" flex items-center justify-center gap-2>
             {{ props.yesOption?props.yesOption:'Sí' }} 
           </label>
         </div>
         <div flex items-center justify-center gap-2 >
-          <RadioButton inputId="no" :value="negativeValue" v-bind="{ ...$attrs }" v-model="model"
+          <RadioButton inputId="no" :value="false" v-bind="{ ...$attrs }" v-model="model"
             :invalid="canValidate && meta.validated && !meta.valid" />
           <label for="yes" flex items-center justify-center gap-2>
             {{ props.noOption?props.noOption:'No' }} 
@@ -48,7 +48,8 @@ const error = ref('error.error')
 const model = defineModel();
 if(props.default!==undefined)
   model.value = props.default
-const positiveValue = computed(()=>props.numbersAsValues?1:true)
-const negativeValue = computed(()=>props.numbersAsValues?0:false)
+
+// const positiveValue = computed(()=>props.numbersAsValues ?1:true)
+// const negativeValue = computed(()=>props.numbersAsValues  ?0:false)
 
 </script>

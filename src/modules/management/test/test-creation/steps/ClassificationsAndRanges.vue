@@ -1,5 +1,5 @@
 <template>
-    <StepPanel v-slot="{ activateCallback }" value="5">
+    <StepPanel v-slot="{ activateCallback }" :value="`${props.value}`">
 
         <div flex gap-4 flex-col>
             <h3 my-0 text-slate-600 font-bold>Configure la clasificación de resultados</h3>
@@ -57,7 +57,7 @@
             </section>
             <span v-else>No existen clasificaciones</span>
             <div class="flex pt-6 justify-between">
-                <Button label="Back" severity="secondary" icon="pi pi-arrow-left" @click="activateCallback('4')" />
+                <Button label="Back" severity="secondary" icon="pi pi-arrow-left" @click="activateCallback(`${parseInt(props.value)-1}`)" />
                 <Button label="Next" icon="pi pi-arrow-right" iconPos="right" @click="nextStep(activateCallback)" />
             </div>
         </div>
@@ -82,6 +82,12 @@ import type { TestBuilder } from '../../classes/TestBuilder';
 import { TestRange } from '../../modules/test_range/test_range.model';
 import ClassificationDialog from '../../modules/classification/ClassificationDialog.vue';
 import TestRangeDialog from '../../modules/test_range/TestRangeDialog.vue';
+const props = defineProps({
+    value:{
+        type:String,
+        required:true
+    }
+})
 
 const classificationDialog = ref()
 const testRangeDialog = ref()
@@ -145,7 +151,7 @@ const nextStep = (activateCallback: Function) => {
             if (classification.ranges.length == 0)
                 throw new Error("Todas las clasificaciones deben poseer al menos un rango")
         });
-        activateCallback('6')
+        activateCallback(`${parseInt(props.value)+1}`)
 
     } catch (e: any) {
         useEvents().dispatch("error", {

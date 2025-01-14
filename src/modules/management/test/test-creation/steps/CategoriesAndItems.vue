@@ -1,5 +1,5 @@
 <template>
-    <StepPanel v-slot="{ activateCallback }" value="2">
+    <StepPanel v-slot="{ activateCallback }" :value="`${props.value}`">
         <div flex gap-4 flex-col>
             <h3 my-0 text-slate-600 font-bold>Inserta las categorías y sus elementos</h3>
             <h4 m-0 flex gap-4 items-center>
@@ -117,6 +117,13 @@ import { Range } from '../../modules/range/range.model';
 import Steps from 'primevue/steps';
 import RangeDialog from '../../modules/range/RangeDialog.vue';
 import VConditions from './VConditions.vue';
+const props = defineProps({
+    value:{
+        type:String,
+        required:true
+    }
+})
+
 const { t } = useI18n()
 const categoryDialog = ref()
 const itemDialog = ref()

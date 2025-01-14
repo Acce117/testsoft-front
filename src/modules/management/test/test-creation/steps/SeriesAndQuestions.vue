@@ -1,5 +1,5 @@
 <template>
-    <StepPanel v-slot="{ activateCallback }" value="3">
+    <StepPanel v-slot="{ activateCallback }" :value="`${props.value}`">
 
         <div flex gap-4 flex-col>
             <h3 my-0 text-slate-600 font-bold>Inserta las series y sus preguntas</h3>
@@ -90,7 +90,7 @@
             <VConditions ref="condition" :conditions />
 
             <div class="flex pt-6 justify-between">
-                <Button label="Back" severity="secondary" icon="pi pi-arrow-left" @click="activateCallback('2')" />
+                <Button label="Back" severity="secondary" icon="pi pi-arrow-left" @click="activateCallback(`${parseInt(props.value)-1}`)" />
                 <Button label="Next" :disabled="canSubmit" icon="pi pi-arrow-right" iconPos="right"
                     @click="nextStep(activateCallback)" />
             </div>
@@ -120,6 +120,13 @@ import AnswerDialog from '../../modules/answer/AnswerDialog.vue';
 import { Answer } from '../../modules/answer/answer.model';
 import Steps from 'primevue/steps';
 import VConditions from './VConditions.vue';
+
+const props = defineProps({
+    value:{
+        type:String,
+        required:true
+    }
+})
 
 const serieDialog = ref()
 const questionDialog = ref()
@@ -236,7 +243,7 @@ const deleteAnswer = async (id: number) => await makeAction(testBuilder.value.de
 const nextStep = (activateCallback: Function) => {
     try {
         if (condition.value.verify())
-            activateCallback('4')
+            activateCallback(`${parseInt(props.value)+1}`)
         else throw new Error("existen condiciones no satisfechas")
 
     } catch (e: any) {
@@ -250,7 +257,7 @@ const nextStep = (activateCallback: Function) => {
 }
 
 const getSeriesNames = () => {
-    let names = Array();
+    let names = [];
     test.series.forEach((serie: { name: string }) => {
         names.push({ label: serie.name });
     });

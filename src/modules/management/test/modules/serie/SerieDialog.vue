@@ -3,8 +3,10 @@
         <template #form>
             <VInput v-model="model.name" name="name" label="Nombre" />
             <VInput v-model="model.description" rows="3" textarea name="description" label="Descripción" />
-            <VInput v-if="testBuilder.getTest().completed==0" v-model="model.time_serie_duration" min="0" number name="time_serie_duration"
+            <VInput v-if="!testBuilder.getTest().navigable" v-model="model.time_serie_duration"
+                :min="testBuilder.getTest().navigable ? 0 : 1" number name="time_serie_duration"
                 label="Tiempo de duración (Minutos)" />
+                {{ model }}
         </template>
     </FormDialog>
 </template>
@@ -26,6 +28,9 @@ const props = defineProps({
 const model: Ref<Serie> = defineModel()
 const testBuilder = inject('testBuilder')
 const dialog = ref()
+
+if (!testBuilder.value.getTest().navigable && model.value.time_serie_duration == 0)
+    model.value.time_serie_duration = 1
 
 const show = () => {
     dialog.value.show()

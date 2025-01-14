@@ -9,7 +9,7 @@ import { TestRange } from "../modules/test_range/test_range.model";
 import { Range } from "../modules/range/range.model";
 
 export class TestBuilder {
-  private test: Test;
+   test: Test;
 
   constructor(test: Test) {
     this.test = test;
@@ -17,6 +17,11 @@ export class TestBuilder {
 
   public getTest() {
     return this.test;
+  }
+
+  public async closeTest() {
+    this.test.done = true
+    await this.test.update();
   }
 
   public async setGeneralData() {

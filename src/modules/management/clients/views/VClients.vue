@@ -2,11 +2,7 @@
 
   <CustomTable :title="t('clients')" hideEdit hideDelete hideCreate :model="client" :query-options="{
     depth:0,
-    relations: [
-      
-        'owner'
-      
-    ]
+    
   }">
 
 

@@ -46,7 +46,7 @@ defineExpose({ show })
 
 const handleTopValueField = (value: number | string) => {
     if (value == 5) {
-        model.value.top_value.top_value = 0
+        model.value.top_value.top_value = 1
     }
     else {
         model.value.top_value?.clearData()

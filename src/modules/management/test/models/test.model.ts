@@ -57,6 +57,7 @@ export class Test extends BaseModel {
     super(data);
     if (data) 
       this.setData(data);
+    
     // } else {
     //   this.equation = new Equation();
     //   this.display_parameters = new ParameterDisplayResult({
@@ -64,10 +65,14 @@ export class Test extends BaseModel {
     //     count_min: 0,
     //   });
     // }
+    
   }
 
   public setData(data: any) {
     super.setData(data);
+    this.navigable = data.navigable == 1
+    this.completed = data.completed == 1
+    this.done = data.done == 1
     this.display_parameters = data.display_parameters
       ? new ParameterDisplayResult(data.display_parameters)
       : new ParameterDisplayResult();
@@ -95,6 +100,9 @@ export class Test extends BaseModel {
     const clone = { ...this };
     delete clone.equation;
     delete clone.display_parameters;
+    delete clone.series;
+    delete clone.category;
+    delete clone.classifications
 
     return await sendRequest({
       method: "POST",
@@ -127,12 +135,12 @@ export class Test extends BaseModel {
     });
   }
   public isPsicometricTest(){
-    return this.type_psi_test.id_type_test==1
+    return this.fk_id_type_test ==1 || this.type_psi_test?.id_type_test==1 
   }
   public isPsicometricTestWithEquation(){
-    return this.type_psi_test.id_type_test==1 && this.equation.equation && this.equation.equation.trim()!=''
+    return this.isPsicometricTest() && this.equation.equation && this.equation.equation.trim()!=''
   }
   public isPersonalityTest(){
-    return this.type_psi_test.id_type_test==2
+    return this.type_psi_test?.id_type_test==2||this.fk_id_type_test ==2
   }
 }

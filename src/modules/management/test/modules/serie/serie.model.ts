@@ -9,7 +9,7 @@ export class Serie extends BaseModel {
   id_serie;
   name;
   description;
-  time_serie_duration;
+  time_serie_duration = 0;
   questions:Question[] = [];
   fk_id_test;
 
