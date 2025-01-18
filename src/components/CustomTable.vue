@@ -70,26 +70,11 @@
                         <Skeleton v-if="isRefetching || isPending" width="60%" borderRadius=".4rem" height="1.5rem" />
 
                         <div v-else class="custom-table-actions">
-                            <i v-for="option in props.extraOptions" :key="option.tooltip" :class="option.icon" v-tooltip="$t(option.tooltip)"
-                                @click="option.action(slotProps.data)" />
-                            <i class="pi pi-eye" v-if="!props.hideShow" v-tooltip="$t('table.view_information')"
-                                @click="showElement(slotProps.data)" />
-                            <i class="pi pi-file-edit" v-if="!props.hideEdit" v-tooltip="$t('table.update')"
-                                @click="showUpdate(slotProps.data)" />
-                            <div v-if="!props.hideDelete">
+                            <div v-for="option in options" :key="option.tooltip">
+                                <i v-if="option.renderIf(slotProps.data)" mx-1 :class="option.icon" v-tooltip="$t(option.tooltip)"
+                                    @click="option.action(slotProps.data,$event)" />
 
-
-                                <i v-if="props.model.getFieldAsActive() == ''" v-tooltip="$t('table.delete')"
-                                    @click="deleteElement($event, slotProps.data)" class="pi pi-trash" />
-                                <i v-else-if="slotProps.data[props.model.getFieldAsActive()] == true || slotProps.data[props.model.getFieldAsActive()] == 1"
-                                    v-tooltip="$t('table.desactivate')"
-                                    @click="desactivateElement($event, slotProps.data)" class="pi pi-trash" />
-
-                                <i v-else-if="slotProps.data[props.model.getFieldAsActive()] == false || slotProps.data[props.model.getFieldAsActive()] == 0"
-                                    v-tooltip="$t('table.recover')" @click="activateElement($event, slotProps.data)"
-                                    class="pi pi-history" />
                             </div>
-
 
                         </div>
                     </template>
@@ -104,8 +89,8 @@
     <Dialog v-model:visible="showInfoDialog" modal :header="$t('table.information')"
         class="w-4/5 max-w-50rem min-w-25rem min-h-15rem">
 
-        <LoadingPanel v-if="isPendingOfOne || isRefetchingOfOne || isErrorOfOne" centered relative :loading="isPendingOfOne || isRefetchingOfOne" :error="isErrorOfOne"
-            :refetch="refetchOfOne" />
+        <LoadingPanel v-if="isPendingOfOne || isRefetchingOfOne || isErrorOfOne" centered relative
+            :loading="isPendingOfOne || isRefetchingOfOne" :error="isErrorOfOne" :refetch="refetchOfOne" />
 
         <div v-else-if="isSuccessOfOne" class="dialog-form">
             <slot name="view-element" :dataOfOne :isPendingOfOne :isErrorOfOne :model></slot>
@@ -151,6 +136,23 @@
             </div>
         </Form>
     </Dialog>
+    <Dialog v-model:visible="showUpdateDialog" modal :header="$t('table.update')" class="w-4/5 max-w-50rem min-w-25rem">
+        <span>{{ $t('table.update_element') }}</span>
+        <Form @submit="updateElement" :validation-schema="props.model.getUpdateSchema()">
+            <div class="dialog-form">
+                <slot name="form-update"></slot>
+            </div>
+            <div class="dialog-footer">
+                <Button type="button" :label="$t('table.cancel')" severity="secondary"
+                    @click="showUpdateDialog = false"></Button>
+                <VButton w-8rem :disabled="isUpdatePending || isFormDataLoading" type="submit">
+                    <span v-if="!isUpdatePending || isFormDataLoading">{{ $t("table.save") }} </span>
+                    <VLoading v-else />
+                </VButton>
+            </div>
+        </Form>
+    </Dialog>
+    <slot name="custom-dialog"></slot>
 </template>
 <script setup lang="ts">
 import Column from 'primevue/column';
@@ -170,7 +172,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query';
 import Rating from 'primevue/rating';
 import Menu from 'primevue/menu';
 import { useI18n } from 'vue-i18n';
-import { BaseModel } from '@/core/BaseModel';
+import { BaseModel } from '@/common/utils/BaseModel';
 import Skeleton from 'primevue/skeleton';
 import VButton from './VButton.vue';
 import LoadingPanel from './LoadingPanel.vue';
@@ -186,7 +188,7 @@ const props = defineProps({
     customUpdateFunction: Function,
     customGetOneFunction: Function,
     queryOptions: Object,
-    extraOptions:Array,
+    extraOptions: Array,
     isFormDataLoading: Boolean,
     hideActions: Boolean,
     hideShow: Boolean,
@@ -203,7 +205,7 @@ const menu = ref();
 const toggle = (value: MouseEvent) => {
     menu.value.toggle(value);
 };
-const { data, isPending, isSuccess, isError, isRefetching, refetch } = useQuery({
+const { data, isPending, isRefetching, refetch } = useQuery({
     queryKey: [queryKey],
     queryFn: () => {
         return props.model.getAll(props.queryOptions)
@@ -221,7 +223,42 @@ const { data: dataOfOne, isPending: isPendingOfOne, isSuccess: isSuccessOfOne, i
 watch(dataOfOne, (newValue) => {
     props.model.setData(newValue)
 })
+const isLogicErase = props.model.getFieldAsActive() != ''
 
+const options = ref([{
+    renderIf: (value) => !props.hideShow? isLogicErase? value[props.model.getFieldAsActive()] == true:true:false,
+    icon: 'pi pi-eye',
+    tooltip: 'table.view_information',
+    action: (value) => showElement(value)
+},
+{
+    renderIf: (value) => !props.hideEdit ? isLogicErase? value[props.model.getFieldAsActive()] == true:true:false,
+    icon: 'pi pi-file-edit',
+    tooltip: 'table.update',
+    action: (value) => showUpdate(value)
+}
+    ,
+{
+    renderIf: () => !props.hideDelete && props.model.getFieldAsActive() == '',
+    icon: 'pi pi-trash',
+    tooltip: 'table.delete',
+    action: (value, event) => deleteElement(value, event)
+},
+{
+    renderIf: (value) => !props.hideDelete && value[props.model.getFieldAsActive()] == true,
+    icon: 'pi pi-trash',
+    tooltip: 'table.desactivate',
+    action: (value, event) => desactivateElement(value, event)
+},
+{
+    renderIf: (value) => !props.hideDelete && value[props.model.getFieldAsActive()] == false,
+    icon: 'pi pi-history',
+    tooltip: 'table.recover',
+    action: (value, event) => activateElement(value, event)
+}
+])
+if (props.extraOptions)
+    options.value.push(...props.extraOptions)
 
 const dt = ref();
 
@@ -308,7 +345,7 @@ const updateElement = (data: object) => {
     mutateUpdate(data)
 }
 
-const deleteElement = (event, data) => {
+const deleteElement = (data: object, event) => {
 
     confirm.require({
         target: event.currentTarget,
@@ -328,7 +365,7 @@ const deleteElement = (event, data) => {
         },
     });
 };
-const desactivateElement = (event, data: object) => {
+const desactivateElement = ( data: object, event) => {
 
     confirm.require({
         target: event.currentTarget,
@@ -354,7 +391,7 @@ const desactivateElement = (event, data: object) => {
         },
     });
 };
-const activateElement = (event, data: object) => {
+const activateElement = (data: object, event) => {
 
     confirm.require({
         target: event.currentTarget,
@@ -438,7 +475,7 @@ const { mutate: mutateDelete } = useMutation({
     }
 })
 
-
+defineExpose({showUpdate, refetch})
 
 </script>
 <style>
@@ -460,7 +497,6 @@ const { mutate: mutateDelete } = useMutation({
     display: flex;
     width: 100%;
     align-items: center;
-    gap: .5rem;
 }
 
 .custom-table-actions .pi {

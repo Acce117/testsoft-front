@@ -1,4 +1,4 @@
-import { BaseModel } from "@/core/BaseModel";
+import { BaseModel } from "@/common/utils/BaseModel";
 import { schema } from "./parameter-display-result.schema";
 
 const url = "parameter_display_result";

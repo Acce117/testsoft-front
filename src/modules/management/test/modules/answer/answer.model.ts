@@ -1,8 +1,8 @@
-import { BaseModel } from "@/core/BaseModel";
+import { BaseModel } from "@/common/utils/BaseModel";
 import { schema } from "./answer.schema";
 import { CorrectAnswer } from "../correct_answer/correct_answer.model";
 import { Tribute } from "../tribute/tribute.model";
-import { sendRequest } from "@/core/sendRequest";
+import { sendRequest } from "@/common/utils/sendRequest";
 
 const url = "answer";
 

@@ -1,7 +1,7 @@
-import { BaseModel } from "@/core/BaseModel";
+import { BaseModel } from "@/common/utils/BaseModel";
 import { schema } from "./item.schema";
 import type { Range } from "../range/range.model";
-import { sendRequest } from "@/core/sendRequest";
+import { sendRequest } from "@/common/utils/sendRequest";
 
 const url = "item";
 

@@ -68,7 +68,7 @@
                     <template #body=slotProps>
                         <Skeleton v-if="isRefetching || isPending" width="60%" borderRadius=".4rem" height="1.5rem" />
 
-                        <div v-else class="custom-table-actions">
+                        <div v-else class="custom-table-actions" gap-2>
                             <i class="pi pi-eye" v-tooltip="$t('table.view_information')"
                                 @click="showElement(slotProps.node)" />
                             <i class="pi pi-file-edit" v-tooltip="$t('table.update')"
@@ -96,8 +96,8 @@
 
     <Dialog v-model:visible="showInfoDialog" modal :header="$t('table.information')"
         class="w-4/5 max-w-50rem min-w-25rem min-h-15rem">
-        <LoadingPanel v-if="isPendingOfOne || isRefetchingOfOne || isErrorOfOne" centered relative :loading="isPendingOfOne || isRefetchingOfOne" :error="isErrorOfOne"
-            :refetch="refetchOfOne" />
+        <LoadingPanel v-if="isPendingOfOne || isRefetchingOfOne || isErrorOfOne" centered relative
+            :loading="isPendingOfOne || isRefetchingOfOne" :error="isErrorOfOne" :refetch="refetchOfOne" />
 
         <div v-else-if="isSuccessOfOne" class="dialog-form">
             <slot name="view-element"></slot>
@@ -105,7 +105,7 @@
                 <Button type="button" :label="$t('table.accepts')" @click="showInfoDialog = false"></Button>
             </div>
         </div>
-        
+
     </Dialog>
     <Dialog v-model:visible="showAddDialog" modal :header="$t('table.add')" class="w-4/5 max-w-50rem min-w-25rem">
 
@@ -160,7 +160,7 @@ import { useConfirm } from "primevue/useconfirm";
 import { useToast } from "primevue/usetoast";
 import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query';
 import { useI18n } from 'vue-i18n';
-import { BaseModel } from '@/core/BaseModel';
+import { BaseModel } from '@/common/utils/BaseModel';
 import Skeleton from 'primevue/skeleton';
 import TreeTable from 'primevue/treetable';
 import VButton from './VButton.vue';
@@ -419,7 +419,6 @@ const { mutate: mutateDelete } = useMutation({
     display: flex;
     width: 100%;
     align-items: center;
-    gap: .5rem;
 }
 
 .custom-table-actions .pi {

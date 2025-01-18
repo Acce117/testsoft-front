@@ -1,4 +1,4 @@
-import { BaseModel } from "@/core/BaseModel";
+import { BaseModel } from "@/common/utils/BaseModel";
 
 const url = "type_psi_test";
 

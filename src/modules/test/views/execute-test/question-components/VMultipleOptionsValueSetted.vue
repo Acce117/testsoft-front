@@ -65,9 +65,9 @@ const invalid = computed(() =>
 </script>
 
 <template>
-  <span text-lg>{{ $t('execute-test.question-components.5.remaining-points') }}: {{ actualPoints }}</span>
+  <span text-base md:text-lg>{{ $t('execute-test.question-components.5.remaining-points') }}: <span text-primary font-bold>{{ actualPoints }}</span></span>
   <div class="answer" v-for="answer in props.possible_answers" :key="answer.id_answer">
-    <label :for="answer.id_answer" flex text-lg text-slate-800 gap-2 flex-items-center h-full w-full
+    <label :for="answer.id_answer" flex text-base md:text-lg text-justify text-slate-800 gap-2 flex-items-center h-full w-full
       flex-justify-between>
       <span w-full>{{ answer.text }}</span>
       <VInputNumber :min="0" :max="actualPoints" @vue:mounted="

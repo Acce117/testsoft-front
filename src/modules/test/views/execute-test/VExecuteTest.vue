@@ -117,15 +117,13 @@ const visibleTimer = ref(false)
     <VTestHeader v-if="isSuccess && router.currentRoute.value.params.id_test == data.id_test" :data="data"
       @next-serie="executeTest.nextSerie(test)">
       <template #timer>
-        <div h-10 flex gap-2 items-center justify-between>
-          <vue-countdown text-slate-600 w-5rem :class="visibleTimer ? 'opacity-0' : 'opacity-100'" text-xl
+        <div h-10 flex gap-2 items-center w-fit>
+          <vue-countdown text-slate-600 w-16 text-xl
             :time="executeTest.timeCountdown.value" v-slot="{ minutes, seconds }" @end="executeTest.timeOver()">
-            {{ minutes > 9 ? minutes : `0` + minutes }}:{{
-              seconds > 9 ? seconds : `0` + seconds
-            }}
+            <Button :label="visibleTimer ?`${minutes > 9 ? minutes : `0` + minutes}:${seconds > 9 ? seconds : `0` + seconds}`:'Mostrar'"
+              @click="visibleTimer = !visibleTimer" icon="pi pi-clock" severity="secondary"></Button>
           </vue-countdown>
-          <Button :label="visibleTimer ? 'Mostrar' : 'Ocultar'" @click="visibleTimer = !visibleTimer" icon="pi pi-clock"
-            severity="secondary"></Button>
+
         </div>
 
       </template>

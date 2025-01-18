@@ -1,4 +1,4 @@
-import { BaseModel } from "@/core/BaseModel";
+import { BaseModel } from "@/common/utils/BaseModel";
 import { schema } from "./range.schema";
 
 const url = "range";

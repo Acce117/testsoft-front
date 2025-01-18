@@ -1,6 +1,6 @@
 import { useSendRequest } from "@/common/utils/fetch";
 import useEvents from "@/common/utils/useEvents";
-import { BaseModel } from "@/core/BaseModel";
+import { BaseModel } from "@/common/utils/BaseModel";
 import { schema } from "../schemas/user.schema";
 
 const url = "user";

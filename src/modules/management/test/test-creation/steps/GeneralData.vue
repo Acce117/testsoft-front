@@ -12,7 +12,7 @@
                     name="navigable" />
 
 
-                <VInput v-if="test.navigable" v-model="test.time_duration" min="1" number name="time_duration"
+                <VInput  v-if="test.navigable" v-model="test.time_duration" min="1" number name="time_duration"
                     label="Tiempo de duración del test (Minutos)" />
 
                 <VYesNoQuestion v-model="test.completed" :default="test.completed"
@@ -28,7 +28,7 @@
                 <VInput v-if="test.fk_id_type_test == 1" @blur="renderSteps" v-model="test.equation.equation"
                     name="equation" label="Formula" />
                 <VInput v-model="test.recurring_time" min="0" number name="recurring_time"
-                    label="Tiempo para poder repetir el test (Años)" />
+                    label="Tiempo para poder repetir el test (Años)" tooltip="Indica el tiempo necesario para poder realizar el test nuevamente. Algunos test aplican esta característica para garantizar la validez de los resultados" />
                 <div class="flex pt-6 justify-end">
                     <Button :disabled="isPending" label="Next" icon="pi pi-arrow-right" iconPos="right" type="submit" />
                 </div>

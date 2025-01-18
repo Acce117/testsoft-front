@@ -1,6 +1,6 @@
-import { BaseModel } from "@/core/BaseModel";
+import { BaseModel } from "@/common/utils/BaseModel";
 import { schema } from "./classification.schema";
-import { sendRequest } from "@/core/sendRequest";
+import { sendRequest } from "@/common/utils/sendRequest";
 import type { TestRange } from "../test_range/test_range.model";
 
 const url = "classification";

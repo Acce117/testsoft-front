@@ -1,7 +1,7 @@
-import { BaseModel } from "@/core/BaseModel";
+import { BaseModel } from "@/common/utils/BaseModel";
 import { schema } from "./serie.schema";
 import type { Question } from "./question.model";
-import { sendRequest } from "@/core/sendRequest";
+import { sendRequest } from "@/common/utils/sendRequest";
 
 const url = "test_serie";
 

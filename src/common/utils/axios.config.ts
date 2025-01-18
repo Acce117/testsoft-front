@@ -1,6 +1,5 @@
-import axios, { type AxiosResponse } from "axios";
-import HttpError from "./exceptions/HttpError";
-import TokenHandler from "@/common/utils/token-handler";
+import axios from "axios";
+import HttpError from "../exceptions/HttpError";
 
 export const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_URL,

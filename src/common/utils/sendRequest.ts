@@ -1,5 +1,5 @@
 import { isAxiosError, type AxiosRequestConfig, type AxiosResponse } from 'axios'
-import HttpError from './exceptions/HttpError'
+import HttpError from '../exceptions/HttpError'
 import { axiosInstance } from './axios.config'
 import TokenHandler from '@/common/utils/token-handler'
 

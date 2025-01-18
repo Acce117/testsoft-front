@@ -1,5 +1,5 @@
-import { BaseModel } from "@/core/BaseModel";
-import { sendRequest } from "@/core/sendRequest";
+import { BaseModel } from "@/common/utils/BaseModel";
+import { sendRequest } from "@/common/utils/sendRequest";
 import { schema } from "@/modules/management/test/schemas/test.schema";
 import type { Serie } from "../modules/serie/serie.model";
 import { ParameterDisplayResult } from "../modules/parameter-display-result/parameter-display-result.model";

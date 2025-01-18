@@ -1,7 +1,7 @@
-import { BaseModel } from "@/core/BaseModel";
+import { BaseModel } from "@/common/utils/BaseModel";
 import type { Answer } from "../answer/answer.model";
 import { schema } from "./question.schema";
-import { sendRequest } from "@/core/sendRequest";
+import { sendRequest } from "@/common/utils/sendRequest";
 import { QuestionTopValue } from "../question-top-value/question-top-value.model";
 import { QuestionType } from "../question-type/question-type.model";
 

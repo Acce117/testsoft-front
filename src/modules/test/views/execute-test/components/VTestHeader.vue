@@ -1,26 +1,29 @@
 <template>
   <section class="test__header" bg-white rounded-xl>
-    <div justify-between h-full flex p-3 w-full items-center>
-      <Button severity="secondary" class=" p-ripple h-1/2" icon="pi pi-arrow-left" v-ripple
-        :disabled="!(serieIndex > 0)" v-if="props.data?.navigable == 1" @click="prevSerie()"
-        v-tooltip.bottom="t('execute-test.tooltips.prev')" placeholder="Bottom" />
-      <div flex items-center w-full flex-col>
+    <div justify-between h-fit flex p-3 w-full items-center>
+      <Button severity="secondary" class=" p-ripple h-14" icon="pi pi-arrow-left" v-ripple :disabled="!(serieIndex > 0)"
+        v-if="props.data?.navigable == 1" @click="prevSerie()" v-tooltip.bottom="t('execute-test.tooltips.prev')"
+        placeholder="Bottom" />
+
+
+      <div flex items-center w-full overflow-auto flex-col>
 
         <Steps mt-4 flex-1 :model="getSeriesNames()" v-model:activeStep="serieIndex" :readonly="data?.navigable != 1" />
-        <div flex gap-8 items-center> 
 
-          <slot name="timer"></slot>
-          <Button fluid @click="executeTest.validateTest(test)" icon="pi pi-file-check"
-            :label="t('execute-test.tooltips.save')" />
-        </div>
 
       </div>
 
-      <Button :disabled="!(serieIndex < props.data?.series.length - 1)" severity="secondary"
-        v-if="props.data?.series.length > 1" class="p-ripple h-1/2 " icon="pi pi-arrow-right" v-ripple
-        @click="nextSerie()" v-tooltip.bottom="t('execute-test.tooltips.next')" placeholder="Bottom" />
+
+      <Button :disabled="!(serieIndex < props.data?.series.length - 1)" h-14 severity="secondary"
+        v-if="props.data?.series.length > 1" class="p-ripple" icon="pi pi-arrow-right" v-ripple @click="nextSerie()"
+        v-tooltip.bottom="t('execute-test.tooltips.next')" placeholder="Bottom" />
 
 
+    </div>
+    <div flex justify-between p-4>
+      <slot name="timer"></slot>
+      <Button @click="executeTest.validateTest(test)" icon="pi pi-file-check"
+        :label="t('execute-test.tooltips.save')" />
     </div>
   </section>
 </template>

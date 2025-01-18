@@ -58,7 +58,8 @@
                                             pa-2 shadow-slate-500 bg-white>
                                             <div flex justify-between items-center>
 
-                                                <span>{{ range.indicator }} (de {{ range.min_val }} a {{ range.max_val }})</span>
+                                                <span>{{ range.indicator }} (de {{ range.min_val }} a {{ range.max_val
+                                                    }})</span>
 
                                                 <div flex gap-2>
                                                     <Button icon="pi pi-eye" severity="secondary"
@@ -118,9 +119,9 @@ import Steps from 'primevue/steps';
 import RangeDialog from '../../modules/range/RangeDialog.vue';
 import VConditions from './VConditions.vue';
 const props = defineProps({
-    value:{
-        type:String,
-        required:true
+    value: {
+        type: String,
+        required: true
     }
 })
 
@@ -164,7 +165,7 @@ const conditions = ref([
         }
     },
     {
-        text: 'Existe al menos un rango en cada elemento, y cada valor máximo de un rango es menor que el valor mínimo del siguiente',
+        text: 'Cada valor máximo de un rango es menor que el valor mínimo del siguiente',
         satisfied: () => {
             if (test.category.length == 0)
                 return false
@@ -175,18 +176,17 @@ const conditions = ref([
                 for (let j = 0; j < category.items.length; j++) {
                     let item = category.items[j]
 
-                    if (!item.ranges ||(item.ranges && item.ranges.length == 0))
-                        return false
-                    for (let k = 0; k < item.ranges.length; k++) {
-                        let range = item.ranges[k]
-                        let nextRange;
-                        if(item.ranges[k+1]){
-                            nextRange=item.ranges[k+1]               
-                            if (range.max_val>=nextRange.min_val)
-                                return false
+                    if (item.ranges)
+                        for (let k = 0; k < item.ranges.length; k++) {
+                            let range = item.ranges[k]
+                            let nextRange;
+                            if (item.ranges[k + 1]) {
+                                nextRange = item.ranges[k + 1]
+                                if (range.max_val > nextRange.min_val)
+                                    return false
+                            }
+
                         }
-                        
-                    }
                 }
             }
             return true

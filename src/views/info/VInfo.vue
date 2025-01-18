@@ -19,7 +19,7 @@
       lg:gap-2rem
     >
       <VUserCard
-        mr-5rem
+        mr-2rem
         lg:mr-0
         lg:mb-10rem
         lg:order-1
@@ -30,7 +30,7 @@
         img ="/img/tony.jpg"
       />
       <VUserCard
-        ml-5rem
+        ml-2rem
         lg:ml-0
         lg:order-2
         :role="t('info.roles.developer')"
@@ -40,7 +40,7 @@
       />
 
       <VUserCard
-        mr-5rem
+        mr-2rem
         mb-2rem
         lg:order-0
         lg:mr-0

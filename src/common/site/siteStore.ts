@@ -9,7 +9,7 @@ import useEvents from "../utils/useEvents";
 import { i18n } from "@/plugins/i18n";
 import router from "@/router";
 import TokenHandler from "../utils/token-handler";
-import { sendRequest } from "@/core/sendRequest";
+import { sendRequest } from "@/common/utils/sendRequest";
 
 const { t } = i18n.global;
 

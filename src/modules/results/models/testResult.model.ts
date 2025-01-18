@@ -1,4 +1,4 @@
-import { BaseModel } from "@/core/BaseModel";
+import { BaseModel } from "@/common/utils/BaseModel";
 
 const url = "execute_test";
 

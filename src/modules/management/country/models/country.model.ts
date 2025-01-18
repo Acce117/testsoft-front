@@ -1,5 +1,5 @@
 
-import { BaseModel } from "@/core/BaseModel";
+import { BaseModel } from "@/common/utils/BaseModel";
 
 const url = "country";
 const columns = [

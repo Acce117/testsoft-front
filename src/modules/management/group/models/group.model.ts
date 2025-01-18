@@ -1,7 +1,7 @@
 import { renameTree, renameTreeForTreeTable } from "@/common/utils/renameTree";
-import { BaseModel } from "@/core/BaseModel";
+import { BaseModel } from "@/common/utils/BaseModel";
 import { schema, updateSchema } from "../schemas/group.schema";
-import { sendRequest } from "@/core/sendRequest";
+import { sendRequest } from "@/common/utils/sendRequest";
 
 const url = "groups";
 const columns = [
