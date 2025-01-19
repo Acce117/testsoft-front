@@ -1,15 +1,16 @@
 <script setup lang="ts">
-import { useRouter } from "vue-router";
 import { ref } from "vue";
 import Button from "primevue/button";
-const router = useRouter();
+import Tag from "primevue/tag";
+import { useI18n } from "vue-i18n";
+const { t } = useI18n()
 const props = defineProps({
   test: { type: Object, required: true },
-  infoCb:{ type: Function, required: true }
 });
-const executeTest = () => {
-  router.push(`/execute-test/${props.test.id_test}`);
-};
+
+const emit = defineEmits(['show-dialog'])
+
+
 const isAvailable = ref(false);
 const now = new Date();
 // const getAvailabilityTime = () => {
@@ -26,17 +27,20 @@ const now = new Date();
 
 <template>
   <div
-    class="border h-10rem border-surface-200 bg-white overflow-hidden flex flex-col justify-between rounded-xl m-2  p-4">
+    class="border  h-15rem shadow-lg border-1 border-solid border-slate-200 bg-white overflow-hidden flex flex-col justify-between rounded-xl m-2 mt-4  p-4">
 
-    <div class="mb-4 font-semibold text-xl text-secondary h-8rem overflow-scroll">{{ props.test.name }}</div>
-    <div class="flex justify-between items-center">
-      <div class="mt-0  text-xl"><i class="pi pi-stopwatch mr-2"></i>{{ props.test.time_duration > 0 ? props.test.time_duration +
-        " min" : "Por series" }}</div>
-      <span>
-        <Button severity="secondary" icon="pi pi-eye" @click="infoCb($event, props.test)" />
-        <Button icon="pi pi-file-edit" ml-2 @click="executeTest()" />
-      </span>
+    <div class=" font-semibold text-lg text-secondary  overflow-scroll">{{ props.test.name }}
+      <div class="card mt-2 flex flex-wrap  gap-2">
+        <Tag severity="secondary" :value="props.test.time_duration > 0 ?
+          props.test.time_duration +
+          ' min' : 'Por series'" icon="pi pi-stopwatch" rounded></Tag>
+        <Tag severity="secondary" :value="props.test.fk_id_type_test == 1 ? 'Psicométrico' : 'Personalidad'"
+          icon="pi pi-file-edit" rounded></Tag>
+      </div>
     </div>
+
+
+    <Button icon="pi pi-file-edit" fluid label="Ejecutar" h-10 @click="emit('show-dialog', props.test)" />
   </div>
   <!-- <div class="test-card" :class="{
     'not-disponible': !isAvailable,
@@ -50,7 +54,7 @@ const now = new Date();
 
 
 
-    <!-- <vue-countdown
+  <!-- <vue-countdown
       :time="availabilityTime"
       v-slot="{ days, hours, minutes, seconds }"
       @end="isAvailable = true"

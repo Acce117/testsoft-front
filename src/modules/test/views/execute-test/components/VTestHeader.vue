@@ -1,6 +1,6 @@
 <template>
   <section class="test__header" bg-white rounded-xl>
-    <div justify-between h-fit flex p-3 w-full items-center>
+    <div justify-between h-fit flex p-2 w-full items-center>
       <Button severity="secondary" class=" p-ripple h-14" icon="pi pi-arrow-left" v-ripple :disabled="!(serieIndex > 0)"
         v-if="props.data?.navigable == 1" @click="prevSerie()" v-tooltip.bottom="t('execute-test.tooltips.prev')"
         placeholder="Bottom" />
@@ -20,7 +20,7 @@
 
 
     </div>
-    <div flex justify-between p-4>
+    <div flex justify-between pb-2 px-4 >
       <slot name="timer"></slot>
       <Button @click="executeTest.validateTest(test)" icon="pi pi-file-check"
         :label="t('execute-test.tooltips.save')" />
@@ -72,5 +72,9 @@ watch(
 
 .p-steps {
   width: 100% !important;
+  margin: 0 !important;
+}
+.p-steps-item-link{
+  gap: 0rem !important;
 }
 </style>

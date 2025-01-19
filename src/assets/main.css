@@ -55,9 +55,9 @@ main {
 html {
   width: 100vw;
   overflow-x: hidden;
-  background: -webkit-linear-gradient(0deg, #3faee4,#ffffff);
+  background: -webkit-linear-gradient(10deg, #3faee4,#ffffff, #ffffff,#ffffff,#ffffff);
   
-  background: linear-gradient(0deg, #3faee4,#ffffff);
+  background: linear-gradient(10deg, #3faee4,#ffffff,#ffffff,#ffffff,#ffffff);
  
 }
 

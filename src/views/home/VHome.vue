@@ -1,14 +1,22 @@
 <template>
-  <section flex-col anim-scale-0.5 text-slate-8 mt-10rem>
-    <div flex flex-col flex-items-center>
-      <h1 text-6xl md:text-8xl m-4 font-bold>TestSoft</h1>
-      <h2 text-2xl md:text-3xl m-0 text-center font-poppins>
-        {{ $t('home.subtitle') }}
-      </h2>
-      <Button v-ripple mt-2rem rounded border-none w-12rem iconPos="right" @click="router.push('/select-test')"  label="Comenzar" icon="pi pi-arrow-right">
+  <section anim-opacity-0.5 text-slate-8 class="home-background" h-full>
+    <div flex items-center justify-center w-full h-full>
+      <div z-2   w-fit items-center ml-4 mx-4  xl:mx-0 flex-col text-center lg:text-left>
 
-      </Button>
+        <h1 text-6xl lg:text-8xl mt-0 mb-4 font-bold>TestSoft</h1>
+        <h2 text-2xl lg:text-xl lg:max-w-100 m-0 font-poppins>
+          {{ $t('home.subtitle') }}
+        </h2>
+        <Button v-ripple mt-2rem rounded border-none w-12rem iconPos="right" @click="router.push('/select-test')"
+          label="Comenzar" icon="pi pi-arrow-right">
+        </Button>
+      </div>
+
+
+      <img hidden lg:block  mt-30 w-160 src="/img/psychometric_practice.webp" />
+
     </div>
+
     <VPresentation />
   </section>
 </template>
@@ -17,3 +25,10 @@ import VPresentation from "./components/VPresentation.vue";
 import Button from "primevue/button";
 import router from "@/router";
 </script>
+<style>
+.home-background {
+  background: -webkit-linear-gradient(10deg, #3faee4, #ffffff, #ffffff, #ffffff, #ffffff);
+
+  background: linear-gradient(10deg, #3faee4, #ffffff, #ffffff, #ffffff, #ffffff);
+}
+</style>

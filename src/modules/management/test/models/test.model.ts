@@ -136,7 +136,7 @@ export class Test extends BaseModel {
 
   public async getAssignedTests(user_id: string) {
     return await sendRequest({
-      url: `${import.meta.env.VITE_API_PATH}/user/${user_id}/tests`,
+      url: `${import.meta.env.VITE_API_PATH}/user/${user_id}/tests`
     });
   }
   public isPsicometricTest(){
