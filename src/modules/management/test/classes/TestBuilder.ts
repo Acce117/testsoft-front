@@ -125,7 +125,7 @@ export class TestBuilder {
     }
   }
   public async deleteCategory(id: number) {
-    return await new Category().delete(id);
+    await new Category().delete(id);
   }
 
   //ITEM

@@ -29,24 +29,24 @@ window.scrollTo(0, 0);
       <VLanguageChanger />
     </div>-->
 
-    <section flex overflow-hidden w-xs bg-white shadow-xl rounded-2xl>
+    <section flex overflow-hidden h-100 w-xs bg-white shadow-xl rounded-2xl border-solid border-1 border-slate-200>
       <div overflow-hidden pa-4>
         <div flex flex-col mb-2rem>
-          <img src="/img/logo.png" w-5rem />
-          <h1 text-3xl anim-slide-in-1 m-0 font-bold text-primary>
+          <img src="/img/logo.png" w-5rem h-20  />
+          <h1 text-3xl h-20 anim-slide-in-1 w-full m-0 font-bold text-primary>
             {{ $t("login.title") }}
           </h1>
         </div>
         <Form @submit="login.login(credentials)" centered gap-27px flex-col :validation-schema="loginSchema">
 
 
-          <VInput name="username" id="user-input" :max="8" v-model="credentials.username" label="login.user">
+          <VInput h-10 name="username" id="user-input" :max="8" v-model="credentials.username" label="login.user">
             <template #icon>
               <span class="pi pi-user"></span>
 
             </template>
           </VInput>
-          <VInput name="password" id="password-input" :max="8" type="password" v-model="credentials.password"
+          <VInput h-10 name="password" id="password-input" :max="8" type="password" v-model="credentials.password"
             label="login.password">
             <template #icon>
               <i class="pi pi-lock"></i>

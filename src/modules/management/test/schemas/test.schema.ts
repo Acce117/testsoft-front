@@ -11,7 +11,7 @@ export const schema = object({
       if (!value ) {
         return true;
       }
-      const equationRegex = /^[\s]*([rci0-9.]+|[\(])([+\-*/]?[\s]*([rci0-9.]+|[\(]))*[\s]*[\)]*$/
+      const equationRegex = /\\d+(\\.\\d+)*|[\\(\\)\\+\\-\\*\\/]/
       return equationRegex.test(value);
     }),
 });

@@ -223,15 +223,15 @@ const showRangeDialog = (index: number, data?: Range) => {
 
 const saveCategory = () => testBuilder.value.saveCategory(category.value)
 
-const deleteCategory = async () => await makeAction(testBuilder.value.deleteCategory(test.category[selectedCategoryIndex.value].id_category), () => { })
+const deleteCategory = async () =>  makeAction(()=> testBuilder.value.deleteCategory(test.category[selectedCategoryIndex.value].id_category), () => { })
 
 const saveItem = () => testBuilder.value.saveItem(item.value, test.category[selectedCategoryIndex.value].id_category)
 
-const deleteItem = async (id: number) => await makeAction(testBuilder.value.deleteItem(id), () => { })
+const deleteItem = async (id: number) =>  makeAction(()=>testBuilder.value.deleteItem(id), () => { })
 
 const saveRange = () => testBuilder.value.saveRange(range.value, selectedItemIndex.value)
 
-const deleteRange = async (id: number) => await makeAction(testBuilder.value.deleteRange(id), () => { })
+const deleteRange = async (id: number) =>  makeAction(()=>testBuilder.value.deleteRange(id), () => { })
 
 
 

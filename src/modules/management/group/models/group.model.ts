@@ -1,4 +1,4 @@
-import { renameTree, renameTreeForTreeTable } from "@/common/utils/renameTree";
+import {  renameTreeForTreeTable } from "@/common/utils/renameTree";
 import { BaseModel } from "@/common/utils/BaseModel";
 import { schema, updateSchema } from "../schemas/group.schema";
 import { sendRequest } from "@/common/utils/sendRequest";
@@ -60,6 +60,7 @@ export class Group extends BaseModel {
 
   public async getElementsForTreeTable() {
     const groups = await this.getAll();
-    return renameTreeForTreeTable(groups);
+    
+    return renameTreeForTreeTable(groups.length?groups:[groups]);
   }
 }

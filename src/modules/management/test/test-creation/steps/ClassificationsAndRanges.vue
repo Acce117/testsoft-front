@@ -132,11 +132,11 @@ const showTestRangeDialog = (index: number, data?: TestRange) => {
 
 const saveClassification = () => testBuilder.value.saveClassification(classification.value)
 
-const deleteClassification = async (id: number) => await makeAction(testBuilder.value.deleteClassification(id), () => { })
+const deleteClassification = async (id: number) => await makeAction(()=>testBuilder.value.deleteClassification(id), () => { })
 
 const saveTestRange = () => testBuilder.value.saveTestRange(testRange.value, selectedClassificationIndex.value)
 
-const deleteTestRange = async (id: number) => await makeAction(testBuilder.value.deleteTestRange(id), () => { })
+const deleteTestRange = async (id: number) => await makeAction(()=>testBuilder.value.deleteTestRange(id), () => { })
 
 
 

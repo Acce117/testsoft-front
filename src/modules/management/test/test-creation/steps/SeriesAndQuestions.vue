@@ -228,15 +228,15 @@ const showAnswerDialog = (index: number, data?: Answer) => {
 
 const saveSerie = () => testBuilder.value.saveSerie(serie.value)
 
-const deleteSerie = async () => await makeAction(testBuilder.value.deleteSerie(test.series[selectedSerieIndex.value].id_serie), () => { })
+const deleteSerie = async () => await makeAction(()=>testBuilder.value.deleteSerie(test.series[selectedSerieIndex.value].id_serie), () => { })
 
 const saveQuestion = () => testBuilder.value.saveQuestion(question.value, test.series[selectedSerieIndex.value].id_serie)
 
-const deleteQuestion = async (id: number) => await makeAction(testBuilder.value.deleteQuestion(id), () => { })
+const deleteQuestion = async (id: number) => await makeAction(()=>testBuilder.value.deleteQuestion(id), () => { })
 
 const saveAnswer = () => testBuilder.value.saveAnswer(answer.value, selectedQuestionIndex.value)
 
-const deleteAnswer = async (id: number) => await makeAction(testBuilder.value.deleteAnswer(id), () => { })
+const deleteAnswer = async (id: number) => await makeAction(()=>testBuilder.value.deleteAnswer(id), () => { })
 
 
 

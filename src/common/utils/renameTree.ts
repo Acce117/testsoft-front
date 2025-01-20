@@ -1,5 +1,7 @@
 export function renameTree(tree, label:string,key:string) {
   // Recorre cada nodo del árbol
+  console.log(tree)
+
   for (let i = 0; i < tree.length; i++) {
     const node = tree[i];
 

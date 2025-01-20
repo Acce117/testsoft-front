@@ -36,7 +36,7 @@ export const siteStore = defineStore("site", {
       try {
         if (token) {
           user = await sendRequest({
-            url: `${import.meta.env.VITE_API_PATH}/me`,
+            url: `${import.meta.env.VITE_API_PATH}/me`,body:{relations:['role']}
           });
           localStorage.setItem('user',JSON.stringify(user))
         }else throw new Error('Not Authenticated')
