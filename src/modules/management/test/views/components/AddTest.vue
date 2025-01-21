@@ -145,6 +145,9 @@ const reloadData = async (index: string) => {
             relations: [{
               name: "type",
             },
+            // {
+            //   name: "image",
+            // },
             {
               name: "answers",
               relations: ["tribute", "correct_answer"],

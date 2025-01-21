@@ -1,12 +1,13 @@
 <template>
 
-  <CustomTable title="Usuarios" :model="user" :query-options="{
-    relations: [
-      {
-        name: 'country'
-      }
-    ]
-  }">
+  <CustomTable ref="table" title="Usuarios" :model="user" :custom-get-all-function="getUsersByGroup">
+    <template #header>
+      <div w-full>
+        <TreeSelect @change="() => table.refetch()" :placeholder="$t('filtergroup')" :options="groups" filter w-40
+          v-model="selectedGroup" />
+      </div>
+
+    </template>
     <template #form-add>
       <AddUser v-model="user" />
     </template>
@@ -26,8 +27,21 @@ import CustomTable from "@/components/CustomTable.vue";
 import ViewUser from "./components/ViewUser.vue";
 import AddUser from "./components/AddUser.vue";
 import UpdateUser from "./components/UpdateUser.vue";
+import { Group } from "../../group/models/group.model";
+import { userStore } from "@/modules/security/store/user-store";
+import TreeSelect from "primevue/treeselect";
+import { useGroups } from "../../group/composables/useGroups";
 const { t } = useI18n();
-
+const table = ref()
 let user = ref(new User())
 
+const { groups } = useGroups()
+const selectedGroup = ref({})
+
+
+const getUsersByGroup = async () => {
+  const id_group = Object.keys(selectedGroup.value)[0]
+  const group = await new Group({ id_group: id_group ? id_group : userStore().assignments[0].group_id }).getOne({ relations: ['users'] })
+  return group.users
+}
 </script>

@@ -2,7 +2,7 @@
     <Card>
         <template #content>
 
-            <DataTable removableSort ref="dt" size="small" tableStyle="min-width: 50rem"
+            <DataTable  v-model:expandedRows="expandedRows"  removableSort ref="dt" size="small" tableStyle="min-width: 50rem"
                 :globalFilterFields="props.model.getColumns().map((c) => c.field)" v-model:filters="filters"
                 filterDisplay="row" paginator :value="data" :rows="5" :rowsPerPageOptions="[5, 10, 20, 50]">
 
@@ -18,6 +18,7 @@
                                 <InputText w-12rem lg:w-20rem v-model="filters['global'].value"
                                     :placeholder="$t('table.search')" />
                             </IconField>
+                            <slot name="header"></slot>
                             <div flex gap-2>
                                 <Button v-if="!props.hideCreate" icon="pi pi-plus" @click="showAdd()" />
 
@@ -32,6 +33,7 @@
                     </div>
 
                 </template>
+                <Column expander v-if="hasExpander" style="width: 1rem" />
                 <Column v-for="(col, index) in props.model.getColumns()" :key="index" sortable :field="col.field"
                     :header="col.header">
 
@@ -80,7 +82,9 @@
                     </template>
                 </Column>
                 <template #empty> {{ $t('table.no_results') }} </template>
-
+                <template #expansion="slotProps">
+                    <slot name="expansion" :slotProps></slot>
+                </template>
             </DataTable>
             <!-- <h2 v-if="isError" class="error">{{ $t('table.something_wrong') }}</h2> -->
         </template>
@@ -184,8 +188,10 @@ const props = defineProps({
         type: BaseModel,
         required: true
     },
+    hasExpander:Boolean,
     customAddFunction: Function,
     customUpdateFunction: Function,
+    customGetAllFunction: Function,
     customGetOneFunction: Function,
     queryOptions: Object,
     extraOptions: Array,
@@ -202,13 +208,15 @@ const queryKey = props.model.constructor.name
 const confirm = useConfirm();
 const toast = useToast();
 const menu = ref();
+const expandedRows =ref()
+
 const toggle = (value: MouseEvent) => {
     menu.value.toggle(value);
 };
 const { data, isPending, isRefetching, refetch } = useQuery({
     queryKey: [queryKey],
-    queryFn: () => {
-        return props.model.getAll(props.queryOptions)
+    queryFn: (parameter?) => {
+        return props.customGetAllFunction?  props.customGetAllFunction(parameter):  props.model.getAll(props.queryOptions)
     }
 })
 

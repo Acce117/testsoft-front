@@ -1,199 +1,204 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import VLogin from '@/modules/security/views/login/VLogin.vue'
-import VHome from '@/views/home/VHome.vue'
-import VSelecTest from '@/modules/test/views/select-test/VSelectTest.vue'
-import VProfile from '@/modules/security/views/profile/VProfile.vue'
-import VExecuteTest from '@/modules/test/views/execute-test/VExecuteTest.vue'
-import VAssignTest from '@/modules/management/assign-test/views/VAssignTest.vue'
-import VGeneralVue from '@/layouts/general/VGeneral.vue'
-import VResults from '@/modules/results/views/VResults.vue'
-import { isUserAuthenticated } from '@/modules/security/isUserAuthenticated'
-import { userStore } from '@/modules/security/store/user-store'
-import VUsersManagement from '@/modules/management/users/views/VUsersManagement.vue'
-import VInfo from '@/views/info/VInfo.vue'
-import useEvents from '@/common/utils/useEvents'
-import AdminLayout from '@/layouts/admin/AdminLayout.vue'
-import VGroups from '@/modules/management/group/views/VGroups.vue'
-import VTestManagement from '@/modules/management/test/views/VTestManagement.vue'
-import AddTest from '@/modules/management/test/views/components/AddTest.vue'
-import VMyResults from '@/modules/results/views/VMyResults.vue'
-import VClients from '@/modules/management/clients/views/VClients.vue'
-const notAuthorizedToastError = {
-  severity: "error",
-  summary: "Error:",
-  detail: 'global.not-authorized',
-  i18n: true,
-  life: 5000,
-}
+import { createRouter, createWebHistory } from "vue-router";
+import VLogin from "@/modules/security/views/login/VLogin.vue";
+import VHome from "@/views/home/VHome.vue";
+import VSelecTest from "@/modules/test/views/select-test/VSelectTest.vue";
+import VProfile from "@/modules/security/views/profile/VProfile.vue";
+import VExecuteTest from "@/modules/test/views/execute-test/VExecuteTest.vue";
+import VAssignTest from "@/modules/management/assign-test/views/VAssignTest.vue";
+import VGeneralVue from "@/layouts/general/VGeneral.vue";
+import VResults from "@/modules/results/views/VResults.vue";
+import { isUserAuthenticated } from "@/modules/security/isUserAuthenticated";
+import { userStore } from "@/modules/security/store/user-store";
+import VUsersManagement from "@/modules/management/users/views/VUsersManagement.vue";
+import VInfo from "@/views/info/VInfo.vue";
+import AdminLayout from "@/layouts/admin/AdminLayout.vue";
+import VGroups from "@/modules/management/group/views/VGroups.vue";
+import VTestManagement from "@/modules/management/test/views/VTestManagement.vue";
+import AddTest from "@/modules/management/test/views/components/AddTest.vue";
+import VMyResults from "@/modules/results/views/VMyResults.vue";
+import VClients from "@/modules/management/clients/views/VClients.vue";
+import NotAuthorized from "@/views/errors/NotAuthorized.vue";
+import NotFound from "@/views/errors/NotFound.vue";
+
+const autorize = (roles: string[]) => {
+  return function (to, from, next) {
+    const user = userStore();
+    const userRoles = user.getRoles;
+    let canTravel = false;
+    roles.forEach((role) => {
+      canTravel = userRoles.includes(role);
+      if (canTravel) next();
+    });
+    if (!canTravel) 
+      next("/not-authorized");
+  };
+};
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/login',
-      name: 'login',
-      component: VLogin
+      path: "/login",
+      name: "login",
+      component: VLogin,
     },
     {
-      path: '/admin',
-      name: 'admin',
+      path: "/admin",
+      name: "admin",
       component: AdminLayout,
-      //meta: { requiresAuth: true },
+      meta: { requiresAuth: true },
       children: [
         {
-          path: '/users',
-          name: 'users',
+          path: "/users",
+          name: "users",
           component: VUsersManagement,
           meta: { requiresAuth: true },
-          //beforeEnter: (to, from, next) => { validateAdminRole(next) }
-    
+          beforeEnter: autorize(["Admin", "Super Admin"]),
         },
         {
-          path: '/groups',
-          name: 'groups',
+          path: "/groups",
+          name: "groups",
           component: VGroups,
           meta: { requiresAuth: true },
-          //beforeEnter: (to, from, next) => { validateAdminRole(next) }
-    
+          beforeEnter: autorize(["Admin", "Super Admin"]),
         },
         {
-          path: '/results',
-          name: 'results',
+          path: "/results",
+          name: "results",
           component: VResults,
           meta: { requiresAuth: true },
-          //beforeEnter: (to, from, next) => { validateAdminRole(next) }
-    
+          beforeEnter: autorize(["Analyst"]),
         },
         {
-          path: '/clients',
-          name: 'clients',
+          path: "/clients",
+          name: "clients",
           component: VClients,
           meta: { requiresAuth: true },
-          //beforeEnter: (to, from, next) => { validateAdminRole(next) }
-    
+          beforeEnter: autorize(["Super Admin"]),
         },
         {
-          path: '/test',
-          name: 'test',
+          path: "/test",
+          name: "test",
           component: VTestManagement,
           meta: { requiresAuth: true },
-          //beforeEnter: (to, from, next) => { validateAdminRole(next) }
+          beforeEnter: autorize(["Analyst"]),
         },
-        
-      ]
+      ],
     },
-    
+
     {
-      path: '/',
-      name: 'home',
+      path: "/",
+      name: "home",
       component: VGeneralVue,
-      //meta: { requiresAuth: true },
+      meta: { requiresAuth: true },
       children: [
         {
-          path: '/',
-          name: 'home',
+          path: "/",
+          name: "home",
           component: VHome,
-          //meta: { requiresAuth: true }
+          meta: { requiresAuth: true }
         },
         {
-          path: '/select-test',
-          name: 'select-test',
+          path: "/select-test",
+          name: "select-test",
           component: VSelecTest,
-          //meta: { requiresAuth: true }
+          meta: { requiresAuth: true },
         },
-        
+
         {
-          path: '/profile',
-          name: 'profile',
+          path: "/profile",
+          name: "profile",
           component: VProfile,
-          meta: { requiresAuth: true }
+          meta: { requiresAuth: true },
         },
         {
-          path: '/my-results',
-          name: 'my-results',
+          path: "/my-results",
+          name: "my-results",
           component: VMyResults,
-          meta: { requiresAuth: true }
+          meta: { requiresAuth: true },
         },
-        
+
         {
-          path: '/assign-test',
-          name: 'assign-test',
+          path: "/assign-test",
+          name: "assign-test",
           component: VAssignTest,
           meta: { requiresAuth: true },
-          beforeEnter: (to, from, next) => { validateAdminRole(next) }
+          beforeEnter: autorize(["Analyst"]),
         },
         {
-          path: '/create-test/:id_test',
-          name: 'create-test',
+          path: "/create-test/:id_test",
+          name: "create-test",
           component: AddTest,
           meta: { requiresAuth: true },
-          //beforeEnter: (to, from, next) => { validateAdminRole(next) }
-    
+          beforeEnter: autorize(["Analyst"]),
         },
         {
-          path: '/update-test/:id_test',
-          name: 'update-test',
+          path: "/update-test/:id_test",
+          name: "update-test",
           component: AddTest,
           meta: { requiresAuth: true },
-          //beforeEnter: (to, from, next) => { validateAdminRole(next) }
-    
+          beforeEnter: autorize(["Analyst"]),
         },
         {
-          path: '/info',
-          name: 'info',
+          path: "/info",
+          name: "info",
           component: VInfo,
-          meta: { requiresAuth: true }
+          meta: { requiresAuth: true },
         },
-      ]
+        {
+          path: "/not-authorized",
+          name: "not-authorized",
+          component: NotAuthorized,
+          meta: { requiresAuth: true },
+        },
+        {
+          path: "/not-found",
+          name: "not-found",
+          meta: { requiresAuth: true },
+          component: NotFound,
+        },
+      ],
     },
     {
-      path: '/execute-test/:id_test',
-      name: 'execute-test',
+      path: "/execute-test/:id_test",
+      name: "execute-test",
       component: VExecuteTest,
-      //meta: { requiresAuth: true },
+      meta: { requiresAuth: true },
       //beforeEnter: (to, from, next) => validateTestExecutionPermission(to, from, next)
     },
     {
       path: "/:catchAll(.*)",
-      redirect: "/"
-    }
+      redirect: "/not-found",
+    },
+  ],
+});
 
-  ]
-})
-const validateAdminRole = (next: Function) => {
+const validateTestExecutionPermission = (
+  to: any,
+  from: any,
+  next: Function
+) => {
   const user = userStore();
-  if (user.role.includes('Analista'))
-    next()
-  else {
-    next('/')
-    useEvents().dispatch('error', notAuthorizedToastError);
-  }
-}
-const validateTestExecutionPermission = (to: any, from: any, next: Function) => {
-
-  const user = userStore();
-  if (from.path.includes('select-test')) {
+  if (from.path.includes("select-test")) {
     try {
-      const id_test = to.path.split('/')[2]
-      const test = user.assignedTests.filter(test => test.id == id_test)[0]
-      if (!test || (test.availabilityTime != null && new Date(test.availabilityTime).getTime() < new Date().getTime()))
-        throw new Error('global.not-authorized')
-      next()
+      const id_test = to.path.split("/")[2];
+      const test = user.assignedTests.filter((test) => test.id == id_test)[0];
+      if (
+        !test ||
+        (test.availabilityTime != null &&
+          new Date(test.availabilityTime).getTime() < new Date().getTime())
+      )
+        throw new Error("global.not-authorized");
+      next();
     } catch (e: any) {
-      next('/');
-      useEvents().dispatch('error', notAuthorizedToastError);
+      next("/not-authorized");
     }
+  } else {
+    next("/not-authorized");
   }
-  else {
-    next('/');
-    useEvents().dispatch('error', notAuthorizedToastError);
-  }
-
-}
-/*
+};
 router.beforeEach((to, from, next) => {
   if (to.meta.requiresAuth && !isUserAuthenticated()) {
-    useEvents().dispatch('error', notAuthorizedToastError);
-  }
-  else next();
-});*/
-export default router
+    next('/login')
+  } else next();
+});
+export default router;

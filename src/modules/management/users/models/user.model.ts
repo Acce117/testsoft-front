@@ -29,19 +29,17 @@ const columns = [
     field: "sex",
     header: "Sexo",
   },
+  // {
+  //   field: "country.type_test_name",
+  //   fieldGetter: (value: User) => value.country.name,
+  //   header: "País",
+  // },
   {
-      field: "country.type_test_name",
-      fieldGetter: (value: User) => value.country.name,
-      header: "País",
-    },
-    {
-      field: "enabled",
-      header:'Habilitado',
-      isBoolean: true,
-    },
-  
+    field: "enabled",
+    header: "Habilitado",
+    isBoolean: true,
+  },
 ];
-
 
 export class User extends BaseModel {
   user_id;
@@ -82,10 +80,4 @@ export class User extends BaseModel {
   public getFieldAsActive(): string {
     return "enabled";
   }
-
-  
 }
-
- 
-
-

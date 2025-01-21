@@ -1,5 +1,5 @@
 <template>
-  <div z-50  w-full >
+  <div z-50 w-full>
 
     <Menubar :model="items">
 
@@ -10,7 +10,12 @@
 
       </template>
       <template #end>
-        <UserAvatar/>
+        <div flex items-center gap-2>
+          <Select w-19 v-model="$i18n.locale" :options="$i18n.availableLocales">
+
+          </Select>
+          <UserAvatar />
+        </div>
 
       </template>
     </Menubar>
@@ -26,6 +31,7 @@ import { useI18n } from "vue-i18n";
 import { userStore } from "@/modules/security/store/user-store";
 import { siteStore } from "@/common/site/siteStore";
 import UserAvatar from "@/components/navbar/components/UserAvatar.vue";
+import Select from "primevue/select";
 const { t, locale } = useI18n();
 
 const router = useRouter();
@@ -39,7 +45,7 @@ const router = useRouter();
 //     i18n: "home",
 //     command: () => router.push("/"),
 //   },
-  
+
 //   {
 //     icon:'pi pi-info-circle',
 //     label: " ",
@@ -74,9 +80,7 @@ const goHome = () => {
 };
 </script>
 <style scoped>
-
-
- .p-menubar{
-  border-radius: 12px !important; 
+.p-menubar {
+  border-radius: 12px !important;
 }
 </style>

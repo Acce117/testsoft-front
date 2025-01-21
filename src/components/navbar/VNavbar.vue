@@ -25,7 +25,13 @@
         <RouterLink to="/" size-10> <img src="/img/logo.png" size-10 /></RouterLink>
       </template>
       <template #end>
-        <UserAvatar/>
+        <div flex items-center gap-2>
+          <Select w-19 v-model="$i18n.locale" :options="$i18n.availableLocales">
+
+          </Select>
+          <UserAvatar />
+        </div>
+
       </template>
     </Menubar>
   </div>
@@ -42,104 +48,61 @@ import { userStore } from "@/modules/security/store/user-store";
 import { siteStore } from "@/common/site/siteStore";
 
 import UserAvatar from "./components/UserAvatar.vue";
+import VSelect from "../VSelect.vue";
+import Select from "primevue/select";
 const { t, locale } = useI18n();
 
 
-
-
-
 const router = useRouter();
-const itemsTestExecutor = [
+
+
+const itemsManagement = [
+  {
+    label: "Management",
+    i18n: "management",
+    icon: 'pi pi-cog',
+
+
+    items: [],
+  },
+];
+
+const itemsAnalyst = [
   {
     label: " ",
     i18n: "test",
-    items: [
-      {
-        label: " ",
-        i18n: "execute",
-        command: () => router.push("/select-test"),
-      },
-      {
-        label: " ",
-        i18n: "roles",
-      },
-      {
-        label: " ",
-        i18n: "compatibility",
-      },
-      {
-        label: " ",
-        i18n: "results",
-        command: () => router.push("/results"),
-      },
-    ],
+    command: () => router.push("/test"),
+  },
+  {
+    label: " ",
+    i18n: "results",
+    command: () => router.push("/results"),
   },
 ];
-const itemsAnalist = [
+
+const itemsAdmin = [
+
   {
-    label: "Management",
-    i18n: "management",
-    icon: 'pi pi-cog',
-
-
-    items: [
-      {
-        label: " ",
-        i18n: "manage-users",
-        command: () => router.push("/users"),
-      }
-    ],
+    label: " ",
+    i18n: "users",
+    command: () => router.push("/users"),
   },
   {
-    label: "Groups",
+    label: " ",
     i18n: "groups",
-    items: [
-      {
-        label: " ",
-        i18n: "assign-test",
-      },
-      {
-        label: " ",
-        i18n: "manage-groups",
-        command: () => router.push("/manage-groups"),
-      },
-    ],
+    command: () => router.push("/groups"),
   },
 ];
-const itemsDefault = [
+
+const itemsSuperAdmin = [
   {
-    label: "Management",
-    i18n: "management",
-    icon: 'pi pi-cog',
-
-
-    items: [
-      {
-        label: " ",
-        i18n: "users",
-        command: () => router.push("/users"),
-      },
-      {
-        label: " ",
-        i18n: "groups",
-        command: () => router.push("/groups"),
-      },
-      {
-        label: " ",
-        i18n: "test",
-        command: () => router.push("/test"),
-      },
-      {
-        label: " ",
-        i18n: "results",
-        command: () => router.push("/results"),
-      },{
-        label: " ",
-        i18n: "client",
-        command: () => router.push("/clients"),
-      },
-    ],
+    label: " ",
+    i18n: "client",
+    command: () => router.push("/clients"),
   },
+]
+const itemsDefault = [
+
   {
     label: " ",
     i18n: "test",
@@ -150,14 +113,6 @@ const itemsDefault = [
         label: " ",
         i18n: "execute",
         command: () => router.push("/select-test"),
-      },
-      {
-        label: " ",
-        i18n: "roles",
-      },
-      {
-        label: " ",
-        i18n: "compatibility",
       },
       {
         label: " ",
@@ -176,9 +131,22 @@ const itemsDefault = [
   },
 ];
 const items = ref([]);
-// if (userStore().role.includes("Estudiante"))
-//   items.value.push(...itemsTestExecutor);
-// if (userStore().role.includes("Analista")) items.value.push(...itemsAnalist);
+let subItemsManagement = []
+if (userStore().getRoles.includes("Admin")) {
+  subItemsManagement.push(...itemsAdmin)
+}
+if (userStore().getRoles.includes("Analyst")) {
+  subItemsManagement.push(...itemsAnalyst)
+}
+if (userStore().getRoles.includes("Super Admin")) {
+  subItemsManagement.push(...itemsAdmin)
+  subItemsManagement.push(...itemsSuperAdmin)
+}
+if (subItemsManagement.length > 0) {
+  itemsManagement[0].items.push(...subItemsManagement);
+  items.value.push(...itemsManagement)
+}
+
 items.value.push(...itemsDefault);
 const updateNavbarLabels = () => {
   items.value.forEach((item: any) => {

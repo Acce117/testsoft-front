@@ -10,6 +10,7 @@
                 v-model="model.top_value.top_value" number name="top_value"
                 label="Cantidad de puntos máxima a distribuir" />
             <VFileUpload v-model="model.image" name="image" label="Imagen asociada a la respuesta" />
+        {{ model }}
         </template>
     </FormDialog>
 </template>

@@ -1,7 +1,7 @@
 <template>
 
     <div class="card flex  justify-center h-screen">
-        <Menu :model="items" >
+        <Menu :model="items">
             <template #start>
                 <span class="inline-flex items-center gap-1 px-2 py-5">
                     <img src="/img/logo.png" size-10 />
@@ -12,10 +12,10 @@
                 <span class="text-primary font-semibold">{{ item.label }}</span>
             </template>
             <template #item="{ item, props }">
-                <a v-ripple class="flex items-center"  v-bind="props.action">
+                <a v-ripple class="flex items-center" v-bind="props.action">
                     <span :class="item.icon" />
                     <span font-bold>{{ item.label }}</span>
-                    
+
                 </a>
             </template>
 
@@ -28,76 +28,128 @@ import { siteStore } from "@/common/site/siteStore";
 import router from "@/router";
 import Menu from "primevue/menu";
 import { ref } from "vue";
+import { useI18n } from "vue-i18n";
+
+import { userStore } from "@/modules/security/store/user-store";
+const { t, locale } = useI18n();
+
 
 const emit = defineEmits(['close'])
 
-const navigateTo=(route:string)=>{
+const navigateTo = (route: string) => {
     router.push(route)
     emit('close')
 }
-
-const items = ref([
+const itemsManagement = [
     {
         separator: true
     },
     {
-        label: 'Gestión',
-        items: [
-            {
-                label: 'Usuarios',
-                icon: 'pi pi-user',
-                command:()=>navigateTo('/users')
-            },
-            {
-                label: 'Grupos',
-                icon: 'pi pi-users',
-                command:()=>navigateTo('/groups')
+        label: "Management",
+        i18n: "management",
+        items: [],
+    },
+];
 
+const itemsAnalyst = [
+    {
+        label: " ",
+        i18n: "test",
+        icon: 'pi pi-file-edit',
 
-            }, 
-            {
-                label: 'Test',
-                icon: 'pi pi-file-edit',
-                command:()=>navigateTo('/test')
-
-
-            },
-            {
-                label: 'Resultados',
-                icon: 'pi pi-list-check',
-                command:()=>navigateTo('/results')
-
-
-            }, 
-            {
-                label: 'Clientes',
-                icon: 'pi pi-briefcase',
-                command:()=>navigateTo('/clients')
-
-
-            }, 
-        ]
+        command: () => router.push("/test"),
     },
     {
-        label: 'Perfil',
+        label: " ",
+        i18n: "results",
+        icon: 'pi pi-list-check',
+
+        command: () => router.push("/results"),
+    },
+];
+
+const itemsAdmin = [
+
+    {
+        label: " ",
+        i18n: "users",
+        icon: 'pi pi-user',
+
+        command: () => router.push("/users"),
+    },
+    {
+        label: " ",
+        icon: 'pi pi-users',
+
+        i18n: "groups",
+        command: () => router.push("/groups"),
+    },
+];
+
+const itemsSuperAdmin = [
+    {
+        label: " ",
+        icon: 'pi pi-briefcase',
+
+        i18n: "client",
+        command: () => router.push("/clients"),
+    },
+]
+const itemsDefault = [
+
+{
+        label: ' ',
+        i18n: 'profile',
         items: [
 
             {
-                label: 'Cerrar Sesión',
+                label: ' ',
+                i18n:'close-session',
                 icon: 'pi pi-sign-out',
-                command:()=>siteStore().logout()
+                command: () => siteStore().logout()
             }
         ]
     },
     {
         separator: true
     }
-]);
+];
+const items = ref([]);
+let subItemsManagement = []
+if (userStore().getRoles.includes("Admin")) {
+    subItemsManagement.push(...itemsAdmin)
+}
+if (userStore().getRoles.includes("Analyst")) {
+    subItemsManagement.push(...itemsAnalyst)
+}
+if (userStore().getRoles.includes("Super Admin")) {
+    subItemsManagement.push(...itemsAdmin)
+    subItemsManagement.push(...itemsSuperAdmin)
+}
+if (subItemsManagement.length > 0) {
+    itemsManagement[1].items.push(...subItemsManagement);
+    items.value.push(...itemsManagement)
+}
+items.value.push(...itemsDefault);
+const updateNavbarLabels = () => {
+  items.value.forEach((item: any) => {
+    if (item.label) {
+      item.label = t(`navbar.${item.i18n}.name`);
+    }
+    if (item.items) {
+      item.items.forEach((subItem: any) => {
+        subItem.label = t(`navbar.${item.i18n}.${subItem.i18n}`);
+      });
+    }
+  });
+};
+
+updateNavbarLabels();
+
 
 </script>
-<style >
-
-.p-menu-submenu-label{
+<style>
+.p-menu-submenu-label {
     margin-top: 1rem !important;
 }
 </style>

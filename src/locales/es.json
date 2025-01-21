@@ -198,5 +198,10 @@
         "existent_ci":"Este carnet ya existe",
         "existent_username":"Este nombre de usuario ya existe"
     },
-    "empty": "El campo no puede estar vacío",
+    "errors":{
+        "title":"Ha ocurrido un error...",
+        "button":"Volver",
+        "403":"Usted no está autorizado",
+        "404":"Esta página no existe",
+    }
 }
