@@ -2,6 +2,7 @@ import { useSendRequest } from "@/common/utils/fetch";
 import useEvents from "@/common/utils/useEvents";
 import { BaseModel } from "@/common/utils/BaseModel";
 import { schema } from "../schemas/user.schema";
+import { sendRequest } from "@/common/utils/sendRequest";
 
 const url = "user";
 const columns = [
@@ -54,6 +55,7 @@ export class User extends BaseModel {
   country_id;
   country;
   enabled;
+  assignments: [];
 
   constructor(data: object = {}) {
     super(data);
@@ -79,5 +81,31 @@ export class User extends BaseModel {
   }
   public getFieldAsActive(): string {
     return "enabled";
+  }
+  async create(data?: object) {
+    const submitData = data ? data : this;
+    const body = {
+      ...submitData,
+      enabled:1,
+      assignments: [
+        {
+          group_id: submitData.group_id,
+          user_id: submitData.user_id,
+          item_id: submitData.item_id,
+        },
+      ],
+    };
+    return await sendRequest({
+      method: "POST",
+      url: `${import.meta.env.VITE_API_PATH}/${this.getURL()}`,
+      body: body,
+    });
+  }
+  async update(data?: object) {
+    return await sendRequest({
+      method: "PATCH",
+      url: `${import.meta.env.VITE_API_PATH}/${this.getURL()}/${this.getID()}`,
+      body: data ? data : this,
+    });
   }
 }

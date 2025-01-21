@@ -1,6 +1,5 @@
-export function renameTree(tree, label:string,key:string) {
+export function renameTree(tree, label: string, key: string) {
   // Recorre cada nodo del árbol
-  console.log(tree)
 
   for (let i = 0; i < tree.length; i++) {
     const node = tree[i];
@@ -11,13 +10,13 @@ export function renameTree(tree, label:string,key:string) {
       delete node[label];
     }
     if (key in node) {
-        node.key = node[key];
+      node.key = node[key];
       delete node[key];
-      }
+    }
 
     // Recorre recursivamente los hijos del nodo actual
     if ("children" in node && node.children.length > 0) {
-        renameTree(node.children, label,key);
+      renameTree(node.children, label, key);
     }
   }
 
@@ -25,26 +24,62 @@ export function renameTree(tree, label:string,key:string) {
   return tree;
 }
 
-export function renameTreeForTreeTable(tree){
-    // Recorre cada nodo del árbol
-    for (let i = 0; i < tree.length; i++) {
-      const node = tree[i];
-  
-      // Cambia la clave 'name_group' a 'name' si existe
-      if (node['id_group']) {
-        node.key = node.id_group
+export function renameTreeAndRemoveNode(
+  tree,
+  label: string,
+  key: string,
+  id_parent: number
+) {
+  // Recorre cada nodo del árbol
 
-        node.data = {
-          name_group : node.name_group,
-          father_group : node.father_group
+  for (let i = 0; i < tree.length; i++) {
+    const node = tree[i];
 
-        }
-      }
-  
-      // Recorre recursivamente los hijos si existen
-      if (Object.prototype.hasOwnProperty.call(node, 'children') && Array.isArray(node.children)) {
-        renameTreeForTreeTable(node.children); // Llamada recursiva para los hijos
-      }
+    if (node[key] == id_parent)
+      delete node.children
+
+    // Cambia la clave 'name' a 'label'
+    if (label in node) {
+      node.label = node[label];
+      delete node[label];
     }
-    return tree
+    if (key in node) {
+      node.key = node[key];
+      delete node[key];
+    }
+
+    // Recorre recursivamente los hijos del nodo actual
+    if ("children" in node && node.children.length > 0) {
+      renameTreeAndRemoveNode(node.children, label, key, id_parent);
+    }
+  }
+
+  // Devuelve el árbol modificado
+  return tree;
+}
+
+export function renameTreeForTreeTable(tree) {
+  // Recorre cada nodo del árbol
+  for (let i = 0; i < tree.length; i++) {
+    const node = tree[i];
+
+    // Cambia la clave 'name_group' a 'name' si existe
+    if (node["id_group"]) {
+      node.key = node.id_group;
+
+      node.data = {
+        name_group: node.name_group,
+        father_group: node.father_group,
+      };
+    }
+
+    // Recorre recursivamente los hijos si existen
+    if (
+      Object.prototype.hasOwnProperty.call(node, "children") &&
+      Array.isArray(node.children)
+    ) {
+      renameTreeForTreeTable(node.children); // Llamada recursiva para los hijos
+    }
+  }
+  return tree;
 }

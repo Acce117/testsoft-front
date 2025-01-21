@@ -10,8 +10,10 @@
   <VInput v-model="user.password" password name="password" label="Contraseña" />
 
   <VInput v-model="user.email" name="email" label="Email" />
-  <VSelect v-model="user.country_id" name="country_id"  label="País" :options="countries" optionLabel="name" optionId="country_id"/>
-  <VTreeSelect v-model="user.group_id" :options="groups" name="group_id" label="Grupo" />
+  <VSelect v-model="user.country_id" name="country_id" label="País" :options="countries" optionLabel="name"
+    optionId="country_id" />
+  <VSelect v-model="user.item_id"  name="item_id" label="Rol" :options="roles" optionLabel="name" optionId="item_id" />
+  <VTreeSelect v-model="user.group_id" :defaultValue="selectedGroup" :options="groups" name="group_id" label="Grupo" />
 </template>
 <script setup lang="ts">
 import "vue3-treeselect/dist/vue3-treeselect.css";
@@ -22,9 +24,21 @@ import { useCountries } from "@/modules/management/country/composables/useCountr
 import { useGroups } from "@/modules/management/group/composables/useGroups";
 import VTreeSelect from "@/components/VTreeSelect.vue";
 import VRadioButton from "@/components/VRadioButton.vue";
-
+import { ref } from "vue";
+const props = defineProps({
+  selectedGroup:{type:Object, required:true}
+})
 const user = defineModel()
 
+const defaultGroup = Object.keys(props.selectedGroup)[0]
+if(defaultGroup) user.value.group_id = defaultGroup
+const roles = ref([
+  { item_id: 1, name: 'Admin' },
+  { item_id: 3, name: 'Executor' },
+  { item_id: 2, name: 'Analyst' },
+
+
+])
 
 const { t } = useI18n();
 

@@ -131,7 +131,7 @@
         <Form @submit="updateElement" :validation-schema="props.model.getUpdateSchema()">
 
             <div class="dialog-form">
-                <slot name="form-add"></slot>
+                <slot name="form-update"></slot>
 
             </div>
             <div class="dialog-footer">

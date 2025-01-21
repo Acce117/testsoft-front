@@ -1,15 +1,24 @@
 <template>
 
-  <CustomTable ref="table" title="Usuarios" :model="user" :custom-get-all-function="getUsersByGroup">
+  <CustomTable ref="table" title="Usuarios" :query-options="{
+    relations: [
+      {
+        name: 'country'
+      },
+      {
+        name: 'assignments'
+      }
+    ]
+  }" :model="user" :custom-get-all-function="getUsersByGroup">
     <template #header>
       <div w-full>
-        <TreeSelect @change="() => table.refetch()" :placeholder="$t('filtergroup')" :options="groups" filter w-40
-          v-model="selectedGroup" />
+        <TreeSelect @change="(value) => {  defaultValue=value; table.refetch() }" :defaultValue
+          :placeholder="$t('filtergroup')" :options="groups" filter w-40 v-model="selectedGroup" />
       </div>
 
     </template>
     <template #form-add>
-      <AddUser v-model="user" />
+      <AddUser v-model="user" :selectedGroup="defaultValue" />
     </template>
     <template #form-update>
       <UpdateUser v-model="user" />
@@ -33,9 +42,11 @@ import TreeSelect from "primevue/treeselect";
 import { useGroups } from "../../group/composables/useGroups";
 const { t } = useI18n();
 const table = ref()
-let user = ref(new User())
+let user = ref(new User({ assignments: [] }))
 
 const { groups } = useGroups()
+let defaultValue = {}
+defaultValue[userStore().assignments[0].group_id] = true
 const selectedGroup = ref({})
 
 

@@ -333,8 +333,9 @@ const showElement = (data: object) => {
 
 const showUpdateDialog = ref(false)
 
-const showUpdate = (data: object) => {
+const showUpdate = async (data: object) => {
     props.model.setData(data)
+    await refetchOfOne()
 
     if (props.customUpdateFunction)
         props.customUpdateFunction(props.model.getID())

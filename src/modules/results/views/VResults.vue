@@ -3,7 +3,7 @@
   <CustomTable hasExpander ref="table" title="Resultados por Usuario" hideActions :model="user" :custom-get-all-function="getUsersByGroup">
     <template #header>
       <div w-full>
-        <TreeSelect @change="() => table.refetch()" :placeholder="$t('filtergroup')" :options="groups" filter w-40
+        <TreeSelect @change="() => table.refetch()" :defaultValue :placeholder="$t('filtergroup')" :options="groups" filter w-40
           v-model="selectedGroup" />
       </div>
     </template>
@@ -70,9 +70,8 @@ const getUsersByGroup = async () => {
   const group = await new Group({ id_group: id_group ? id_group : userStore().assignments[0].group_id }).getOne({ relations: ['users'] })
   return group.users
 }
-const getResultsByUser = async ()=>{
-
-}
+let defaultValue = {}
+defaultValue[userStore().assignments[0].group_id]=true
 onUnmounted(() => {
   toast.removeAllGroups();
 });

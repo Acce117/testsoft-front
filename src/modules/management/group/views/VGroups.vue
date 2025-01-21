@@ -4,6 +4,9 @@
         <template #form-add>
           <AddGroup v-model="group"/>
         </template>
+        <template #form-update>
+          <UpdateGroup v-model="group"/>
+        </template>
         <template #view-element>
           <ViewGroup v-model="group"/>
         </template>
@@ -16,6 +19,7 @@ import CustomTreeTable from "@/components/CustomTreeTable.vue";
 import { Group } from "../models/group.model";
 import AddGroup from "./components/AddGroup.vue";
 import ViewGroup from "./components/ViewGroup.vue";
+import UpdateGroup from "./components/UpdateGroup.vue";
 const { t } = useI18n();
 
 let group = ref(new Group())

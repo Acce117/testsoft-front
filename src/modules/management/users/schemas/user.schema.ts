@@ -10,4 +10,6 @@ export const schema = object({
     last_name: string().required(),
     country_id: number().integer().required(),
     group_id: number().integer().required(),
+    item_id: number().integer().required(),
+
   });
