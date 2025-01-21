@@ -1,16 +1,16 @@
 <template>
 
-  <CustomTable hasExpander ref="table" title="Resultados por Usuario" hideActions :model="user" :custom-get-all-function="getUsersByGroup">
+  <CustomTable hasExpander hide-create ref="table" title="results.by_user"  hideActions :model="user" :custom-get-all-function="getUsersByGroup">
     <template #header>
       <div w-full>
-        <TreeSelect @change="() => table.refetch()" :defaultValue :placeholder="$t('filtergroup')" :options="groups" filter w-40
+        <TreeSelect @change="() => table.refetch()" :defaultValue :placeholder="$t('user.filtergroup')" :options="groups" filter w-40
           v-model="selectedGroup" />
       </div>
     </template>
 
 
     <template #expansion="slotProps">
-      <CustomTable :title="t('results.title')"  
+      <CustomTable title="results.title" 
         :custom-get-one-function="(id_test_application: number) => new TestResult({ id_test_application: id_test_application }).getOne()"
         hideEdit hideDelete hideCreate :model="result" :query-options="{
 

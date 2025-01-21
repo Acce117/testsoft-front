@@ -39,7 +39,6 @@
 
 </template>
 <script setup lang="ts">
-import VLanguageChanger from "../VLanguageChanger.vue";
 import { useRouter } from "vue-router";
 import Menubar from "primevue/menubar";
 import { ref, watch } from "vue";
@@ -48,7 +47,6 @@ import { userStore } from "@/modules/security/store/user-store";
 import { siteStore } from "@/common/site/siteStore";
 
 import UserAvatar from "./components/UserAvatar.vue";
-import VSelect from "../VSelect.vue";
 import Select from "primevue/select";
 const { t, locale } = useI18n();
 

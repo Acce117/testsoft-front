@@ -1,15 +1,15 @@
 <template>
-  <VInput v-model="user.CI" name="CI" mask="99999999999" label="Carnet de Identidad" />
-  <VRadioButton label="Sexo" v-model="user.sex" name="sex" :options="['F', 'M']" />
+  <VInput v-model="user.CI" name="CI" mask="99999999999" label="user.ci" />
+  <VRadioButton label="user.sex" v-model="user.sex" name="sex" :options="['F', 'M']" />
 
-  <VInput v-model="user.name" name="name" label="Nombres" />
+  <VInput v-model="user.name" name="name" label="user.name" />
 
-  <VInput v-model="user.last_name" name="last_name" label="Apellidos" />
-  <VInput v-model="user.username" name="username" label="Nombre de Usuario" />
-  <VInput v-model="user.email" name="email" label="Email" />
-  <VSelect :loading="isPending" v-model="user.country_id" :defaultValue="defaultCountry" name="country_id" label="País" optionId="country_id" :options="countries" optionLabel="name" />
-  <VSelect v-model="user.item_id"  name="item_id" label="Rol" :defaultValue="defaultRole" :options="roles" optionLabel="name" optionId="item_id" />
-  <VTreeSelect v-model="user.group_id" :defaultValue :options="groups" name="group_id" label="Grupo" />
+  <VInput v-model="user.last_name" name="last_name" label="user.last_name" />
+  <VInput v-model="user.username" name="username" label="user.username" />
+  <VInput v-model="user.email" name="email" label="user.email" />
+  <VSelect :loading="isPending" v-model="user.country_id" :defaultValue="defaultCountry" name="country_id" label="user.country" optionId="country_id" :options="countries" optionLabel="name" />
+  <VSelect v-model="user.item_id"  name="item_id" label="user.role" :defaultValue="defaultRole" :options="roles" optionLabel="name" optionId="item_id" />
+  <VTreeSelect v-model="user.group_id" :defaultValue :options="groups" name="group_id" label="user.group" />
 
 </template>
 <script setup lang="ts">

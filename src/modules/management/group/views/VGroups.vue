@@ -1,6 +1,6 @@
 <template>
   
-      <CustomTreeTable title="Grupos" :model="group">
+      <CustomTreeTable title="group.title" :model="group">
         <template #form-add>
           <AddGroup v-model="group"/>
         </template>

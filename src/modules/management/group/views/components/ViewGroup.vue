@@ -1,6 +1,6 @@
 <template>
   <div flex flex-col gap-2>
-    <span><span text-primary>Nombre: </span>{{ group.name_group }}</span>
+    <span><span text-primary>{{ $t('group.name') }}: </span>{{ group.name_group }}</span>
   </div>
 </template>
 <script setup lang="ts">

@@ -5,11 +5,11 @@ const url = "country";
 const columns = [
   {
     field: "name",
-    header: "Nombre",
+    header: "country.name",
   },
   {
     field: "code",
-    header: "Código",
+    header: "country.code",
   },
 ];
 

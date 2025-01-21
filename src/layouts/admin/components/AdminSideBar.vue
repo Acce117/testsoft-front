@@ -27,7 +27,7 @@
 import { siteStore } from "@/common/site/siteStore";
 import router from "@/router";
 import Menu from "primevue/menu";
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
 import { userStore } from "@/modules/security/store/user-store";
@@ -146,7 +146,9 @@ const updateNavbarLabels = () => {
 
 updateNavbarLabels();
 
-
+watch(locale, () => {
+  updateNavbarLabels();
+});
 </script>
 <style>
 .p-menu-submenu-label {

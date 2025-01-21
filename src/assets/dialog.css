@@ -1,6 +1,10 @@
 .p-dialog-footer {
   justify-content: space-between !important;
 }
+.p-dialog {
+  margin: 0 1rem !important;
+
+}
 
 /* .p-dialog {
   position: relative;

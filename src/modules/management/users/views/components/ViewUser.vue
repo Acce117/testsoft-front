@@ -1,10 +1,12 @@
 <template>
   <div flex flex-col gap-2>
-    <span><span text-primary>Nombres: </span>{{ user.name }}</span>
-    <span><span text-primary>Apellidos: </span>{{ user.last_name }}</span>
-    <span><span text-primary>Nombre de Usuario: </span>{{ user.username }}</span>
-    <span><span text-primary>Email: </span>{{ user.email }}</span>
-    <span><span text-primary>País: </span>{{ user.country.name }}</span>
+    <span><span text-primary>{{$t('user.name')}}: </span>{{ user.name }}</span>
+    <span><span text-primary>{{$t('user.last_name')}}: </span>{{ user.last_name }}</span>
+    <span><span text-primary>{{$t('user.username')}}: </span>{{ user.username }}</span>
+    <span><span text-primary>{{$t('user.email')}}: </span>{{ user.email }}</span>
+    <span><span text-primary>{{$t('user.country')}}: </span>{{ user.country.name }}</span>
+    <!-- <span><span text-primary>{{$t('user.group')}}: </span>{{ user.assignments[0].role.name }}</span>
+    <span><span text-primary>{{$t('user.role')}}: </span>{{ user.country.name }}</span> -->
 
   </div>
 </template>

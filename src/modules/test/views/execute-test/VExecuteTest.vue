@@ -120,7 +120,7 @@ const visibleTimer = ref(false)
         <div h-10 flex gap-2 items-center w-fit>
           <vue-countdown text-slate-600 w-16 text-xl
             :time="executeTest.timeCountdown.value" v-slot="{ minutes, seconds }" @end="executeTest.timeOver()">
-            <Button :label="visibleTimer ?`${minutes > 9 ? minutes : `0` + minutes}:${seconds > 9 ? seconds : `0` + seconds}`:'Mostrar'"
+            <Button :label="visibleTimer ?`${minutes > 9 ? minutes : `0` + minutes}:${seconds > 9 ? seconds : `0` + seconds}`:t('execute-test.tooltips.show')"
               @click="visibleTimer = !visibleTimer" icon="pi pi-clock" severity="secondary"></Button>
           </vue-countdown>
 

@@ -7,7 +7,7 @@
 
                 <template #header>
                     <div class="custom-table-header">
-                        <h1 text-xl m-0 font-semibold>{{ title }}</h1>
+                        <h1 text-xl m-0 font-semibold>{{ $t(title) }}</h1>
                         <div class="custom-table-header__options">
                             <IconField>
                                 <InputIcon>
@@ -28,7 +28,7 @@
                     </div>
 
                 </template>
-                <Column expander :field="fiedAsExpander.field" :header="fiedAsExpander.header">
+                <Column expander :field="fiedAsExpander.field" :header="t(fiedAsExpander.header)">
 
                     <template #body=slotProps>
 
@@ -47,7 +47,7 @@
 
 
                 <Column v-for="(col, index) in props.model.getColumns().filter(c => !c.expander)" :key="index" sortable
-                    :field="col.field" :header="col.header">
+                    :field="col.field" :header="t(col.header)">
                     <template #body=slotProps>
 
                         <Skeleton v-if="isRefetching || isPending" width="60%" borderRadius=".4rem" height="1.5rem" />
@@ -102,7 +102,7 @@
         <div v-else-if="isSuccessOfOne" class="dialog-form">
             <slot name="view-element"></slot>
             <div class="flex justify-end gap-2">
-                <Button type="button" :label="$t('table.accepts')" @click="showInfoDialog = false"></Button>
+                <Button type="button" :label="$t('global.confirm')" @click="showInfoDialog = false"></Button>
             </div>
         </div>
 
@@ -116,10 +116,10 @@
             </div>
 
             <div class="dialog-footer">
-                <Button type="button" :label="$t('table.cancel')" severity="secondary"
+                <Button type="button" :label="$t('global.cancel')" severity="secondary"
                     @click="showAddDialog = false"></Button>
                 <VButton w-8rem :disabled="isAddPending" type="submit">
-                    <span v-if="!isAddPending">{{ $t("table.save") }} </span>
+                    <span v-if="!isAddPending">{{ $t("global.save") }} </span>
                     <VLoading v-else />
                 </VButton>
             </div>
@@ -135,10 +135,10 @@
 
             </div>
             <div class="dialog-footer">
-                <Button type="button" :label="$t('table.cancel')" severity="secondary"
+                <Button type="button" :label="$t('global.cancel')" severity="secondary"
                     @click="showUpdateDialog = false"></Button>
                 <VButton w-8rem :disabled="isUpdatePending" type="submit">
-                    <span v-if="!isUpdatePending">{{ $t("table.save") }} </span>
+                    <span v-if="!isUpdatePending">{{ $t("global.save") }} </span>
                     <VLoading v-else />
                 </VButton>
             </div>
@@ -271,15 +271,17 @@ const deleteElement = (event, data) => {
 
     confirm.require({
         target: event.currentTarget,
+        header:t('table.delete'),
+
         message: t('table.delete_element_ask'),
         icon: 'pi pi-exclamation-triangle',
         rejectProps: {
-            label: t('table.cancel'),
+            label: t('global.cancel'),
             severity: 'secondary',
             outlined: true
         },
         acceptProps: {
-            label: t('table.accept')
+            label: t('global.confirm')
         },
         accept: () => {
             props.model.setData(data)
@@ -291,15 +293,17 @@ const desactivateElement = (event, data) => {
 
     confirm.require({
         target: event.currentTarget,
+        header:t('table.desactivate'),
+
         message: t('table.desactivate_element_ask'),
         icon: 'pi pi-exclamation-triangle',
         rejectProps: {
-            label: t('table.cancel'),
+            label: t('global.cancel'),
             severity: 'secondary',
             outlined: true
         },
         acceptProps: {
-            label: t('table.accept')
+            label: t('global.confirm')
         },
         accept: () => {
             let updateObject = {}
@@ -318,15 +322,17 @@ const activateElement = (event, data) => {
 
     confirm.require({
         target: event.currentTarget,
+        header:t('table.activate'),
+
         message: t('table.activate_element_ask'),
         icon: 'pi pi-exclamation-triangle',
         rejectProps: {
-            label: t('table.cancel'),
+            label: t('global.cancel'),
             severity: 'secondary',
             outlined: true
         },
         acceptProps: {
-            label: t('table.accept')
+            label: t('global.confirm')
         },
         accept: () => {
             let updateObject = {}

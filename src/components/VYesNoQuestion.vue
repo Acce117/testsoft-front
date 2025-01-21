@@ -11,14 +11,14 @@
           <RadioButton  inputId="yes" :value="true" v-bind="{ ...$attrs }" v-model="model"
             :invalid="canValidate && meta.validated && !meta.valid" />
           <label for="yes" flex items-center justify-center gap-2>
-            {{ props.yesOption?props.yesOption:'Sí' }} 
+            {{ props.yesOption?props.yesOption:$t('global.yes') }} 
           </label>
         </div>
         <div flex items-center justify-center gap-2 >
           <RadioButton inputId="no" :value="false" v-bind="{ ...$attrs }" v-model="model"
             :invalid="canValidate && meta.validated && !meta.valid" />
           <label for="yes" flex items-center justify-center gap-2>
-            {{ props.noOption?props.noOption:'No' }} 
+            {{ props.noOption?props.noOption:$t('global.no')  }} 
           </label>
         </div>
       </div>
@@ -32,7 +32,6 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue';
 import { Field } from 'vee-validate';
 import RadioButton from 'primevue/radiobutton';
 const props = defineProps({
@@ -44,7 +43,6 @@ const props = defineProps({
   default:{type:Boolean},
   canValidate:{type:Boolean, default:true}
 });
-const error = ref('error.error')
 const model = defineModel();
 if(props.default!==undefined)
   model.value = props.default

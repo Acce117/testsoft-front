@@ -1,19 +1,19 @@
 <template>
-  <VInput v-model="user.CI" name="CI" mask="99999999999" label="Carnet de Identidad" />
-  <VRadioButton label="Sexo" v-model="user.sex" name="sex" :options="['F', 'M']" />
+  <VInput v-model="user.CI" name="CI" mask="99999999999" label="user.ci" />
+  <VRadioButton label="user.sex" v-model="user.sex" name="sex" :options="['F', 'M']" />
 
-  <VInput v-model="user.name" name="name" label="Nombres" />
+  <VInput v-model="user.name" name="name" label="user.name" />
 
-  <VInput v-model="user.last_name" name="last_name" label="Apellidos" />
+  <VInput v-model="user.last_name" name="last_name" label="user.last_name" />
 
-  <VInput v-model="user.username" name="username" label="Nombre de Usuario" />
-  <VInput v-model="user.password" password name="password" label="Contraseña" />
+  <VInput v-model="user.username" name="username" label="user.username" />
+  <VInput v-model="user.password" password name="password" label="user.password" />
 
-  <VInput v-model="user.email" name="email" label="Email" />
-  <VSelect v-model="user.country_id" name="country_id" label="País" :options="countries" optionLabel="name"
+  <VInput v-model="user.email" name="email" label="user.email" />
+  <VSelect v-model="user.country_id" name="country_id" label="user.country" :options="countries" optionLabel="name"
     optionId="country_id" />
-  <VSelect v-model="user.item_id"  name="item_id" label="Rol" :options="roles" optionLabel="name" optionId="item_id" />
-  <VTreeSelect v-model="user.group_id" :defaultValue="selectedGroup" :options="groups" name="group_id" label="Grupo" />
+  <VSelect v-model="user.item_id"  name="item_id" label="user.role" :options="roles" optionLabel="name" optionId="item_id" />
+  <VTreeSelect v-model="user.group_id" :defaultValue="selectedGroup" :options="groups" name="group_id" label="user.group" />
 </template>
 <script setup lang="ts">
 import "vue3-treeselect/dist/vue3-treeselect.css";

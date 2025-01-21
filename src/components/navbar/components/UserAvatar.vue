@@ -15,30 +15,52 @@ import { siteStore } from '@/common/site/siteStore';
 import { userStore } from '@/modules/security/store/user-store';
 import Avatar from 'primevue/avatar';
 import Menu from 'primevue/menu';
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 const userMenu = ref();
 const user = userStore()
 const router = useRouter();
-
+const {t,locale}=useI18n()
 const userItems = ref([
-  {
-    label: 'Opciones de Usuario',
+  { 
+    label:' ',
+    i18n: 'profile',
     items: [
 
       {
-        label: "Mi Perfil",
+        label:' ',
+
+        i18n: "name",
         icon: 'pi pi-user',
         command: () => router.push("/profile"),
       },
       {
-        label: "Cerrar Sesión",
+        label:' ',
+        i18n: "close-session",
         icon: 'pi pi-sign-out',
         command: () => siteStore().logout(),
       },
     ],
   },
 ]);
+
+const updateNavbarLabels = () => {
+  userItems.value.forEach((item: any) => {
+    if (item.label) {
+      item.label = t(`navbar.${item.i18n}.name`);
+    }
+    if (item.items) {
+      item.items.forEach((subItem: any) => {
+        subItem.label = t(`navbar.${item.i18n}.${subItem.i18n}`);
+      });
+    }
+  });
+};
+updateNavbarLabels()
+watch(locale, () => {
+  updateNavbarLabels();
+});
 
 const toggleUserMenu = (event) => {
   userMenu.value.toggle(event);

@@ -1,6 +1,6 @@
 <template>
-  <VInput v-model="group.name_group" name="name_group" label="Nombre" />
-  <VTreeSelect  :defaultValue v-model="group.father_group" :options="groups" name="father_group"  label="Grupo al que Pertenece"  />
+  <VInput v-model="group.name_group" name="name_group" label="group.name_group" />
+  <VTreeSelect  :defaultValue v-model="group.father_group" :options="groups" name="father_group"  label="group.father_group"  />
 </template>
 <script setup lang="ts">
 import "vue3-treeselect/dist/vue3-treeselect.css";

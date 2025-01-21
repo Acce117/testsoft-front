@@ -1,6 +1,6 @@
 <template>
 
-  <CustomTable ref="table" title="Usuarios" :query-options="{
+  <CustomTable ref="table" title="user.title" :query-options="{
     relations: [
       {
         name: 'country'
@@ -13,7 +13,7 @@
     <template #header>
       <div w-full>
         <TreeSelect @change="(value) => {  defaultValue=value; table.refetch() }" :defaultValue
-          :placeholder="$t('filtergroup')" :options="groups" filter w-40 v-model="selectedGroup" />
+          :placeholder="$t('user.filtergroup')" :options="groups" filter w-40 v-model="selectedGroup" />
       </div>
 
     </template>

@@ -8,7 +8,7 @@
     <div v-if="!loading && !error" class="test-results" text-slate-600  id="test-results" text-black>
       <div flex gap-4 > 
         <h1 font-bold text-slate-800 text-left font-size-1.5rem my-0 >Test: {{ props.testName }}</h1><Button icon="pi pi-file-pdf" @click="confirmPDF"
-          label="Exportar"></Button>
+          :label="$t('global.export')"></Button>
       </div>
 
       <h2 v-if="testResult.parameters.global_result == 1 && testType == 2">

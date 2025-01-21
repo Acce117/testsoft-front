@@ -85,7 +85,7 @@ const executeTest = () => {
     </Carousel>
     <section v-else w-full mx-2 items-center flex justify-center>
       <h3>
-        No existen test para ejecutar
+        {{ $t('table.no_elements') }}
       </h3>
 
     </section>
@@ -98,29 +98,24 @@ const executeTest = () => {
           :applicatedTests="test.applicatedTests" />
       </swiper-slide>
     </Swiper> -->
-    <Dialog v-model:visible="dialogVisible" modal :header="$t('table.ejecutartest')"
+    <Dialog v-if="selectedTest" v-model:visible="dialogVisible" modal :header="selectedTest.name"
       class="w-4/5 max-w-50rem min-w-25rem">
 
 
       <div class="pt-4">
         <div class="flex flex-col justify-between text-base text-justify items-start gap-2 mb-4">
           <div>
-            <span font-bold>Nombre: </span>
-            <span class="font-medium text-surface-500  ">{{ selectedTest.name
-              }}</span>
-          </div>
-          <div>
-            <span font-bold>Disponibilidad: </span>
-            <span class="font-medium text-secondary ">Disponible</span>
+            <span font-bold>{{$t('select-test.availability')}}: </span>
+            <span class="font-medium text-secondary ">{{$t('select-test.available')}}</span>
           </div>
           <span class="font-medium text-surface-500  ">{{ selectedTest.description
             }}</span>
 
         </div>
         <div class="dialog-footer">
-          <Button type="button" :label="$t('table.cancel')" severity="secondary"
+          <Button type="button" :label="$t('global.cancel')" severity="secondary"
             @click="dialogVisible = false"></Button>
-          <Button type="button" :label="$t('execute')" @click="executeTest"></Button>
+          <Button type="button" :label="$t('global.execute')" @click="executeTest"></Button>
         </div>
       </div>
     </Dialog>

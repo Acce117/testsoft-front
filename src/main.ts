@@ -16,9 +16,6 @@ import VInput from "./components/VInput.vue";
 import Ripple from "primevue/ripple";
 import { i18n } from "./plugins/i18n";
 import "uno.css";
-import VWhiteButton from "./components/buttons/VWhiteButton.vue";
-import VBlackButton from "./components/buttons/VBlackButton.vue";
-import VButtonsContainer from "./components/buttons/VButtonsContainer.vue";
 import {
   VueQueryPlugin,
   type VueQueryPluginOptions,
@@ -40,11 +37,6 @@ app.use(VueQueryPlugin, vueQueryPluginOptions);
 app.component("vue-countdown", VueCountdown);
 app.component("VLoading", VLoading);
 app.component("VInput", VInput);
-app.component("VWhiteButton", VWhiteButton);
-app.component("VBlackButton", VBlackButton);
-
-app.component("VButtonsContainer", VButtonsContainer);
-
 app.component("VError", VError);
 app.directive("ripple", Ripple);
 app.directive("tooltip", Tooltip);

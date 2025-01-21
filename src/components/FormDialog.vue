@@ -1,5 +1,5 @@
 <template>
-    <Dialog @after-hide="props.model.clearData()" v-model:visible="visible" modal :header="$t('table.update')" class="w-4/5 max-w-50rem min-w-25rem">
+    <Dialog @after-hide="props.model.clearData()" v-model:visible="visible" modal :header="props.model.getID()? $t('table.update'):$t('table.add')" class="w-4/5 max-w-50rem min-w-25rem">
         <Form @submit="onSubmit" :validation-schema="model.getSchema()">
             <div class="dialog-form">
                 <slot name="form">
@@ -7,10 +7,10 @@
             </div>
 
             <div class="dialog-footer">
-                <Button type="button" :label="$t('table.cancel')" severity="secondary"
+                <Button type="button" :label="$t('global.cancel')" severity="secondary"
                     @click="visible = false"></Button>
                 <VButton w-8rem :disabled="isRequestLoading || isDataLoading" type="submit">
-                    <span v-if="!isRequestLoading || isDataLoading">{{ $t("table.save") }} </span>
+                    <span v-if="!isRequestLoading || isDataLoading">{{ $t("global.save") }} </span>
                     <VLoading v-else />
                 </VButton>
             </div>

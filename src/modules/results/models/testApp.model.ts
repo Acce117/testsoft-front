@@ -6,11 +6,11 @@ const columns = [
   {
     field: "test.name",
     fieldGetter:(value:TestAplication)=>value.test.name,
-    header: "Test",
+    header: "test.name",
   },
   {
     field: "date",
-    header: "Fecha",
+    header: "test.date",
   },
 ];
 

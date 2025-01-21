@@ -10,9 +10,9 @@
         
       </div>
       <div class="dialog-footer">
-        <Button type="button" :label="$t('table.cancel')" severity="secondary" @click="visible = false"></Button>
+        <Button type="button" :label="$t('global.cancel')" severity="secondary" @click="visible = false"></Button>
         <VButton w-8rem :disabled="isUpdatePending || isGroupsLoading" type="submit">
-          <span v-if="!isUpdatePending || isGroupsLoading">{{ $t("table.save") }} </span>
+          <span v-if="!isUpdatePending || isGroupsLoading">{{ $t("global.save") }} </span>
           <VLoading v-else />
         </VButton>
       </div>

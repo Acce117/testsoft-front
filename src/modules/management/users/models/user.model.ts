@@ -8,27 +8,27 @@ const url = "user";
 const columns = [
   {
     field: "CI",
-    header: "Carnet de Identidad",
+    header: "user.ci",
   },
   {
     field: "name",
-    header: "Nombre",
+    header: "user.name",
   },
   {
     field: "last_name",
-    header: "Apellido",
+    header: "user.last_name",
   },
   {
     field: "username",
-    header: "Nombre de Usuario",
+    header: "user.username",
   },
   {
     field: "email",
-    header: "Email",
+    header: "user.email",
   },
   {
     field: "sex",
-    header: "Sexo",
+    header: "user.sex",
   },
   // {
   //   field: "country.type_test_name",
@@ -37,7 +37,7 @@ const columns = [
   // },
   {
     field: "enabled",
-    header: "Habilitado",
+    header: "global.enabled",
     isBoolean: true,
   },
 ];

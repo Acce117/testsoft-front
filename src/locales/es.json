@@ -20,13 +20,10 @@
     
     "select-test": {
         "title": "Seleccione un test",
-        "dialogs": {},
-        "test-card": {
-            "duration": "Duración",
-            "description": "Descripción",
-            "not-available": "No Disponible",
-            "available": "Disponible en"
-        }
+        "not-available": "No Disponible",
+        "available": "Disponible",
+        "availability": "Disponibilidad"
+        
     },
     "execute-test": {
         "dialogs": {
@@ -71,11 +68,8 @@
     },
     "results": {
         "title": "Resultados",
-        "info":"En esta pantalla puede consultar los resultados de sus tests. Presione la flecha a la izquierda de una fila para mostrar los resultados generales del test correspondiente, o el botón de la derecha para ver los resultados finales del mismo. Utilice los botones del encabezado para mostrar los resultados de todos los tests o para esconderlos.",
+        "by_user":"Resultados por Usuario",
 
-        "show-all": "Mostrar Todos",
-        "hide-all": "Ocultar Todos",
-        "final-results": "Ver Resultados Finales",
         "results-of": "Resultados de",
         "date": "Fecha",
         "test": "Test",
@@ -128,11 +122,16 @@
         "confirm": "Aceptar",
         "cancel": "Cancelar",
         "delete": "Eliminar",
+        "save":"Guardar",
         "deleted": "Eliminado",
         "edit":"Editar",
         "find": "Buscar",
         "add": "Añadir",
-        "error": "Algo ha salido mal",
+        "yes":"Sí",
+        "no":"No",
+        "error": "Algo ha salido mal...",
+        "start":"Comenzar",
+        "retry":"Reintentar",
         "resend": "Reenviar Test",
         "execute": "Ejecutar",
         "warning": "Advertencia",
@@ -141,14 +140,15 @@
         "loading": "Cargando", 
         "not-authorized":"Usted no está autorizado",
         "language":"Idioma",
+        "enabled":"Habilitado",
         "completed": "Operación completada satisfactoriamente",
         "failed":"Operación fallida",
         "confirm-delete":"¿Desea eliminar el elemento?"
     },
-    "users": {
+    "user": {
         "title": "Usuarios",
         "name": "Nombres",
-        "lastname": "Apellidos",
+        "last_name": "Apellidos",
         "ci": "Carnet de Identidad",
         "username": "Nombre de Usuario",
         "password": "Contraseña",
@@ -157,10 +157,47 @@
         "role": "Rol",
         "usertype": "Tipo de Usuario",
         "group": "Grupo",
-        "add":"Inserte los datos del nuevo usuario"
-            
-         
+        "country":"País",
+        "filtergroup":"Grupo..."
     },
+    "country": {
+        "name": "Nombre",
+        "code": "Código"  
+    },
+    "group": {
+        "title":"Grupos",
+        "name_group": "Nombre",
+        "father_group": "Grupo al que Pertenece"  
+    },
+    "test": {
+        "name": "Test",
+        "date": "Fecha de Ejecución",  
+        "name": "Test",
+        "duration": "Duración (min)",
+        "description": "Descripción",
+        "name": "Test",
+        "name": "Test",
+        "name": "Test",
+        "name": "Test",
+        "serie": {
+            "name": "Serie",
+            "question": {
+                "name": "Pregunta",
+
+            },
+
+        },
+        "category": {
+            "name": "Categoría",
+
+        },
+        "classifications": {
+            "name": "Clasificación",
+
+        },
+
+    },
+    
     "navbar": {
         "test": {
             "name": "Test",
@@ -175,6 +212,7 @@
             "name": "Sobre Nosotros"
         },
         "profile": {
+            "options":"Opciones de Usuario",
             "name": "Perfil",
             "user": "Usuario",
             "close-session": "Cerrar Sesión",
@@ -186,9 +224,32 @@
         "management":{
             "name":"Gestión",
             "users":"Usuarios",
-            "groups":"Grupos"
+            "groups":"Grupos",
+            "clients":"Clientes",
+            "test":"Test",
+            "results":"Resultados"
         }
     },
+"table":{
+    "search":"Buscar...",
+    "actions":"Acciones",
+    "no_results":"No existen elementos",
+    "information":"Detalles",
+    "view_information":"Ver Detalles",
+    "update":"Actualizar",
+    "delete":"Eliminar",
+    "recover":"Activar",
+    "desactivate":"Desactivar",
+    "add":"Añadir Elemento",
+    "new_element":"Inserte los datos del nuevo elemento",
+    "update_element":"Inserte los datos del elemento a actualizar",
+    "assign":"Asignar",
+    "open":"Abierto",
+    "closed":"Cerrado",
+    "desactivate_element_ask":"¿Desea desactivar el elemento?",
+    "activate_element_ask":"¿Desea activar el elemento?",
+    "delete_element_ask":"¿Desea eliminar el elemento? Se perderá toda la información correspondiente"
+},
     "error": {
         "error":"Error",
         "empty": "El campo no puede estar vacío",

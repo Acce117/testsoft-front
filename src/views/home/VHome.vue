@@ -8,7 +8,7 @@
           {{ $t('home.subtitle') }}
         </h2>
         <Button v-ripple mt-2rem rounded border-none w-12rem iconPos="right" @click="router.push('/select-test')"
-          label="Comenzar" icon="pi pi-arrow-right">
+          :label="$t('global.start')" icon="pi pi-arrow-right">
         </Button>
       </div>
 

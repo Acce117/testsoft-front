@@ -40,7 +40,7 @@ const now = new Date();
     </div>
 
 
-    <Button icon="pi pi-file-edit" fluid label="Ejecutar" h-10 @click="emit('show-dialog', props.test)" />
+    <Button icon="pi pi-file-edit" fluid :label="$t('global.execute')" h-10 @click="emit('show-dialog', props.test)" />
   </div>
   <!-- <div class="test-card" :class="{
     'not-disponible': !isAvailable,

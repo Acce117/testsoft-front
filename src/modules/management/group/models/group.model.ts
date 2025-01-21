@@ -7,7 +7,7 @@ const url = "groups";
 const columns = [
   {
     field: "name_group",
-    header: "Nombre",
+    header: "group.name_group",
     expander: true,
   },
 ];
