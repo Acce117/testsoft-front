@@ -163,7 +163,7 @@ const router = createRouter({
       name: "execute-test",
       component: VExecuteTest,
       meta: { requiresAuth: true },
-      //beforeEnter: (to, from, next) => validateTestExecutionPermission(to, from, next)
+      beforeEnter: (to, from, next) => validateTestExecutionPermission(to, from, next)
     },
     {
       path: "/:catchAll(.*)",

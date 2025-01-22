@@ -67,7 +67,6 @@ const getGroupsOfChild = (event) => {
       prueba.value = request.result;
       let groupsFormatted =[]
       request.result.value.forEach(group=>{
-        console.log(group)
         groupsFormatted.push(getGroupFormatted(group,group.arraystudent_group))
       })
       prueba.value = groupsFormatted

@@ -13,32 +13,26 @@ import type { Test } from "@/modules/management/test/models/test.model";
 import router from "@/router";
 
 
-const { tests, isSuccess, isPending, isError, refetch } = useAssignedTests()
+const { tests, isSuccess, isPending, isError, refetch } = useAssignedTests((value)=>{
+  user.assignedTests = [];
+  value.forEach((test: any) => {
+    let availableDate: Date = null;
+    if (test.test_apps.length>0) {
+      availableDate = new Date(test.test_apps[test.test_apps.length-1].date);
+      availableDate.setFullYear(
+        availableDate.getFullYear() + parseInt(test.recurring_time)
+      );
+    }
+    user.assignedTests.push({
+      id: test.id_test,
+      availabilityTime: availableDate,
+    });
+    sessionStorage.setItem("user", JSON.stringify(user.$state));
+  });
+})
 
 
-// watch(tests, (newValue) => {
-//   user.assignedTests = [];
-//   newValue.forEach((test: any) => {
-//     let availableDate: Date = null;
-//     if (test.applicatedTests[0]) {
-//       availableDate = new Date(test.applicatedTests[0].date);
-//       availableDate.setFullYear(
-//         availableDate.getFullYear() + parseInt(test.recurringTime)
-//       );
-//     }
-//     user.assignedTests.push({
-//       id: test.id,
-//       availabilityTime: availableDate,
-//     });
-//     sessionStorage.setItem("user", JSON.stringify(user.$state));
-//   });
-// });
 
-// const renderPagination = () => {
-//   if (result.value.length <= 3 && window.innerWidth >= 768)
-//     pagination.enabled = false;
-//   else pagination.enabled = true;
-// };
 
 const responsiveOptions = ref([
   {
@@ -89,25 +83,14 @@ const executeTest = () => {
       </h3>
 
     </section>
-    <!-- <Swiper :spaceBetween="30" :slidesPerView="1" :loop="true" :pagination="pagination" :navigation="true"
-      :modules="modules" :breakpoints="{ 768: { slidesPerView: 2 }, 1024: { slidesPerView: 3 } }"
-      @breakpoint="renderPagination()">
-      <swiper-slide class="swiper-slide" v-for="test in tests" :key="test.id_test">
-        <VTestCard :id="parseInt(test.id_test)" :title="test.name" :description="test.description"
-          :duration="parseInt(test.durationTime)" :recurringTime="parseInt(test.recurringTime)"
-          :applicatedTests="test.applicatedTests" />
-      </swiper-slide>
-    </Swiper> -->
+   
     <Dialog v-if="selectedTest" v-model:visible="dialogVisible" modal :header="selectedTest.name"
       class="w-4/5 max-w-50rem min-w-25rem">
 
 
       <div class="pt-4">
         <div class="flex flex-col justify-between text-base text-justify items-start gap-2 mb-4">
-          <div>
-            <span font-bold>{{$t('select-test.availability')}}: </span>
-            <span class="font-medium text-secondary ">{{$t('select-test.available')}}</span>
-          </div>
+          
           <span class="font-medium text-surface-500  ">{{ selectedTest.description
             }}</span>
 
@@ -115,7 +98,7 @@ const executeTest = () => {
         <div class="dialog-footer">
           <Button type="button" :label="$t('global.cancel')" severity="secondary"
             @click="dialogVisible = false"></Button>
-          <Button type="button" :label="$t('global.execute')" @click="executeTest"></Button>
+          <Button type="button" :label="$t('global.start')" @click="executeTest"></Button>
         </div>
       </div>
     </Dialog>

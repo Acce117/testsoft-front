@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/vue-query'
 import {Test } from '../../management/test/models/test.model'
 import { userStore } from '@/modules/security/store/user-store'
 
-export const useAssignedTests = () => {
+export const useAssignedTests = (cb:(test:any)=>void) => {
   const {
     data: tests,
     isPending,
@@ -13,7 +13,11 @@ export const useAssignedTests = () => {
     isError
   } = useQuery({
     queryKey: ['tests'],
-    queryFn:()=> new Test().getAssignedTests(userStore().user_id)
+    queryFn: async ()=> {
+      const test = await new Test().getAssignedTests(userStore().user_id)
+      cb(test)
+      return  test
+    }
   })
   return { tests, isPending, isSuccess, error, isError, refetch, isRefetching }
 }

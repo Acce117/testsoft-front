@@ -113,7 +113,6 @@ provide('renderSteps', renderSteps)
 
 const reloadData = async (index: string) => {
   const mode = steps.value[parseInt(index) - 1]
-  console.log(mode)
   relations.value = [{
     name: "type_psi_test",
   },

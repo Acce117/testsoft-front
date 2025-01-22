@@ -15,7 +15,6 @@ export const userStore = defineStore("user", {
   state: (): UserInterface => {
     const user = siteStore().getUserInLocal();
     let state: UserInterface;
-    console.log(user);
     user
       ? (state = user)
       : (state = {
