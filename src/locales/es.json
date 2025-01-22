@@ -240,6 +240,7 @@
     "delete":"Eliminar",
     "recover":"Activar",
     "desactivate":"Desactivar",
+    "retire":"Retirar",
     "add":"Añadir Elemento",
     "new_element":"Inserte los datos del nuevo elemento",
     "update_element":"Inserte los datos del elemento a actualizar",

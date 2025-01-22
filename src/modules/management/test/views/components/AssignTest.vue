@@ -2,15 +2,16 @@
   <Dialog v-model:visible="visible" modal :header="$t('table.assign')" class="w-4/5 max-w-50rem min-w-25rem">
 
     <span>{{ $t('table.assign') }} {{ test.name }}</span>
-    <Form @submit="mutate" :validation-schema="test.getUpdateSchema()">
-      <div class="dialog-form">
-        <div rounded-xl p-2 bg-slate-200>
-
-          <Tree v-if="!isRequestLoading && !isGroupsLoading" rounded-xl :value="groups">
+      <div class="dialog-form" min-h-40>
+        <LoadingPanel v-if="isRequestLoading || isRefetching|| isGroupsLoading || isError" centered relative
+        :loading="isRequestLoading || isRefetching|| isGroupsLoading" :error="isError" :refetch="refetchGroups" />
+        <div v-else-if="isSuccess" rounded-xl p-2 bg-slate-200 min-h-40>
+         
+          <Tree  rounded-xl :value="groups">
             <template #default="slotProps">
-              <b mr-4>{{ slotProps.node.label }}</b> <Button @click="retireTest(slotProps.node.key)"
-                v-if="slotProps.node.psiTests.filter(t => t.id_test == test.id_test)[0]" severity="danger"
-                :label="$t('table.retire')"></Button> <Button v-else @click="assignTest(slotProps.node.key)"
+              <b mr-8>{{ slotProps.node.label }}</b><Button @click="retireTest(slotProps.node.key)" variant="text" 
+                v-if="slotProps.node.psiTests.filter(t => t.id_test == test.id_test).length>0" icon="pi pi-times" severity="danger"
+                :label="$t('table.retire')"></Button> <Button variant="text" icon="pi pi-check"  v-else @click="assignTest(slotProps.node.key)"
                 :label="$t('table.assign')"></Button>
             </template>
           </Tree>
@@ -24,7 +25,6 @@
           <VLoading v-else />
         </VButton>
       </div> -->
-    </Form>
   </Dialog>
 </template>
 <script setup lang="ts">
@@ -42,6 +42,7 @@ import Tree from "primevue/tree";
 import { GroupForTest } from "../../modules/group_for_test/group_for_test.model";
 import handlePromise from "@/common/utils/handlePromise";
 import { ref } from "vue";
+import LoadingPanel from "@/components/LoadingPanel.vue";
 const props = defineProps({ refetch: { type: Function, required: true } })
 
 const isRequestLoading = ref(false)
@@ -59,15 +60,19 @@ const retireTest = async (id_group: string) => {
         fk_id_group: id_group
       }
     })
-    groupForTest.delete(assignations[0].id_group_for_test)
+    assignations.forEach(element => {
+      groupForTest.delete(element.id_group_for_test)
+      
+    });
+
   }, isRequestLoading, () => {
-    refetchGroups()
+    setTimeout(refetchGroups,1)
   })
 }
 
 const test: ModelRef<Test> = defineModel({ required: true })
 const visible: ModelRef<boolean> = defineModel("visible")
 
-const { groups, refetch: refetchGroups, isPending: isGroupsLoading } = useGroupsWithTest()
+const { groups, refetch: refetchGroups, isPending: isGroupsLoading,isRefetching ,  isError , isSuccess} = useGroupsWithTest()
 
 </script>
