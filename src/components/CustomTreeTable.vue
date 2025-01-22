@@ -68,13 +68,13 @@
                     <template #body=slotProps>
                         <Skeleton v-if="isRefetching || isPending" width="60%" borderRadius=".4rem" height="1.5rem" />
 
-                        <div v-else class="custom-table-actions" gap-2>
+                        <div v-else class="custom-table-actions"  gap-2>
                             <i class="pi pi-eye" v-tooltip="$t('table.view_information')"
                                 @click="showElement(slotProps.node)" />
                             <i class="pi pi-file-edit" v-tooltip="$t('table.update')"
                                 @click="showUpdate(slotProps.node)" />
 
-                            <i v-if="props.model.getFieldAsActive() == ''" v-tooltip="$t('table.delete')"
+                            <!-- <i v-if="props.model.getFieldAsActive() == ''" v-tooltip="$t('table.delete')"
                                 @click="deleteElement($event, slotProps.data)" class="pi pi-trash" />
                             <i v-else-if="slotProps.data[props.model.getFieldAsActive()] == true || slotProps.data[props.model.getFieldAsActive()] == 1"
                                 v-tooltip="$t('table.desactivate')" @click="desactivateElement($event, slotProps.data)"
@@ -82,7 +82,7 @@
 
                             <i v-else-if="slotProps.data[props.model.getFieldAsActive()] == false || slotProps.data[props.model.getFieldAsActive()] == 0"
                                 v-tooltip="$t('table.recover')" @click="activateElement($event, slotProps.data)"
-                                class="pi pi-history" />
+                                class="pi pi-history" /> -->
 
                         </div>
                     </template>
@@ -169,9 +169,11 @@ useQueryClient()
 const props = defineProps({
     title: String,
     model: BaseModel,
+    hideDelete:Boolean,
     queryOptions: {
         requestPDF: Function
     },
+
 
 })
 

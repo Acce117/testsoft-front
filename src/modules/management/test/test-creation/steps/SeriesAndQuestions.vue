@@ -10,7 +10,7 @@
             <section v-if="test.series.length > 0" bg-slate-200 flex flex-col gap-4 pa-3 rounded-xl overflow-hidden>
                 <div w-full pb-4 overflow-auto>
 
-                    <Steps :readonly="false" flex-1 :model="getSeriesNames()" v-model:activeStep="selectedSerieIndex" />
+                    <Steps class="!flex !gap-2" :readonly="false" flex-1 :model="getSeriesNames()" v-model:activeStep="selectedSerieIndex" />
                 </div>
 
                 <div shadow-md rounded-lg pa-2 shadow-slate-500 bg-white>
@@ -99,7 +99,7 @@
     <SerieDialog ref="serieDialog" v-model="serie" :submit-function="saveSerie" :success-function="() => refetch()" />
     <QuestionDialog ref="questionDialog" v-model="question" :submit-function="saveQuestion"
         :success-function="() => refetch()" />
-    <AnswerDialog ref="answerDialog" v-model="answer" :options="getItems()" :submit-function="saveAnswer"
+    <AnswerDialog ref="answerDialog" v-model="answer"  :options="getItems()" :submit-function="saveAnswer"
         :success-function="() => refetch()" />
 
 

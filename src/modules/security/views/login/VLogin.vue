@@ -29,7 +29,7 @@ window.scrollTo(0, 0);
       <VLanguageChanger />
     </div>-->
 
-    <section flex overflow-hidden h-100 w-xs bg-white shadow-xl rounded-2xl border-solid border-1 border-slate-200>
+    <section flex overflow-hidden h-115 w-xs bg-white shadow-xl rounded-2xl border-solid border-1 border-slate-200>
       <div overflow-hidden pa-4>
         <div flex flex-col mb-2rem>
           <img src="/img/logo.png" w-5rem h-20  />
@@ -59,6 +59,7 @@ window.scrollTo(0, 0);
             <span v-if="!login.loading">{{ $t("login.login") }} <span class="pi pi-arrow-right"></span></span>
             <VLoading v-else />
           </VButton>
+          <RouterLink  text-primary to="/sign-up">{{ $t('login.sign-up') }}</RouterLink>
         </Form>
       </div>
     </section>

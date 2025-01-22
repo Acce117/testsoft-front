@@ -7,9 +7,12 @@
   <VInput v-model="user.last_name" name="last_name" label="user.last_name" />
   <VInput v-model="user.username" name="username" label="user.username" />
   <VInput v-model="user.email" name="email" label="user.email" />
-  <VSelect :loading="isPending" v-model="user.country_id" :defaultValue="defaultCountry" name="country_id" label="user.country" optionId="country_id" :options="countries" optionLabel="name" />
-  <VSelect v-model="user.item_id"  name="item_id" label="user.role" :defaultValue="defaultRole" :options="roles" optionLabel="name" optionId="item_id" />
-  <VTreeSelect v-model="user.group_id" :defaultValue :options="groups" name="group_id" label="user.group" />
+  <VSelect :loading="isPending" v-model="user.country_id" :defaultValue="defaultCountry" name="country_id"
+    label="user.country" optionId="country_id" :options="countries" optionLabel="name" />
+  <VSelect :disabled="user.item_id==5 || (user.item_id==1 && userRole==1)" v-model="user.item_id" name="item_id" label="user.role" :defaultValue="defaultRole" :options="roles"
+    optionLabel="name" optionId="item_id" />
+  <VTreeSelect :disabled="user.item_id==5 || (user.item_id==1  && userRole==1)" v-model="user.group_id" :defaultValue :options="groups" name="group_id" label="user.group" />
+  <VInput opacity-0 invisible v-model="user.assignment_id" name="assignment_id" label="user.name" />
 
 </template>
 <script setup lang="ts">
@@ -22,30 +25,31 @@ import { useGroups } from "@/modules/management/group/composables/useGroups";
 import { ref } from "vue";
 import VTreeSelect from "@/components/VTreeSelect.vue";
 import VRadioButton from "@/components/VRadioButton.vue";
-
+import { userStore } from "@/modules/security/store/user-store";
+const { t } = useI18n();
+const userRole = userStore().assignments[0].item_id
 const user = defineModel()
 const roles = ref([
-  { item_id: 1, name: 'Admin' },
-  { item_id: 3, name: 'Executor' },
-  { item_id: 2, name: 'Analyst' },
-  { item_id: 4, name: 'Super Admin' },
-
-
-
+  { item_id: 3, name: t('roles.Executor') },
+  { item_id: 2, name: t('roles.Analyst') },
 ])
-const defaultCountry =  ref( user.value.country)
-const defaultRole =  ref( roles.value.filter((role)=>role.item_id==user.value.assignments[0].item_id)[0])
+if (userRole == 4 || userRole == 5 || (user.value.item_id==1 && userRole==1)) roles.value.push({ item_id: 1, name: t('roles.Admin') })
+
+if (userRole == 4 || (user.value.item_id==5 && userRole==1)) roles.value.push({ item_id: 5, name: t('roles.Client')})
+const defaultCountry = ref(user.value.country)
+const defaultRole = ref(roles.value.filter((role) => user.value.assignments[0] && role.item_id == user.value.assignments[0].item_id)[0])
 
 let defaultValue = {}
-const { t } = useI18n();
 
 const { countries, isPending } = useCountries()
 const { groups } = useGroups()
 defaultValue[user.value.assignments[0].group_id] = true
-
 user.value.country_id = user.value.country.country_id
 user.value.group_id = user.value.assignments[0].group_id
 user.value.item_id = user.value.assignments[0].item_id
+user.value.assignment_id = user.value.assignments[0].assignment_id
+
+
 
 
 </script>

@@ -1,7 +1,9 @@
 <template>
   <section mt-6rem pa-2>
+      <div rounded-xl pa-2 bg-white border-1 border-solid border-slate-200 shadow-md>
 
-    <CustomTable title="my-results.title" :custom-get-one-function="(id_test_application:number)=>new TestResult({id_test_application:id_test_application}).getOne()" hideEdit hideDelete hideCreate :model="result"  :query-options="{
+      
+    <CustomTable title="results.my-results" :custom-get-one-function="(id_test_application:number)=>new TestResult({id_test_application:id_test_application}).getOne()" hideEdit hideDelete hideCreate :model="result"  :query-options="{
       where: {
         fk_id_user: userStore().user_id
       },
@@ -17,7 +19,7 @@
         <VFinalResults :loading="slotProps.isPendingOfOne" :error="slotProps.isErrorOfOne"  :testResult="slotProps.dataOfOne" :testName="slotProps.model.test.name" :testType="slotProps.model.test.type_psi_test.id_type_test"/>  
       </template>
     </CustomTable>
-
+  </div>
   </section>
 
 </template>

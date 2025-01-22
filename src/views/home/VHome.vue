@@ -7,7 +7,7 @@
         <h2 text-2xl lg:text-xl lg:max-w-100 m-0 font-poppins>
           {{ $t('home.subtitle') }}
         </h2>
-        <Button v-ripple mt-2rem rounded border-none w-12rem iconPos="right" @click="router.push('/select-test')"
+        <Button v-ripple v-if="userStore().assignments[0].item_id==3" mt-2rem rounded border-none w-12rem iconPos="right" @click="router.push('/select-test')"
           :label="$t('global.start')" icon="pi pi-arrow-right">
         </Button>
       </div>
@@ -24,6 +24,7 @@
 import VPresentation from "./components/VPresentation.vue";
 import Button from "primevue/button";
 import router from "@/router";
+import { userStore } from "@/modules/security/store/user-store";
 </script>
 <style>
 .home-background {

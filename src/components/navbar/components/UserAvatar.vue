@@ -5,7 +5,7 @@
       class="mr-2" shape="circle" />
     <span class="hidden text-slate-800 lg:inline-flex flex-col items-start">
       <span class="font-bold">{{ user.username }}</span>
-      <span class="text-sm">{{ user.assignments[0].role.name }}</span>
+      <span class="text-sm">{{ $t('roles.'+user.assignments[0].role.name) }}</span>
     </span>
   </button>
   <Menu ref="userMenu" :model="userItems" :popup="true" />

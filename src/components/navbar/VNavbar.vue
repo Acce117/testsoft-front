@@ -130,7 +130,7 @@ const itemsDefault = [
 ];
 const items = ref([]);
 let subItemsManagement = []
-if (userStore().getRoles.includes("Admin")) {
+if (userStore().getRoles.includes("Admin") || userStore().getRoles.includes("Client")) {
   subItemsManagement.push(...itemsAdmin)
 }
 if (userStore().getRoles.includes("Analyst")) {
@@ -138,14 +138,21 @@ if (userStore().getRoles.includes("Analyst")) {
 }
 if (userStore().getRoles.includes("Super Admin")) {
   subItemsManagement.push(...itemsAdmin)
+  subItemsManagement.push(...itemsAnalyst)
+
   subItemsManagement.push(...itemsSuperAdmin)
 }
+
+
 if (subItemsManagement.length > 0) {
   itemsManagement[0].items.push(...subItemsManagement);
   items.value.push(...itemsManagement)
 }
+if (userStore().getRoles.includes("Executor")) {
+  items.value.push(...itemsDefault);
+}
 
-items.value.push(...itemsDefault);
+
 const updateNavbarLabels = () => {
   items.value.forEach((item: any) => {
     if (item.label) {

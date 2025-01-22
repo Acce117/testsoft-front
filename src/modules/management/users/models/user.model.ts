@@ -1,7 +1,7 @@
 import { useSendRequest } from "@/common/utils/fetch";
 import useEvents from "@/common/utils/useEvents";
 import { BaseModel } from "@/common/utils/BaseModel";
-import { schema } from "../schemas/user.schema";
+import { schema, updateSchema } from "../schemas/user.schema";
 import { sendRequest } from "@/common/utils/sendRequest";
 
 const url = "user";
@@ -75,6 +75,9 @@ export class User extends BaseModel {
   public getSchema() {
     return schema;
   }
+  public getUpdateSchema() {
+    return updateSchema;
+  }
 
   public getFieldAsID(): string {
     return "user_id";
@@ -84,9 +87,10 @@ export class User extends BaseModel {
   }
   async create(data?: object) {
     const submitData = data ? data : this;
+    
     const body = {
       ...submitData,
-      enabled:1,
+      enabled: 1,
       assignments: [
         {
           group_id: submitData.group_id,
@@ -95,6 +99,9 @@ export class User extends BaseModel {
         },
       ],
     };
+    delete body.item_id;
+    delete body.group_id;
+    delete body.enabled;
     return await sendRequest({
       method: "POST",
       url: `${import.meta.env.VITE_API_PATH}/${this.getURL()}`,
@@ -102,10 +109,26 @@ export class User extends BaseModel {
     });
   }
   async update(data?: object) {
-    return await sendRequest({
+    console.log(data);
+    const submitData = data ? data : this;
+    const clone = { ...submitData };
+    delete clone.item_id;
+    delete clone.group_id;
+    delete clone.assignment_id;
+
+    await sendRequest({
       method: "PATCH",
       url: `${import.meta.env.VITE_API_PATH}/${this.getURL()}/${this.getID()}`,
-      body: data ? data : this,
+      body: clone,
+    });
+    await sendRequest({
+      method: "PATCH",
+      url: `${import.meta.env.VITE_API_PATH}/auth_assignment/${submitData.assignment_id}`,
+      body: {
+        group_id: submitData.group_id,
+        item_id: submitData.item_id,
+        user_id: submitData.user_id,
+      },
     });
   }
 }

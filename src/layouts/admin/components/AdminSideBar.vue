@@ -57,14 +57,14 @@ const itemsAnalyst = [
         i18n: "test",
         icon: 'pi pi-file-edit',
 
-        command: () => router.push("/test"),
+        command: () => navigateTo("/test"),
     },
     {
         label: " ",
         i18n: "results",
         icon: 'pi pi-list-check',
 
-        command: () => router.push("/results"),
+        command: () => navigateTo("/results"),
     },
 ];
 
@@ -75,14 +75,14 @@ const itemsAdmin = [
         i18n: "users",
         icon: 'pi pi-user',
 
-        command: () => router.push("/users"),
+        command: () => navigateTo("/users"),
     },
     {
         label: " ",
         icon: 'pi pi-users',
 
         i18n: "groups",
-        command: () => router.push("/groups"),
+        command: () => navigateTo("/groups"),
     },
 ];
 
@@ -92,7 +92,7 @@ const itemsSuperAdmin = [
         icon: 'pi pi-briefcase',
 
         i18n: "client",
-        command: () => router.push("/clients"),
+        command: () => navigateTo("/clients"),
     },
 ]
 const itemsDefault = [
@@ -116,7 +116,7 @@ const itemsDefault = [
 ];
 const items = ref([]);
 let subItemsManagement = []
-if (userStore().getRoles.includes("Admin")) {
+if (userStore().getRoles.includes("Admin") || userStore().getRoles.includes("Client")) {
     subItemsManagement.push(...itemsAdmin)
 }
 if (userStore().getRoles.includes("Analyst")) {
@@ -124,6 +124,7 @@ if (userStore().getRoles.includes("Analyst")) {
 }
 if (userStore().getRoles.includes("Super Admin")) {
     subItemsManagement.push(...itemsAdmin)
+    subItemsManagement.push(...itemsAnalyst)
     subItemsManagement.push(...itemsSuperAdmin)
 }
 if (subItemsManagement.length > 0) {

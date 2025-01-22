@@ -19,6 +19,7 @@ import VMyResults from "@/modules/results/views/VMyResults.vue";
 import VClients from "@/modules/management/clients/views/VClients.vue";
 import NotAuthorized from "@/views/errors/NotAuthorized.vue";
 import NotFound from "@/views/errors/NotFound.vue";
+import VSignUp from "@/modules/security/views/sign-up/VSignUp.vue";
 
 const autorize = (roles: string[]) => {
   return function (to, from, next) {
@@ -42,6 +43,11 @@ const router = createRouter({
       component: VLogin,
     },
     {
+      path: "/sign-up",
+      name: "sign-up",
+      component: VSignUp,
+    },
+    {
       path: "/admin",
       name: "admin",
       component: AdminLayout,
@@ -52,21 +58,21 @@ const router = createRouter({
           name: "users",
           component: VUsersManagement,
           meta: { requiresAuth: true },
-          beforeEnter: autorize(["Admin", "Super Admin"]),
+          beforeEnter: autorize(["Admin", "Super Admin", "Client"]),
         },
         {
           path: "/groups",
           name: "groups",
           component: VGroups,
           meta: { requiresAuth: true },
-          beforeEnter: autorize(["Admin", "Super Admin"]),
+          beforeEnter: autorize(["Admin", "Super Admin", "Client"]),
         },
         {
           path: "/results",
           name: "results",
           component: VResults,
           meta: { requiresAuth: true },
-          beforeEnter: autorize(["Analyst"]),
+          beforeEnter: autorize(["Analyst","Super Admin"]),
         },
         {
           path: "/clients",

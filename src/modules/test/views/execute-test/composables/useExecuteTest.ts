@@ -74,7 +74,7 @@ export const useExecuteTest = () => {
       acceptLabel: t("global.confirm"),
       accept: () => {
         useEvents().dispatch("dialog-results");
-        exitTest("");
+        exitTest("my-results");
       },
       reject: () => {
         confirmExit.value = false;

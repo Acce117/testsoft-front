@@ -6,7 +6,7 @@
                 name="is_correct" :default="model.correct_answer.id_correct_answer !== undefined" />
             <VSelect v-model="model.tribute.fk_id_item" :defaultValue="model.tribute.fk_id_answer ? defaultItem : null"
                 optionId="id_item" name="fk_id_item" label="Elemento al que tributa" :options optionLabel="name" />
-            <VInput v-model="model.tribute.tribute_value" number name="tribute_value"
+            <VInput  v-model="model.tribute.tribute_value" number name="tribute_value"
                 label="Cantidad de puntos que tributa" />
             <VFileUpload v-model="model.image" name="image" label="Imagen asociada a la respuesta" />
         </template>
@@ -34,8 +34,11 @@ const props = defineProps({
         required: true
     },
 })
+
 const model: Ref<Answer> = defineModel()
     const testBuilder = inject('testBuilder')
+
+
 
 
 const defaultItem = computed(()=>props.options.filter((i)=>i.id_item == model.value.tribute.fk_id_item)[0])

@@ -1,11 +1,11 @@
 <template>
 
-  <div w-full text-left flex flex-col gap-4>
+  <div w-full text-left flex flex-col gap-4 text-slate-600>
     <Field v-model="model" :name="props.name" v-slot="{ meta, errors }">
       <label for="" >
         <slot name="icon"></slot>{{ $t(props.label) }}
       </label>
-      <div  w-full flex gap-4 flex-wrap>
+      <div  w-full flex gap-4 flex-wrap >
 
         <div flex items-center justify-center gap-2 v-for="option in props.options" :key="option">
           <RadioButton  :inputId="option" :value="option" v-bind="{ ...$attrs }" v-model="model"

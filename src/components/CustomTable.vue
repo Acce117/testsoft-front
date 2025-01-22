@@ -1,5 +1,5 @@
 <template>
-    <Card>
+    <Card overflow-auto>
         <template #content>
 
             <DataTable  v-model:expandedRows="expandedRows"  removableSort ref="dt" size="small" tableStyle="min-width: 50rem"
@@ -45,7 +45,7 @@
                             <Rating v-if="col.isRating" :modelValue="slotProps.data[col.fieldGetter(slotProps.data)]"
                                 readonly />
                             <span v-else-if="col.isBoolean">{{
-                                col.fieldGetter(slotProps.data) == true ? t('yes') : t('no') }}</span>
+                                col.fieldGetter(slotProps.data) == true ? t('global.yes') : t('global.no') }}</span>
                             <span v-else-if="col.fieldGetter(slotProps.data) !== undefined">{{ typeof
                                 col.fieldGetter(slotProps.data) == 'string' ? col.fieldGetter(slotProps.data).length <
                                     20 ? col.fieldGetter(slotProps.data) : col.fieldGetter(slotProps.data).substring(0,
@@ -55,7 +55,7 @@
                         <div overflow-auto text-sm v-else>
                             <Rating v-if="col.isRating" :modelValue="slotProps.data[col.field]" readonly />
                             <span v-else-if="col.isBoolean || col.field === props.model.getFieldAsActive()">{{
-                                slotProps.data[col.field] == true ? t('yes') : t('no') }}</span>
+                                slotProps.data[col.field] == true ? t('global.yes') : t('global.no') }}</span>
                             <span v-else-if="slotProps.data[col.field] !== undefined">{{ typeof
                                 slotProps.data[col.field] == 'string' ? slotProps.data[col.field].length < 20 ?
                                 slotProps.data[col.field] : slotProps.data[col.field].substring(0, 20) + '...' :
@@ -228,6 +228,7 @@ const { data: dataOfOne, isPending: isPendingOfOne, isSuccess: isSuccessOfOne, i
 })
 
 watch(dataOfOne, (newValue) => {
+    console.log(newValue)
     props.model.setData(newValue)
 })
 const isLogicErase = props.model.getFieldAsActive() != ''
@@ -335,6 +336,7 @@ const showUpdateDialog = ref(false)
 const showUpdate = async (data: object) => {
     props.model.setData(data)
     await refetchOfOne()
+    props.model.setData(dataOfOne.value)
 
     if (props.customUpdateFunction)
         props.customUpdateFunction(props.model.getID())
@@ -487,7 +489,7 @@ const { mutate: mutateDelete } = useMutation({
     }
 })
 
-defineExpose({showUpdate, refetch})
+defineExpose({showUpdate, refetch, desactivateElement, activateElement})
 
 </script>
 <style>

@@ -4,7 +4,8 @@
         "password": "Contraseña",
         "title": "Bienvenido a TestSoft",
         "login": "Iniciar Sesión",
-        "error": "Inicio de sesión inválido"
+        "error": "Inicio de sesión inválido",
+        "sign-up":"Regístrate como nuestro cliente"
     },
     "home": {
         "subtitle": "Herramienta para la ejecución de test psicológicos",
@@ -68,6 +69,7 @@
     },
     "results": {
         "title": "Resultados",
+        "my-results":"Mis Resultados",
         "by_user":"Resultados por Usuario",
 
         "results-of": "Resultados de",
@@ -153,7 +155,7 @@
         "title": "Usuarios",
         "name": "Nombres",
         "last_name": "Apellidos",
-        "ci": "Carnet de Identidad",
+        "ci": "Identificación",
         "username": "Nombre de Usuario",
         "password": "Contraseña",
         "email": "Correo",
@@ -170,8 +172,15 @@
     },
     "group": {
         "title":"Grupos",
-        "name_group": "Nombre",
+        "name_group": "Nombre del Grupo",
         "father_group": "Grupo al que Pertenece"  
+    },
+    "roles":{
+        "Executor":"Ejecutor",
+        "Admin":"Administrador",
+        "Analyst":"Analista",
+        "Super Admin":"Proveedor",
+        "Client":"Cliente"
     },
     "test": {
         "name": "Test",
@@ -237,6 +246,12 @@
 "table":{
     "search":"Buscar...",
     "actions":"Acciones",
+    "options":"Opciones",
+    "confirmation":"Operación Completada",
+    "element_ok_updated":"Elemento actualizado correctamente",
+    "element_ok_deleted":"Elemento eliminado correctamente",
+    "element_ok_added":"Elemento añadido correctamente",
+    "something_wrong":"Operación Fallida",
     "no_results":"No existen elementos",
     "information":"Detalles",
     "view_information":"Ver Detalles",
