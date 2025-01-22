@@ -182,6 +182,9 @@
         "Super Admin":"Proveedor",
         "Client":"Cliente"
     },
+    "clients":{
+        "title":"Clientes"
+    },
     "test": {
         "name": "Test",
         "date": "Fecha de Ejecución",  

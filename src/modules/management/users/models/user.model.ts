@@ -99,14 +99,32 @@ export class User extends BaseModel {
         },
       ],
     };
+    // if (submitData.item_id == 5) {
+    //   body.my_groups = [
+    //     {
+    //       user_id: submitData.user_id,
+    //       group_id: submitData.group_id,
+    //     },
+    //   ];
+    // }
     delete body.item_id;
     delete body.group_id;
     delete body.enabled;
-    return await sendRequest({
+    await sendRequest({
       method: "POST",
       url: `${import.meta.env.VITE_API_PATH}/${this.getURL()}`,
       body: body,
     });
+    if(submitData.item_id==5){
+      await sendRequest({
+        method: "POST",
+        url: `${import.meta.env.VITE_API_PATH}/group_owner}`,
+        body: {
+          user_id:submitData.user_id,
+          group_id: submitData.group_id
+        },
+      });
+    }
   }
   async update(data?: object) {
     console.log(data);

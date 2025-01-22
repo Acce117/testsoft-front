@@ -48,7 +48,10 @@ export class Client extends BaseModel {
 
 
   public getFieldAsID(): string {
-    return "id_user";
+    return "user_id";
+  }
+  public getFieldAsActive(): string {
+    return "enabled";
   }
 
   public async getAll(params: object = {}) {
