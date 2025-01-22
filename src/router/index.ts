@@ -80,7 +80,7 @@ const router = createRouter({
           name: "test",
           component: VTestManagement,
           meta: { requiresAuth: true },
-          beforeEnter: autorize(["Analyst"]),
+          beforeEnter: autorize(["Analyst","Super Admin"]),
         },
       ],
     },

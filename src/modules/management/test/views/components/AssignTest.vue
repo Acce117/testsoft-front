@@ -1,21 +1,29 @@
 <template>
-  <Dialog v-model:visible="visible" modal :header="$t('table.update')" class="w-4/5 max-w-50rem min-w-25rem">
+  <Dialog v-model:visible="visible" modal :header="$t('table.assign')" class="w-4/5 max-w-50rem min-w-25rem">
 
-    <span>{{ $t('assign') }}</span>
+    <span>{{ $t('table.assign') }} {{ test.name }}</span>
     <Form @submit="mutate" :validation-schema="test.getUpdateSchema()">
       <div class="dialog-form">
-        <div shadow-md v-for="group in data.groups" rounded-lg pa-2>
-          {{group.name_group}}
+        <div rounded-xl p-2 bg-slate-200>
+
+          <Tree v-if="!isRequestLoading && !isGroupsLoading" rounded-xl :value="groups">
+            <template #default="slotProps">
+              <b mr-4>{{ slotProps.node.label }}</b> <Button @click="retireTest(slotProps.node.key)"
+                v-if="slotProps.node.psiTests.filter(t => t.id_test == test.id_test)[0]" severity="danger"
+                :label="$t('table.retire')"></Button> <Button v-else @click="assignTest(slotProps.node.key)"
+                :label="$t('table.assign')"></Button>
+            </template>
+          </Tree>
         </div>
-        
+
       </div>
-      <div class="dialog-footer">
+      <!-- <div class="dialog-footer">
         <Button type="button" :label="$t('global.cancel')" severity="secondary" @click="visible = false"></Button>
         <VButton w-8rem :disabled="isUpdatePending || isGroupsLoading" type="submit">
           <span v-if="!isUpdatePending || isGroupsLoading">{{ $t("global.save") }} </span>
           <VLoading v-else />
         </VButton>
-      </div>
+      </div> -->
     </Form>
   </Dialog>
 </template>
@@ -29,35 +37,37 @@ import Dialog from "primevue/dialog";
 import { useMutation, useQuery } from "@tanstack/vue-query";
 import { useToast } from "primevue/usetoast";
 import Button from "primevue/button";
-import VButton from "@/components/VButton.vue";
+import { useGroupsWithTest } from "@/modules/management/group/composables/useGroups";
+import Tree from "primevue/tree";
+import { GroupForTest } from "../../modules/group_for_test/group_for_test.model";
+import handlePromise from "@/common/utils/handlePromise";
+import { ref } from "vue";
 const props = defineProps({ refetch: { type: Function, required: true } })
-const toast = useToast();
+
+const isRequestLoading = ref(false)
+const assignTest = (id_group: string) => {
+  handlePromise(() => new GroupForTest().create({ id_test: test.value.id_test, id_group: id_group }), isRequestLoading, () => {
+    refetchGroups()
+  })
+}
+const retireTest = async (id_group: string) => {
+  handlePromise(async () => {
+    const groupForTest = new GroupForTest()
+    const assignations = await groupForTest.getAll({
+      where: {
+        fk_id_test: test.value.id_test,
+        fk_id_group: id_group
+      }
+    })
+    groupForTest.delete(assignations[0].id_group_for_test)
+  }, isRequestLoading, () => {
+    refetchGroups()
+  })
+}
 
 const test: ModelRef<Test> = defineModel({ required: true })
 const visible: ModelRef<boolean> = defineModel("visible")
 
-// const {data:groups, isPending:isGroupsLoading} = useGroupsOfTest(test.value.id_test)
-const { data, isPending: isGroupsLoading } =
-  useQuery({
-    queryKey: ["groups-of-test"],
-    queryFn: async () =>
-      await new Test({ id_test: test.value.id_test }).getOne({
-        relations: ["groups"],
-      }),
-  });
+const { groups, refetch: refetchGroups, isPending: isGroupsLoading } = useGroupsWithTest()
 
-const { t } = useI18n();
-const { mutate, isPending: isUpdatePending } = useMutation({
-  mutationKey: [`assign-test`],
-  mutationFn: (data: object) => console.log(data),
-  onSuccess: async () => {
-    await props.refetch()
-    toast.add({ severity: 'info', summary: t('table.confirmation'), detail: t('table.element_ok_updated'), life: 5000 });
-    visible.value = false
-    test.value.clearData()
-  },
-  onError: (error) => {
-    toast.add({ severity: 'error', summary: t('table.something_wrong'), detail: error.statusCode == 404 ? t('table.relations_error') : t(error.message), life: 5000 });
-  }
-})
 </script>

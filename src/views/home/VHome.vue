@@ -13,7 +13,7 @@
       </div>
 
 
-      <img hidden lg:block  mt-0 w-200 src="/img/psychometric_practice.webp" />
+      <img hidden lg:block  mt-20 w-160  src="/img/psychometric_practice.webp" />
 
     </div>
 

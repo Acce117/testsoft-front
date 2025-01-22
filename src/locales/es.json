@@ -225,7 +225,7 @@
             "name":"Gestión",
             "users":"Usuarios",
             "groups":"Grupos",
-            "clients":"Clientes",
+            "client":"Clientes",
             "test":"Test",
             "results":"Resultados"
         }
