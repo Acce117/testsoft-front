@@ -2,9 +2,10 @@
     <Card overflow-auto>
         <template #content>
 
-            <DataTable  v-model:expandedRows="expandedRows"  removableSort ref="dt" size="small" tableStyle="min-width: 50rem"
-                :globalFilterFields="props.model.getColumns().map((c) => c.field)" v-model:filters="filters"
-                filterDisplay="row" paginator :value="data" :rows="5" :rowsPerPageOptions="[5, 10, 20, 50]">
+            <DataTable v-model:expandedRows="expandedRows" removableSort ref="dt" size="small"
+                tableStyle="min-width: 50rem" :globalFilterFields="props.model.getColumns().map((c) => c.field)"
+                v-model:filters="filters" filterDisplay="row" paginator :value="data" :rows="5"
+                :rowsPerPageOptions="[5, 10, 20, 50]">
 
 
                 <template #header>
@@ -73,15 +74,15 @@
 
                         <div v-else class="custom-table-actions">
                             <div v-for="option in options" :key="option.tooltip">
-                                <i v-if="option.renderIf(slotProps.data)" mx-1 :class="option.icon" v-tooltip="$t(option.tooltip)"
-                                    @click="option.action(slotProps.data,$event)" />
+                                <i v-if="option.renderIf(slotProps.data)" mx-1 :class="option.icon"
+                                    v-tooltip="$t(option.tooltip)" @click="option.action(slotProps.data, $event)" />
 
                             </div>
 
                         </div>
                     </template>
                 </Column>
-                <template #empty> {{ isError? $t('errors.title'):$t('table.no_results') }} </template>
+                <template #empty> {{ isError ? $t('errors.title') : $t('table.no_results') }} </template>
                 <template #expansion="slotProps">
                     <slot name="expansion" :slotProps></slot>
                 </template>
@@ -187,11 +188,12 @@ const props = defineProps({
         type: BaseModel,
         required: true
     },
-    hasExpander:Boolean,
+    hasExpander: Boolean,
     customAddFunction: Function,
     customUpdateFunction: Function,
     customGetAllFunction: Function,
     customGetOneFunction: Function,
+    //validateBefore: Function,
     queryOptions: Object,
     extraOptions: Array,
     isFormDataLoading: Boolean,
@@ -207,7 +209,7 @@ const queryKey = props.model.constructor.name
 const confirm = useConfirm();
 const toast = useToast();
 const menu = ref();
-const expandedRows =ref()
+const expandedRows = ref()
 
 const toggle = (value: MouseEvent) => {
     menu.value.toggle(value);
@@ -215,7 +217,7 @@ const toggle = (value: MouseEvent) => {
 const { data, isPending, isRefetching, isError, refetch } = useQuery({
     queryKey: [queryKey],
     queryFn: (parameter?) => {
-        return props.customGetAllFunction?  props.customGetAllFunction(parameter):  props.model.getAll(props.queryOptions)
+        return props.customGetAllFunction ? props.customGetAllFunction(parameter) : props.model.getAll(props.queryOptions)
     }
 })
 
@@ -234,13 +236,13 @@ watch(dataOfOne, (newValue) => {
 const isLogicErase = props.model.getFieldAsActive() != ''
 
 const options = ref([{
-    renderIf: (value) => !props.hideShow? isLogicErase? value[props.model.getFieldAsActive()] == true:true:false,
+    renderIf: (value) => !props.hideShow ? isLogicErase ? value[props.model.getFieldAsActive()] == true : true : false,
     icon: 'pi pi-eye',
     tooltip: 'table.view_information',
     action: (value) => showElement(value)
 },
 {
-    renderIf: (value) => !props.hideEdit ? isLogicErase? value[props.model.getFieldAsActive()] == true:true:false,
+    renderIf: (value) => !props.hideEdit ? isLogicErase ? value[props.model.getFieldAsActive()] == true : true : false,
     icon: 'pi pi-file-edit',
     tooltip: 'table.update',
     action: (value) => showUpdate(value)
@@ -350,6 +352,11 @@ const showAddDialog = ref(false)
 
 const addElement = () => {
     mutateAdd()
+    //     :validateBefore="(value, values)=>{
+    //     const ci = values.filter((u)=>u.ci==value.ci)
+    //     if(ci[0] && ci.user_id!=value.ci)
+    //       throw new Error('Esta identificación ya existe')
+    //   }"
 }
 const updateElement = (data: object) => {
     mutateUpdate(data)
@@ -359,7 +366,7 @@ const deleteElement = (data: object, event) => {
 
     confirm.require({
         target: event.currentTarget,
-        header:t('table.delete'),
+        header: t('table.delete'),
         message: t('table.delete_element_ask'),
         icon: 'pi pi-exclamation-triangle',
         rejectProps: {
@@ -376,11 +383,11 @@ const deleteElement = (data: object, event) => {
         },
     });
 };
-const desactivateElement = ( data: object, event) => {
+const desactivateElement = (data: object, event) => {
 
     confirm.require({
         target: event.currentTarget,
-        header:t('table.desactivate'),
+        header: t('table.desactivate'),
         message: t('table.desactivate_element_ask'),
         icon: 'pi pi-exclamation-triangle',
         rejectProps: {
@@ -407,7 +414,7 @@ const activateElement = (data: object, event) => {
 
     confirm.require({
         target: event.currentTarget,
-        header:t('table.activate'),
+        header: t('table.activate'),
 
         message: t('table.activate_element_ask'),
         icon: 'pi pi-exclamation-triangle',
@@ -489,7 +496,7 @@ const { mutate: mutateDelete } = useMutation({
     }
 })
 
-defineExpose({showUpdate, refetch, desactivateElement, activateElement})
+defineExpose({ showUpdate, refetch, desactivateElement, activateElement })
 
 </script>
 <style>

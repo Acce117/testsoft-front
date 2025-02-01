@@ -8,7 +8,7 @@
       <Stepper pb-4  linear  @update:value="(index) => reloadData(index)" value="1" h-full v-if="isSuccess">
         <StepList>
 
-          <Step v-for="(step, index) in steps" :key="step" :value="`${index + 1}`">{{ $t(step) }}</Step>
+          <Step v-for="(step, index) in steps" :key="step" :value="`${index + 1}`">{{ $t('steps.'+step) }}</Step>
         </StepList>
         <StepPanels>
           <GeneralData :value="`${steps.indexOf('data') + 1}`" />

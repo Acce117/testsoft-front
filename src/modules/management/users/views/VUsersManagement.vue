@@ -8,7 +8,7 @@
         name: 'assignments'
       }
     ]
-  }" :model="user" :custom-get-all-function="getUsersByGroup" :extra-options="[ 
+  }" :model="user"  :custom-get-all-function="getUsersByGroup" :extra-options="[ 
   {
     renderIf: (value:User) =>   value.enabled == true && value.user_id != userStore().user_id && value.user_id != 40,
     icon: 'pi pi-file-edit',

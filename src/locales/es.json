@@ -185,6 +185,20 @@
     "clients":{
         "title":"Clientes"
     },
+    "steps":{
+        
+    "series":"Series y Preguntas",
+    "categories":"Categorías y Elementos",
+    "classifications":"Clasificaciones",
+    "close":"Cerrar Test",
+    "results":"Visualización de resultados",
+    "data":"Datos Generales",
+    },
+
+
+
+
+
     "test": {
         "name": "Test",
         "date": "Fecha de Ejecución",  

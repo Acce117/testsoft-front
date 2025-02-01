@@ -6,7 +6,7 @@
             <VInput v-if="!testBuilder.getTest().navigable" v-model="model.time_serie_duration"
                 :min="testBuilder.getTest().navigable ? 0 : 1" number name="time_serie_duration"
                 label="Tiempo de duración (Minutos)" />
-                {{ model }}
+            
         </template>
     </FormDialog>
 </template>
