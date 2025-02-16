@@ -1,7 +1,6 @@
 
 import { BaseModel } from "@/common/utils/BaseModel";
 
-const url = "country";
 const columns = [
   {
     field: "name",
@@ -18,19 +17,11 @@ export class Country extends BaseModel {
   country_id;
   code;
   name;
-
-  constructor(data: object = {}) {
-    super(data);
-    if (data) this.setData(data);
-  }
-  public setData(data: object) {
-    super.setData(data);
-  }
+  static readonly url: string = "country";
+  static readonly field_as_id: string =  "country_id";
 
 
-  public getURL(): string {
-    return url;
-  }
+
   
   public getColumns() {
     return columns;
@@ -39,9 +30,7 @@ export class Country extends BaseModel {
   //   return schema;
   // }
 
-  public getFieldAsID(): string {
-    return "country_id";
-  }
+  
 
   
 }

@@ -7,7 +7,6 @@ import type { Category } from "../modules/category/category.model";
 import { Equation } from "../modules/equation/equation.model";
 import type { Classification } from "../modules/classification/classification.model";
 
-const url = "psi_test";
 const columns = [
   {
     field: "name",
@@ -57,6 +56,8 @@ export class Test extends BaseModel {
   classifications: Classification[] =[];
   display_parameters;
   equation;
+  static readonly url: string = "psi_test";
+  static readonly field_as_id: string =  "id_test";
 
   constructor(data: any = null) {
     super(data);
@@ -86,10 +87,6 @@ export class Test extends BaseModel {
       : new Equation();
   }
 
-  public getURL(): string {
-    return url;
-  }
-
   public getColumns() {
     return columns;
   }
@@ -97,9 +94,7 @@ export class Test extends BaseModel {
     return schema;
   }
 
-  public getFieldAsID(): string {
-    return "id_test";
-  }
+
 
   async create() {
     const clone = { ...this };

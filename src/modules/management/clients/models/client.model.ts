@@ -1,9 +1,7 @@
 import { BaseModel } from "@/common/utils/BaseModel";
 import { sendRequest } from "@/common/utils/sendRequest";
 
-const url = "user";
 const columns = [
-  
   {
     field: "username",
     header: "user.username",
@@ -13,7 +11,6 @@ const columns = [
     header: "user.email",
   },
 
-
   {
     field: "enabled",
     header: "global.enabled",
@@ -22,34 +19,19 @@ const columns = [
 ];
 
 export class Client extends BaseModel {
-   id_user;
-   email;
-
+  id_user;
+  email;
   enabled;
-   username;
+  username;
+  static readonly url: string = "user";
+  static readonly field_as_id: string =  "id_user";
 
-  constructor(data: object = {}) {
-    super(data);
-    if (data) this.setData(data);
-  }
-  public setData(data: object) {
-    super.setData(data);
-  }
-
-  public getURL(): string {
-    return url;
-  }
 
   public getColumns() {
     return columns;
   }
 
   
-
-
-  public getFieldAsID(): string {
-    return "user_id";
-  }
   public getFieldAsActive(): string {
     return "enabled";
   }
@@ -60,6 +42,4 @@ export class Client extends BaseModel {
       body: params,
     });
   }
-
-  
 }

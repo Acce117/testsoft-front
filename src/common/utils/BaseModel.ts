@@ -2,16 +2,15 @@ import { object } from "yup";
 import { sendRequest } from "./sendRequest";
 
 export class BaseModel {
-  constructor(data: object) {
-    if (data) {
-      this.setData(data);
-    }
+  static readonly url: string = "base";
+  static readonly field_as_id: string = "base";
+
+  constructor(data?: object) {
+    if (data) this.setData(data);
   }
-  public getURL() {
-    return "";
-  }
+
   public getColumns() {
-    return [{field:'', header:''}];
+    return [{ field: "", header: "" }];
   }
   public setData(data: object) {
     for (const key in data) this[key] = data[key];
@@ -26,6 +25,10 @@ export class BaseModel {
   public getID() {
     return this[this.getFieldAsID()];
   }
+
+  public getURL() {
+    return (this.constructor as typeof BaseModel).url;
+  }
   public getActive() {
     return this[this.getFieldAsActive()];
   }
@@ -38,7 +41,7 @@ export class BaseModel {
   }
 
   public getFieldAsID() {
-    return "";
+    return (this.constructor as typeof BaseModel).field_as_id;
   }
 
   public getFieldAsActive() {
@@ -57,6 +60,14 @@ export class BaseModel {
       body: params,
     });
   }
+
+  static async getOne(id: number | string, params: object = {}) {
+    return await sendRequest({
+      url: `${import.meta.env.VITE_API_PATH}/${this.url}/${id}`,
+      body: params,
+    });
+  }
+
   async create(data?: object) {
     return await sendRequest({
       method: "POST",

@@ -6,7 +6,7 @@ export const useGroupsOfTest = (id: string) => {
     useQuery({
       queryKey: ["groups-of-test"],
       queryFn: async () =>
-        await new Test({ id_test: id }).getOne({
+        await Test.getOne(id, {
           relations: ["groups"],
         }),
     });

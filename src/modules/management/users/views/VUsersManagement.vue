@@ -8,26 +8,26 @@
         name: 'assignments'
       }
     ]
-  }" :model="user"  :custom-get-all-function="getUsersByGroup" :extra-options="[ 
-  {
-    renderIf: (value:User) =>   value.enabled == true && value.user_id != userStore().user_id && value.user_id != 40,
-    icon: 'pi pi-file-edit',
-    tooltip: 'table.update',
-    action: (value) => table.showUpdate(value)
-  }
-  ,
-  {
-    renderIf: (value:User) => value.enabled == true && value.user_id != userStore().user_id && value.user_id != 40,
-    icon: 'pi pi-trash',
-    tooltip: 'table.desactivate',
-    action: (value, event) => table.desactivateElement(value, event)
-  },
-  {
-    renderIf: (value) =>  value.enabled == false && value.user_id != userStore().user_id && value.user_id != 40,
-    icon: 'pi pi-history',
-    tooltip: 'table.recover',
-    action: (value, event) => table.activateElement(value, event)
-  }]">
+  }" :model="user" :custom-get-all-function="getUsersByGroup" :extra-options="[
+    {
+      renderIf: (value: User) => value.enabled == true && value.user_id != userStore().user_id && value.user_id != 40,
+      icon: 'pi pi-file-edit',
+      tooltip: 'table.update',
+      action: (value) => table.showUpdate(value)
+    }
+    ,
+    {
+      renderIf: (value: User) => value.enabled == true && value.user_id != userStore().user_id && value.user_id != 40,
+      icon: 'pi pi-trash',
+      tooltip: 'table.desactivate',
+      action: (value, event) => table.desactivateElement(value, event)
+    },
+    {
+      renderIf: (value) => value.enabled == false && value.user_id != userStore().user_id && value.user_id != 40,
+      icon: 'pi pi-history',
+      tooltip: 'table.recover',
+      action: (value, event) => table.activateElement(value, event)
+    }]">
     <template #header>
       <div w-full>
         <TreeSelect @change="(value) => { defaultValue = value; table.refetch() }" :defaultValue
@@ -70,7 +70,7 @@ const selectedGroup = ref({})
 
 const getUsersByGroup = async () => {
   const id_group = Object.keys(selectedGroup.value)[0]
-  const group = await new Group({ id_group: id_group ? id_group : userStore().assignments[0].group_id }).getOne({ relations: ['users'] })
+  const group = await Group.getOne(id_group ? id_group : userStore().assignments[0].group_id, { relations: ['users'] })
   return group.users
 }
 </script>

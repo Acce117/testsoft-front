@@ -4,7 +4,6 @@ import { CorrectAnswer } from "../correct_answer/correct_answer.model";
 import { Tribute } from "../tribute/tribute.model";
 import { sendRequest } from "@/common/utils/sendRequest";
 
-const url = "answer";
 
 export class Answer extends BaseModel {
   id_answer;
@@ -14,11 +13,12 @@ export class Answer extends BaseModel {
   tribute;
   is_correct;
   image = null;
+  static readonly url: string = "answer";
+  static readonly field_as_id: string =  "id_answer";
 
-  constructor(data: object = {}) {
-    super(data);
-    if (data) this.setData(data);
-  }
+
+
+  
 
   public setData(data: object) {
     super.setData(data);
@@ -28,9 +28,6 @@ export class Answer extends BaseModel {
     this.tribute = data.tribute ? new Tribute(data.tribute) : new Tribute();
   }
 
-  public getURL(): string {
-    return url;
-  }
   public getSchema() {
     return schema;
   }
@@ -69,7 +66,4 @@ export class Answer extends BaseModel {
     });
   }
 
-  public getFieldAsID(): string {
-    return "id_answer";
-  }
 }

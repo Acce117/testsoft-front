@@ -3,22 +3,14 @@ import { schema } from "./classification.schema";
 import { sendRequest } from "@/common/utils/sendRequest";
 import type { TestRange } from "../test_range/test_range.model";
 
-const url = "classification";
 
 export class Classification extends BaseModel {
   id_classification;
   name_classification;
   ranges:TestRange[] = [];
   fk_id_test;
+  static readonly url: string = "classification";
 
-  constructor(data: object = {}) {
-    super(data);
-    this.setData(data);
-  }
-  public setData(data: object) {
-    super.setData(data);
-
-  }
 
   async create() {
       const clone = { ...this };
@@ -42,14 +34,11 @@ export class Classification extends BaseModel {
 
 
 
-  public getURL(): string {
-    return url;
-  }
+   
   public getSchema() {
     return schema;
   }
 
-  public getFieldAsID(): string {
-    return "id_classification";
-  }
+  static readonly field_as_id: string =  "id_classification";
+  
 }

@@ -1,6 +1,5 @@
 import { BaseModel } from "@/common/utils/BaseModel";
 
-const url = "test_app";
 
 const columns = [
   {
@@ -20,24 +19,14 @@ export class TestAplication extends BaseModel {
   fk_id_test;
   date;
   test;
+  static readonly url: string = "test_app";
+  static readonly field_as_id: string =  "id_test_application";
+  
 
-  constructor(data: object = {}) {
-    super(data);
-    if (data) this.setData(data);
-  }
-  public setData(data: object) {
-    super.setData(data);
-  }
-
-  public getURL(): string {
-    return url;
-  }
 
   public getColumns() {
     return columns;
   }
 
-  public getFieldAsID(): string {
-    return "id_test_application";
-  }
+ 
 }

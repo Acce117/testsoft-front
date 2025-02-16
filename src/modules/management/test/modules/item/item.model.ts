@@ -3,7 +3,6 @@ import { schema } from "./item.schema";
 import type { Range } from "../range/range.model";
 import { sendRequest } from "@/common/utils/sendRequest";
 
-const url = "item";
 
 export class Item extends BaseModel {
   id_item;
@@ -12,26 +11,19 @@ export class Item extends BaseModel {
   fk_category;
   priority;
   ranges: Range[] = [];
+  static readonly url: string = "item";
+  static readonly field_as_id: string =  "id_item";
 
 
-  constructor(data: object = {}) {
-    super(data);
-    if (data) this.setData(data);
-  }
-  public setData(data: object) {
-    super.setData(data);
-  }
 
-  public getURL(): string {
-    return url;
-  }
+ 
+
+   
   public getSchema() {
     return schema;
   }
 
-  public getFieldAsID(): string {
-    return "id_item";
-  }
+  
   async create() {
       const clone = { ...this };
       delete clone.ranges;

@@ -1,18 +1,19 @@
 <template>
 
-  <CustomTable hasExpander hide-create ref="table" title="results.by_user"  hideActions :model="user" :custom-get-all-function="getUsersByGroup">
+  <CustomTable hasExpander hide-create ref="table" title="results.by_user" hideActions :model="user"
+    :custom-get-all-function="getUsersByGroup">
     <template #header>
       <div w-full>
-        <TreeSelect @change="() => table.refetch()" :defaultValue :placeholder="$t('user.filtergroup')" :options="groups" filter w-40
-          v-model="selectedGroup" />
+        <TreeSelect @change="() => table.refetch()" :defaultValue :placeholder="$t('user.filtergroup')"
+          :options="groups" filter w-40 v-model="selectedGroup" />
       </div>
     </template>
 
 
     <template #expansion="slotProps">
-      <CustomTable title="results.title" 
-        :custom-get-one-function="(id_test_application: number) => new TestResult({ id_test_application: id_test_application }).getOne()"
-        hideEdit hideDelete hideCreate :model="result" :query-options="{
+      <CustomTable title="results.title"
+        :custom-get-one-function="(id_test_application: number) => TestResult.getOne(id_test_application)" hideEdit
+        hideDelete hideCreate :model="result" :query-options="{
 
           relations: [
             {
@@ -20,8 +21,8 @@
               relations: ['type_psi_test']
             }
           ],
-          where:{
-            fk_id_user:slotProps.slotProps.data.user_id
+          where: {
+            fk_id_user: slotProps.slotProps.data.user_id
           }
         }">
 
@@ -67,11 +68,12 @@ const { groups } = useGroups()
 
 const getUsersByGroup = async () => {
   const id_group = Object.keys(selectedGroup.value)[0]
-  const group = await new Group({ id_group: id_group ? id_group : userStore().assignments[0].group_id }).getOne({ relations: ['users'] })
+
+  const group = await Group.getOne(id_group ? id_group : userStore().assignments[0].group_id, { relations: ['users'] })
   return group.users
 }
 let defaultValue = {}
-defaultValue[userStore().assignments[0].group_id]=true
+defaultValue[userStore().assignments[0].group_id] = true
 onUnmounted(() => {
   toast.removeAllGroups();
 });

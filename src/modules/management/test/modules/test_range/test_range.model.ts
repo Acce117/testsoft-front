@@ -1,7 +1,6 @@
 import { BaseModel } from "@/common/utils/BaseModel";
 import { schema } from "./test_range.schema";
 
-const url = "test_range";
 
 export class TestRange extends BaseModel {
   id_test_range;
@@ -10,23 +9,12 @@ export class TestRange extends BaseModel {
   indicator;
   description;
   fk_id_classification;
+  static readonly url: string = "test_range";
+  static readonly field_as_id: string =  "id_test_range";
 
-  constructor(data: object = {}) {
-    super(data);
-    if (data) this.setData(data);
-  }
-  public setData(data: object) {
-    super.setData(data);
-  }
-
-  public getURL(): string {
-    return url;
-  }
   public getSchema() {
     return schema;
   }
 
-  public getFieldAsID(): string {
-    return "id_test_range";
-  }
+  
 }

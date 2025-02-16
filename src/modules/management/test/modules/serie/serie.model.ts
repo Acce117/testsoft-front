@@ -3,55 +3,40 @@ import { schema } from "./serie.schema";
 import type { Question } from "./question.model";
 import { sendRequest } from "@/common/utils/sendRequest";
 
-const url = "test_serie";
-
 export class Serie extends BaseModel {
   id_serie;
   name;
   description;
   time_serie_duration = 0;
-  questions:Question[] = [];
+  questions: Question[] = [];
   fk_id_test;
-
-  constructor(data: object = {}) {
-    super(data);
-    this.setData(data);
-  }
-  public setData(data: object) {
-    super.setData(data);
-
-  }
+  static readonly url: string = "test_serie";
+  static readonly field_as_id: string =  "id_serie";
+  
 
   async create() {
-      const clone = { ...this };
-      delete clone.questions;
-      return await sendRequest({
-        method: "POST",
-        url: `${import.meta.env.VITE_API_PATH}/${this.getURL()}`,
-        body: clone,
-      });
-    }
-  
-    async update() {
-      const clone = { ...this };
-      delete clone.questions;
-      return await sendRequest({
-        method: "PATCH",
-        url: `${import.meta.env.VITE_API_PATH}/${this.getURL()}/${this.getID()}`,
-        body: clone,
-      });
-    }
-
-
-
-  public getURL(): string {
-    return url;
+    const clone = { ...this };
+    delete clone.questions;
+    return await sendRequest({
+      method: "POST",
+      url: `${import.meta.env.VITE_API_PATH}/${this.getURL()}`,
+      body: clone,
+    });
   }
+
+  async update() {
+    const clone = { ...this };
+    delete clone.questions;
+    return await sendRequest({
+      method: "PATCH",
+      url: `${import.meta.env.VITE_API_PATH}/${this.getURL()}/${this.getID()}`,
+      body: clone,
+    });
+  }
+
   public getSchema() {
     return schema;
   }
 
-  public getFieldAsID(): string {
-    return "id_serie";
-  }
+  
 }

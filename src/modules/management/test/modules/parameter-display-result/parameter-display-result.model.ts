@@ -1,7 +1,6 @@
 import { BaseModel } from "@/common/utils/BaseModel";
 import { schema } from "./parameter-display-result.schema";
 
-const url = "parameter_display_result";
 
 export class ParameterDisplayResult extends BaseModel {
   id_parameter_display;
@@ -13,23 +12,11 @@ export class ParameterDisplayResult extends BaseModel {
   tops_values;
   count_max;
   count_min;
-
-  constructor(data: object={}) {
-    super(data);
-    if (data) this.setData(data);
-  }
-  public setData(data: object) {
-    super.setData(data);
-  }
-
-  public getURL(): string {
-    return url;
-  }
+  static readonly url: string = "parameter_display_result";
+  static readonly field_as_id: string =  "id_parameter_display";
+   
   public getSchema() {
     return schema;
   }
 
-  public getFieldAsID(): string {
-    return "id_parameter_display";
-  }
 }

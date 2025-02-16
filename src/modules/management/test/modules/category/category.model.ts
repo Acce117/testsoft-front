@@ -3,28 +3,17 @@ import { schema } from "./category.schema";
 import type { Item } from "../item/item.model";
 import { sendRequest } from "@/common/utils/sendRequest";
 
-const url = "category";
 
 export class Category extends BaseModel {
   id_category;
   name;
   description;
   items: Item[] = [];
+  static readonly url: string = "category";
+  static readonly field_as_id: string =  "id_category";
 
-  constructor(data: object = {} ) {
-    super(data);
-    if (data) 
-      this.setData(data);
-    
 
-  }
-  public setData(data: object) {
-    super.setData(data);
-  }
 
-  public getURL(): string {
-    return url;
-  }
   public getSchema() {
     return schema;
   }
@@ -51,7 +40,4 @@ export class Category extends BaseModel {
       });
     }
 
-  public getFieldAsID(): string {
-    return "id_category";
-  }
 }

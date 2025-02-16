@@ -1,10 +1,7 @@
-import { useSendRequest } from "@/common/utils/fetch";
-import useEvents from "@/common/utils/useEvents";
 import { BaseModel } from "@/common/utils/BaseModel";
 import { schema, updateSchema } from "../schemas/user.schema";
 import { sendRequest } from "@/common/utils/sendRequest";
 
-const url = "user";
 const columns = [
   {
     field: "CI",
@@ -56,18 +53,9 @@ export class User extends BaseModel {
   country;
   enabled;
   assignments: [];
-
-  constructor(data: object = {}) {
-    super(data);
-    if (data) this.setData(data);
-  }
-  public setData(data: object) {
-    super.setData(data);
-  }
-
-  public getURL(): string {
-    return url;
-  }
+  static readonly url: string = "user";
+  static readonly field_as_id: string = "user_id";
+  static readonly field_as_active: string = "enabled";
 
   public getColumns() {
     return columns;
@@ -79,9 +67,7 @@ export class User extends BaseModel {
     return updateSchema;
   }
 
-  public getFieldAsID(): string {
-    return "user_id";
-  }
+  
   public getFieldAsActive(): string {
     return "enabled";
   }

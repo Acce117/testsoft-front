@@ -1,9 +1,8 @@
-import {  renameTreeForTreeTable } from "@/common/utils/renameTree";
+import { renameTreeForTreeTable } from "@/common/utils/renameTree";
 import { BaseModel } from "@/common/utils/BaseModel";
 import { schema, updateSchema } from "../schemas/group.schema";
 import { sendRequest } from "@/common/utils/sendRequest";
 
-const url = "groups";
 const columns = [
   {
     field: "name_group",
@@ -15,22 +14,12 @@ const columns = [
 export class Group extends BaseModel {
   id_group;
   name_group;
-
   father_group;
   children;
   mpath;
+  static readonly url: string = "groups";
+  static readonly field_as_id: string =  "id_group";
 
-  constructor(data: object = {}) {
-    super(data);
-    if (data) this.setData(data);
-  }
-  public setData(data: object) {
-    super.setData(data);
-  }
-
-  public getURL(): string {
-    return url;
-  }
 
   public getColumns() {
     return columns;
@@ -39,7 +28,7 @@ export class Group extends BaseModel {
   async update() {
     return await sendRequest({
       method: "PATCH",
-      url: `${import.meta.env.VITE_API_PATH}/${this.getURL()}/${this.getID()}`,
+      url: `${import.meta.env.VITE_API_PATH}/${url}/${this.getID()}`,
       body: {
         name_group: this.name_group,
         father_group: this.father_group,
@@ -54,13 +43,11 @@ export class Group extends BaseModel {
     return updateSchema;
   }
 
-  public getFieldAsID(): string {
-    return "id_group";
-  }
+  
 
   public async getElementsForTreeTable() {
     const groups = await this.getAll();
-    
-    return renameTreeForTreeTable(groups.length?groups:[groups]);
+
+    return renameTreeForTreeTable(groups.length ? groups : [groups]);
   }
 }

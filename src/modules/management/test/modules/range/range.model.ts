@@ -1,7 +1,6 @@
 import { BaseModel } from "@/common/utils/BaseModel";
 import { schema } from "./range.schema";
 
-const url = "range";
 
 export class Range extends BaseModel {
   id_range;
@@ -10,25 +9,14 @@ export class Range extends BaseModel {
   indicator;
   description;
   fk_id_item;
+  static readonly url: string = "range";
+  static readonly field_as_id: string =  "id_range";
 
-  constructor(data: object = {}) {
-    super(data);
-    if (data) this.setData(data);
-  }
-  public setData(data: object) {
-    super.setData(data);
-  }
 
-  
 
-  public getURL(): string {
-    return url;
-  }
   public getSchema() {
     return schema;
   }
 
-  public getFieldAsID(): string {
-    return "id_range";
-  }
+  
 }

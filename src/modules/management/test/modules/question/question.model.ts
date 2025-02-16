@@ -5,7 +5,6 @@ import { sendRequest } from "@/common/utils/sendRequest";
 import { QuestionTopValue } from "../question-top-value/question-top-value.model";
 import { QuestionType } from "../question-type/question-type.model";
 
-const url = "question";
 
 export class Question extends BaseModel {
   id_question;
@@ -16,11 +15,11 @@ export class Question extends BaseModel {
   answers: Answer[] = [];
   top_value;
   type;
+  static readonly url: string = "question";
+  static readonly field_as_id: string =  "id_question";
 
-  constructor(data: object = {}) {
-    super(data);
-    this.setData(data);
-  }
+
+
   public setData(data: object) {
     super.setData(data);
     this.top_value = data.top_value
@@ -31,9 +30,6 @@ export class Question extends BaseModel {
       : new QuestionType();
   }
 
-  public getURL(): string {
-    return url;
-  }
   public getSchema() {
     return schema;
   }
@@ -74,7 +70,4 @@ export class Question extends BaseModel {
     this.top_value =new QuestionTopValue();
   }
 
-  public getFieldAsID(): string {
-    return "id_question";
-  }
 }
