@@ -3,9 +3,10 @@ import { schema } from "./answer.schema";
 import { CorrectAnswer } from "../correct_answer/correct_answer.model";
 import { Tribute } from "../tribute/tribute.model";
 import { sendRequest } from "@/common/utils/sendRequest";
-
+import { ID } from "@/common/utils/Decorators";
 
 export class Answer extends BaseModel {
+  @ID
   id_answer;
   text;
   fk_id_question;
@@ -14,11 +15,6 @@ export class Answer extends BaseModel {
   is_correct;
   image = null;
   static readonly url: string = "answer";
-  static readonly field_as_id: string =  "id_answer";
-
-
-
-  
 
   public setData(data: object) {
     super.setData(data);
@@ -28,16 +24,10 @@ export class Answer extends BaseModel {
     this.tribute = data.tribute ? new Tribute(data.tribute) : new Tribute();
   }
 
-  public getSchema() {
-    return schema;
-  }
-
   public clearData() {
-    super.clearData()
-    this.tribute =  new Tribute();
+    super.clearData();
+    this.tribute = new Tribute();
     this.correct_answer = new CorrectAnswer();
-
-
   }
   async create() {
     const form = new FormData();
@@ -49,7 +39,7 @@ export class Answer extends BaseModel {
       url: `${import.meta.env.VITE_API_PATH}/${this.getURL()}?_method=PATCH`,
       method: "POST",
       body: form,
-      isFormData:true
+      isFormData: true,
     });
   }
 
@@ -62,8 +52,7 @@ export class Answer extends BaseModel {
       method: "PATCH",
       url: `${import.meta.env.VITE_API_PATH}/${this.getURL()}/${this.getID()}`,
       body: form,
-      isFormData:true
+      isFormData: true,
     });
   }
-
 }

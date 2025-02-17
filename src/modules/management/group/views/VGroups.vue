@@ -15,7 +15,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
-import CustomTreeTable from "@/components/CustomTreeTable.vue";
+import CustomTreeTable from "@/components/table/CustomTreeTable.vue";
 import { Group } from "../models/group.model";
 import AddGroup from "./components/AddGroup.vue";
 import ViewGroup from "./components/ViewGroup.vue";

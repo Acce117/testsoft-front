@@ -28,7 +28,7 @@ import { provide, onUnmounted, ref } from "vue";
 import { useDialog } from "primevue/usedialog";
 import { useToast } from "primevue/usetoast";
 import { useI18n } from "vue-i18n";
-import CustomTable from "@/components/CustomTable.vue";
+import CustomTable from "@/components/table/CustomTable.vue";
 import { Client } from "../models/client.model";
 import type { User } from "../../users/models/user.model";
 const { t } = useI18n();

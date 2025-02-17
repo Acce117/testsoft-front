@@ -1,12 +1,13 @@
 import { BaseModel } from "@/common/utils/BaseModel";
+import { ID } from "@/common/utils/Decorators";
 import { sendRequest } from "@/common/utils/sendRequest";
 
 export class GroupForTest extends BaseModel {
-  id_group_for_test;
-  fk_id_test;
-  fk_id_group;
+  @ID
+  id_group_for_test:number|undefined;
+  fk_id_test:number|undefined;
+  fk_id_group:number|undefined;
   static readonly url: string = "group_for_test";
-  static readonly field_as_id: string = "fk_id_group";
 
   async create(body: object) {
     return await sendRequest({

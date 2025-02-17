@@ -1,4 +1,5 @@
 import { BaseModel } from "@/common/utils/BaseModel";
+import { ID, LogicErase } from "@/common/utils/Decorators";
 import { sendRequest } from "@/common/utils/sendRequest";
 
 const columns = [
@@ -19,22 +20,14 @@ const columns = [
 ];
 
 export class Client extends BaseModel {
-  id_user;
-  email;
-  enabled;
-  username;
+  @ID
+  id_user: number | undefined;
+  email: string | undefined;
+  @LogicErase
+  enabled: boolean | number | undefined;
+  username: string | undefined;
   static readonly url: string = "user";
-  static readonly field_as_id: string =  "id_user";
-
-
-  public getColumns() {
-    return columns;
-  }
-
-  
-  public getFieldAsActive(): string {
-    return "enabled";
-  }
+  static readonly columns = columns;
 
   public async getAll(params: object = {}) {
     return await sendRequest({

@@ -1,10 +1,10 @@
 import { BaseModel } from "@/common/utils/BaseModel";
+import { ID } from "@/common/utils/Decorators";
 
 export class Tribute extends BaseModel {
-  fk_id_item;
-  fk_id_answer;
-  tribute_value;
+  @ID
+  fk_id_answer: number | undefined;
+  fk_id_item: number | undefined;
+  tribute_value: number | undefined;
   static readonly url: string = "tribute";
-  static readonly field_as_id: string =  "fk_id_answer";
-  
 }

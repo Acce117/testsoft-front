@@ -1,6 +1,8 @@
 import { BaseModel } from "@/common/utils/BaseModel";
 import { schema, updateSchema } from "../schemas/user.schema";
 import { sendRequest } from "@/common/utils/sendRequest";
+import { ID, LogicErase } from "@/common/utils/Decorators";
+import type { Country } from "../../country/models/country.model";
 
 const columns = [
   {
@@ -40,40 +42,32 @@ const columns = [
 ];
 
 export class User extends BaseModel {
-  user_id;
-  CI;
-  name;
-  username;
-  password;
-  last_name;
-  email;
-  sex;
+  @ID
+  user_id: number | undefined;
+  CI: string | undefined;
+  name: string | undefined;
+  username: string | undefined;
+  password: string | undefined;
+  last_name: string | undefined;
+  email: string | undefined;
+  sex: string | undefined;
   user_type;
-  country_id;
-  country;
-  enabled;
+  country_id: number | undefined;
+  country: Country | undefined;
+  @LogicErase
+  enabled: boolean | number | undefined;
   assignments: [];
   static readonly url: string = "user";
-  static readonly field_as_id: string = "user_id";
-  static readonly field_as_active: string = "enabled";
+  static readonly columns = columns;
+  static readonly schema = schema;
 
-  public getColumns() {
-    return columns;
-  }
-  public getSchema() {
-    return schema;
-  }
   public getUpdateSchema() {
     return updateSchema;
   }
 
-  
-  public getFieldAsActive(): string {
-    return "enabled";
-  }
   async create(data?: object) {
     const submitData = data ? data : this;
-    
+
     const body = {
       ...submitData,
       enabled: 1,
@@ -113,7 +107,6 @@ export class User extends BaseModel {
     // }
   }
   async update(data?: object) {
-    console.log(data);
     const submitData = data ? data : this;
     const clone = { ...submitData };
     delete clone.item_id;
@@ -127,7 +120,9 @@ export class User extends BaseModel {
     });
     await sendRequest({
       method: "PATCH",
-      url: `${import.meta.env.VITE_API_PATH}/auth_assignment/${submitData.assignment_id}`,
+      url: `${import.meta.env.VITE_API_PATH}/auth_assignment/${
+        submitData.assignment_id
+      }`,
       body: {
         group_id: submitData.group_id,
         item_id: submitData.item_id,

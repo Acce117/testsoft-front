@@ -1,42 +1,17 @@
 import { BaseModel } from "@/common/utils/BaseModel";
 import { schema } from "./serie.schema";
-import type { Question } from "./question.model";
-import { sendRequest } from "@/common/utils/sendRequest";
+import { ID, NotSavable } from "@/common/utils/Decorators";
+import type { Question } from "../question/question.model";
 
 export class Serie extends BaseModel {
-  id_serie;
-  name;
-  description;
+  @ID
+  id_serie: number | undefined;
+  name: string | undefined;
+  description: string | undefined;
   time_serie_duration = 0;
+  @NotSavable
   questions: Question[] = [];
-  fk_id_test;
+  fk_id_test: number | undefined;
   static readonly url: string = "test_serie";
-  static readonly field_as_id: string =  "id_serie";
-  
-
-  async create() {
-    const clone = { ...this };
-    delete clone.questions;
-    return await sendRequest({
-      method: "POST",
-      url: `${import.meta.env.VITE_API_PATH}/${this.getURL()}`,
-      body: clone,
-    });
-  }
-
-  async update() {
-    const clone = { ...this };
-    delete clone.questions;
-    return await sendRequest({
-      method: "PATCH",
-      url: `${import.meta.env.VITE_API_PATH}/${this.getURL()}/${this.getID()}`,
-      body: clone,
-    });
-  }
-
-  public getSchema() {
-    return schema;
-  }
-
-  
+  static readonly schema = schema;
 }

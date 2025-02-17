@@ -163,8 +163,8 @@ import { useI18n } from 'vue-i18n';
 import { BaseModel } from '@/common/utils/BaseModel';
 import Skeleton from 'primevue/skeleton';
 import TreeTable from 'primevue/treetable';
-import VButton from './VButton.vue';
-import LoadingPanel from './LoadingPanel.vue';
+import VButton from '../VButton.vue';
+import LoadingPanel from '../LoadingPanel.vue';
 
 useQueryClient()
 const props = defineProps({

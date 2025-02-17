@@ -2,6 +2,7 @@ import { renameTreeForTreeTable } from "@/common/utils/renameTree";
 import { BaseModel } from "@/common/utils/BaseModel";
 import { schema, updateSchema } from "../schemas/group.schema";
 import { sendRequest } from "@/common/utils/sendRequest";
+import { ID, NotSavable } from "@/common/utils/Decorators";
 
 const columns = [
   {
@@ -12,42 +13,29 @@ const columns = [
 ];
 
 export class Group extends BaseModel {
-  id_group;
-  name_group;
-  father_group;
-  children;
-  mpath;
+  @ID
+  @NotSavable
+  id_group: number | undefined;
+  name_group: string | undefined;
+  father_group: number | undefined;
+  @NotSavable
+  children: [] | undefined;
+  @NotSavable
+  mpath: string | undefined;
+  @NotSavable
+  key: number | undefined;
+  @NotSavable
+  data: object | undefined;
   static readonly url: string = "groups";
-  static readonly field_as_id: string =  "id_group";
+  static readonly columns = columns;
+  static readonly schema = schema;
 
-
-  public getColumns() {
-    return columns;
-  }
-
-  async update() {
-    return await sendRequest({
-      method: "PATCH",
-      url: `${import.meta.env.VITE_API_PATH}/${url}/${this.getID()}`,
-      body: {
-        name_group: this.name_group,
-        father_group: this.father_group,
-      },
-    });
-  }
-
-  public getSchema() {
-    return schema;
-  }
   public getUpdateSchema() {
     return updateSchema;
   }
 
-  
-
   public async getElementsForTreeTable() {
     const groups = await this.getAll();
-
     return renameTreeForTreeTable(groups.length ? groups : [groups]);
   }
 }

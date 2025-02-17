@@ -14,7 +14,7 @@ export const useGroupsForGroupUpdate = (id_parent:number) => {
   } = useQuery({
     queryKey: ['groups'],
     queryFn:async ()=>{
-      const groups = await new Group().getAll()
+      const groups = await  Group.getAll()
       return renameTreeAndRemoveNode(groups.length?groups:[groups], 'name_group','id_group',id_parent)
     } 
 

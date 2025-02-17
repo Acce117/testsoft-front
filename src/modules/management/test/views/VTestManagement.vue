@@ -31,7 +31,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
-import CustomTable from "@/components/CustomTable.vue";
+import CustomTable from "@/components/table/CustomTable.vue";
 import router from "@/router";
 import { Test } from "@/modules/management/test/models/test.model";
 import ViewTest from "./components/ViewTest.vue";

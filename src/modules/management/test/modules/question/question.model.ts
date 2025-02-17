@@ -4,19 +4,21 @@ import { schema } from "./question.schema";
 import { sendRequest } from "@/common/utils/sendRequest";
 import { QuestionTopValue } from "../question-top-value/question-top-value.model";
 import { QuestionType } from "../question-type/question-type.model";
+import { ID } from "@/common/utils/Decorators";
 
 
 export class Question extends BaseModel {
-  id_question;
-  statement;
+  @ID
+  id_question:number|undefined;
+  statement:string|undefined;
   image;
-  fk_id_serie;
-  fk_id_type_question;
+  fk_id_serie:number|undefined;
+  fk_id_type_question:number|undefined;
   answers: Answer[] = [];
-  top_value;
-  type;
+  top_value:QuestionTopValue|undefined;
+  type:QuestionType|undefined;
   static readonly url: string = "question";
-  static readonly field_as_id: string =  "id_question";
+  static readonly schema = schema;
 
 
 
@@ -30,9 +32,6 @@ export class Question extends BaseModel {
       : new QuestionType();
   }
 
-  public getSchema() {
-    return schema;
-  }
   
   async create() {
     const form = new FormData();

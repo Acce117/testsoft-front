@@ -21,6 +21,7 @@
     "pinia": "^2.1.7",
     "primeicons": "^7.0.0",
     "primevue": "^4.1.1",
+    "reflect-metadata": "^0.2.2",
     "swiper": "^11.0.5",
     "unocss": "^0.58.5",
     "vee-validate": "^4.14.6",

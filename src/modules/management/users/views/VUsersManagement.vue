@@ -50,7 +50,7 @@
 import { User } from "../models/user.model";
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
-import CustomTable from "@/components/CustomTable.vue";
+import CustomTable from "@/components/table/CustomTable.vue";
 import ViewUser from "./components/ViewUser.vue";
 import AddUser from "./components/AddUser.vue";
 import UpdateUser from "./components/UpdateUser.vue";

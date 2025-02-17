@@ -1,4 +1,5 @@
 import { BaseModel } from "@/common/utils/BaseModel";
+import { ID } from "@/common/utils/Decorators";
 
 
 const columns = [
@@ -14,19 +15,13 @@ const columns = [
 ];
 
 export class TestAplication extends BaseModel {
-  id_test_application;
-  fk_id_user;
-  fk_id_test;
+  @ID
+  id_test_application:number|undefined;
+  fk_id_user:number|undefined;
+  fk_id_test:number|undefined;
   date;
   test;
   static readonly url: string = "test_app";
-  static readonly field_as_id: string =  "id_test_application";
-  
+  static readonly columns = columns;
 
-
-  public getColumns() {
-    return columns;
-  }
-
- 
 }

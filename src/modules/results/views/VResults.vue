@@ -46,7 +46,7 @@ import { provide, onUnmounted, ref } from "vue";
 import { useDialog } from "primevue/usedialog";
 import { useToast } from "primevue/usetoast";
 import { useI18n } from "vue-i18n";
-import CustomTable from "@/components/CustomTable.vue";
+import CustomTable from "@/components/table/CustomTable.vue";
 import { TestAplication } from "../models/testApp.model";
 import VFinalResults from "./finalResults/VFinalResults.vue";
 import { TestResult } from "../models/testResult.model";

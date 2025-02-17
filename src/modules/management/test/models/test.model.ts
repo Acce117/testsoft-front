@@ -6,6 +6,8 @@ import { ParameterDisplayResult } from "../modules/parameter-display-result/para
 import type { Category } from "../modules/category/category.model";
 import { Equation } from "../modules/equation/equation.model";
 import type { Classification } from "../modules/classification/classification.model";
+import { ID, NotSavable } from "@/common/utils/Decorators";
+import type { TestType } from "../modules/test-type/test-type.model";
 
 const columns = [
   {
@@ -29,41 +31,49 @@ const columns = [
   },
   {
     field: "type_psi_test.type_test_name",
-    fieldGetter: (value: Test) => value.type_psi_test.type_test_name,
+    fieldGetter: (value: Test) => value.type_psi_test?.type_test_name,
     header: "Tipo de Test",
   },
   {
     field: "type_psi_test.done",
-    fieldGetter: (value: Test) => value.done==1?'Cerrado':'Abierto',
+    fieldGetter: (value: Test) => (value.done == 1 ? "Cerrado" : "Abierto"),
     header: "Estado",
   },
 ];
 
 export class Test extends BaseModel {
-  id_test;
-  name;
-  description;
-  time_duration;
-  recurring_time;
-  completed;
-  navigable;
-  done;
-  language;
-  fk_id_type_test;
-  type_psi_test;
-  series: Serie[] =[];
-  category: Category[] =[];
-  classifications: Classification[] =[];
-  display_parameters;
-  equation;
+  @ID
+  @NotSavable
+  id_test: number | undefined;
+  name: string | undefined;
+  description: string | undefined;
+  time_duration: number | undefined;
+  recurring_time: number | undefined;
+  completed: boolean | undefined;
+  navigable: boolean | undefined;
+  done: boolean | number | undefined;
+  language: string | undefined;
+  fk_id_type_test: number | undefined;
+  @NotSavable
+  type_psi_test: TestType | undefined;
+  @NotSavable
+  series: Serie[] = [];
+  @NotSavable
+  category: Category[] = [];
+  @NotSavable
+  classifications: Classification[] = [];
+  @NotSavable
+  display_parameters: ParameterDisplayResult | undefined;
+  @NotSavable
+  equation: Equation | undefined;
   static readonly url: string = "psi_test";
-  static readonly field_as_id: string =  "id_test";
+  static readonly columns = columns;
+  static readonly schema = schema;
 
   constructor(data: any = null) {
     super(data);
-    if (data) 
-      this.setData(data);
-    
+    if (data) this.setData(data);
+
     // } else {
     //   this.equation = new Equation();
     //   this.display_parameters = new ParameterDisplayResult({
@@ -71,14 +81,13 @@ export class Test extends BaseModel {
     //     count_min: 0,
     //   });
     // }
-    
   }
 
   public setData(data: any) {
     super.setData(data);
-    this.navigable = data.navigable == 1
-    this.completed = data.completed == 1
-    this.done = data.done == 1
+    this.navigable = data.navigable == 1;
+    this.completed = data.completed == 1;
+    this.done = data.done == 1;
     this.display_parameters = data.display_parameters
       ? new ParameterDisplayResult(data.display_parameters)
       : new ParameterDisplayResult();
@@ -87,60 +96,23 @@ export class Test extends BaseModel {
       : new Equation();
   }
 
-  public getColumns() {
-    return columns;
-  }
-  public getSchema() {
-    return schema;
-  }
-
-
-
-  async create() {
-    const clone = { ...this };
-    delete clone.equation;
-    delete clone.display_parameters;
-    delete clone.series;
-    delete clone.category;
-    delete clone.classifications
-
-    return await sendRequest({
-      method: "POST",
-      url: `${import.meta.env.VITE_API_PATH}/${this.getURL()}`,
-      body: clone,
-    });
-  }
-
-  async update() {
-    const clone = { ...this };
-    delete clone.id_test;
-
-    delete clone.series;
-    delete clone.category;
-    delete clone.classifications
-    delete clone.equation;
-    delete clone.type_psi_test;
-    delete clone.display_parameters;
-
-    return await sendRequest({
-      method: "PATCH",
-      url: `${import.meta.env.VITE_API_PATH}/${this.getURL()}/${this.getID()}`,
-      body: clone,
-    });
-  }
 
   public async getAssignedTests(user_id: string) {
     return await sendRequest({
-      url: `${import.meta.env.VITE_API_PATH}/user/${user_id}/tests`
+      url: `${import.meta.env.VITE_API_PATH}/user/${user_id}/tests`,
     });
   }
-  public isPsicometricTest(){
-    return this.fk_id_type_test ==1 || this.type_psi_test?.id_type_test==1 
+  public isPsicometricTest() {
+    return this.fk_id_type_test == 1 || this.type_psi_test?.id_type_test == 1;
   }
-  public isPsicometricTestWithEquation(){
-    return this.isPsicometricTest() && this.equation.equation && this.equation.equation.trim()!=''
+  public isPsicometricTestWithEquation() {
+    return (
+      this.isPsicometricTest() &&
+      this.equation?.equation &&
+      this.equation.equation?.trim() != ""
+    );
   }
-  public isPersonalityTest(){
-    return this.type_psi_test?.id_type_test==2||this.fk_id_type_test ==2
+  public isPersonalityTest() {
+    return this.type_psi_test?.id_type_test == 2 || this.fk_id_type_test == 2;
   }
 }

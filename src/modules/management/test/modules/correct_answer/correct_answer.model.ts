@@ -1,10 +1,9 @@
 import { BaseModel } from "@/common/utils/BaseModel";
-
+import { ID } from "@/common/utils/Decorators";
 
 export class CorrectAnswer extends BaseModel {
-  id_correct_answer;
-  fk_id_answer;
+  @ID
+  id_correct_answer: number | undefined;
+  fk_id_answer: number | undefined;
   static readonly url: string = "correct_answer";
-  static readonly field_as_id: string =  "id_correct_answer";
-  
 }

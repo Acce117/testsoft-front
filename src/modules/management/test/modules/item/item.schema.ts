@@ -1,6 +1,7 @@
-import {   object, string } from "yup";
+import { number, object, string } from "yup";
 
 export const schema = object({
-    name:string().required(),
-    description:string().required()
-  });
+  name: string().required(),
+  description: string().required(),
+  priority: number().min(0).required(),
+});

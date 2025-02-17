@@ -1,22 +1,15 @@
 import { BaseModel } from "@/common/utils/BaseModel";
 import { schema } from "./range.schema";
-
+import { ID } from "@/common/utils/Decorators";
 
 export class Range extends BaseModel {
-  id_range;
-  min_val;
-  max_val;
-  indicator;
-  description;
-  fk_id_item;
+  @ID
+  id_range: number | undefined;
+  min_val: number | undefined;
+  max_val: number | undefined;
+  indicator: string | undefined;
+  description: string | undefined;
+  fk_id_item: number | undefined;
   static readonly url: string = "range";
-  static readonly field_as_id: string =  "id_range";
-
-
-
-  public getSchema() {
-    return schema;
-  }
-
-  
+  static readonly schema = schema;
 }
