@@ -47,7 +47,7 @@ export class BaseModel {
         return property;
       }
     }
-    throw new Error("Not Found");
+    return ''
   }
   public getSavableData() {
     const submitData = { ...this };

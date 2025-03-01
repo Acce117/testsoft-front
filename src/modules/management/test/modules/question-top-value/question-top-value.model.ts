@@ -8,5 +8,4 @@ export class QuestionTopValue extends BaseModel {
   fk_id_question:number|undefined;
   top_value:number|undefined;
   static readonly url: string = "question_value";
-  
 }
