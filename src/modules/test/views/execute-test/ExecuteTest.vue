@@ -120,7 +120,7 @@ const visibleTimer = ref(false)
       </div>
     </template>
   </ExecuteTestNavbar>
-  <main bg-white w-screen h-screen  gap-2 flex anim-fade-in-1>
+  <main bg-white w-screen h-screen gap-2 flex anim-fade-in-1>
 
     <LoadingPanel centered :loading="isPending" :error="isError" :refetch="refetch" />
 
@@ -130,16 +130,20 @@ const visibleTimer = ref(false)
 
 
 
-    <div h-full flex flex-col px-4  overflow-auto max-w-full rounded-xl w-full>
+    <div h-full flex flex-col px-4 overflow-auto max-w-full rounded-xl w-full>
       <VTestHeader v-if="isSuccess && router.currentRoute.value.params.id_test == data.id_test" :data="data"
         @next-serie="executeTest.nextSerie(test)">
         <template #timer>
           <div h-10 flex gap-2 items-center w-fit>
-            <vue-countdown text-slate-600 w-16 text-xl :time="executeTest.timeCountdown.value"
+            <vue-countdown text-slate-600 text-xl :time="executeTest.timeCountdown.value"
               v-slot="{ minutes, seconds }" @end="executeTest.timeOver()">
-              <Button
-                :label="visibleTimer ? `${minutes > 9 ? minutes : `0` + minutes}:${seconds > 9 ? seconds : `0` + seconds}` : t('execute-test.tooltips.show')"
-                @click="visibleTimer = !visibleTimer" icon="pi pi-clock" severity="secondary"></Button>
+              <div flex items-center  gap-2 border-solid border-1 border-slate-200 rounded-xl p-1 min-w-12rem >
+                <Button :label="visibleTimer ? t('execute-test.tooltips.hide') : t('execute-test.tooltips.show')"
+                  @click="visibleTimer = !visibleTimer" icon="pi pi-clock" severity="secondary"></Button>
+                <span font-bold v-if="visibleTimer">{{ `${minutes > 9 ? minutes : `0` + minutes}:${seconds > 9 ? seconds
+                  : `0` + seconds}` }}</span>
+              </div>
+
             </vue-countdown>
 
           </div>

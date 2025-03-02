@@ -1,11 +1,11 @@
 <template>
-  <section class="test__header" bg-white rounded-xl pt-14>
+  <section class="test__header" bg-white rounded-xl pt-20>
     <div justify-between h-fit flex p-2 w-full items-center>
 
 
 
-      <h3 text-lg text-justify md:text-xl w-full text-center mb-2 mt-0 text-black>
-        {{ props.data?.series[serieIndex].description }}
+      <h3 text-lg text-justify md:text-xl w-full text-center mb-2 mt-0 text-slate-800>
+        <span text-primary font-bold>{{ props.data?.series[serieIndex].name }}:</span> {{ props.data?.series[serieIndex].description }}
       </h3>
 
 
