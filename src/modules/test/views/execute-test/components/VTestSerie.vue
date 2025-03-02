@@ -17,9 +17,7 @@ const props = defineProps({
 </script>
 
 <template>
-    <h3 text-lg text-justify md:text-xl w-full text-center mb-2 mt-0 text-black>
-      {{ serie.description }}
-    </h3>
+    
     <VQuestion v-for="(question, index) in props.serie?.questions" :key="question.id_question"
       :id_question="question.id_question" :question_index="index + 1" :title="question.statement">
       <template #default="{ changeInvalid }">

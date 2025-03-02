@@ -20,6 +20,10 @@ import Button from "primevue/button";
 import useEvents from "@/common/utils/useEvents";
 import { useTest } from "@/modules/management/test/composables/useTest";
 import LoadingPanel from "@/components/LoadingPanel.vue";
+import AdminSideBar from "@/layouts/admin/components/AdminSideBar.vue";
+import ExecuteTestSideBar from "./components/ExecuteTestSideBar.vue";
+import Drawer from "primevue/drawer";
+import ExecuteTestNavbar from "./components/ExecuteTestNavbar.vue";
 const { t } = useI18n();
 
 const VTestResult = defineAsyncComponent(() => import("../../../results/views/VTestResult.vue"));
@@ -102,43 +106,82 @@ onUnmounted(() => {
   toast.removeAllGroups();
 });
 
-
+const visible = ref(false)
 
 const visibleTimer = ref(false)
 
 </script>
 <template>
-  <main bg-sky-200 w-screen h-screen flex-col gap-2 p-2 flex anim-fade-in-1>
-    <AdminNavbar>
+  <ExecuteTestNavbar>
+    <template #sidebar-button>
+      <div xl:hidden block>
+        <Button icon="pi pi-bars" h-fit severity="secondary" @click="visible = true" />
 
-    </AdminNavbar>
+      </div>
+    </template>
+  </ExecuteTestNavbar>
+  <main bg-white w-screen h-screen  gap-2 flex anim-fade-in-1>
+
     <LoadingPanel centered :loading="isPending" :error="isError" :refetch="refetch" />
 
-    <VTestHeader v-if="isSuccess && router.currentRoute.value.params.id_test == data.id_test" :data="data"
-      @next-serie="executeTest.nextSerie(test)">
-      <template #timer>
-        <div h-10 flex gap-2 items-center w-fit>
-          <vue-countdown text-slate-600 w-16 text-xl
-            :time="executeTest.timeCountdown.value" v-slot="{ minutes, seconds }" @end="executeTest.timeOver()">
-            <Button :label="visibleTimer ?`${minutes > 9 ? minutes : `0` + minutes}:${seconds > 9 ? seconds : `0` + seconds}`:t('execute-test.tooltips.show')"
-              @click="visibleTimer = !visibleTimer" icon="pi pi-clock" severity="secondary"></Button>
-          </vue-countdown>
-
-        </div>
-
-      </template>
-    </VTestHeader>
-
-
-    <div class="test__container" h-full overflow-auto max-w-full px-4 lg:px-16 py-2 rounded-xl w-full>
 
 
 
-      <VTestSerie v-if="isSuccess && router.currentRoute.value.params.id_test == data.id_test"
-        :serie="data.series[executeTest.serieIndex.value]" />
+
+
+
+    <div h-full flex flex-col px-4  overflow-auto max-w-full rounded-xl w-full>
+      <VTestHeader v-if="isSuccess && router.currentRoute.value.params.id_test == data.id_test" :data="data"
+        @next-serie="executeTest.nextSerie(test)">
+        <template #timer>
+          <div h-10 flex gap-2 items-center w-fit>
+            <vue-countdown text-slate-600 w-16 text-xl :time="executeTest.timeCountdown.value"
+              v-slot="{ minutes, seconds }" @end="executeTest.timeOver()">
+              <Button
+                :label="visibleTimer ? `${minutes > 9 ? minutes : `0` + minutes}:${seconds > 9 ? seconds : `0` + seconds}` : t('execute-test.tooltips.show')"
+                @click="visibleTimer = !visibleTimer" icon="pi pi-clock" severity="secondary"></Button>
+            </vue-countdown>
+
+          </div>
+
+        </template>
+      </VTestHeader>
+
+
+      <div class="test__container" px-4 flex flex-col overflow-auto h-full>
+
+
+
+        <VTestSerie v-if="isSuccess && router.currentRoute.value.params.id_test == data.id_test"
+          :serie="data.series[executeTest.serieIndex.value]" />
+
+
+      </div>
 
     </div>
 
+
+
+
+
+    <aside class="hidden xl:flex h-full">
+      <ExecuteTestSideBar v-if="isSuccess && router.currentRoute.value.params.id_test == data.id_test" :data="data" />
+
+    </aside>
+
+
+
+    <aside class="card flex justify-center">
+      <Drawer position="right" v-model:visible="visible" class="!w-fit">
+        <template #container>
+          <ExecuteTestSideBar v-if="isSuccess && router.currentRoute.value.params.id_test == data.id_test" :data="data"
+            @close="visible = false" />
+
+        </template>
+
+      </Drawer>
+
+    </aside>
 
   </main>
 

@@ -1,28 +1,26 @@
 <template>
-  <section class="test__header" bg-white rounded-xl>
+  <section class="test__header" bg-white rounded-xl pt-14>
     <div justify-between h-fit flex p-2 w-full items-center>
-      <Button severity="secondary" class=" p-ripple h-14" icon="pi pi-arrow-left" v-ripple :disabled="!(serieIndex > 0)"
-        v-if="props.data?.navigable == 1" @click="prevSerie()" v-tooltip.bottom="t('execute-test.tooltips.prev')"
-        placeholder="Bottom" />
 
 
-      <div flex items-center w-full overflow-auto flex-col>
 
-        <Steps mt-4 flex-1 :model="getSeriesNames()" v-model:activeStep="serieIndex" :readonly="data?.navigable != 1" />
-
-
-      </div>
+      <h3 text-lg text-justify md:text-xl w-full text-center mb-2 mt-0 text-black>
+        {{ props.data?.series[serieIndex].description }}
+      </h3>
 
 
-      <Button :disabled="!(serieIndex < props.data?.series.length - 1)" h-14 severity="secondary"
-        v-if="props.data?.series.length > 1" class="p-ripple" icon="pi pi-arrow-right" v-ripple @click="nextSerie()"
-        v-tooltip.bottom="t('execute-test.tooltips.next')" placeholder="Bottom" />
 
 
     </div>
-    <div flex justify-between pb-2 px-4 >
+    <div flex justify-between pb-2 px-4>
+      <Button severity="secondary" class=" p-ripple" icon="pi pi-arrow-left" v-ripple :disabled="!(serieIndex > 0)"
+        v-if="props.data?.navigable == 1" @click="prevSerie()" :label="t('execute-test.tooltips.prev')"
+        placeholder="Bottom" />
       <slot name="timer"></slot>
-      <Button @click="executeTest.validateTest(test)" icon="pi pi-file-check"
+      <Button :label="t('execute-test.tooltips.next')"
+        v-if="props.data?.series.length > 1 && serieIndex < props.data?.series.length - 1" class="p-ripple" icon="pi pi-arrow-right" v-ripple @click="nextSerie()"
+        placeholder="Bottom" />
+      <Button v-if="serieIndex == props.data?.series.length - 1" @click="executeTest.validateTest(test)" icon="pi pi-file-check"
         :label="t('execute-test.tooltips.save')" />
     </div>
   </section>
@@ -74,7 +72,8 @@ watch(
   width: 100% !important;
   margin: 0 !important;
 }
-.p-steps-item-link{
+
+.p-steps-item-link {
   gap: 0rem !important;
 }
 </style>

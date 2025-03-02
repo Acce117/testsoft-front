@@ -3,7 +3,6 @@ import VLogin from "@/modules/security/views/login/VLogin.vue";
 import VHome from "@/views/home/VHome.vue";
 import VSelecTest from "@/modules/test/views/select-test/VSelectTest.vue";
 import VProfile from "@/modules/security/views/profile/VProfile.vue";
-import VExecuteTest from "@/modules/test/views/execute-test/VExecuteTest.vue";
 import VAssignTest from "@/modules/management/assign-test/views/VAssignTest.vue";
 import VGeneralVue from "@/layouts/general/VGeneral.vue";
 import VResults from "@/modules/results/views/VResults.vue";
@@ -20,6 +19,7 @@ import VClients from "@/modules/management/clients/views/VClients.vue";
 import NotAuthorized from "@/views/errors/NotAuthorized.vue";
 import NotFound from "@/views/errors/NotFound.vue";
 import VSignUp from "@/modules/security/views/sign-up/VSignUp.vue";
+import ExecuteTest from "@/modules/test/views/execute-test/ExecuteTest.vue";
 
 const autorize = (roles: string[]) => {
   return function (to, from, next) {
@@ -167,7 +167,7 @@ const router = createRouter({
     {
       path: "/execute-test/:id_test",
       name: "execute-test",
-      component: VExecuteTest,
+      component: ExecuteTest,
       meta: { requiresAuth: true },
       beforeEnter: (to, from, next) => validateTestExecutionPermission(to, from, next)
     },
@@ -199,7 +199,9 @@ const validateTestExecutionPermission = (
       next("/not-authorized");
     }
   } else {
-    next("/not-authorized");
+    //next("/not-authorized");
+    next();
+
   }
 };
 router.beforeEach((to, from, next) => {

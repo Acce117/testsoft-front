@@ -16,7 +16,7 @@ const changeInvalid = (value:boolean)=>invalid.value = value
     <div :class="{
         'invalid-input': invalid,
           'question':true
-      }" flex flex-col bg-white p-4 overflow-hidden  rounded-lg my-4 :id="props.id_question">
+      }" flex-none bg-sky-100  p-4 overflow-hidden  rounded-lg my-4 :id="props.id_question">
       <h4 m m-0   text-base md:text-lg text-justify w-full   text-black >{{ props.question_index + `-` + props.title }}</h4>
       <div relative flex flex-col gap-4 mt-6>
         <slot  :changeInvalid ></slot>
