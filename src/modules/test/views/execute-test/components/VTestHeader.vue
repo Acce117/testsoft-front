@@ -1,5 +1,5 @@
 <template>
-  <section class="test__header" bg-white rounded-xl pt-20>
+  <section class="test__header" bg-white rounded-xl px-4 pb-2 pt-20>
     <div justify-between h-fit flex p-2 w-full items-center>
 
 
@@ -12,7 +12,7 @@
 
 
     </div>
-    <div flex justify-between pb-2 px-4>
+    <div flex justify-between pb-2 >
       <Button severity="secondary" class=" p-ripple" icon="pi pi-arrow-left" v-ripple :disabled="!(serieIndex > 0)"
         v-if="props.data?.navigable == 1" @click="prevSerie()" :label="t('execute-test.tooltips.prev')"
         placeholder="Bottom" />

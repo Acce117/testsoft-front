@@ -120,7 +120,7 @@ const visibleTimer = ref(false)
       </div>
     </template>
   </ExecuteTestNavbar>
-  <main bg-white w-screen h-screen gap-2 flex anim-fade-in-1>
+  <main bg-white w-screen h-screen  flex anim-fade-in-1>
 
     <LoadingPanel centered :loading="isPending" :error="isError" :refetch="refetch" />
 
@@ -130,7 +130,7 @@ const visibleTimer = ref(false)
 
 
 
-    <div h-full flex flex-col px-4 overflow-auto max-w-full rounded-xl w-full>
+    <div h-full flex flex-col  overflow-auto max-w-full rounded-xl w-full>
       <VTestHeader v-if="isSuccess && router.currentRoute.value.params.id_test == data.id_test" :data="data"
         @next-serie="executeTest.nextSerie(test)">
         <template #timer>
@@ -152,7 +152,7 @@ const visibleTimer = ref(false)
       </VTestHeader>
 
 
-      <div class="test__container" px-4 flex flex-col overflow-auto h-full>
+      <div class="test__container" bg-sky-200 pt-4  px-4 flex flex-col items-center overflow-auto h-full>
 
 
 

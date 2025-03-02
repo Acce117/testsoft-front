@@ -5,7 +5,7 @@
 
         
         <h4 text-slate-600 font-bold mb-2>Series</h4>
-        <div w-full h-20rem overflow-auto flex flex-wrap gap-2 p-2 border-solid rounded-xl mb-4 border-slate-200 border-1>
+        <div w-full max-h-20rem h-fit overflow-auto flex flex-wrap gap-2 p-2 border-solid rounded-xl mb-4 border-slate-200 border-1>
             <article
                 :class="`serie-button ${serieIndex == index ? 'selected' : data.navigable == 1 ? 'bg-sky-100' : 'disabled'}`"
                 v-for="(serie, index) in props.data.series" :key="serie.id_serie"
