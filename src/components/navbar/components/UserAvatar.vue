@@ -5,10 +5,11 @@
       class="mr-2" shape="circle" />
     <span class="hidden text-slate-800 lg:inline-flex flex-col items-start">
       <span class="font-bold">{{ user.username }}</span>
-      <span class="text-sm">{{ $t('roles.'+user.assignments[0].role.name) }}</span>
+      <span class="text-sm">{{ $t('roles.' + user.assignments[0].role.name) }}</span>
     </span>
   </button>
   <Menu ref="userMenu" :model="userItems" :popup="true" />
+  <ChangePassword v-model="visibleChangePassword"/>
 </template>
 <script setup lang="ts">
 import { siteStore } from '@/common/site/siteStore';
@@ -18,25 +19,33 @@ import Menu from 'primevue/menu';
 import { ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
+import ChangePassword from './ChangePassword.vue';
 const userMenu = ref();
 const user = userStore()
 const router = useRouter();
-const {t,locale}=useI18n()
+const { t, locale } = useI18n()
 const userItems = ref([
-  { 
-    label:' ',
+  {
+    label: ' ',
     i18n: 'profile',
     items: [
 
       {
-        label:' ',
+        label: ' ',
 
         i18n: "name",
         icon: 'pi pi-user',
         command: () => router.push("/profile"),
       },
       {
-        label:' ',
+        label: ' ',
+
+        i18n: "change-password",
+        icon: 'pi pi-lock',
+        command: () => visibleChangePassword.value = true,
+      },
+      {
+        label: ' ',
         i18n: "close-session",
         icon: 'pi pi-sign-out',
         command: () => siteStore().logout(),
@@ -65,6 +74,9 @@ watch(locale, () => {
 const toggleUserMenu = (event) => {
   userMenu.value.toggle(event);
 };
+
+
+const visibleChangePassword = ref(false)
 
 
 </script>
