@@ -90,6 +90,11 @@ const itemsAdmin = [
     i18n: "groups",
     command: () => router.push("/groups"),
   },
+  {
+    label: " ",
+    i18n: "functional_roles",
+    command: () => router.push("/functional_roles"),
+  },
 ];
 
 const itemsSuperAdmin = [

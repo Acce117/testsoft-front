@@ -40,7 +40,7 @@ const userItems = ref([
       {
         label: ' ',
 
-        i18n: "change-password",
+        i18n: "change_password",
         icon: 'pi pi-lock',
         command: () => visibleChangePassword.value = true,
       },

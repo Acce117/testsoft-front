@@ -20,6 +20,7 @@ import NotAuthorized from "@/views/errors/NotAuthorized.vue";
 import NotFound from "@/views/errors/NotFound.vue";
 import VSignUp from "@/modules/security/views/sign-up/VSignUp.vue";
 import ExecuteTest from "@/modules/test/views/execute-test/ExecuteTest.vue";
+import FunctionalRoleManagement from "@/modules/management/functional-roles/views/FunctionalRoleManagement.vue";
 
 const autorize = (roles: string[]) => {
   return function (to, from, next) {
@@ -73,6 +74,13 @@ const router = createRouter({
           component: VResults,
           meta: { requiresAuth: true },
           beforeEnter: autorize(["Analyst","Super Admin"]),
+        },
+        {
+          path: "/functional_roles",
+          name: "functional_roles",
+          component: FunctionalRoleManagement,
+          meta: { requiresAuth: true },
+          beforeEnter: autorize(["Admin","Super Admin"]),
         },
         {
           path: "/clients",

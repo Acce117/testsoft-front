@@ -6,10 +6,12 @@
         <Form @submit="changePassword" :validation-schema="schema">
             <div class="dialog-form">
 
-                <VInput name="password" id="password-input" :max="8" type="password" v-model="credentials.password"
-                    label="change_password.password" />
-                <VInput name="new_password" id="password-input" :max="8" type="password" v-model="credentials.new_password"
+                <VInput name="old_password"  :max="8" type="old_password" v-model="credentials.old_password"
+                    label="change_password.old_password" />
+                <VInput name="new_password"  :max="8" type="password" v-model="credentials.new_password"
                     label="change_password.new_password" />
+                    <VInput name="confirm_password"  :max="8" type="password" v-model="credentials.confirm_password"
+                    label="change_password.confirm_password" />
 
             </div>
 
@@ -43,24 +45,29 @@ const visible = defineModel()
 const { t } = useI18n()
 
 const schema = object({
-    password: string().required().min(8),
-    new_password: string().required().oneOf([yupRef('password'), null], 'Las contraseñas no coinciden'),
+    old_password: string().required().min(6),
+    new_password: string().required().min(8),
+
+    confirm_password: string().required().oneOf([yupRef('new_password'), null], 'Las contraseñas no coinciden'),
 });
 
 const credentials = ref({
+    old_password: "",
     new_password: "",
-    password: "",
+    confirm_password:""
 });
 const cleanForm = ()=>{
     credentials.value.new_password=''
-    credentials.value.password=''
+    credentials.value.old_password=''
+    credentials.value.confirm_password=''
 }
 
 const { mutate: changePassword, isPending: isAddPending } = useMutation({
     mutationKey: [`change-password`],
     mutationFn: (value) => sendRequest({
-        url: `${import.meta.env.VITE_API_PATH}/change-password`,
-        body: value,
+        url: `${import.meta.env.VITE_API_PATH}/change_password`,
+        body: {new_password: value.new_password, old_password:value.old_password},
+        method:'PATCH'
     }),
     onSuccess: async () => {
         toast.add({ severity: 'info', summary: t('table.confirmation'), detail: t('table.operation_completed'), life: 5000 });

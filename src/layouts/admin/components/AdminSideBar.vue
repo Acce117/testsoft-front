@@ -84,6 +84,13 @@ const itemsAdmin = [
         i18n: "groups",
         command: () => navigateTo("/groups"),
     },
+    {
+        label: " ",
+        i18n: "functional_roles",
+        icon: 'pi pi-tags',
+
+        command: () => navigateTo("/functional_roles"),
+    },
 ];
 
 const itemsSuperAdmin = [
