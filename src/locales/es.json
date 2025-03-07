@@ -298,7 +298,8 @@
     "subtitle": "Introduzca su anterior contraseña, la nueva contraseña y confírmela:",
     "new_password": "Nueva Contraseña",
     "old_password": "Contraseña Anterior",
-    "confirm_password": "Confirmar Contraseña"
+    "confirm_password": "Confirmar Contraseña",
+    "wrong_password":"La contraseña actual no coincide con la insertada"
   },
   "general": {
     "name": "Nombre",

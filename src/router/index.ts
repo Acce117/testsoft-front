@@ -21,6 +21,7 @@ import NotFound from "@/views/errors/NotFound.vue";
 import VSignUp from "@/modules/security/views/sign-up/VSignUp.vue";
 import ExecuteTest from "@/modules/test/views/execute-test/ExecuteTest.vue";
 import FunctionalRoleManagement from "@/modules/management/functional-roles/views/FunctionalRoleManagement.vue";
+import SelectFunctionalRoles from "@/modules/functional-roles/views/SelectFunctionalRoles.vue";
 
 const autorize = (roles: string[]) => {
   return function (to, from, next) {
@@ -128,6 +129,12 @@ const router = createRouter({
           path: "/my-results",
           name: "my-results",
           component: VMyResults,
+          meta: { requiresAuth: true },
+        },
+        {
+          path: "/functional_roles_selection",
+          name: "functional_roles_selection",
+          component: SelectFunctionalRoles,
           meta: { requiresAuth: true },
         },
 
