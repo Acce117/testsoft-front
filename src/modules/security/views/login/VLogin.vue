@@ -55,7 +55,7 @@ window.scrollTo(0, 0);
 
           </VInput>
 
-          <VButton w-full :disabled="login.loading" type="submit">
+          <VButton w-full :disabled="login.loading" id="login-button" type="submit">
             <span v-if="!login.loading">{{ $t("login.login") }} <span class="pi pi-arrow-right"></span></span>
             <VLoading v-else />
           </VButton>

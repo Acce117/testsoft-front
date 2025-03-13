@@ -96,9 +96,9 @@ const executeTest = () => {
 
         </div>
         <div class="dialog-footer">
-          <Button type="button" :label="$t('global.cancel')" severity="secondary"
+          <Button type="button" id="cancel-button" :label="$t('global.cancel')" severity="secondary"
             @click="dialogVisible = false"></Button>
-          <Button type="button" :label="$t('global.start')" @click="executeTest"></Button>
+          <Button type="button" id="start-button" :label="$t('global.start')" @click="executeTest"></Button>
         </div>
       </div>
     </Dialog>

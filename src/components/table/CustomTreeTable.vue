@@ -68,7 +68,7 @@
                     <template #body=slotProps>
                         <Skeleton v-if="isRefetching || isPending" width="60%" borderRadius=".4rem" height="1.5rem" />
 
-                        <div v-else class="custom-table-actions"  gap-2>
+                        <div v-else class="custom-table-actions" gap-2>
                             <i class="pi pi-eye" v-tooltip="$t('table.view_information')"
                                 @click="showElement(slotProps.node)" />
                             <i class="pi pi-file-edit" v-tooltip="$t('table.update')"
@@ -87,7 +87,10 @@
                         </div>
                     </template>
                 </Column>
-                <template #empty> {{ $t('table.no_results') }} </template>
+                <template #empty>
+                    <span v-if="isError">{{ $t('errors.title') }}</span>
+                    <span v-else id="empty-message">{{ $t('table.no_results') }}</span>
+                </template>
 
             </TreeTable>
             <!-- <h2 v-else-if="isError" class="error">{{ $t('table.something_wrong') }}</h2> -->
@@ -170,7 +173,7 @@ useQueryClient()
 const props = defineProps({
     title: String,
     model: BaseModel,
-    hideDelete:Boolean,
+    hideDelete: Boolean,
     queryOptions: {
         requestPDF: Function
     },
@@ -274,7 +277,7 @@ const deleteElement = (event, data) => {
 
     confirm.require({
         target: event.currentTarget,
-        header:t('table.delete'),
+        header: t('table.delete'),
 
         message: t('table.delete_element_ask'),
         icon: 'pi pi-exclamation-triangle',
@@ -296,7 +299,7 @@ const desactivateElement = (event, data) => {
 
     confirm.require({
         target: event.currentTarget,
-        header:t('table.desactivate'),
+        header: t('table.desactivate'),
 
         message: t('table.desactivate_element_ask'),
         icon: 'pi pi-exclamation-triangle',
@@ -325,7 +328,7 @@ const activateElement = (event, data) => {
 
     confirm.require({
         target: event.currentTarget,
-        header:t('table.activate'),
+        header: t('table.activate'),
 
         message: t('table.activate_element_ask'),
         icon: 'pi pi-exclamation-triangle',

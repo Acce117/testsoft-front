@@ -29,7 +29,7 @@ const availabilityTime = getAvailabilityTime();
   <div
     class="border  h-15rem shadow-lg border-1 border-solid border-slate-200 bg-white overflow-hidden flex flex-col justify-between rounded-xl m-2 mt-4  p-4">
 
-    <div class=" font-semibold text-lg text-secondary  overflow-scroll">{{ props.test.name }}
+    <div class=" font-semibold text-lg text-secondary  overflow-auto">{{ props.test.name }}
       <div class="card mt-2 flex flex-wrap  gap-2">
         <Tag severity="secondary" :value="props.test.time_duration > 0 ?
           props.test.time_duration +
@@ -43,9 +43,9 @@ const availabilityTime = getAvailabilityTime();
 
 
 
-    <Button v-if="!availabilityTime" icon="pi pi-file-edit"  fluid :label="$t('global.execute')" h-10
+    <Button v-if="!availabilityTime" :id="'execute-test-'+test.name+'-button'" icon="pi pi-file-edit"  fluid :label="$t('global.execute')" h-10
       @click="emit('show-dialog', props.test)" />
-    <Button v-else severity="secondary" ><vue-countdown :time="availabilityTime" v-slot="{ days, hours, minutes, seconds }"
+    <Button v-else severity="secondary"  disabled :id="'execute-test-'+test.name+'-button-disabled'" ><vue-countdown :time="availabilityTime" v-slot="{ days, hours, minutes, seconds }"
         @end="isAvailable = true">
         
         <div >

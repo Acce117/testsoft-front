@@ -13,7 +13,7 @@
                 }}
             </article>
         </div>
-        <Button @click="executeTest.validateTest(test)" icon="pi pi-file-check"
+        <Button @click="executeTest.validateTest(test)" id="finish-test-button" icon="pi pi-file-check"
             :label="t('execute-test.tooltips.save')" />
     </div>
 </template>

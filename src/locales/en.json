@@ -131,6 +131,7 @@
         "edit": "Edit",
         "find": "Search",
         "add": "Add",
+        "and":"and",
         "error": "Something went wrong",
         "resend": "Resend Test",
         "execute": "Execute",

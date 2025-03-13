@@ -5,16 +5,16 @@
       <InputGroup>
         
         <FloatLabel variant="on">
-          <InputNumber v-if="props.number" v-model="model" showButtons v-bind="{ ...$attrs }" fluid
+          <InputNumber :id v-if="props.number" v-model="model" showButtons v-bind="{ ...$attrs }" fluid
             :invalid="meta.validated && !meta.valid" />
-          <Textarea v-else-if="props.textarea" v-bind="{ ...$attrs }" fluid v-model="model"
+          <Textarea :id v-else-if="props.textarea" v-bind="{ ...$attrs }" fluid v-model="model"
             :invalid="meta.validated && !meta.valid" />
-          <InputMask v-else-if="$attrs.mask" toggle-mask :mask="$attrs.mask" fluid v-bind="{ ...$attrs }"
+          <InputMask :id v-else-if="$attrs.mask" toggle-mask :mask="$attrs.mask" fluid v-bind="{ ...$attrs }"
             v-model="model" :invalid="meta.validated && !meta.valid" />
-          <Password v-else-if="props.password" toggle-mask :feedback="false" fluid v-bind="{ ...$attrs }"
+          <Password :id v-else-if="props.password" toggle-mask :feedback="false" fluid v-bind="{ ...$attrs }"
             v-model="model" :invalid="meta.validated && !meta.valid" />
-          <InputText  v-else v-bind="{ ...$attrs }" fluid v-model="model" :invalid="meta.validated && !meta.valid" />
-          <label for="" flex items-center justify-center gap-2>
+          <InputText :id  v-else v-bind="{ ...$attrs }" fluid v-model="model" :invalid="meta.validated && !meta.valid" />
+          <label :for="id" flex items-center justify-center gap-2>
             <slot name="icon"></slot>{{ $t(props.label) }}
           </label>
         </FloatLabel>
@@ -43,6 +43,7 @@ import InputNumber from 'primevue/inputnumber';
 import InputGroup from 'primevue/inputgroup';
 import InputGroupAddon from 'primevue/inputgroupaddon';
 const props = defineProps({
+  id:String,
   label: { type: String, required: true },
   name: { type: String, required: true },
   textarea: Boolean,

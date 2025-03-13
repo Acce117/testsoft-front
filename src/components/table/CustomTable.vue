@@ -82,7 +82,10 @@
                         </div>
                     </template>
                 </Column>
-                <template #empty> {{ isError ? $t('errors.title') : $t('table.no_results') }} </template>
+                <template #empty>
+                    <span v-if="isError">{{ $t('errors.title') }}</span>
+                    <span v-else id="empty-message">{{ $t('table.no_results') }}</span>
+                </template>
                 <template #expansion="slotProps">
                     <slot name="expansion" :slotProps></slot>
                 </template>
@@ -178,7 +181,7 @@ import Menu from 'primevue/menu';
 import { useI18n } from 'vue-i18n';
 import { BaseModel } from '@/common/utils/BaseModel';
 import Skeleton from 'primevue/skeleton';
-import VButton from '../VButton.vue'; 
+import VButton from '../VButton.vue';
 import LoadingPanel from '../LoadingPanel.vue';
 
 useQueryClient()
