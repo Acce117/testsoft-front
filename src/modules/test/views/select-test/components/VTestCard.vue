@@ -43,9 +43,9 @@ const availabilityTime = getAvailabilityTime();
 
 
 
-    <Button v-if="!availabilityTime" :id="'execute-test-'+test.name+'-button'" icon="pi pi-file-edit"  fluid :label="$t('global.execute')" h-10
+    <Button v-if="!availabilityTime" :id="'execute-test-'+test.id_test+'-button'" icon="pi pi-file-edit"  fluid :label="$t('global.execute')" h-10
       @click="emit('show-dialog', props.test)" />
-    <Button v-else severity="secondary"  disabled :id="'execute-test-'+test.name+'-button-disabled'" ><vue-countdown :time="availabilityTime" v-slot="{ days, hours, minutes, seconds }"
+    <Button v-else severity="secondary"  disabled :id="'execute-test-'+test.id_test+'-button-disabled'" ><vue-countdown :time="availabilityTime" v-slot="{ days, hours, minutes, seconds }"
         @end="isAvailable = true">
         
         <div >

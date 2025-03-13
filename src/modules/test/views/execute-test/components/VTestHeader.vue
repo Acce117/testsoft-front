@@ -17,7 +17,7 @@
         v-if="props.data?.navigable == 1" @click="prevSerie()" :label="t('execute-test.tooltips.prev')"
         placeholder="Bottom" />
       <slot name="timer"></slot>
-      <Button :label="t('execute-test.tooltips.next')"
+      <Button :label="t('execute-test.tooltips.next')" id="next-serie-button"
         v-if="props.data?.series.length > 1 && serieIndex < props.data?.series.length - 1" class="p-ripple" icon="pi pi-arrow-right" v-ripple @click="nextSerie()"
         placeholder="Bottom" />
       <Button v-if="serieIndex == props.data?.series.length - 1" @click="executeTest.validateTest(test)" icon="pi pi-file-check"

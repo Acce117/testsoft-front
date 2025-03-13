@@ -6,7 +6,7 @@
     <p v-for="item in category?.items" :key="item.id_item">
       <span>
 
-        <strong>{{ item.name }}</strong>, {{ $t('results.by-category.3') }} <strong>{{
+        <strong class='item'>{{ item.name }}</strong>, {{ $t('results.by-category.3') }} <strong>{{
           item.value }}</strong><span v-if="item.ranges.length > 0">,
           {{ $t('results.by-category.4') }} <strong>{{ item.ranges[0].indicator
             }}</strong></span>.<br />
