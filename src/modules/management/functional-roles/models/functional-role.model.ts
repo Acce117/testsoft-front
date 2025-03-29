@@ -23,7 +23,7 @@ export class FunctionalRole extends BaseModel {
   static readonly columns = columns;
   static readonly schema = schema;
 
-  public async getFunctionalRolesByGroup(id_group: string | number) {
+  public async getFunctionalRolesByGroup(queryParams:object, id_group: string | number) {
     const groups = await sendRequest({
       url: `${import.meta.env.VITE_API_PATH}/groups/parents/${id_group}`,
       body: { relations: ["functional_roles"] },

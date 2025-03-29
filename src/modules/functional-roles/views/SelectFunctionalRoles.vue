@@ -1,12 +1,11 @@
 <template>
     <section class=" mt-8 mx-auto flex flex-col items-center ">
 
-        <h1 class="text-center text-2xl lg:text-3xl p-4">Roles funcionales</h1>
-        <h2 class="text-center text-2xl lg:text-3xl p-4">Seleccione sus roles preferidos o evitados</h2>
+        <h1 class="text-center text-2xl lg:text-3xl p-4">Seleccione sus roles preferidos o evitados</h1>
 
 
 
-        <Pagination :query-function="getRoles">
+        <Pagination :query-function="getRoles" :query-key="'functional-roles'">
 
             <template #item-template="{ data }">
                 <article
@@ -19,6 +18,8 @@
                         <i class="like-button pi pi-thumbs-up"
                             :style="{ 'color': data.preferred ? '#0ea5e9' : 'gray' }" />
                         <i class="like-button pi pi-thumbs-down" :style="{ 'color': data.avoided ? 'red' : 'gray' }" />
+                        <i class="like-button pi pi-eye" :style="{ 'color': 'gray' }" />
+
                     </div>
 
                 </article>

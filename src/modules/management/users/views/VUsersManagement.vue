@@ -1,5 +1,5 @@
 <template>
-  <CustomTable ref="table" title="user.title" hideDelete hideEdit :query-options="{
+  <TableServerPagination ref="table" title="user.title" hideDelete hideEdit :query-options="{
     relations: [
       {
         name: 'country'
@@ -35,6 +35,7 @@
       </div>
 
     </template>
+
     <template #form-add>
       <AddUser v-model="user" :selectedGroup="defaultValue" />
     </template>
@@ -44,13 +45,11 @@
     <template #view-element>
       <ViewUser v-model="user" />
     </template>
-  </CustomTable>
+  </TableServerPagination>
 </template>
 <script setup lang="ts">
-import { User } from "../models/user.model";
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
-import CustomTable from "@/components/table/CustomTable.vue";
 import ViewUser from "./components/ViewUser.vue";
 import AddUser from "./components/AddUser.vue";
 import UpdateUser from "./components/UpdateUser.vue";
@@ -58,6 +57,8 @@ import { Group } from "../../group/models/group.model";
 import { userStore } from "@/modules/security/store/user-store";
 import TreeSelect from "primevue/treeselect";
 import { useGroups } from "../../group/composables/useGroups";
+import { User } from "../models/user.model";
+import TableServerPagination from "@/components/table/TableServerPagination.vue";
 const { t } = useI18n();
 const table = ref()
 let user = ref(new User({ assignments: [] }))
@@ -68,9 +69,8 @@ defaultValue[userStore().assignments[0].group_id] = true
 const selectedGroup = ref({})
 
 
-const getUsersByGroup = async () => {
+const getUsersByGroup = async (queryParams:object) => {
   const id_group = Object.keys(selectedGroup.value)[0]
-  const group = await Group.getOne(id_group ? id_group : userStore().assignments[0].group_id, { relations: ['users'] })
-  return group.users
+  return await user.value.getUsersByGroup(queryParams,id_group ? id_group : userStore().assignments[0].group_id)
 }
 </script>

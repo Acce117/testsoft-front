@@ -15,7 +15,7 @@ export const useGroups = () => {
     queryKey: ['groups'],
     queryFn:async ()=>{
       const groups = await  Group.getAll()
-      return renameTree(groups.length?groups:[groups], 'name_group','id_group')
+      return renameTree(groups.data.length?groups.data:[groups.data], 'name_group','id_group')
     } 
 
   })

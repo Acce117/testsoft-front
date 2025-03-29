@@ -75,6 +75,7 @@ export class BaseModel {
   }
 
   public async getAll(params: object = {}) {
+    console.log(params)
     return await sendRequest({
       url: `${import.meta.env.VITE_API_PATH}/${this.getURL()}`,
       body: params,

@@ -1,11 +1,9 @@
 <template>
     <Card overflow-auto h-full>
         <template #content>
-
             <DataTable v-model:expandedRows="expandedRows" removableSort ref="dt" size="small"
                 tableStyle="min-width: 50rem" :globalFilterFields="props.model.getColumns().map((c) => c.field)"
-                v-model:filters="filters" filterDisplay="row" paginator :value="data" :rows="5"
-                :rowsPerPageOptions="[5, 10, 20, 50]">
+                v-model:filters="filters" filterDisplay="row" :value="data?data.data:[]" :rows="5">
 
 
                 <template #header>
@@ -88,6 +86,24 @@
                 </template>
                 <template #expansion="slotProps">
                     <slot name="expansion" :slotProps></slot>
+                </template>
+                <template #footer>
+                    <Paginator :rows="offset" @page="(e)=>{
+                        console.log(e)
+                        limit = e.rows
+                        refetch()
+                    }" 
+                    
+                    :totalRecords="data?data.elements_amount:0" :rowsPerPageOptions="[1, 10, 20, 30]" >
+                        <template #start="slotProps">
+                            Página: {{ slotProps.state.page }}
+                            First: {{ slotProps.state.first }}
+                            Elementos: {{ slotProps.state.rows }}
+                        </template>
+                        <template #end>
+                            <Button type="button" icon="pi pi-search" />
+                        </template>
+                    </Paginator>
                 </template>
             </DataTable>
         </template>
@@ -183,6 +199,7 @@ import { BaseModel } from '@/common/utils/BaseModel';
 import Skeleton from 'primevue/skeleton';
 import VButton from '../VButton.vue';
 import LoadingPanel from '../LoadingPanel.vue';
+import Paginator from 'primevue/paginator';
 
 useQueryClient()
 const props = defineProps({
@@ -207,6 +224,11 @@ const props = defineProps({
     hideDelete: Boolean,
 
 })
+const totalRecords =ref(0)
+const limit =ref(0)
+const offset =ref(10)
+
+
 const fieldAsID = props.model.getFieldAsID()
 const queryKey = props.model.constructor.name
 const confirm = useConfirm();
@@ -220,7 +242,7 @@ const toggle = (value: MouseEvent) => {
 const { data, isPending, isRefetching, isError, refetch } = useQuery({
     queryKey: [queryKey],
     queryFn: (parameter?) => {
-        return props.customGetAllFunction ? props.customGetAllFunction(parameter) : props.model.getAll(props.queryOptions)
+        return props.customGetAllFunction ? props.customGetAllFunction({limit:limit.value,offset:0,...parameter}) : props.model.getAll({limit:limit.value,offset:0, ...props.queryOptions})
     }
 })
 
@@ -503,10 +525,12 @@ defineExpose({ showUpdate, refetch, desactivateElement, activateElement })
 
 </script>
 <style>
-
- .p-card-body, .p-card-content, .p-datatable{
+.p-card-body,
+.p-card-content,
+.p-datatable {
     height: 100% !important;
 }
+
 .custom-table-header {
     display: flex;
     flex-direction: column;

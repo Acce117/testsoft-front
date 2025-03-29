@@ -68,9 +68,7 @@ const { groups } = useGroups()
 
 const getUsersByGroup = async () => {
   const id_group = Object.keys(selectedGroup.value)[0]
-
-  const group = await Group.getOne(id_group ? id_group : userStore().assignments[0].group_id, { relations: ['users'] })
-  return group.users
+  return await user.value.getUsersByGroup({},id_group ? id_group : userStore().assignments[0].group_id)
 }
 let defaultValue = {}
 defaultValue[userStore().assignments[0].group_id] = true

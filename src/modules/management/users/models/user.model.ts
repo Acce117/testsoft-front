@@ -65,6 +65,14 @@ export class User extends BaseModel {
     return updateSchema;
   }
 
+  async getUsersByGroup(params: object = {}, id_group: string) {
+    console.log(id_group)
+    return await sendRequest({
+      url: `${import.meta.env.VITE_API_PATH}/groups/users/${id_group}`,
+      body: params,
+    });
+  }
+
   async create(data?: object) {
     const submitData = data ? data : this;
 
@@ -106,6 +114,8 @@ export class User extends BaseModel {
     //   });
     // }
   }
+
+ 
   async update(data?: object) {
     const submitData = data ? data : this;
     const clone = { ...submitData };

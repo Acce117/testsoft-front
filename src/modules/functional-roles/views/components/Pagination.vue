@@ -10,13 +10,17 @@ import { ref } from 'vue';
 
 
 const props = defineProps({
-    queryFunction:{
-        type:Function,
-        required:true
+    queryFunction: {
+        type: Function,
+        required: true
     },
-    paginationOptions:{
-        type:Array,
-        default:[5,10,20]
+    queryKey: {
+        type: String,
+        required: true
+    },
+    paginationOptions: {
+        type: Array,
+        default: [5, 10, 20]
 
     }
 })
@@ -29,8 +33,8 @@ const {
     refetch,
     isError
 } = useQuery({
-    queryKey: ['functional-roles'],
-    queryFn:()=> props.queryFunction() 
+    queryKey: [props.queryKey],
+    queryFn: () => props.queryFunction()
 
 })
 
@@ -66,27 +70,31 @@ const paginationSize = ref(20)
                 <button @click="() => { searchTerm = ''; startIndex = 0; refetch() }"
                     class="absolute end-2 inset-y-2 cursor-pointer flex items-center third-color-button justify-center p-1 h-6">
                 </button>
-                 <Select v-model="paginationSize" :options="paginationOptions"
-                    @update:model-value="refetch" >
-                    
-                </Select> 
+                <Select v-model="paginationSize" :options="paginationOptions" @update:model-value="refetch">
+
+                </Select>
             </div>
 
             <div class="flex items-center space-x-2">
 
-                <Button   icon="pi pi-angle-left" :disabled="startIndex == 0" @click="() => {
+                <Button icon="pi pi-angle-left" :disabled="startIndex == 0" @click="() => {
                     emit('update-start-index', startIndex - paginationSize)
                     refetch()
 
                 }" />
-                    
-                <Button  :disabled="data && data.length < paginationSize"
-                    @click="() => {
-                        emit('update-start-index', startIndex + paginationSize)
-                        refetch()
-                    }" icon="pi pi-angle-right" />
 
-                    
+                <Button :disabled="data && data.length < paginationSize" @click="() => {
+                    emit('update-start-index', startIndex + paginationSize)
+                    refetch()
+                }" icon="pi pi-angle-right" />
+
+                <Button icon="pi pi-refresh" :disabled="isPending || isRefetching" @click="() => {
+                    startIndex=0
+                    refetch()
+
+                }" />
+
+
 
 
             </div>
