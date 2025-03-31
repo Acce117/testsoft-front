@@ -2,7 +2,7 @@
     <Card overflow-auto h-full>
         <template #content>
 
-            <DataTable v-model:expandedRows="expandedRows" removableSort ref="dt" size="small"
+            <DataTable v-model:expandedRows="expandedRows" scrollable scrollHeight="flex" removableSort ref="dt" size="small"
                 tableStyle="min-width: 50rem" :globalFilterFields="props.model.getColumns().map((c) => c.field)"
                 v-model:filters="filters" filterDisplay="row" paginator :value="data" :rows="5"
                 :rowsPerPageOptions="[5, 10, 20, 50]">

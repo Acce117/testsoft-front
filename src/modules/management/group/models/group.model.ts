@@ -38,4 +38,18 @@ export class Group extends BaseModel {
     const groups = await this.getAll();
     return renameTreeForTreeTable(groups.length ? groups : [groups]);
   }
+  public static async getUsersFromGroup(id: number, params = {}) {
+    return await sendRequest({
+      url: `${import.meta.env.VITE_API_PATH}/groups/users_from_group/${id}`,
+      body: params,
+    });
+  }
+  public static async getUsersWithLeadershipAndIncompatibilities(id: number, params = {}) {
+    return await sendRequest({
+      url: `${import.meta.env.VITE_API_PATH}/groups/users_with_compatibility/${id}`,
+      body: params,
+    });
+  }
+
+  
 }

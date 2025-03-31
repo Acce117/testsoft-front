@@ -49,6 +49,19 @@ const itemsManagement = [
         i18n: "management",
         items: [],
     },
+    {
+        label: "Reports",
+        i18n: "reports",
+        items: [
+            {
+                label: " ",
+                i18n: "sociometric",
+                icon: 'pi pi-sitemap',
+
+                command: () => navigateTo("/incompatibility-leadership"),
+            },
+        ],
+    },
 ];
 
 const itemsAnalyst = [
@@ -104,14 +117,14 @@ const itemsSuperAdmin = [
 ]
 const itemsDefault = [
 
-{
+    {
         label: ' ',
         i18n: 'profile',
         items: [
 
             {
                 label: ' ',
-                i18n:'close-session',
+                i18n: 'close-session',
                 icon: 'pi pi-sign-out',
                 command: () => siteStore().logout()
             }
@@ -140,22 +153,22 @@ if (subItemsManagement.length > 0) {
 }
 items.value.push(...itemsDefault);
 const updateNavbarLabels = () => {
-  items.value.forEach((item: any) => {
-    if (item.label) {
-      item.label = t(`navbar.${item.i18n}.name`);
-    }
-    if (item.items) {
-      item.items.forEach((subItem: any) => {
-        subItem.label = t(`navbar.${item.i18n}.${subItem.i18n}`);
-      });
-    }
-  });
+    items.value.forEach((item: any) => {
+        if (item.label) {
+            item.label = t(`navbar.${item.i18n}.name`);
+        }
+        if (item.items) {
+            item.items.forEach((subItem: any) => {
+                subItem.label = t(`navbar.${item.i18n}.${subItem.i18n}`);
+            });
+        }
+    });
 };
 
 updateNavbarLabels();
 
 watch(locale, () => {
-  updateNavbarLabels();
+    updateNavbarLabels();
 });
 </script>
 <style>

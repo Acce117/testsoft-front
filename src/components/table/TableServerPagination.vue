@@ -1,9 +1,10 @@
 <template>
     <Card overflow-auto h-full>
         <template #content>
-            <DataTable v-model:expandedRows="expandedRows" removableSort ref="dt" size="small"
+           
+            <DataTable v-model:expandedRows="expandedRows" scrollable scrollHeight="flex" removableSort ref="dt" size="small"
                 tableStyle="min-width: 50rem" :globalFilterFields="props.model.getColumns().map((c) => c.field)"
-                v-model:filters="filters" filterDisplay="row" :value="data?data.data:[]" :rows="5">
+                v-model:filters="filters" filterDisplay="row" :value="data ? data.data : []" :rows="5">
 
 
                 <template #header>
@@ -88,20 +89,21 @@
                     <slot name="expansion" :slotProps></slot>
                 </template>
                 <template #footer>
-                    <Paginator :rows="offset" @page="(e)=>{
+                    <Paginator :rows="limit" @page="(e) => {
                         console.log(e)
+                        offset = e.first
                         limit = e.rows
                         refetch()
-                    }" 
-                    
-                    :totalRecords="data?data.elements_amount:0" :rowsPerPageOptions="[1, 10, 20, 30]" >
+                    }" :totalRecords="totalRecords" :rowsPerPageOptions="[1, 10, 20, 30]">
                         <template #start="slotProps">
-                            Página: {{ slotProps.state.page }}
-                            First: {{ slotProps.state.first }}
-                            Elementos: {{ slotProps.state.rows }}
+                            Mostrando {{ slotProps.state.rows }} de {{ totalRecords }} elementos
+                            
+                            , Primer elemento: {{ slotProps.state.first+1 }}
+                            
+                            
                         </template>
-                        <template #end>
-                            <Button type="button" icon="pi pi-search" />
+                        <template #end="slotProps">
+                            Página: {{ slotProps.state.page+1 }} de {{ totalPages }}
                         </template>
                     </Paginator>
                 </template>
@@ -186,7 +188,7 @@ import DataTable from 'primevue/datatable';
 import IconField from 'primevue/iconfield';
 import InputIcon from 'primevue/inputicon';
 import { FilterMatchMode } from '@primevue/core/api';
-import { ref, watch } from 'vue';
+import { ref, watch, watchEffect } from 'vue';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 import { useConfirm } from "primevue/useconfirm";
@@ -224,9 +226,11 @@ const props = defineProps({
     hideDelete: Boolean,
 
 })
-const totalRecords =ref(0)
-const limit =ref(0)
-const offset =ref(10)
+const limit = ref(10)
+const offset = ref(0)
+const totalRecords = ref(0)
+const totalPages = ref(0)
+
 
 
 const fieldAsID = props.model.getFieldAsID()
@@ -239,11 +243,28 @@ const expandedRows = ref()
 const toggle = (value: MouseEvent) => {
     menu.value.toggle(value);
 };
-const { data, isPending, isRefetching, isError, refetch } = useQuery({
+const { data, isPending,isSuccess, isRefetching, isError, refetch } = useQuery({
     queryKey: [queryKey],
     queryFn: (parameter?) => {
-        return props.customGetAllFunction ? props.customGetAllFunction({limit:limit.value,offset:0,...parameter}) : props.model.getAll({limit:limit.value,offset:0, ...props.queryOptions})
-    }
+        console.log(parseInt(offset.value))
+        return props.customGetAllFunction ?
+            props.customGetAllFunction(
+                {
+                    limit: limit.value,
+                    offset: offset.value,
+                    ...parameter
+
+                }
+            ) :
+            props.model.getAll(
+                {
+                    limit: limit.value,
+                    offset: offset.value,
+                    ...props.queryOptions
+                }
+            )
+    },
+    
 })
 
 const { data: dataOfOne, isPending: isPendingOfOne, isSuccess: isSuccessOfOne, isError: isErrorOfOne, isRefetching: isRefetchingOfOne, refetch: refetchOfOne } = useQuery({
@@ -258,6 +279,15 @@ watch(dataOfOne, (newValue) => {
     console.log(newValue)
     props.model.setData(newValue)
 })
+
+watchEffect(() => {
+  if (isSuccess.value && !isPending.value && !isRefetching.value) {
+    
+    totalRecords.value = data.value.elements_amount
+    totalPages.value = data.value.pages
+  }
+});
+
 const isLogicErase = props.model.getFieldAsActive() != ''
 
 const options = ref([{

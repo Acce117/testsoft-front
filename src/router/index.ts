@@ -98,6 +98,12 @@ const router = createRouter({
           meta: { requiresAuth: true },
           beforeEnter: autorize(["Analyst","Super Admin"]),
         },
+        {
+          path: "/incompatibility-leadership",
+          name: "incompatibility-leadership",
+          component: IncompatibilityLeadershipView,
+          meta: { requiresAuth: true },
+        },
       ],
     },
 
@@ -119,12 +125,7 @@ const router = createRouter({
           component: VSelecTest,
           meta: { requiresAuth: true },
         },
-        {
-          path: "/incompatiblity-leadership",
-          name: "incompatiblity-leadership",
-          component: IncompatibilityLeadershipView,
-          meta: { requiresAuth: true },
-        },
+       
 
         {
           path: "/profile",
