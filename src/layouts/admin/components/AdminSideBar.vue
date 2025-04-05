@@ -99,10 +99,10 @@ const itemsAdmin = [
     },
     {
         label: " ",
-        i18n: "functional_roles",
+        i18n: "functional-roles",
         icon: 'pi pi-tags',
 
-        command: () => navigateTo("/functional_roles"),
+        command: () => navigateTo("/functional-roles"),
     },
 ];
 

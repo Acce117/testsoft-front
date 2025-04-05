@@ -22,8 +22,9 @@ const { t } = useI18n();
 
 
 const defaultGroup = {}
+console.log(functionalRole.value)
 
-defaultGroup[functionalRole.value.group.id_group] = true
+// defaultGroup[functionalRole.value.group.id_group] = true
 
 
 const { groups } = useGroups()

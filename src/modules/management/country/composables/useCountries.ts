@@ -12,7 +12,11 @@ export const useCountries = () => {
     isError
   } = useQuery({
     queryKey: ['countries'],
-    queryFn:()=> Country.getAll()
+    queryFn: async ()=> {
+      const countries =  await Country.getAll()
+      return countries.data
+    }
+      
   })
   return { countries, isPending, isSuccess, error, isError, refetch, isRefetching }
 }

@@ -21,7 +21,7 @@ test('Login', async ({ page }) => {
 
 test('Get Functional Roles', async ({ page }) => {
 
-  await page.goto(baseURL+'functional_roles');
+  await page.goto(baseURL+'functional-roles');
   
   const responsePromise = page.waitForResponse('http://localhost:3000/functional_role')
 

@@ -1,13 +1,15 @@
 <template>
     <Card overflow-auto h-full>
         <template #content>
-           
-            <DataTable v-model:expandedRows="expandedRows" scrollable scrollHeight="flex" removableSort ref="dt" size="small"
-                tableStyle="min-width: 50rem" :globalFilterFields="props.model.getColumns().map((c) => c.field)"
-                v-model:filters="filters" filterDisplay="row" :value="data ? data.data : []" :rows="5">
+
+            <DataTable v-model:expandedRows="expandedRows" scrollable v-model:filters="filters" :lazy="true"
+                @filter="onFilter" filterDisplay="menu" scrollHeight="flex" removableSort ref="dt" size="small"
+                tableStyle="min-width: 50rem" :value="data ? data.data : []" :rows="5">
 
 
                 <template #header>
+                    {{ filters }}
+                    {{ filtersForServer }}
                     <div class="custom-table-header">
                         <h1 text-xl m-0 font-semibold>{{ $t(title) }}</h1>
                         <div class="custom-table-header__options">
@@ -15,12 +17,16 @@
                                 <InputIcon>
                                     <i class="pi pi-search" />
                                 </InputIcon>
-                                <InputText w-12rem lg:w-20rem v-model="filters['global'].value"
-                                    :placeholder="$t('table.search')" />
+                                <!-- <InputText w-12rem lg:w-20rem v-model="filters['global'].value"
+                                    :placeholder="$t('table.search')" /> -->
                             </IconField>
                             <slot name="header"></slot>
                             <div flex gap-2>
-                                <Button v-if="!props.hideCreate" icon="pi pi-plus" @click="showAdd()" />
+                                <CreateButton v-if="!props.hideCreate" :customFunction="props.customAddFunction" >
+                                    <template #form>
+                                        <slot name="form-add"></slot>
+                                    </template>
+                                </CreateButton>
 
                                 <Button icon="pi pi-external-link" @click="toggle" aria-haspopup="true"
                                     aria-controls="overlay_menu" severity="secondary" />
@@ -34,8 +40,8 @@
 
                 </template>
                 <Column expander v-if="hasExpander" style="width: 1rem" />
-                <Column v-for="(col, index) in props.model.getColumns()" :key="index" sortable :field="col.field"
-                    :header="$t(col.header)">
+                <Column v-for="(col, index) in props.model.getColumns()" :key="index" filterField="rol_name" sortable
+                    :field="col.field" :header="$t(col.header)" :filterMatchModeOptions="filterOptions">
 
 
                     <template #body="slotProps">
@@ -64,6 +70,17 @@
                         </div>
 
                     </template>
+                    <template #filter="{ filterModel, filterCallback }">
+                        <!-- <InputText v-model="filters['rol_name'].value" type="text" @input="(a) => console.log(a)"
+                            placeholder="Search by country" /> -->
+                        <InputText v-model="filterModel.value" @keyup.enter="filterCallback()"
+                            placeholder="Buscar por nombre" />
+                    </template>
+                    <!-- <template #filter="{ filterModel, filterCallback }">
+                        {{ filters }}
+                        
+                    </template> -->
+
 
                 </Column>
                 <Column v-if="!props.hideActions" :field="fieldAsID" :header="$t('table.actions')">
@@ -95,16 +112,18 @@
                         limit = e.rows
                         refetch()
                     }" :totalRecords="totalRecords" :rowsPerPageOptions="[1, 10, 20, 30]">
-                        <template #start="slotProps">
-                            Mostrando {{ slotProps.state.rows }} de {{ totalRecords }} elementos
-                            
-                            , Primer elemento: {{ slotProps.state.first+1 }}
-                            
-                            
+                        <!-- <template #start="slotProps">
+                            Mostrando {{ slotProps.state.rows > totalRecords ? totalRecords : slotProps.state.rows }} de
+                            {{
+                                totalRecords }} elementos
+
+                            , Primer elemento: {{ slotProps.state.first + 1 }}
+
+
                         </template>
-                        <template #end="slotProps">
-                            Página: {{ slotProps.state.page+1 }} de {{ totalPages }}
-                        </template>
+<template #end="slotProps">
+                            Página: {{ slotProps.state.page + 1 }} de {{ totalPages }}
+                        </template> -->
                     </Paginator>
                 </template>
             </DataTable>
@@ -124,26 +143,7 @@
             </div>
         </div>
     </Dialog>
-    <Dialog v-model:visible="showAddDialog" modal :header="$t('table.add')" class="w-4/5 max-w-50rem min-w-25rem">
-
-        <span>{{ $t('table.new_element') }}</span>
-        <Form @submit="addElement" :validation-schema="props.model.getSchema()">
-            <div class="dialog-form">
-                <slot name="form-add"></slot>
-
-            </div>
-
-            <div class="dialog-footer">
-                <Button type="button" :label="$t('global.cancel')" severity="secondary"
-                    @click="showAddDialog = false"></Button>
-                <VButton w-8rem :disabled="isAddPending || isFormDataLoading" type="submit">
-                    <span v-if="!isAddPending || isFormDataLoading">{{ $t("global.save") }} </span>
-                    <VLoading v-else />
-                </VButton>
-            </div>
-        </Form>
-
-    </Dialog>
+   
 
     <Dialog v-model:visible="showUpdateDialog" modal :header="$t('table.update')" class="w-4/5 max-w-50rem min-w-25rem">
         <span>{{ $t('table.update_element') }}</span>
@@ -178,6 +178,8 @@
         </Form>
     </Dialog>
     <slot name="custom-dialog"></slot>
+    
+
 </template>
 <script setup lang="ts">
 import Column from 'primevue/column';
@@ -188,7 +190,7 @@ import DataTable from 'primevue/datatable';
 import IconField from 'primevue/iconfield';
 import InputIcon from 'primevue/inputicon';
 import { FilterMatchMode } from '@primevue/core/api';
-import { ref, watch, watchEffect } from 'vue';
+import { inject, provide, ref, watch, watchEffect } from 'vue';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 import { useConfirm } from "primevue/useconfirm";
@@ -202,6 +204,7 @@ import Skeleton from 'primevue/skeleton';
 import VButton from '../VButton.vue';
 import LoadingPanel from '../LoadingPanel.vue';
 import Paginator from 'primevue/paginator';
+import CreateButton from './components/CreateButton.vue';
 
 useQueryClient()
 const props = defineProps({
@@ -231,6 +234,24 @@ const offset = ref(0)
 const totalRecords = ref(0)
 const totalPages = ref(0)
 
+const filters = ref({
+    rol_name: { value: null, matchMode: 'contains' },
+});
+const filtersForServer = ref({});
+const filterOptions = ref([
+    { label: 'Contains', value: 'contains' }
+])
+
+
+const onFilter = (event) => {
+    filtersForServer.value = {}
+    Object.entries(event.filters).map((f)=>{
+        if(f[1].value)
+            filtersForServer.value[f[0]]=f[1].value
+    })
+    refetch()
+}
+
 
 
 const fieldAsID = props.model.getFieldAsID()
@@ -240,10 +261,19 @@ const toast = useToast();
 const menu = ref();
 const expandedRows = ref()
 
+
+provide('queryKey', queryKey)
+provide('model', props.model)
+provide('isFormDataLoading',props.isFormDataLoading)
+
+
+
+
+
 const toggle = (value: MouseEvent) => {
     menu.value.toggle(value);
 };
-const { data, isPending,isSuccess, isRefetching, isError, refetch } = useQuery({
+const { data, isPending, isSuccess, isRefetching, isError, refetch } = useQuery({
     queryKey: [queryKey],
     queryFn: (parameter?) => {
         console.log(parseInt(offset.value))
@@ -252,19 +282,20 @@ const { data, isPending,isSuccess, isRefetching, isError, refetch } = useQuery({
                 {
                     limit: limit.value,
                     offset: offset.value,
-                    ...parameter
-
+                    where:filtersForServer.value,
+                    ...props.queryOptions
                 }
             ) :
             props.model.getAll(
                 {
                     limit: limit.value,
                     offset: offset.value,
+                    where:filtersForServer.value,
                     ...props.queryOptions
                 }
             )
     },
-    
+
 })
 
 const { data: dataOfOne, isPending: isPendingOfOne, isSuccess: isSuccessOfOne, isError: isErrorOfOne, isRefetching: isRefetchingOfOne, refetch: refetchOfOne } = useQuery({
@@ -281,11 +312,11 @@ watch(dataOfOne, (newValue) => {
 })
 
 watchEffect(() => {
-  if (isSuccess.value && !isPending.value && !isRefetching.value) {
-    
-    totalRecords.value = data.value.elements_amount
-    totalPages.value = data.value.pages
-  }
+    if (isSuccess.value && !isPending.value && !isRefetching.value) {
+
+        totalRecords.value = data.value.elements_amount
+        totalPages.value = data.value.pages
+    }
 });
 
 const isLogicErase = props.model.getFieldAsActive() != ''
@@ -365,28 +396,23 @@ const exportOptions = ref([
 //         })
 // }
 
-const filters = ref({
-    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-});
+
 
 const selectedRowInfo = ref()
 
 const showInfoDialog = ref(false)
 
-const showAdd = () => {
-    if (props.customAddFunction)
-        props.customAddFunction()
-    else
-        showAddDialog.value = true
-    props.model.clearData()
 
-}
 
 const showElement = (data: object) => {
     props.model.setData(data)
     showInfoDialog.value = true
     refetchOfOne()
 }
+
+
+
+
 
 const showUpdateDialog = ref(false)
 
@@ -402,17 +428,9 @@ const showUpdate = async (data: object) => {
 
 }
 
-const showAddDialog = ref(false)
 
 
-const addElement = () => {
-    mutateAdd()
-    //     :validateBefore="(value, values)=>{
-    //     const ci = values.filter((u)=>u.ci==value.ci)
-    //     if(ci[0] && ci.user_id!=value.ci)
-    //       throw new Error('Esta identificación ya existe')
-    //   }"
-}
+
 const updateElement = (data: object) => {
     mutateUpdate(data)
 }
@@ -498,19 +516,7 @@ const activateElement = (data: object, event) => {
 
 //
 
-const { mutate: mutateAdd, isPending: isAddPending } = useMutation({
-    mutationKey: [`${queryKey}-add`],
-    mutationFn: () => props.model.create(),
-    onSuccess: async () => {
-        await refetch()
-        toast.add({ severity: 'info', summary: t('table.confirmation'), detail: t('table.element_ok_added'), life: 5000 });
-        showAddDialog.value = false
-        props.model.clearData()
-    },
-    onError: (error) => {
-        toast.add({ severity: 'error', summary: t('table.something_wrong'), detail: t(error.message), life: 5000 });
-    }
-})
+
 
 
 const { mutate: mutateUpdate, isPending: isUpdatePending } = useMutation({
@@ -559,6 +565,10 @@ defineExpose({ showUpdate, refetch, desactivateElement, activateElement })
 .p-card-content,
 .p-datatable {
     height: 100% !important;
+}
+
+.p-datatable-filter-constraint-dropdown {
+    display: none !important;
 }
 
 .custom-table-header {

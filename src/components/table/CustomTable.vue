@@ -106,26 +106,7 @@
             </div>
         </div>
     </Dialog>
-    <Dialog v-model:visible="showAddDialog" modal :header="$t('table.add')" class="w-4/5 max-w-50rem min-w-25rem">
-
-        <span>{{ $t('table.new_element') }}</span>
-        <Form @submit="addElement" :validation-schema="props.model.getSchema()">
-            <div class="dialog-form">
-                <slot name="form-add"></slot>
-
-            </div>
-
-            <div class="dialog-footer">
-                <Button type="button" :label="$t('global.cancel')" severity="secondary"
-                    @click="showAddDialog = false"></Button>
-                <VButton w-8rem :disabled="isAddPending || isFormDataLoading" type="submit">
-                    <span v-if="!isAddPending || isFormDataLoading">{{ $t("global.save") }} </span>
-                    <VLoading v-else />
-                </VButton>
-            </div>
-        </Form>
-
-    </Dialog>
+    
 
     <Dialog v-model:visible="showUpdateDialog" modal :header="$t('table.update')" class="w-4/5 max-w-50rem min-w-25rem">
         <span>{{ $t('table.update_element') }}</span>

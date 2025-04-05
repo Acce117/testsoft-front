@@ -35,6 +35,11 @@ const columns = [
   //   header: "País",
   // },
   {
+    field: "groups.name_group",
+    fieldGetter: (value: User) => value.groups[0].name_group,
+    header: "user.group",
+  },
+  {
     field: "enabled",
     header: "global.enabled",
     isBoolean: true,
@@ -66,10 +71,20 @@ export class User extends BaseModel {
   }
 
   async getUsersByGroup(params: object = {}, id_group: string) {
-    console.log(id_group)
+    console.log(id_group);
     return await sendRequest({
       url: `${import.meta.env.VITE_API_PATH}/groups/users/${id_group}`,
-      body: params,
+      body: {
+        relations: [
+          {
+            name: "country",
+          },
+          {
+            name: "assignments",
+          },
+        ],
+        ...params,
+      },
     });
   }
 
@@ -115,7 +130,6 @@ export class User extends BaseModel {
     // }
   }
 
- 
   async update(data?: object) {
     const submitData = data ? data : this;
     const clone = { ...submitData };

@@ -92,8 +92,8 @@ const itemsAdmin = [
   },
   {
     label: " ",
-    i18n: "functional_roles",
-    command: () => router.push("/functional_roles"),
+    i18n: "functional-roles",
+    command: () => router.push("/functional-roles"),
   },
 ];
 

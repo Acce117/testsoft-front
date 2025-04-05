@@ -78,8 +78,8 @@ const router = createRouter({
           beforeEnter: autorize(["Analyst","Super Admin"]),
         },
         {
-          path: "/functional_roles",
-          name: "functional_roles",
+          path: "/functional-roles",
+          name: "functional-roles",
           component: FunctionalRoleManagement,
           meta: { requiresAuth: true },
           beforeEnter: autorize(["Admin","Super Admin"]),
@@ -140,8 +140,8 @@ const router = createRouter({
           meta: { requiresAuth: true },
         },
         {
-          path: "/functional_roles_selection",
-          name: "functional_roles_selection",
+          path: "/functional-roles-selection",
+          name: "functional-roles-selection",
           component: SelectFunctionalRoles,
           meta: { requiresAuth: true },
         },

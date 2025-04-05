@@ -8,10 +8,10 @@ const columns = [
     field: "rol_name",
     header: "general.name",
   },
-  {
-    field: "rol_descrip",
-    header: "general.description",
-  },
+  // {
+  //   field: "rol_descrip",
+  //   header: "general.description",
+  // },
 ];
 
 export class FunctionalRole extends BaseModel {

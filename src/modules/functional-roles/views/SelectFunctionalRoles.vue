@@ -5,7 +5,7 @@
 
 
 
-        <Pagination :query-function="getRoles" :query-key="'functional-roles'">
+        <Pagination :query-function="(params)=>FunctionalRole.getAll(params)" :query-key="'functional-roles'">
 
             <template #item-template="{ data }">
                 <article
@@ -31,6 +31,7 @@
 
 </template>
 <script setup lang="ts">
+import { FunctionalRole } from '@/modules/management/functional-roles/models/functional-role.model';
 import Pagination from './components/Pagination.vue';
 
 
