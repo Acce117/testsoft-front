@@ -22,7 +22,7 @@
                             </IconField>
                             <slot name="header"></slot>
                             <div flex gap-2>
-                                <CreateButton v-if="!props.hideCreate" :customFunction="props.customAddFunction" >
+                                <CreateButton v-if="!props.hideCreate" :customFunction="props.customAddFunction">
                                     <template #form>
                                         <slot name="form-add"></slot>
                                     </template>
@@ -89,7 +89,14 @@
                         <Skeleton v-if="isRefetching || isPending" width="60%" borderRadius=".4rem" height="1.5rem" />
 
                         <div v-else class="custom-table-actions">
+                            <UpdateButton :data-to-update="slotProps.data" :custom-function="customUpdateFunction"
+                                v-if="!props.hideEdit">
+                                <template #form>
+                                    <slot name="form-update"></slot>
+                                </template>
+                            </UpdateButton>
                             <div v-for="option in options" :key="option.tooltip">
+
                                 <i v-if="option.renderIf(slotProps.data)" mx-1 :class="option.icon"
                                     v-tooltip="$t(option.tooltip)" @click="option.action(slotProps.data, $event)" />
 
@@ -143,42 +150,12 @@
             </div>
         </div>
     </Dialog>
-   
 
-    <Dialog v-model:visible="showUpdateDialog" modal :header="$t('table.update')" class="w-4/5 max-w-50rem min-w-25rem">
-        <span>{{ $t('table.update_element') }}</span>
-        <Form @submit="updateElement" :validation-schema="props.model.getUpdateSchema()">
-            <div class="dialog-form">
-                <slot name="form-update"></slot>
-            </div>
-            <div class="dialog-footer">
-                <Button type="button" :label="$t('global.cancel')" severity="secondary"
-                    @click="showUpdateDialog = false"></Button>
-                <VButton w-8rem :disabled="isUpdatePending || isFormDataLoading" type="submit">
-                    <span v-if="!isUpdatePending || isFormDataLoading">{{ $t("global.save") }} </span>
-                    <VLoading v-else />
-                </VButton>
-            </div>
-        </Form>
-    </Dialog>
-    <Dialog v-model:visible="showUpdateDialog" modal :header="$t('table.update')" class="w-4/5 max-w-50rem min-w-25rem">
-        <span>{{ $t('table.update_element') }}</span>
-        <Form @submit="updateElement" :validation-schema="props.model.getUpdateSchema()">
-            <div class="dialog-form">
-                <slot name="form-update"></slot>
-            </div>
-            <div class="dialog-footer">
-                <Button type="button" :label="$t('global.cancel')" severity="secondary"
-                    @click="showUpdateDialog = false"></Button>
-                <VButton w-8rem :disabled="isUpdatePending || isFormDataLoading" type="submit">
-                    <span v-if="!isUpdatePending || isFormDataLoading">{{ $t("global.save") }} </span>
-                    <VLoading v-else />
-                </VButton>
-            </div>
-        </Form>
-    </Dialog>
+
+
+
     <slot name="custom-dialog"></slot>
-    
+
 
 </template>
 <script setup lang="ts">
@@ -205,6 +182,7 @@ import VButton from '../VButton.vue';
 import LoadingPanel from '../LoadingPanel.vue';
 import Paginator from 'primevue/paginator';
 import CreateButton from './components/CreateButton.vue';
+import UpdateButton from './components/update/UpdateButton.vue';
 
 useQueryClient()
 const props = defineProps({
@@ -245,9 +223,9 @@ const filterOptions = ref([
 
 const onFilter = (event) => {
     filtersForServer.value = {}
-    Object.entries(event.filters).map((f)=>{
-        if(f[1].value)
-            filtersForServer.value[f[0]]=f[1].value
+    Object.entries(event.filters).map((f) => {
+        if (f[1].value)
+            filtersForServer.value[f[0]] = f[1].value
     })
     refetch()
 }
@@ -264,7 +242,7 @@ const expandedRows = ref()
 
 provide('queryKey', queryKey)
 provide('model', props.model)
-provide('isFormDataLoading',props.isFormDataLoading)
+provide('isFormDataLoading', props.isFormDataLoading)
 
 
 
@@ -282,7 +260,7 @@ const { data, isPending, isSuccess, isRefetching, isError, refetch } = useQuery(
                 {
                     limit: limit.value,
                     offset: offset.value,
-                    where:filtersForServer.value,
+                    where: filtersForServer.value,
                     ...props.queryOptions
                 }
             ) :
@@ -290,7 +268,7 @@ const { data, isPending, isSuccess, isRefetching, isError, refetch } = useQuery(
                 {
                     limit: limit.value,
                     offset: offset.value,
-                    where:filtersForServer.value,
+                    where: filtersForServer.value,
                     ...props.queryOptions
                 }
             )
@@ -519,19 +497,7 @@ const activateElement = (data: object, event) => {
 
 
 
-const { mutate: mutateUpdate, isPending: isUpdatePending } = useMutation({
-    mutationKey: [`${queryKey}-update`],
-    mutationFn: (data: object) => props.model.update(data),
-    onSuccess: async () => {
-        await refetch()
-        toast.add({ severity: 'info', summary: t('table.confirmation'), detail: t('table.element_ok_updated'), life: 5000 });
-        showUpdateDialog.value = false
-        props.model.clearData()
-    },
-    onError: (error) => {
-        toast.add({ severity: 'error', summary: t('table.something_wrong'), detail: error.statusCode == 404 ? t('table.relations_error') : t(error.message), life: 5000 });
-    }
-})
+
 
 
 

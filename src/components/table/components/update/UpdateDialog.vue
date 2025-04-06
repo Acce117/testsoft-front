@@ -1,9 +1,8 @@
 <template>
 
-    <Dialog v-model:visible="visible" modal :header="$t('table.add')" class="w-4/5 max-w-50rem min-w-25rem">
-
-        <span>{{ $t('table.new_element') }}</span>
-        <Form @submit="() => mutate()" :validation-schema="model?.getSchema()">
+    <Dialog v-model:visible="visible" modal :header="$t('table.update')" class="w-4/5 max-w-50rem min-w-25rem">
+        <span>{{ $t('table.update_element') }}</span>
+        <Form @submit="(values) => mutate(values)" :validation-schema="model?.getUpdateSchema()">
             <div class="dialog-form">
                 <slot name="form"></slot>
             </div>
@@ -16,7 +15,6 @@
                 </VButton>
             </div>
         </Form>
-
     </Dialog>
 </template>
 <script setup lang="ts">
@@ -42,18 +40,18 @@ const isFormDataLoading = inject<Ref<boolean>>('isFormDataLoading')
 
 
 const { mutate, isPending } = useMutation({
-    mutationKey: [`${queryKey}-add`],
-    mutationFn: () => model.create(),
+    mutationKey: [`${queryKey}-update`],
+    mutationFn: (data: object) => model.update(data),
     onSuccess: async () => {
         await queryClient.refetchQueries({
             queryKey: [queryKey]
         })
-        toast.add({ severity: 'info', summary: t('table.confirmation'), detail: t('table.element_ok_added'), life: 5000 });
+        toast.add({ severity: 'info', summary: t('table.confirmation'), detail: t('table.element_ok_updated'), life: 5000 });
         visible.value = false
         model?.clearData()
     },
     onError: (error) => {
-        toast.add({ severity: 'error', summary: t('table.something_wrong'), detail: t(error.message), life: 5000 });
+        toast.add({ severity: 'error', summary: t('table.something_wrong'), detail: error.statusCode == 404 ? t('table.relations_error') : t(error.message), life: 5000 });
     }
 })
 
