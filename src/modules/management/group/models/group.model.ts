@@ -10,6 +10,11 @@ const columns = [
     header: "group.name_group",
     expander: true,
   },
+  {
+    field: "actions",
+    header: "actions",
+    isActionsColumn: true,
+  },
 ];
 
 export class Group extends BaseModel {

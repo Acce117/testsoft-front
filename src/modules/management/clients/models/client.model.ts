@@ -17,6 +17,11 @@ const columns = [
     header: "global.enabled",
     isBoolean: true,
   },
+  {
+    field: "actions",
+    header: "actions",
+    isActionsColumn: true,
+  },
 ];
 
 export class Client extends BaseModel {

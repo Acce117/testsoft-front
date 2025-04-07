@@ -2,10 +2,10 @@
     <Card overflow-auto h-full>
         <template #content>
 
-            <DataTable v-model:expandedRows="expandedRows" scrollable scrollHeight="flex" removableSort ref="dt" size="small"
-                tableStyle="min-width: 50rem" :globalFilterFields="props.model.getColumns().map((c) => c.field)"
-                v-model:filters="filters" filterDisplay="row" paginator :value="data" :rows="5"
-                :rowsPerPageOptions="[5, 10, 20, 50]">
+            <DataTable v-model:expandedRows="expandedRows" scrollable scrollHeight="flex" removableSort ref="dt"
+                size="small" tableStyle="min-width: 50rem"
+                :globalFilterFields="props.model.getColumns().map((c) => c.field)" v-model:filters="filters"
+                filterDisplay="row" paginator :value="data" :rows="5" :rowsPerPageOptions="[5, 10, 20, 50]">
 
 
                 <template #header>
@@ -21,7 +21,7 @@
                             </IconField>
                             <slot name="header"></slot>
                             <div flex gap-2>
-                                <Button v-if="!props.hideCreate" icon="pi pi-plus" @click="showAdd()" />
+                                <Button v-if="props.visibleCreateButton" icon="pi pi-plus" @click="showAdd()" />
 
                                 <Button icon="pi pi-external-link" @click="toggle" aria-haspopup="true"
                                     aria-controls="overlay_menu" severity="secondary" />
@@ -106,7 +106,7 @@
             </div>
         </div>
     </Dialog>
-    
+
 
     <Dialog v-model:visible="showUpdateDialog" modal :header="$t('table.update')" class="w-4/5 max-w-50rem min-w-25rem">
         <span>{{ $t('table.update_element') }}</span>
@@ -182,10 +182,16 @@ const props = defineProps({
     extraOptions: Array,
     isFormDataLoading: Boolean,
     hideActions: Boolean,
-    hideShow: Boolean,
-    hideEdit: Boolean,
-    hideCreate: Boolean,
-    hideDelete: Boolean,
+    visibleViewButton: Boolean,
+    visibleUpdateButton: Boolean,
+    visibleCreateButton: {
+        type: Boolean,
+        default: true
+    },
+    visibleDeleteButton: {
+        type: Boolean,
+        default: true
+    },
 
 })
 const fieldAsID = props.model.getFieldAsID()
@@ -220,13 +226,13 @@ watch(dataOfOne, (newValue) => {
 const isLogicErase = props.model.getFieldAsActive() != ''
 
 const options = ref([{
-    renderIf: (value) => !props.hideShow ? isLogicErase ? value[props.model.getFieldAsActive()] == true : true : false,
+    renderIf: (value) => props.visibleViewButton ? isLogicErase ? value[props.model.getFieldAsActive()] == true : true : false,
     icon: 'pi pi-eye',
     tooltip: 'table.view_information',
     action: (value) => showElement(value)
 },
 {
-    renderIf: (value) => !props.hideEdit ? isLogicErase ? value[props.model.getFieldAsActive()] == true : true : false,
+    renderIf: (value) => props.visibleUpdateButton ? isLogicErase ? value[props.model.getFieldAsActive()] == true : true : false,
     icon: 'pi pi-file-edit',
     tooltip: 'table.update',
     action: (value) => showUpdate(value)
@@ -484,10 +490,12 @@ defineExpose({ showUpdate, refetch, desactivateElement, activateElement })
 
 </script>
 <style>
-
- .p-card-body, .p-card-content, .p-datatable{
+.p-card-body,
+.p-card-content,
+.p-datatable {
     height: 100% !important;
 }
+
 .custom-table-header {
     display: flex;
     flex-direction: column;

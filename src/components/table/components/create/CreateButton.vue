@@ -1,15 +1,10 @@
 <template>
     <Button icon="pi pi-plus" @click="action" />
-    <CreateDialog v-model="visible">
-        <template #form>
-            <slot name="form" />
-        </template>
-    </CreateDialog>
+    
 </template>
 <script setup lang="ts">
 import { Button } from 'primevue';
-import CreateDialog from './CreateDialog.vue';
-import { inject, ref } from 'vue';
+import { inject } from 'vue';
 import { BaseModel } from '@/common/utils/BaseModel';
 
 
@@ -19,15 +14,16 @@ const props = defineProps({
         type: Function
     }
 })
+const emit = defineEmits(['show-create-dialog'])
+
 
 const action = () => {
     if (props.customFunction)
         props.customFunction()
-    else visible.value = true
+    else emit('show-create-dialog')
     model?.clearData()
 }
 
-const visible = ref(false)
 
 
 </script>

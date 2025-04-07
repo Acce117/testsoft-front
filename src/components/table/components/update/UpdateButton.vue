@@ -1,15 +1,10 @@
 <template>
     <i mx-1 class="pi pi-file-edit" v-tooltip="$t('table.update')" @click="action($event)" />
-    <UpdateDialog v-model="visible">
-        <template #form>
-            <slot name="form" />
-        </template>
-    </UpdateDialog>
+
 </template>
 <script setup lang="ts">
-import { inject, ref, type Ref } from 'vue';
+import { inject, type Ref } from 'vue';
 import { BaseModel } from '@/common/utils/BaseModel';
-import UpdateDialog from './UpdateDialog.vue';
 import { useQueryClient } from '@tanstack/vue-query';
 
 const queryClient = useQueryClient()
@@ -27,6 +22,8 @@ const props = defineProps({
     }
 })
 
+const emit = defineEmits(['show-update-dialog'])
+
 const action = async (event) => {
     console.log(event)
     console.log(props.dataToUpdate)
@@ -37,14 +34,13 @@ const action = async (event) => {
         queryKey: [queryKey + '-one']
     })
 
-    
+
 
     if (props.customFunction)
         props.customFunction(model?.getID())
-    else visible.value = true
+    else emit('show-update-dialog')
 }
 
-const visible = ref(false)
 
 
 </script>

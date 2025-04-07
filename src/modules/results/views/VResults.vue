@@ -1,6 +1,6 @@
 <template>
 
-  <CustomTable hasExpander hide-create ref="table" title="results.by_user" hideActions :model="user"
+  <TableServerPagination hasExpander hide-create ref="table" title="results.by_user" :visible-actions="false"   :model="user"
     :custom-get-all-function="getUsersByGroup">
     <template #header>
       <div w-full>
@@ -11,9 +11,9 @@
 
 
     <template #expansion="slotProps">
-      <CustomTable title="results.title"
-        :custom-get-one-function="(id_test_application: number) => TestResult.getOne(id_test_application)" hideEdit
-        hideDelete hideCreate :model="result" :query-options="{
+      <TableServerPagination title="results.title"
+        :custom-get-one-function="(id_test_application: number) => TestResult.getOne(id_test_application)" :visibleUpdateButton="false"
+        :visibleDeleteButton="false" :visibleCreateButton="false" :model="result" :query-options="{
 
           relations: [
             {
@@ -27,15 +27,16 @@
         }">
 
         <template #view-element="slotProps">
+          {{ slotProps.dataOfOne }}
           <VFinalResults :loading="slotProps.isPendingOfOne" :error="slotProps.isErrorOfOne"
             :testResult="slotProps.dataOfOne" :testName="slotProps.model.test.name"
             :testType="slotProps.model.test.type_psi_test.id_type_test" />
         </template>
 
-      </CustomTable>
+      </TableServerPagination>
     </template>
 
-  </CustomTable>
+  </TableServerPagination>
 
 
 </template>
@@ -46,7 +47,6 @@ import { provide, onUnmounted, ref } from "vue";
 import { useDialog } from "primevue/usedialog";
 import { useToast } from "primevue/usetoast";
 import { useI18n } from "vue-i18n";
-import CustomTable from "@/components/table/CustomTable.vue";
 import { TestAplication } from "../models/testApp.model";
 import VFinalResults from "./finalResults/VFinalResults.vue";
 import { TestResult } from "../models/testResult.model";
@@ -54,6 +54,7 @@ import { Group } from "@/modules/management/group/models/group.model";
 import TreeSelect from "primevue/treeselect";
 import { User } from "@/modules/management/users/models/user.model";
 import { useGroups } from "@/modules/management/group/composables/useGroups";
+import TableServerPagination from "@/components/table/TableServerPagination.vue";
 const { t } = useI18n();
 const toast = useToast();
 const table = ref()

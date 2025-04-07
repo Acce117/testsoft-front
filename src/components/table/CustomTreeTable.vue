@@ -1,8 +1,8 @@
 <template>
     <Card overflow-auto h-full>
         <template #content>
-            <TreeTable sortMode="multiple" removableSort ref="dt" scrollable scrollHeight="flex" size="small" tableStyle="min-width: 50rem" paginator
-                :value="data" :rows="5" :rowsPerPageOptions="[5, 10, 20, 50]">
+            <TreeTable sortMode="multiple" removableSort ref="dt" scrollable scrollHeight="flex" size="small"
+                tableStyle="min-width: 50rem" paginator :value="data" :rows="5" :rowsPerPageOptions="[5, 10, 20, 50]">
 
 
                 <template #header>
@@ -173,7 +173,10 @@ useQueryClient()
 const props = defineProps({
     title: String,
     model: BaseModel,
-    hideDelete: Boolean,
+    visibleDeleteButton: {
+        type: Boolean,
+        default: true
+    },
     queryOptions: {
         requestPDF: Function
     },

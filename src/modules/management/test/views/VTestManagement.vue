@@ -1,14 +1,9 @@
 <template>
-  <CustomTable ref="table" title="Test" :model="test" hide-edit :hideCreate="userStore().assignments[0].item_id==4" :extra-options="[{
+  <TableServerPagination ref="table" title="Test" :model="test"  :visibleCreateButton="userStore().assignments[0].item_id!=4" :extra-options="[{
     renderIf: (value: Test) => value.done == true,
     icon: 'pi pi-paperclip',
     tooltip: 'table.assign',
     action: (value) => {assignVisible=true; test.setData(value)}
-  }, {
-    renderIf: (value: Test) => value.done == false && value.authors[0] && value.authors[0].user_id==userStore().user_id,
-    icon: 'pi pi-file-edit',
-    tooltip: 'table.edit',
-    action: (value) => table.showUpdate(value)
   }]" :query-options="{
     relations: [
       {
@@ -26,17 +21,17 @@
     <template #custom-dialog>
         <AssignTest v-if="assignVisible" :refetch="()=>table.refetch()" v-model="test" v-model:visible="assignVisible" />
     </template>
-  </CustomTable>
+  </TableServerPagination>
 </template>
 <script setup lang="ts">
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
-import CustomTable from "@/components/table/CustomTable.vue";
 import router from "@/router";
 import { Test } from "@/modules/management/test/models/test.model";
 import ViewTest from "./components/ViewTest.vue";
 import AssignTest from "./components/AssignTest.vue";
 import { userStore } from "@/modules/security/store/user-store";
+import TableServerPagination from "@/components/table/TableServerPagination.vue";
 const { t } = useI18n();
 const table = ref()
 const assignVisible = ref(false)

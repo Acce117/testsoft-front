@@ -3,7 +3,7 @@
       <div rounded-xl pa-2 bg-white border-1 border-solid border-slate-200 shadow-md>
 
       
-    <CustomTable title="results.my-results" :custom-get-one-function="(id_test_application:number)=>  TestResult.getOne(id_test_application)" hideEdit hideDelete hideCreate :model="result"  :query-options="{
+    <CustomTable title="results.my-results" :custom-get-one-function="(id_test_application:number)=>  TestResult.getOne(id_test_application)" :visibleUpdateButton="false" :visibleDeleteButton="false" :visibleCreateButton="false" :model="result"  :query-options="{
       where: {
         fk_id_user: userStore().user_id
       },

@@ -2,17 +2,8 @@ import { BaseModel } from "@/common/utils/BaseModel";
 import { sendRequest } from "@/common/utils/sendRequest";
 import { ID } from "@/common/utils/Decorators";
 import schema from "../schemas/functional-role.schema";
+import { columns } from "./functional-role.columns";
 
-const columns = [
-  {
-    field: "rol_name",
-    header: "general.name",
-  },
-  // {
-  //   field: "rol_descrip",
-  //   header: "general.description",
-  // },
-];
 
 export class FunctionalRole extends BaseModel {
   @ID
@@ -23,7 +14,10 @@ export class FunctionalRole extends BaseModel {
   static readonly columns = columns;
   static readonly schema = schema;
 
-  public async getFunctionalRolesByGroup(queryParams:object, id_group: string | number) {
+  public async getFunctionalRolesByGroup(
+    queryParams: object,
+    id_group: string | number
+  ) {
     const groups = await sendRequest({
       url: `${import.meta.env.VITE_API_PATH}/groups/parents/${id_group}`,
       body: { relations: ["functional_roles"] },

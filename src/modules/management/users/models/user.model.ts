@@ -3,48 +3,8 @@ import { schema, updateSchema } from "../schemas/user.schema";
 import { sendRequest } from "@/common/utils/sendRequest";
 import { ID, LogicErase } from "@/common/utils/Decorators";
 import type { Country } from "../../country/models/country.model";
+import { columns } from "./user.columns";
 
-const columns = [
-  {
-    field: "CI",
-    header: "user.ci",
-  },
-  {
-    field: "name",
-    header: "user.name",
-  },
-  {
-    field: "last_name",
-    header: "user.last_name",
-  },
-  {
-    field: "username",
-    header: "user.username",
-  },
-  {
-    field: "email",
-    header: "user.email",
-  },
-  {
-    field: "sex",
-    header: "user.sex",
-  },
-  // {
-  //   field: "country.type_test_name",
-  //   fieldGetter: (value: User) => value.country.name,
-  //   header: "País",
-  // },
-  {
-    field: "groups.name_group",
-    fieldGetter: (value: User) => value.groups[0].name_group,
-    header: "user.group",
-  },
-  {
-    field: "enabled",
-    header: "global.enabled",
-    isBoolean: true,
-  },
-];
 
 export class User extends BaseModel {
   @ID
@@ -136,6 +96,7 @@ export class User extends BaseModel {
     delete clone.item_id;
     delete clone.group_id;
     delete clone.assignment_id;
+    console.log(submitData)
 
     await sendRequest({
       method: "PATCH",

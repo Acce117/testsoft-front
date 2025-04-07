@@ -8,38 +8,7 @@ import { Equation } from "../modules/equation/equation.model";
 import type { Classification } from "../modules/classification/classification.model";
 import { ID, NotSavable } from "@/common/utils/Decorators";
 import type { TestType } from "../modules/test-type/test-type.model";
-
-const columns = [
-  {
-    field: "name",
-    header: "Nombre",
-  },
-  {
-    field: "time_duration",
-    header: "Tiempo de Duración (min)",
-  },
-  {
-    field: "navigable",
-    header: "¿Es posible navegar por las diferentes series del test?",
-    isBoolean: true,
-  },
-  {
-    field: "completed",
-    header:
-      "¿Es necesario chequear el completamiento para que el procesamiento del test sea correcto?",
-    isBoolean: true,
-  },
-  {
-    field: "type_psi_test.type_test_name",
-    fieldGetter: (value: Test) => value.type_psi_test?.type_test_name,
-    header: "Tipo de Test",
-  },
-  {
-    field: "type_psi_test.done",
-    fieldGetter: (value: Test) => (value.done == 1 ? "Cerrado" : "Abierto"),
-    header: "Estado",
-  },
-];
+import { columns } from "./test.columns";
 
 export class Test extends BaseModel {
   @ID
@@ -95,7 +64,6 @@ export class Test extends BaseModel {
       ? new Equation(data.equation)
       : new Equation();
   }
-
 
   public async getAssignedTests(user_id: string) {
     return await sendRequest({

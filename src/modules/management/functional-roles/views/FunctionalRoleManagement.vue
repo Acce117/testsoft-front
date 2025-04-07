@@ -1,7 +1,8 @@
 <template>
   <TableServerPagination ref="table" title="functional_role.title" :model="functionalRole"
   :query-options="{relations:['group']}"
-    :custom-get-all-function="getFunctionalRoles">
+    :custom-get-all-function="getFunctionalRoles"
+    >
     
     <template #form-add>
       <AddFunctionalRole v-model="functionalRole"  />
