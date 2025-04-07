@@ -10,8 +10,9 @@
         }
       ]
     }" :model="user" :custom-get-all-function="getUsersByGroup">
-    <template #header>
-      <div w-full>
+    
+    <template #custom-filter-template-groups>
+      <div flex w-full>
         <TreeSelect @change="(value) => { defaultValue = value; table.refetch() }" :defaultValue
           :placeholder="$t('user.filtergroup')" :options="groups" filter w-40 v-model="selectedGroup" />
       </div>

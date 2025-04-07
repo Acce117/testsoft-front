@@ -62,6 +62,10 @@ export class BaseModel {
   public getColumns() {
     return (this.constructor as typeof BaseModel).columns;
   }
+  public getFilters() {
+    const columns = this.getColumns()
+    return columns?.filter((c)=>c.filter)
+  }
   public getSchema() {
     return (this.constructor as typeof BaseModel).schema;
   }

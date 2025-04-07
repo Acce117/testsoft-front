@@ -9,6 +9,7 @@ export const columns = [
   {
     field: "name",
     header: "user.name",
+    filter:true
   },
   {
     field: "last_name",
@@ -35,6 +36,9 @@ export const columns = [
     field: "groups.name_group",
     fieldGetter: (value: User) => value.groups[0].name_group,
     header: "user.group",
+    customFilterTemplate:'groups',
+    filter:true
+
   },
   {
     field: "enabled",

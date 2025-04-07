@@ -11,7 +11,7 @@
                     {{ filters }}
                     {{ filtersForServer }}
                     <div class="custom-table-header">
-                        <h1 text-xl m-0 font-semibold>{{ $t(props.title?props.title:'') }}</h1>
+                        <h1 text-xl m-0 font-semibold>{{ $t(props.title ? props.title : '') }}</h1>
                         <div class="custom-table-header__options">
                             <IconField>
                                 <InputIcon>
@@ -41,12 +41,11 @@
                 <Column expander v-if="hasExpander" style="width: 1rem" />
                 <div v-for="(col, index) in props.model.getColumns()" :key="index">
 
-                    <Column v-if="!col.isActionsColumn" filterField="rol_name" sortable :field="col.field"
+                    <Column v-if="!col.isActionsColumn" :filterField="col.field" sortable :field="col.field"
                         :header="$t(col.header)" :filterMatchModeOptions="filterOptions">
 
 
                         <template #body="slotProps">
-
                             <Skeleton v-if="isRefetching || isPending" width="60%" borderRadius=".4rem"
                                 height="1.5rem" />
                             <div overflow-auto text-sm v-else-if="col.fieldGetter">
@@ -73,16 +72,18 @@
                             </div>
 
                         </template>
-                        <template #filter="{ filterModel, filterCallback }">
-                            <!-- <InputText v-model="filters['rol_name'].value" type="text" @input="(a) => console.log(a)"
-                            placeholder="Search by country" /> -->
-                            <InputText v-model="filterModel.value" @keyup.enter="filterCallback()"
-                                placeholder="Buscar por nombre" />
+                        <template v-if="col.filter" #filter="{ filterModel, filterCallback }">
+                            <slot v-if="col.customFilterTemplate" :name="'custom-filter-template-'+col.customFilterTemplate" :filterModel :filterCallback ></slot>
+                            <IconField v-else>
+                                <InputIcon>
+                                    <i class="pi pi-search" />
+                                </InputIcon>
+                                <InputText v-model="filterModel.value" @keyup.enter="filterCallback()"
+                                    placeholder="Buscar" />
+                            </IconField>
+
                         </template>
-                        <!-- <template #filter="{ filterModel, filterCallback }">
-                        {{ filters }}
-                        
-                    </template> -->
+
 
 
                     </Column>
@@ -104,7 +105,7 @@
                                         && (col.visibleUpdateFunction ? col.visibleUpdateFunction(slotProps.data) : true)"
                                     @show-update-dialog="updateDialogVisible = true"
                                     :custom-function="customUpdateFunction" />
-                                <div
+                                <template
                                     v-if="props.visibleDeleteButton && (col.visibleDeleteFunction ? col.visibleDeleteFunction(slotProps.data) : true)">
 
                                     <DeleteButton :data-to-delete="slotProps.data" v-if="!isLogicErase" />
@@ -112,14 +113,14 @@
                                     <ActivateButton :data-to-activate="slotProps.data"
                                         v-else-if="slotProps.data[props.model.getFieldAsActive()] == false" />
                                     <DesactivateButton :data-to-desactivate="slotProps.data" v-else />
-                                </div>
-                                <div v-if="props.extraOptions">
-                                    <article v-for="option in props.extraOptions" :key="option">
+                                </template>
+                                <template v-if="props.extraOptions">
+                                    <template v-for="option in props.extraOptions" :key="option">
                                         <i v-if="option.renderIf(slotProps.data)" mx-1 :class="option.icon"
                                             v-tooltip="$t(option.tooltip)"
                                             @click="option.action(slotProps.data, $event)" />
-                                    </article>
-                                </div>
+                                    </template>
+                                </template>
 
 
                             </div>
@@ -258,9 +259,14 @@ const totalPages = ref(0)
 const dt = ref();
 
 
-const filters = ref({
-    rol_name: { value: null, matchMode: 'contains' },
-});
+
+const filters = ref({});
+
+props.model.getFilters()?.forEach((f) => {
+    filters.value[f.field] = { value: null, matchMode: 'contains' }
+
+})
+
 const filtersForServer = ref({});
 const filterOptions = ref([
     { label: 'Contains', value: 'contains' }
@@ -321,7 +327,7 @@ const { data, isPending, isSuccess, isRefetching, isError, refetch } = useQuery(
 
 })
 
-const { dataOfOne,isPendingOfOne, isErrorOfOne, refetchOfOne } = useQueryOfOne(queryKey, props.model, props.queryOptions)
+const { dataOfOne, isPendingOfOne, isErrorOfOne, refetchOfOne } = useQueryOfOne(queryKey, props.model, props.queryOptions)
 
 
 const isLogicErase = props.model.getFieldAsActive() != ''
