@@ -124,6 +124,34 @@ const itemsDefault = [
       },
     ]
   },
+  {
+    label: " ",
+    i18n: "rolesfuncionales",
+    icon: 'pi pi-file-edit',
+
+    items: [
+      {
+        label: " ",
+        i18n: "seleccionar preferidos evitados",
+        command: () => router.push("/functional-roles-selection"),
+      },
+      
+    ]
+  },
+  {
+    label: " ",
+    i18n: "compatibility",
+    icon: 'pi pi-file-edit',
+
+    items: [
+      {
+        label: " ",
+        i18n: "seleccionar compatibilidades y liderazgo ",
+        command: () => router.push("/compatibility-selection"),
+      },
+      
+    ]
+  },
 
   {
     label: " ",

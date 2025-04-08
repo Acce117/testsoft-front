@@ -81,21 +81,21 @@ watchEffect(() => {
                     <InputText w-20rem lg:w-20rem v-model="searchTerm" :placeholder="$t('table.search')"
                         @keydown="(e) => { if (e.key == 'Enter') { offset = 0; refetch() } }" />
                 </IconField>
-                
+
                 <Button icon="pi pi-refresh" :disabled="isPending || isRefetching" @click="() => {
                     offset = 0
                     refetch()
 
                 }" />
 
-                
+
             </div>
 
             <div class="flex items-center space-x-2">
 
-                
 
-                
+
+
                 <Paginator :rows="limit" @page="(e) => {
                     console.log(e)
                     offset = e.first
@@ -103,15 +103,16 @@ watchEffect(() => {
                     refetch()
                 }" :totalRecords="totalRecords" :rowsPerPageOptions="[1, 10, 20, 30]">
                     <template #start="slotProps">
-                        
+
 
 
                     </template>
                     <template #end="slotProps">
                         <section class="flex flex-col ml-4">
                             <span>
-                                Mostrando {{ slotProps.state.rows>totalRecords?totalRecords:slotProps.state.rows }} de {{ totalRecords }} elementos
-                                
+                                Mostrando {{ slotProps.state.rows > totalRecords ? totalRecords : slotProps.state.rows }} de
+                                {{ totalRecords }} elementos
+
                             </span>
                             <span>
                                 Primer elemento: {{ slotProps.state.first + 1 }}
@@ -121,12 +122,12 @@ watchEffect(() => {
                             </span>
                         </section>
 
-                       
-                        
+
+
                     </template>
                 </Paginator>
 
-                
+
 
 
 
@@ -134,26 +135,26 @@ watchEffect(() => {
 
 
         </div>
-       
-        <div v-if="!isPending && !isRefetching">
 
-            <article
-                class="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 overflow-auto lg:grid-cols-4 xl:grid-cols-5  p-2">
+        <template v-if="!isPending && !isRefetching">
+
+            <section
+                class="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 overflow-auto lg:grid-cols-4   p-2 mx-4">
                 <slot v-for="(item, index) in data.data" :key="index" name="item-template" :data="item">
                 </slot>
-            </article>
+            </section>
 
             <span v-if="data.data.length === 0" class="text-red-500 font-medium cursor-pointer text-base">No
                 existen
                 elementos</span>
 
-        </div>
+        </template>
         <span v-else-if="isError" @click="refetch" class="text-red-500 font-medium cursor-pointer text-base">Ha ocurrido
             un
             error, inténtelo de nuevo...</span>
-        <div class="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3  gap-8 overflow-auto lg:grid-cols-4 xl:grid-cols-5  p-6"
+        <div class="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3  gap-8 overflow-auto lg:grid-cols-4  p-6"
             v-else>
-            <Skeleton v-for="e in [1, 2, 3, 4]" :key="e" class="w-52 h-64 animate-pulse bg-third" />
+            <Skeleton v-for="e in [1, 2, 3, 4]" height="8rem"  :key="e" class=" w-full animate-pulse " />
         </div>
 
 

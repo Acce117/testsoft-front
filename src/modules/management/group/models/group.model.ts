@@ -3,6 +3,7 @@ import { BaseModel } from "@/common/utils/BaseModel";
 import { schema, updateSchema } from "../schemas/group.schema";
 import { sendRequest } from "@/common/utils/sendRequest";
 import { ID, NotSavable } from "@/common/utils/Decorators";
+import { userStore } from "@/modules/security/store/user-store";
 
 const columns = [
   {
@@ -43,9 +44,9 @@ export class Group extends BaseModel {
     const groups = await this.getAll();
     return renameTreeForTreeTable(groups.length ? groups : [groups]);
   }
-  public static async getUsersFromGroup(id: number, params = {}) {
+  public static async getUsersFromCurrentGroup( params = {}) {
     return await sendRequest({
-      url: `${import.meta.env.VITE_API_PATH}/groups/users_from_group/${id}`,
+      url: `${import.meta.env.VITE_API_PATH}/groups/users_from_group/${userStore().assignments[0].group_id}`,
       body: params,
     });
   }

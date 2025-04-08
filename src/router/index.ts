@@ -23,6 +23,7 @@ import ExecuteTest from "@/modules/test/views/execute-test/ExecuteTest.vue";
 import FunctionalRoleManagement from "@/modules/management/functional-roles/views/FunctionalRoleManagement.vue";
 import SelectFunctionalRoles from "@/modules/functional-roles/views/SelectFunctionalRoles.vue";
 import IncompatibilityLeadershipView from "@/modules/incompatibility-leadership/views/IncompatibilityLeadershipView.vue";
+import SelectCompatibility from "@/modules/incompatibility-leadership/views/SelectCompatibility.vue";
 
 const autorize = (roles: string[]) => {
   return function (to, from, next) {
@@ -143,6 +144,12 @@ const router = createRouter({
           path: "/functional-roles-selection",
           name: "functional-roles-selection",
           component: SelectFunctionalRoles,
+          meta: { requiresAuth: true },
+        },
+        {
+          path: "/compatibility-selection",
+          name: "compatibility-selection",
+          component: SelectCompatibility,
           meta: { requiresAuth: true },
         },
 

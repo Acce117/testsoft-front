@@ -8,17 +8,17 @@
               await refetchGroups()
             }" />
 
-      <!-- <UserRelationsGraph ref="graph" v-else-if="isSuccess" :data="users">
+      <UserRelationsGraph ref="graph" v-else-if="isSuccess" :data="users">
         <template #header>
           <h1 text-xl font-semibold>Sociométrico </h1>
 
           <TreeSelect @change="(value) => { defaultValue = value; refetch() }" :defaultValue
             :placeholder="$t('user.filtergroup')" :options="groups" filter w-40 v-model="selectedGroup" />
         </template>
-      </UserRelationsGraph> -->
-      <EvyGraph>
+      </UserRelationsGraph>
+      <!-- <EvyGraph>
 
-      </EvyGraph>
+      </EvyGraph> -->
     </template>
 
   </Card>
