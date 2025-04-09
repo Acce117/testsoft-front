@@ -110,7 +110,7 @@ const router = createRouter({
 
     {
       path: "/",
-      name: "home",
+      name: "general",
       component: VGeneralVue,
       meta: { requiresAuth: true },
       children: [
