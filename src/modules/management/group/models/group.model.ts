@@ -40,9 +40,13 @@ export class Group extends BaseModel {
     return updateSchema;
   }
 
-  public async getElementsForTreeTable() {
-    const groups = await this.getAll();
-    return renameTreeForTreeTable(groups.length ? groups : [groups]);
+  public async getElementsForTreeTable(body:object) {
+    const groups = await this.getAll(body);
+    const data = renameTreeForTreeTable(groups.data.length ? groups.data : [groups.data]);
+    return {
+      ...groups,
+      data: groups.data
+    }
   }
   public static async getUsersFromCurrentGroup( params = {}) {
     return await sendRequest({

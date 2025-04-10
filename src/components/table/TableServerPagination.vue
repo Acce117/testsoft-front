@@ -1,14 +1,15 @@
 <template>
     <Card overflow-auto h-full>
         <template #content>
+            <LoadingPanel v-if="isPending"  centered
+            :loading="isPending" :error="isError" :refetch="refetch" />
 
-            <DataTable v-model:expandedRows="expandedRows" scrollable v-model:filters="filters" :lazy="true"
+            <DataTable :class="internDatatable? 'intern-datatable':''" v-model:expandedRows="expandedRows" scrollable v-model:filters="filters" :lazy="true"
                 @filter="onFilter" filterDisplay="menu" scrollHeight="flex" removableSort ref="dt" size="small"
-                tableStyle="min-width: 50rem" :value="data ? data.data : []" :rows="5">
+                tableStyle="min-width: 50rem" :value="tableData" :rows="5" >
 
 
                 <template #header>
-                    {{ filters }}
                     {{ filtersForServer }}
                     <div class="custom-table-header">
                         <h1 text-xl m-0 font-semibold>{{ $t(props.title ? props.title : '') }}</h1>
@@ -27,11 +28,11 @@
                                     :customFunction="props.customAddFunction" />
 
 
-                                <Button icon="pi pi-external-link" @click="toggle" aria-haspopup="true"
-                                    aria-controls="overlay_menu" severity="secondary" />
+                                <Button icon="pi pi-download" variant="outlined"  @click="toggle" aria-haspopup="true"
+                                    aria-controls="overlay_menu" severity="info"  />
                                 <Menu ref="menu" id="overlay_menu" :model="exportOptions" :popup="true" />
 
-                                <Button icon="pi pi-refresh" severity="secondary" @click="refetch()" />
+                                <Button icon="pi pi-refresh" variant="outlined" severity="info" @click="refetch()" />
                             </div>
 
                         </div>
@@ -48,32 +49,32 @@
                         <template #body="slotProps">
                             <Skeleton v-if="isRefetching || isPending" width="60%" borderRadius=".4rem"
                                 height="1.5rem" />
-                            <div overflow-auto text-sm v-else-if="col.fieldGetter">
+                            <template v-else-if="col.fieldGetter">
                                 <Rating v-if="col.isRating"
                                     :modelValue="slotProps.data[col.fieldGetter(slotProps.data)]" readonly />
-                                <span v-else-if="col.isBoolean">{{
-                                    col.fieldGetter(slotProps.data) == true ? t('global.yes') : t('global.no') }}</span>
-                                <span v-else-if="col.fieldGetter(slotProps.data) !== undefined">{{ typeof
-                                    col.fieldGetter(slotProps.data) == 'string' ? col.fieldGetter(slotProps.data).length
-                                        < 20 ? col.fieldGetter(slotProps.data) :
-                                    col.fieldGetter(slotProps.data).substring(0, 20) + '...' :
-                                    col.fieldGetter(slotProps.data) }}</span>
-                                        <span v-else>-</span>
-                            </div>
-                            <div overflow-auto text-sm v-else>
+                                <template v-else-if="col.isBoolean">{{
+                                    col.fieldGetter(slotProps.data) == true ? t('global.yes') : t('global.no') }}</template>
+                                <template v-else-if="col.fieldGetter(slotProps.data) !== undefined">{{col.fieldGetter(slotProps.data) }}</template>
+                                        <template v-else>-</template>
+                            </template>
+                            <template  v-else>
                                 <Rating v-if="col.isRating" :modelValue="slotProps.data[col.field]" readonly />
-                                <span v-else-if="col.isBoolean || col.field === props.model.getFieldAsActive()">{{
-                                    slotProps.data[col.field] == true ? t('global.yes') : t('global.no') }}</span>
-                                <span v-else-if="slotProps.data[col.field] !== undefined">{{ typeof
-                                    slotProps.data[col.field] == 'string' ? slotProps.data[col.field].length < 20 ?
-                                    slotProps.data[col.field] : slotProps.data[col.field].substring(0, 20) + '...' :
-                                    slotProps.data[col.field] }}</span>
-                                        <span v-else>-</span>
-                            </div>
+                                <template v-else-if="col.isBoolean || col.field === props.model.getFieldAsActive()">
+                                    <Tag  v-if="slotProps.data[col.field] == true" severity="success"
+                                        :value="$t('global.yes')" />
+                                    <Tag v-else severity="danger" :value="$t('global.no')" />
+
+                                </template>
+                                <template v-else-if="slotProps.data[col.field] !== undefined">{{slotProps.data[col.field] }}</template>
+                                        <template v-else>-</template>
+                            </template>
 
                         </template>
                         <template v-if="col.filter" #filter="{ filterModel, filterCallback }">
-                            <slot v-if="col.customFilterTemplate" :name="'custom-filter-template-'+col.customFilterTemplate" :filterModel :filterCallback ></slot>
+                            <slot v-if="col.customFilterTemplate"
+                                :name="'custom-filter-template-' + col.customFilterTemplate" :filterModel
+                                :filterCallback>
+                            </slot>
                             <IconField v-else>
                                 <InputIcon>
                                     <i class="pi pi-search" />
@@ -116,7 +117,7 @@
                                 </template>
                                 <template v-if="props.extraOptions">
                                     <template v-for="option in props.extraOptions" :key="option">
-                                        <i v-if="option.renderIf(slotProps.data)" mx-1 :class="option.icon"
+                                        <Button v-if="option.renderIf(slotProps.data)" :severity="option.severity" rounded variant="text" :icon="'pi '+option.icon"
                                             v-tooltip="$t(option.tooltip)"
                                             @click="option.action(slotProps.data, $event)" />
                                     </template>
@@ -210,6 +211,8 @@ import CreateDialog from './components/create/CreateDialog.vue';
 import DeleteButton from './components/delete/DeleteButton.vue';
 import ActivateButton from './components/logic_delete/ActivateButton.vue';
 import DesactivateButton from './components/logic_delete/DesactivateButton.vue';
+import { Tag } from 'primevue';
+import LoadingPanel from '../LoadingPanel.vue';
 
 useQueryClient()
 const { t } = useI18n();
@@ -228,7 +231,7 @@ const props = defineProps({
     customGetOneFunction: Function,
     //validateBefore: Function,
     queryOptions: Object,
-    extraOptions: Array<{ renderIf: (data: object) => boolean, tooltip: string, icon: string, action: (data: BaseModel, event: MouseEvent) => void }>,
+    extraOptions: Array<{ renderIf: (data: object) => boolean, tooltip: string, severity: string, icon: string, action: (data: BaseModel, event: MouseEvent) => void }>,
     isFormDataLoading: Boolean,
     visibleActions: {
         type: Boolean,
@@ -250,6 +253,10 @@ const props = defineProps({
         type: Boolean,
         default: true
     },
+    internDatatable:{
+        type: Boolean,
+        default: false
+    }
 
 })
 const limit = ref(10)
@@ -257,7 +264,7 @@ const offset = ref(0)
 const totalRecords = ref(0)
 const totalPages = ref(0)
 const dt = ref();
-
+const tableData = ref()
 
 
 const filters = ref({});
@@ -380,6 +387,7 @@ watchEffect(() => {
 
         totalRecords.value = data.value.elements_amount
         totalPages.value = data.value.pages
+        tableData.value = data.value.data
     }
 });
 
@@ -417,10 +425,7 @@ defineExpose({ refetch })
     align-items: center;
 }
 
-.custom-table-actions .pi {
-    color: var(--p-button-primary-background);
-    cursor: pointer;
-}
+
 
 .dialog-form {
     display: flex;
@@ -440,5 +445,21 @@ defineExpose({ refetch })
     display: flex;
     align-items: center;
     justify-content: center;
+}
+td {
+    white-space: nowrap;
+    /* Evita el salto de línea */
+    overflow: hidden;
+    /* Oculta el texto que sobresale */
+    text-overflow: ellipsis;
+    /* Añade puntos suspensivos */
+    max-width: 200px;
+    /* O el ancho que necesites */
+}
+.p-datatable-thead{
+    z-index: 2 !important;
+}
+.intern-datatable .p-datatable-thead{
+    z-index: 1 !important;
 }
 </style>

@@ -23,7 +23,7 @@
                             <div flex gap-2>
                                 <Button v-if="props.visibleCreateButton" icon="pi pi-plus" @click="showAdd()" />
 
-                                <Button icon="pi pi-external-link" @click="toggle" aria-haspopup="true"
+                                <Button icon="pi pi-download" @click="toggle" aria-haspopup="true"
                                     aria-controls="overlay_menu" severity="secondary" />
                                 <Menu ref="menu" id="overlay_menu" :model="exportOptions" :popup="true" />
 
@@ -55,8 +55,13 @@
                         </div>
                         <div overflow-auto text-sm v-else>
                             <Rating v-if="col.isRating" :modelValue="slotProps.data[col.field]" readonly />
-                            <span v-else-if="col.isBoolean || col.field === props.model.getFieldAsActive()">{{
-                                slotProps.data[col.field] == true ? t('global.yes') : t('global.no') }}</span>
+                            <template v-else-if="col.isBoolean || col.field === props.model.getFieldAsActive()">
+                                <Tag  v-if="slotProps.data[col.field] == true" severity="success"
+                                    :value="$t('global.yes')" />
+                                <Tag v-else severity="danger" :value="$t('global.no')" />
+
+                            </template>
+
                             <span v-else-if="slotProps.data[col.field] !== undefined">{{ typeof
                                 slotProps.data[col.field] == 'string' ? slotProps.data[col.field].length < 20 ?
                                 slotProps.data[col.field] : slotProps.data[col.field].substring(0, 20) + '...' :
@@ -164,6 +169,7 @@ import { BaseModel } from '@/common/utils/BaseModel';
 import Skeleton from 'primevue/skeleton';
 import VButton from '../VButton.vue';
 import LoadingPanel from '../LoadingPanel.vue';
+import { Tag } from 'primevue';
 
 useQueryClient()
 const props = defineProps({
@@ -516,10 +522,7 @@ defineExpose({ showUpdate, refetch, desactivateElement, activateElement })
     align-items: center;
 }
 
-.custom-table-actions .pi {
-    color: var(--p-button-primary-background);
-    cursor: pointer;
-}
+
 
 .dialog-form {
     display: flex;

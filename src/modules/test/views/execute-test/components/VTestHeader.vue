@@ -1,5 +1,5 @@
 <template>
-  <section class="test__header" bg-white rounded-xl px-4 pb-2 pt-20>
+  <section class="test__header" bg-white rounded-xl border  border-solid  px-4 pb-2 pt-20>
     <div justify-between h-fit flex p-2 w-full items-center>
 
 
@@ -66,6 +66,8 @@ watch(
 <style>
 .test__header {
   animation: slide-in-from-top 0.5s ease;
+  border: solid 1px rgb(226 232 240) !important;
+
 }
 
 .p-steps {

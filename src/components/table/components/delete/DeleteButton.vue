@@ -1,12 +1,12 @@
 <template>
-    <i mx-1 class="pi pi-trash" v-tooltip="$t('table.delete')" @click="action($event)" />
-
+    <Button icon="pi pi-trash" severity="danger" variant="text" rounded aria-label="Trash"
+        v-tooltip="$t('table.delete')" @click="action($event)" />
 </template>
 <script setup lang="ts">
 import { inject, type Ref } from 'vue';
 import { BaseModel } from '@/common/utils/BaseModel';
 import { useMutation, useQueryClient } from '@tanstack/vue-query';
-import { useConfirm, useToast } from 'primevue';
+import { Button, useConfirm, useToast } from 'primevue';
 import { useI18n } from 'vue-i18n';
 
 const queryClient = useQueryClient()
@@ -39,7 +39,8 @@ const action = (event:MouseEvent) => {
             outlined: true
         },
         acceptProps: {
-            label: t('global.confirm')
+            label: t('table.delete'),
+            severity: 'danger',
         },
         accept: () => {
             model?.setData(props.dataToDelete)

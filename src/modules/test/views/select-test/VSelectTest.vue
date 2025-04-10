@@ -12,31 +12,36 @@ import Dialog from "primevue/dialog";
 import { Test } from "@/modules/management/test/models/test.model";
 import router from "@/router";
 import Paginator from "@/components/Paginator.vue";
+import { Card } from "primevue";
 
 
-const { tests, isSuccess, isPending, isError, refetch } = useAssignedTests((value) => {
-  user.assignedTests = [];
-  value.forEach((test: any) => {
-    let availableDate: Date = null;
-    if (test.test_apps.length > 0) {
-      availableDate = new Date(test.test_apps[test.test_apps.length - 1].date);
-      availableDate.setFullYear(
-        availableDate.getFullYear() + parseInt(test.recurring_time)
-      );
-    }
-    user.assignedTests.push({
-      id: test.id_test,
-      availabilityTime: availableDate,
-    });
-    sessionStorage.setItem("user", JSON.stringify(user.$state));
-  });
-})
+// const { tests, isSuccess, isPending, isError, refetch } = useAssignedTests((value) => {
+//   user.assignedTests = [];
+//   value.forEach((test: any) => {
+//     let availableDate: Date = null;
+//     if (test.test_apps.length > 0) {
+//       availableDate = new Date(test.test_apps[test.test_apps.length - 1].date);
+//       availableDate.setFullYear(
+//         availableDate.getFullYear() + parseInt(test.recurring_time)
+//       );
+//     }
+//     user.assignedTests.push({
+//       id: test.id_test,
+//       availabilityTime: availableDate,
+//     });
+//     sessionStorage.setItem("user", JSON.stringify(user.$state));
+//   });
+// })
 
 
 const queryFunction = async () => {
+  console.log('asdsa')
+
   const test = await new Test().getAssignedTests(userStore().user_id)
   user.assignedTests = [];
-  test.forEach((test: any) => {
+  console.log(test)
+
+  test.data.forEach((test: any) => {
     let availableDate: Date = null;
     if (test.test_apps.length > 0) {
       availableDate = new Date(test.test_apps[test.test_apps.length - 1].date);
@@ -50,28 +55,11 @@ const queryFunction = async () => {
     });
     sessionStorage.setItem("user", JSON.stringify(user.$state));
   });
+  console.log(test)
 
   return test
 }
 
-const responsiveOptions = ref([
-  {
-    breakpoint: '1400px',
-    numVisible: 3,
-    numScroll: 1
-  },
-  {
-    breakpoint: '1199px',
-    numVisible: 2,
-    numScroll: 1
-  },
-
-  {
-    breakpoint: '575px',
-    numVisible: 1,
-    numScroll: 1
-  }
-]);
 
 
 const dialogVisible = ref(false)
@@ -86,21 +74,27 @@ const executeTest = () => {
   router.push(`/execute-test/${selectedTest.value.id_test}`);
 };
 
+const gridOptions = {
+  base:1,
+  md:1,
+  lg:2,
+  xl:3
+
+}
+
 </script>
 <template>
-  <section v-if="isSuccess">
-    <h2 text-slate-800 page-title>{{ $t('select-test.title') }}</h2>
+  <section h-full flex flex-col m-3>
+    <h2 mt-5rem text-left>{{ $t('select-test.title') }}</h2>
 
-    <Carousel v-if="tests.length > 0" h-90 :value="tests" :numVisible="3" :numScroll="1" :responsiveOptions circular>
-      <template #item="slotProps">
+    
+        <Paginator :query-function="(params) => queryFunction()" :gridOptions :filterOptions="[{name:'Todos', value:'todos'},{ name:'Disponibles', value:'disponibles'}]" :query-key="'users-current-group'">
+          <template #item-template="{ data }">
+            <VTestCard :test="data" @show-dialog="(value) => showDialog(value)" />
+          </template>
+        </Paginator>
+     
 
-      </template>
-    </Carousel>
-    <Paginator :query-function="(params) => queryFunction()" :query-key="'users-current-group'">
-      <template #item-template="{ data }">
-        <VTestCard :test="data" @show-dialog="(value) => showDialog(value)" />
-      </template>
-    </Paginator>
 
 
     <Dialog v-if="selectedTest" v-model:visible="dialogVisible" modal :header="selectedTest.name"

@@ -1,10 +1,11 @@
 <template>
-    <i mx-1 class="pi pi-eye" v-tooltip="$t('table.view_information')" @click="action()" />
-
+    <Button icon="pi pi-eye" severity="secondary" variant="text" rounded aria-label="Eye"
+        v-tooltip="$t('table.view_information')" @click="action()" />
 </template>
 <script setup lang="ts">
 import { inject } from 'vue';
 import { BaseModel } from '@/common/utils/BaseModel';
+import { Button } from 'primevue';
 
 
 const model = inject<BaseModel>('model')

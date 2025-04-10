@@ -11,7 +11,7 @@
 
 
     <template #expansion="slotProps">
-      <TableServerPagination title="results.title"
+      <TableServerPagination title="results.title" intern-datatable
         :custom-get-one-function="(id_test_application: number) => TestResult.getOne(id_test_application)" :visibleUpdateButton="false"
         :visibleDeleteButton="false" :visibleCreateButton="false" :model="result" :query-options="{
 

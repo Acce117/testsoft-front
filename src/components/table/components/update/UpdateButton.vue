@@ -1,11 +1,12 @@
 <template>
-    <i mx-1 class="pi pi-file-edit" v-tooltip="$t('table.update')" @click="action($event)" />
-
+    <Button icon="pi pi-pencil" severity="primary" variant="text" rounded aria-label="Pencil"
+        v-tooltip="$t('table.update')" @click="action($event)" />
 </template>
 <script setup lang="ts">
 import { inject, type Ref } from 'vue';
 import { BaseModel } from '@/common/utils/BaseModel';
 import { useQueryClient } from '@tanstack/vue-query';
+import { Button } from 'primevue';
 
 const queryClient = useQueryClient()
 

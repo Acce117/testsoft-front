@@ -3,6 +3,7 @@
     renderIf: (value: Test) => value.done == true,
     icon: 'pi pi-paperclip',
     tooltip: 'table.assign',
+    severity:'success', 
     action: (value) => {assignVisible=true; test.setData(value)}
   }]" :query-options="{
     relations: [

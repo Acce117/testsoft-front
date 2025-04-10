@@ -8,7 +8,9 @@
     "sign-up": "Regístrate como nuestro cliente"
   },
   "home": {
-    "subtitle": "Herramienta para la ejecución de test psicológicos",
+    "subtitle": "Tu plataforma digital para aplicar, crear y analizar test psicológicos",
+    "overtitle":"Software para evaluación psicológica",
+    "title":"Te presentamos TestSoft",
     "option1": "Realiza un test",
     "option2": "Descubre compatibilidades y líderes",
     "option3": "Encuentra los roles más efectivos",
@@ -20,8 +22,8 @@
   },
 
   "select-test": {
-    "title": "Seleccione un test",
-    "not-available": "Disponible en",
+    "title": "Seleccione un test para realizar",
+    "not-available": "Disponible el ",
     "available": "Disponible",
     "availability": "Disponibilidad"
   },
@@ -147,7 +149,9 @@
     "confirm-delete": "¿Desea eliminar el elemento?",
     "minutes": "minutos",
     "days": "días",
-    "hours": "horas"
+    "hours": "horas",
+    "active":"Activado",
+    "inactive":"Desactivado"
   },
   "user": {
     "title": "Usuarios",

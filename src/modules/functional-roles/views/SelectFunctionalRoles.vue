@@ -1,18 +1,17 @@
 <template>
-    <section class=" mt-8 mx-auto flex flex-col items-center ">
-
-        <h1 class="text-center text-2xl lg:text-3xl p-4">Seleccione sus roles preferidos o evitados</h1>
-
+    <section h-full flex flex-col m-3>
+        <h2 mt-5rem text-left>Seleccione sus roles preferidos o evitados</h2>
 
 
-        <Paginator :query-function="(params)=>FunctionalRole.getAll(params)" :query-key="'functional-roles'">
+
+        <Paginator :query-function="(params) => FunctionalRole.getAll(params)" :gridOptions :query-key="'functional-roles'">
 
             <template #item-template="{ data }">
                 <article
                     class="rounded-md text-left overflow-hidden border border-solid border-slate-200 bg-white w-full  flex justify-between  gap-2 p-4 shadow-md">
-                    <span class="w-full text-slate-500 font-bold text-left whitespace-nowrap overflow-hidden ">{{
-                        data.rol_name.length >= 24 ? data.rol_name.substring(0, 24) + '...' : data.rol_name
-                        }}</span>
+                    <span class="role-text w-full  text-left whitespace-nowrap overflow-hidden ">{{
+                        data.rol_name
+                    }}</span>
                     <div class="flex items-center justify-center gap-2">
 
                         <i class="like-button pi pi-thumbs-up"
@@ -47,7 +46,13 @@ const getRoles = () => [
 
 //getBibliosForLoan(startIndex.value, paginationSize.value, searchTerm.value.trim() != '' ? searchTerm.value : null)
 
+const gridOptions = {
+  base:1,
+  md:1,
+  lg:2,
+  xl:3
 
+}
 
 
 </script>
@@ -59,5 +64,11 @@ const getRoles = () => [
 
 .like-button:active {
     transform: scale(1.1);
+}
+.role-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 400px;
 }
 </style>

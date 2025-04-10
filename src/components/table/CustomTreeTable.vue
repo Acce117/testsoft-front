@@ -1,221 +1,335 @@
 <template>
     <Card overflow-auto h-full>
         <template #content>
-            <TreeTable sortMode="multiple" removableSort ref="dt" scrollable scrollHeight="flex" size="small"
-                tableStyle="min-width: 50rem" paginator :value="data" :rows="5" :rowsPerPageOptions="[5, 10, 20, 50]">
+            <LoadingPanel v-if="isPending" centered :loading="isPending" :error="isError" :refetch="refetch" />
+
+            <TreeTable sortMode="multiple" removableSort ref="dt" scrollable scrollHeight="flex" :lazy="true"
+                size="small" tableStyle="min-width: 50rem" :value="tableData" :rows="5">
 
 
                 <template #header>
+                    {{ filtersForServer }}
                     <div class="custom-table-header">
-                        <h1 text-xl m-0 font-semibold>{{ $t(title) }}</h1>
+                        <h1 text-xl m-0 font-semibold>{{ $t(props.title ? props.title : '') }}</h1>
                         <div class="custom-table-header__options">
                             <IconField>
                                 <InputIcon>
                                     <i class="pi pi-search" />
                                 </InputIcon>
-                                <InputText w-12rem lg:w-20rem v-model="filters['global'].value"
-                                    :placeholder="$t('table.search')" />
+                                <!-- <InputText w-12rem lg:w-20rem v-model="filters['global'].value"
+                                    :placeholder="$t('table.search')" /> -->
                             </IconField>
+                            <slot name="header"></slot>
                             <div flex gap-2>
-                                <Button icon="pi pi-plus" @click="showAdd()" />
+                                <CreateButton v-if="props.visibleCreateButton"
+                                    @show-create-dialog="createDialogVisible = true"
+                                    :customFunction="props.customAddFunction" />
 
 
+                                <!-- <Button icon="pi pi-download" variant="outlined" @click="toggle" aria-haspopup="true"
+                                    aria-controls="overlay_menu" severity="info" /> -->
+                                <Menu ref="menu" id="overlay_menu" :model="exportOptions" :popup="true" />
 
-                                <Button icon="pi pi-refresh" severity="secondary" @click="refetch()" />
+                                <Button icon="pi pi-refresh" variant="outlined" severity="info" @click="refetch()" />
                             </div>
 
                         </div>
                     </div>
 
                 </template>
-                <Column expander :field="fiedAsExpander.field" :header="t(fiedAsExpander.header)">
-
-                    <template #body=slotProps>
-
-                        <Skeleton v-if="isRefetching || isPending" width="60%" borderRadius=".4rem" height="1.5rem" />
-                        <div overflow-auto text-sm v-else>
-                            <span v-if="slotProps.node[fiedAsExpander.field] !== undefined">{{ typeof
-                                slotProps.node[fiedAsExpander.field] == 'string' ?
-                                slotProps.node[fiedAsExpander.field].length < 20 ? slotProps.node[fiedAsExpander.field]
-                                    : slotProps.node[fiedAsExpander.field].substring(0, 20) + '...' :
-                                slotProps.node[fiedAsExpander.field] }}</span>
-                                    <span v-else>-</span>
-                        </div>
-                    </template>
-
-                </Column>
 
 
-                <Column v-for="(col, index) in props.model.getColumns().filter(c => !c.expander)" :key="index" sortable
-                    :field="col.field" :header="t(col.header)">
-                    <template #body=slotProps>
+                <div v-for="(col, index) in props.model.getColumns()" :key="index">
+                    <Column expander v-if="col.expander" :field="fiedAsExpander.field"
+                        :header="t(fiedAsExpander.header)">
 
-                        <Skeleton v-if="isRefetching || isPending" width="60%" borderRadius=".4rem" height="1.5rem" />
-                        <div overflow-auto text-sm v-else>
+                        <template #body=slotProps>
 
-                            <span v-if="slotProps.node[col.field] !== undefined">{{ typeof
-                                slotProps.node[col.field] == 'string' ? slotProps.node[col.field].length < 20 ?
-                                slotProps.node[col.field] : slotProps.node[col.field].substring(0, 20) + '...' :
-                                slotProps.node[col.field] }}</span>
-                                    <span v-else>-</span>
-                        </div>
-                    </template>
+                            <Skeleton v-if="isRefetching || isPending" width="60%" borderRadius=".4rem"
+                                height="1.5rem" />
+                            <template v-else>
+                                <template v-if="slotProps.node[fiedAsExpander.field] !== undefined">{{
+                                    slotProps.node[fiedAsExpander.field] }}</template>
+                                <template v-else>-</template>
+                            </template>
+                        </template>
+
+                    </Column>
+                    <Column v-else-if="!col.isActionsColumn" :filterField="col.field" sortable :field="col.field"
+                        :header="$t(col.header)" :filterMatchModeOptions="filterOptions">
 
 
-                </Column>
-                <Column :field="fieldAsID" :header="$t('table.actions')">
+                        <template #body="slotProps">
+                            <Skeleton v-if="isRefetching || isPending" width="60%" borderRadius=".4rem"
+                                height="1.5rem" />
+                            <template v-else-if="col.fieldGetter">
+                                <Rating v-if="col.isRating"
+                                    :modelValue="slotProps.data[col.fieldGetter(slotProps.data)]" readonly />
+                                <template v-else-if="col.isBoolean">{{
+                                    col.fieldGetter(slotProps.data) == true ? t('global.yes') : t('global.no') }}</template>
+                                <template v-else-if="col.fieldGetter(slotProps.data) !== undefined">
+                                    {{ col.fieldGetter(slotProps.data) }}</template>
+                                <template v-else>-</template>
+                            </template>
+                            <template v-else>
+                                <Rating v-if="col.isRating" :modelValue="slotProps.data[col.field]" readonly />
+                                <template v-else-if="col.isBoolean || col.field === props.model.getFieldAsActive()">
+                                    <Tag  v-if="slotProps.data[col.field] == true" severity="success"
+                                        :value="$t('global.yes')" />
+                                    <Tag v-else severity="danger" :value="$t('global.no')" />
 
-                    <template #body=slotProps>
-                        <Skeleton v-if="isRefetching || isPending" width="60%" borderRadius=".4rem" height="1.5rem" />
+                                </template>
+                                <template v-else-if="slotProps.data[col.field] !== undefined">{{
+                                    slotProps.data[col.field] }}</template>
+                                <template v-else>-</template>
+                            </template>
 
-                        <div v-else class="custom-table-actions" gap-2>
-                            <i class="pi pi-eye" v-tooltip="$t('table.view_information')"
-                                @click="showElement(slotProps.node)" />
-                            <i class="pi pi-file-edit" v-tooltip="$t('table.update')"
-                                @click="showUpdate(slotProps.node)" />
+                        </template>
+                        <template v-if="col.filter" #filter="{ filterModel, filterCallback }">
+                            <slot v-if="col.customFilterTemplate"
+                                :name="'custom-filter-template-' + col.customFilterTemplate" :filterModel
+                                :filterCallback>
+                            </slot>
+                            <IconField v-else>
+                                <InputIcon>
+                                    <i class="pi pi-search" />
+                                </InputIcon>
+                                <InputText v-model="filterModel.value" @keyup.enter="filterCallback()"
+                                    placeholder="Buscar" />
+                            </IconField>
 
-                            <!-- <i v-if="props.model.getFieldAsActive() == ''" v-tooltip="$t('table.delete')"
-                                @click="deleteElement($event, slotProps.data)" class="pi pi-trash" />
-                            <i v-else-if="slotProps.data[props.model.getFieldAsActive()] == true || slotProps.data[props.model.getFieldAsActive()] == 1"
-                                v-tooltip="$t('table.desactivate')" @click="desactivateElement($event, slotProps.data)"
-                                class="pi pi-trash" />
+                        </template>
 
-                            <i v-else-if="slotProps.data[props.model.getFieldAsActive()] == false || slotProps.data[props.model.getFieldAsActive()] == 0"
-                                v-tooltip="$t('table.recover')" @click="activateElement($event, slotProps.data)"
-                                class="pi pi-history" /> -->
 
-                        </div>
-                    </template>
-                </Column>
+
+                    </Column>
+                    <Column v-else-if="visibleActions" :field="fieldAsID" :header="$t('table.actions')">
+
+                        <template #body=slotProps>
+                            <Skeleton v-if="isRefetching || isPending" width="60%" borderRadius=".4rem"
+                                height="1.5rem" />
+
+                            <div v-else class="custom-table-actions">
+                                <ViewButton :data-to-show="slotProps.data" v-if="props.visibleViewButton &&
+                                    (isLogicErase ? slotProps.data[props.model.getFieldAsActive()] == true : true)
+                                    && (col.visibleViewFunction ? col.visibleViewFunction(slotProps.data) : true)"
+                                    :refetch="refetchOfOne" @show-view-dialog="viewDialogVisible = true" />
+
+                                <UpdateButton :data-to-update="slotProps.data" v-if="props.visibleUpdateButton &&
+                                    (isLogicErase ? slotProps.data[props.model.getFieldAsActive()] == true : true)
+                                    && (col.visibleUpdateFunction ? col.visibleUpdateFunction(slotProps.data) : true)"
+                                    @show-update-dialog="updateDialogVisible = true"
+                                    :custom-function="customUpdateFunction" />
+                                <template
+                                    v-if="props.visibleDeleteButton && (col.visibleDeleteFunction ? col.visibleDeleteFunction(slotProps.data) : true)">
+
+                                    <DeleteButton :data-to-delete="slotProps.data" v-if="!isLogicErase" />
+
+                                    <ActivateButton :data-to-activate="slotProps.data"
+                                        v-else-if="slotProps.data[props.model.getFieldAsActive()] == false" />
+                                    <DesactivateButton :data-to-desactivate="slotProps.data" v-else />
+                                </template>
+                                <template v-if="props.extraOptions">
+                                    <template v-for="option in props.extraOptions" :key="option">
+                                        <i v-if="option.renderIf(slotProps.data)" mx-1 :class="option.icon"
+                                            v-tooltip="$t(option.tooltip)"
+                                            @click="option.action(slotProps.data, $event)" />
+                                    </template>
+                                </template>
+
+
+                            </div>
+                        </template>
+                    </Column>
+                </div>
+
+
                 <template #empty>
                     <span v-if="isError">{{ $t('errors.title') }}</span>
                     <span v-else id="empty-message">{{ $t('table.no_results') }}</span>
                 </template>
 
             </TreeTable>
-            <!-- <h2 v-else-if="isError" class="error">{{ $t('table.something_wrong') }}</h2> -->
         </template>
     </Card>
 
-    <Dialog v-model:visible="showInfoDialog" modal :header="$t('table.information')"
-        class="w-4/5 max-w-50rem min-w-25rem min-h-15rem">
-        <LoadingPanel v-if="isPendingOfOne || isRefetchingOfOne || isErrorOfOne" centered relative
-            :loading="isPendingOfOne || isRefetchingOfOne" :error="isErrorOfOne" :refetch="refetchOfOne" />
+    <CreateDialog v-model="createDialogVisible">
+        <template #form>
+            <slot name="form-add"></slot>
+        </template>
+    </CreateDialog>
 
-        <div v-else-if="isSuccessOfOne" class="dialog-form">
-            <slot name="view-element"></slot>
-            <div class="flex justify-end gap-2">
-                <Button type="button" :label="$t('global.confirm')" @click="showInfoDialog = false"></Button>
-            </div>
-        </div>
+    <ViewDialog v-model="viewDialogVisible">
+        <template #view-element>
+            <slot name="view-element" :dataOfOne :isPendingOfOne :isErrorOfOne :model></slot>
+        </template>
+    </ViewDialog>
 
-    </Dialog>
-    <Dialog v-model:visible="showAddDialog" modal :header="$t('table.add')" class="w-4/5 max-w-50rem min-w-25rem">
+    <UpdateDialog v-model="updateDialogVisible">
+        <template #form>
+            <slot name="form-update"></slot>
+        </template>
+    </UpdateDialog>
 
-        <span>{{ $t('table.new_element') }}</span>
-        <Form @submit="addElement" :validation-schema="props.model.getSchema()">
-            <div class="dialog-form">
-                <slot name="form-add"></slot>
-            </div>
 
-            <div class="dialog-footer">
-                <Button type="button" :label="$t('global.cancel')" severity="secondary"
-                    @click="showAddDialog = false"></Button>
-                <VButton w-8rem :disabled="isAddPending" type="submit">
-                    <span v-if="!isAddPending">{{ $t("global.save") }} </span>
-                    <VLoading v-else />
-                </VButton>
-            </div>
-        </Form>
-
-    </Dialog>
-    <Dialog v-model:visible="showUpdateDialog" modal :header="$t('table.update')" class="w-4/5 max-w-50rem min-w-25rem">
-        <span>{{ $t('table.update_element') }}</span>
-        <Form @submit="updateElement" :validation-schema="props.model.getUpdateSchema()">
-
-            <div class="dialog-form">
-                <slot name="form-update"></slot>
-
-            </div>
-            <div class="dialog-footer">
-                <Button type="button" :label="$t('global.cancel')" severity="secondary"
-                    @click="showUpdateDialog = false"></Button>
-                <VButton w-8rem :disabled="isUpdatePending" type="submit">
-                    <span v-if="!isUpdatePending">{{ $t("global.save") }} </span>
-                    <VLoading v-else />
-                </VButton>
-            </div>
-        </Form>
-    </Dialog>
+    <slot name="custom-dialog"></slot>
 </template>
 <script setup lang="ts">
 import Column from 'primevue/column';
-import { Form } from 'vee-validate';
 import Card from 'primevue/card';
-import Dialog from 'primevue/dialog';
+import DataTable from 'primevue/datatable';
 import IconField from 'primevue/iconfield';
 import InputIcon from 'primevue/inputicon';
-import { FilterMatchMode } from '@primevue/core/api';
-import { ref, watch } from 'vue';
+import { provide, ref, watch, watchEffect } from 'vue';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
-import { useConfirm } from "primevue/useconfirm";
-import { useToast } from "primevue/usetoast";
-import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query';
+import { useQuery, useQueryClient } from '@tanstack/vue-query';
+import Rating from 'primevue/rating';
+import Menu from 'primevue/menu';
 import { useI18n } from 'vue-i18n';
 import { BaseModel } from '@/common/utils/BaseModel';
 import Skeleton from 'primevue/skeleton';
-import TreeTable from 'primevue/treetable';
-import VButton from '../VButton.vue';
+import Paginator from 'primevue/paginator';
+import CreateButton from './components/create/CreateButton.vue';
+import UpdateButton from './components/update/UpdateButton.vue';
+import { useQueryOfOne } from './composable/useQueryOfOne';
+import ViewButton from './components/view/ViewButton.vue';
+import UpdateDialog from './components/update/UpdateDialog.vue';
+import ViewDialog from './components/view/ViewDialog.vue';
+import CreateDialog from './components/create/CreateDialog.vue';
+import DeleteButton from './components/delete/DeleteButton.vue';
+import ActivateButton from './components/logic_delete/ActivateButton.vue';
+import DesactivateButton from './components/logic_delete/DesactivateButton.vue';
+import { Tag, TreeTable } from 'primevue';
 import LoadingPanel from '../LoadingPanel.vue';
 
 useQueryClient()
+const { t } = useI18n();
+
 const props = defineProps({
     title: String,
-    model: BaseModel,
+    model: {
+        type: BaseModel,
+        required: true
+    },
+    hasExpander: Boolean,
+    customAddFunction: Function,
+    customUpdateFunction: Function,
+    customGetAllFunction: Function,
+    customGetOneFunction: Function,
+    //validateBefore: Function,
+    queryOptions: Object,
+    extraOptions: Array<{ renderIf: (data: object) => boolean, tooltip: string, icon: string, action: (data: BaseModel, event: MouseEvent) => void }>,
+    isFormDataLoading: Boolean,
+    visibleActions: {
+        type: Boolean,
+        default: true
+    },
+    visibleViewButton: {
+        type: Boolean,
+        default: true
+    },
+    visibleUpdateButton: {
+        type: Boolean,
+        default: true
+    },
+    visibleCreateButton: {
+        type: Boolean,
+        default: true
+    },
     visibleDeleteButton: {
         type: Boolean,
         default: true
     },
-    queryOptions: {
-        requestPDF: Function
-    },
-
 
 })
+
+const limit = ref(10)
+const offset = ref(0)
+const totalRecords = ref(0)
+const totalPages = ref(0)
+const dt = ref();
+const tableData = ref()
+
+
+const filters = ref({});
+
+props.model.getFilters()?.forEach((f) => {
+    filters.value[f.field] = { value: null, matchMode: 'contains' }
+
+})
+
+const filtersForServer = ref({});
+const filterOptions = ref([
+    { label: 'Contains', value: 'contains' }
+])
 
 const fieldAsID = props.model.getFieldAsID()
+const queryKey = props.model.constructor.name
 
+const menu = ref();
+const expandedRows = ref()
+
+const updateDialogVisible = ref(false)
+const viewDialogVisible = ref(false)
+const createDialogVisible = ref(false)
 const fiedAsExpander = props.model.getColumns().filter(c => c.expander)[0]
 
-const queryKey = props.model.constructor.name
-const confirm = useConfirm();
-const toast = useToast();
 
-const { data, isPending, isSuccess, isError, isRefetching, refetch } = useQuery({
+provide('queryKey', queryKey)
+provide('model', props.model)
+provide('isFormDataLoading', props.isFormDataLoading)
+
+
+const onFilter = (event) => {
+    filtersForServer.value = {}
+    Object.entries(event.filters).map((f) => {
+        if (f[1].value)
+            filtersForServer.value[f[0]] = f[1].value
+    })
+    refetch()
+}
+
+
+
+const toggle = (value: MouseEvent) => {
+    menu.value.toggle(value);
+};
+const { data, isPending, isSuccess, isRefetching, isError, refetch } = useQuery({
     queryKey: [queryKey],
-    queryFn: async () => {
-        return props.model.getElementsForTreeTable()
-    }
-})
-
-const { data: dataOfOne, isPending: isPendingOfOne, isSuccess: isSuccessOfOne, isRefetching: isRefetchingOfOne, refetch: refetchOfOne } = useQuery({
-    queryKey: [queryKey + '-one'],
-    queryFn: () => {
-        return props.model.getOne()
+    queryFn: (parameter?) => {
+        console.log(parseInt(offset.value))
+        return props.model.getElementsForTreeTable(
+            {
+                limit: limit.value,
+                offset: offset.value,
+                where: filtersForServer.value,
+                ...props.queryOptions
+            }
+        )
     },
-    enabled: false
+
 })
 
-watch(dataOfOne, (newValue) => {
-    props.model.setData(newValue)
-})
+const { dataOfOne, isPendingOfOne, isErrorOfOne, refetchOfOne } = useQueryOfOne(queryKey, props.model, props.queryOptions)
 
 
-const dt = ref();
+const isLogicErase = props.model.getFieldAsActive() != ''
 
 
-const { t } = useI18n();
+const exportOptions = ref([
+    {
+        label: t('table.options'),
+        items: [
+            {
+                label: 'CSV',
+                icon: 'pi pi-file-excel',
+                command: () => dt.value.exportCSV()
+            }
+        ]
+    }
+]);
+
 
 
 
@@ -239,178 +353,23 @@ const { t } = useI18n();
 //         })
 // }
 
-const filters = ref({
-    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+
+watch(dataOfOne, (newValue) => {
+    console.log(newValue)
+    props.model.setData(newValue)
+})
+
+watchEffect(() => {
+    if (isSuccess.value && !isPending.value && !isRefetching.value) {
+
+        totalRecords.value = data.value.elements_amount
+        totalPages.value = data.value.pages
+        tableData.value = data.value.data
+    }
 });
 
-const selectedRowInfo = ref()
+defineExpose({ refetch })
 
-const showInfoDialog = ref(false)
-
-const showAdd = () => {
-
-    showAddDialog.value = true
-    props.model.clearData()
-}
-
-const showElement = (data) => {
-    props.model.setData(data)
-    showInfoDialog.value = true
-    refetchOfOne()
-}
-
-const showUpdateDialog = ref(false)
-
-const showUpdate = (data) => {
-    props.model.setData(data)
-    showUpdateDialog.value = true
-}
-
-const showAddDialog = ref(false)
-
-
-const addElement = () => {
-    mutateAdd()
-}
-const updateElement = () => {
-    mutateUpdate()
-}
-
-const deleteElement = (event, data) => {
-
-    confirm.require({
-        target: event.currentTarget,
-        header: t('table.delete'),
-
-        message: t('table.delete_element_ask'),
-        icon: 'pi pi-exclamation-triangle',
-        rejectProps: {
-            label: t('global.cancel'),
-            severity: 'secondary',
-            outlined: true
-        },
-        acceptProps: {
-            label: t('global.confirm')
-        },
-        accept: () => {
-            props.model.setData(data)
-            mutateDelete()
-        },
-    });
-};
-const desactivateElement = (event, data) => {
-
-    confirm.require({
-        target: event.currentTarget,
-        header: t('table.desactivate'),
-
-        message: t('table.desactivate_element_ask'),
-        icon: 'pi pi-exclamation-triangle',
-        rejectProps: {
-            label: t('global.cancel'),
-            severity: 'secondary',
-            outlined: true
-        },
-        acceptProps: {
-            label: t('global.confirm')
-        },
-        accept: () => {
-            let updateObject = {}
-            Object.assign(updateObject, data)
-            // for (const key in updateObject) {
-            //     if (key.includes('date'))
-            //         updateObject[key] = parseDate(updateObject[key]);
-            // }
-
-            //updateObject[props.fieldAsActive] = false;
-            mutateUpdate({ id: data[props.fieldAsID], data: updateObject })
-        },
-    });
-};
-const activateElement = (event, data) => {
-
-    confirm.require({
-        target: event.currentTarget,
-        header: t('table.activate'),
-
-        message: t('table.activate_element_ask'),
-        icon: 'pi pi-exclamation-triangle',
-        rejectProps: {
-            label: t('global.cancel'),
-            severity: 'secondary',
-            outlined: true
-        },
-        acceptProps: {
-            label: t('global.confirm')
-        },
-        accept: () => {
-            let updateObject = {}
-            Object.assign(updateObject, data)
-            // for (const key in updateObject) {
-            //     if (key.includes('date'))
-            //         updateObject[key] = parseDate(updateObject[key]);
-            // }
-
-            //updateObject[props.fieldAsActive] = true;
-            mutateUpdate({ id: data[props.fieldAsID], data: updateObject })
-        },
-    });
-};
-
-//
-
-const { mutate: mutateAdd, isPending: isAddPending } = useMutation({
-    mutationKey: [`${queryKey}-add`],
-    mutationFn: () => props.model.create(),
-    onSuccess: async () => {
-        await refetch()
-        toast.add({ severity: 'info', summary: t('table.confirmation'), detail: t('table.element_ok_added'), life: 5000 });
-        showAddDialog.value = false
-        props.model.clearData()
-    },
-    onError: (error) => {
-        toast.add({ severity: 'error', summary: t('table.something_wrong'), detail: t(error.message), life: 5000 });
-    }
-})
-
-
-const { mutate: mutateUpdate, isPending: isUpdatePending } = useMutation({
-    mutationKey: [`${queryKey}-update`],
-    mutationFn: () => props.model.update(),
-    onSuccess: async () => {
-        await refetch()
-        toast.add({ severity: 'info', summary: t('table.confirmation'), detail: t('table.element_ok_updated'), life: 5000 });
-        showUpdateDialog.value = false
-        props.model.clearData()
-    },
-    onError: (error) => {
-        toast.add({ severity: 'error', summary: t('table.something_wrong'), detail: error.statusCode == 404 ? t('table.relations_error') : t(error.message), life: 5000 });
-    }
-})
-
-
-
-
-const { mutate: mutateDelete } = useMutation({
-    mutationKey: [`${queryKey}-delete`],
-    mutationFn: () => props.model.delete(),
-    onSuccess: async () => {
-        await refetch()
-        toast.add({ severity: 'info', summary: t('table.confirmation'), detail: t('table.element_ok_deleted'), life: 5000 });
-        props.model.clearData()
-    },
-    onError: async (error) => {
-        // if (error instanceof EmailError) {
-        //     await refetch()
-
-        //     toast.add({ severity: 'info', summary: t('table.confirmation'), detail: t('table.element_ok_deleted'), life: 5000 });
-
-        //     toast.add({ severity: 'error', summary: t('table.something_wrong'), detail:t(error.message), life: 5000 });
-
-        // } else
-        toast.add({ severity: 'error', summary: t('table.something_wrong'), detail: t(error.message), life: 5000 });
-    }
-})
 
 
 
@@ -436,10 +395,7 @@ const { mutate: mutateDelete } = useMutation({
     align-items: center;
 }
 
-.custom-table-actions .pi {
-    color: var(--p-button-primary-background);
-    cursor: pointer;
-}
+
 
 .dialog-form {
     display: flex;
@@ -459,5 +415,12 @@ const { mutate: mutateDelete } = useMutation({
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+td {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
 }
 </style>

@@ -94,6 +94,12 @@ export class User extends BaseModel {
     const submitData = data ? data : this;
     const clone = { ...submitData };
     delete clone.item_id;
+    delete clone.groups;
+    delete clone.deleted_at;
+    delete clone.created_scenario;
+
+
+
     delete clone.group_id;
     delete clone.assignment_id;
     console.log(submitData)

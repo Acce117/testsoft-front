@@ -1,12 +1,12 @@
 <template>
-    <i mx-1 class="pi pi-history" v-tooltip="$t('table.recover')" @click="action($event)" />
-
+    <Button icon="pi pi-history" severity="success" variant="text" rounded aria-label="Recover"
+    v-tooltip="$t('table.recover')" @click="action($event)" />
 </template>
 <script setup lang="ts">
 import { inject, type Ref } from 'vue';
 import { BaseModel } from '@/common/utils/BaseModel';
 import { useMutation, useQueryClient } from '@tanstack/vue-query';
-import { useConfirm, useToast } from 'primevue';
+import { Button, useConfirm, useToast } from 'primevue';
 import { useI18n } from 'vue-i18n';
 
 const queryClient = useQueryClient()

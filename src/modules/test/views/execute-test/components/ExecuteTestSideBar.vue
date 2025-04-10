@@ -1,6 +1,6 @@
 <template>
 
-    <div class="p-4 card flex   h-full flex-col  border-solid border-slate-200 border-1">
+    <div class="p-4 card flex  w-18rem h-full flex-col  border-solid border-slate-200 border-1">
         <h3 font-bold mt-14 mb-2 text-primary>{{ props.data.name }}</h3>
 
         
@@ -124,8 +124,7 @@ watch(locale, () => {
 
 .serie-button:not(.disabled):hover {
     cursor: pointer;
-    width: 2.8rem;
-    height: 2.8rem;
+    
 
 }
 </style>
