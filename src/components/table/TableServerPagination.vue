@@ -1,12 +1,10 @@
 <template>
     <Card overflow-auto h-full>
         <template #content>
-            <LoadingPanel v-if="isPending"  centered
-            :loading="isPending" :error="isError" :refetch="refetch" />
 
-            <DataTable :class="internDatatable? 'intern-datatable':''" v-model:expandedRows="expandedRows" scrollable v-model:filters="filters" :lazy="true"
-                @filter="onFilter" filterDisplay="menu" scrollHeight="flex" removableSort ref="dt" size="small"
-                tableStyle="min-width: 50rem" :value="tableData" :rows="5" >
+            <DataTable :class="internDatatable ? 'intern-datatable' : ''" v-model:expandedRows="expandedRows" scrollable
+                v-model:filters="filters" :lazy="true" @filter="onFilter" filterDisplay="menu" scrollHeight="flex"
+                removableSort ref="dt" size="small" tableStyle="min-width: 50rem" :value="tableData" :rows="5">
 
 
                 <template #header>
@@ -28,8 +26,8 @@
                                     :customFunction="props.customAddFunction" />
 
 
-                                <Button icon="pi pi-download" variant="outlined"  @click="toggle" aria-haspopup="true"
-                                    aria-controls="overlay_menu" severity="info"  />
+                                <Button icon="pi pi-download" variant="outlined" @click="toggle" aria-haspopup="true"
+                                    aria-controls="overlay_menu" severity="info" />
                                 <Menu ref="menu" id="overlay_menu" :model="exportOptions" :popup="true" />
 
                                 <Button icon="pi pi-refresh" variant="outlined" severity="info" @click="refetch()" />
@@ -53,20 +51,25 @@
                                 <Rating v-if="col.isRating"
                                     :modelValue="slotProps.data[col.fieldGetter(slotProps.data)]" readonly />
                                 <template v-else-if="col.isBoolean">{{
-                                    col.fieldGetter(slotProps.data) == true ? t('global.yes') : t('global.no') }}</template>
-                                <template v-else-if="col.fieldGetter(slotProps.data) !== undefined">{{col.fieldGetter(slotProps.data) }}</template>
-                                        <template v-else>-</template>
+                                    col.fieldGetter(slotProps.data) == true ? t('global.yes') : t('global.no')
+                                }}</template>
+                                <template v-else-if="col.fieldGetter(slotProps.data) !== undefined">{{
+                                    col.fieldGetter(slotProps.data)
+                                    }}</template>
+                                <template v-else>-</template>
                             </template>
-                            <template  v-else>
+                            <template v-else>
                                 <Rating v-if="col.isRating" :modelValue="slotProps.data[col.field]" readonly />
                                 <template v-else-if="col.isBoolean || col.field === props.model.getFieldAsActive()">
-                                    <Tag  v-if="slotProps.data[col.field] == true" severity="success"
+                                    <Tag v-if="slotProps.data[col.field] == true" severity="success"
                                         :value="$t('global.yes')" />
                                     <Tag v-else severity="danger" :value="$t('global.no')" />
 
                                 </template>
-                                <template v-else-if="slotProps.data[col.field] !== undefined">{{slotProps.data[col.field] }}</template>
-                                        <template v-else>-</template>
+                                <template v-else-if="slotProps.data[col.field] !== undefined">{{
+                                    slotProps.data[col.field]
+                                    }}</template>
+                                <template v-else>-</template>
                             </template>
 
                         </template>
@@ -117,7 +120,8 @@
                                 </template>
                                 <template v-if="props.extraOptions">
                                     <template v-for="option in props.extraOptions" :key="option">
-                                        <Button v-if="option.renderIf(slotProps.data)" :severity="option.severity" rounded variant="text" :icon="'pi '+option.icon"
+                                        <Button v-if="option.renderIf(slotProps.data)" :severity="option.severity"
+                                            rounded variant="text" :icon="'pi ' + option.icon"
                                             v-tooltip="$t(option.tooltip)"
                                             @click="option.action(slotProps.data, $event)" />
                                     </template>
@@ -131,7 +135,10 @@
 
 
                 <template #empty>
-                    <span v-if="isError">{{ $t('errors.title') }}</span>
+
+                    <LoadingPanel v-if="isRefetching || isPending" centered :error="isError" :refetch="refetch"
+                        :loading="isRefetching || isPending" />
+                    <span v-else-if="isError">{{ $t('errors.title') }}</span>
                     <span v-else id="empty-message">{{ $t('table.no_results') }}</span>
                 </template>
                 <template #expansion="slotProps">
@@ -253,7 +260,7 @@ const props = defineProps({
         type: Boolean,
         default: true
     },
-    internDatatable:{
+    internDatatable: {
         type: Boolean,
         default: false
     }
@@ -446,16 +453,19 @@ defineExpose({ refetch })
     align-items: center;
     justify-content: center;
 }
+
 td {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: 200px;
 }
-.p-datatable-thead{
+
+.p-datatable-thead {
     z-index: 2 !important;
 }
-.intern-datatable .p-datatable-thead{
+
+.intern-datatable .p-datatable-thead {
     z-index: 1 !important;
 }
 </style>

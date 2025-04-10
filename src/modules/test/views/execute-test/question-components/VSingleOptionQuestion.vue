@@ -28,7 +28,7 @@ const invalid = computed(() =>
 </script>
 <template>
   <div class="radio-button-answer answer" v-for="answer in props.possible_answers" :key="answer.id_answer">
-    <label cursor-pointer :for="answer.id_answer" flex text-base md:text-lg text-justify text-slate-800 gap-2 flex-items-center w-fit h-full>
+    <label cursor-pointer :for="answer.id_answer" flex text-base md:text-lg text-justify  gap-2 flex-items-center w-fit h-full>
       <RadioButton v-model="question.answer" :inputId="'answer-'+answer.id_answer" :name="props.id_question + ''"
         :value="answer.id_answer" :invalid />
       {{ answer.text }}

@@ -1,8 +1,6 @@
 <template>
     <Card overflow-auto h-full>
         <template #content>
-            <LoadingPanel v-if="isPending" centered :loading="isPending" :error="isError" :refetch="refetch" />
-
             <TreeTable sortMode="multiple" removableSort ref="dt" scrollable scrollHeight="flex" :lazy="true"
                 size="small" tableStyle="min-width: 50rem" :value="tableData" :rows="5">
 
@@ -66,7 +64,8 @@
                                 <Rating v-if="col.isRating"
                                     :modelValue="slotProps.data[col.fieldGetter(slotProps.data)]" readonly />
                                 <template v-else-if="col.isBoolean">{{
-                                    col.fieldGetter(slotProps.data) == true ? t('global.yes') : t('global.no') }}</template>
+                                    col.fieldGetter(slotProps.data) == true ? t('global.yes') : t('global.no')
+                                }}</template>
                                 <template v-else-if="col.fieldGetter(slotProps.data) !== undefined">
                                     {{ col.fieldGetter(slotProps.data) }}</template>
                                 <template v-else>-</template>
@@ -74,7 +73,7 @@
                             <template v-else>
                                 <Rating v-if="col.isRating" :modelValue="slotProps.data[col.field]" readonly />
                                 <template v-else-if="col.isBoolean || col.field === props.model.getFieldAsActive()">
-                                    <Tag  v-if="slotProps.data[col.field] == true" severity="success"
+                                    <Tag v-if="slotProps.data[col.field] == true" severity="success"
                                         :value="$t('global.yes')" />
                                     <Tag v-else severity="danger" :value="$t('global.no')" />
 
@@ -145,7 +144,9 @@
 
 
                 <template #empty>
-                    <span v-if="isError">{{ $t('errors.title') }}</span>
+                    <LoadingPanel v-if="isRefetching || isPending" centered :error="isError" :refetch="refetch"
+                        :loading="isRefetching || isPending" />
+                    <span v-else-if="isError">{{ $t('errors.title') }}</span>
                     <span v-else id="empty-message">{{ $t('table.no_results') }}</span>
                 </template>
 

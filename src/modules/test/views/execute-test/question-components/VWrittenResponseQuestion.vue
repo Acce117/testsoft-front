@@ -27,7 +27,7 @@ const invalid = computed(() =>
 </script>
 <template>
   <div class=" answer overflow-auto">
-    <Textarea rows="2"  fluid v-model="question.answer" text-lg text-slate-800 :invalid />
+    <Textarea rows="2"  fluid v-model="question.answer" text-lg  :invalid />
   </div>
 </template>
 <style></style>

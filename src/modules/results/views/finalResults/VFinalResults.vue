@@ -5,7 +5,7 @@
   <div  class="modal__long-message" min-w-20rem min-h-10rem>
     <LoadingPanel  relative :loading :error :refetch/>
 
-    <div v-if="!loading && !error" class="test-results" text-slate-600  id="test-results" text-black>
+    <div v-if="!loading && !error" class="test-results" text-slate-600  id="test-results">
       <div flex gap-4 > 
         <h1 font-bold text-slate-800 text-left font-size-1.5rem my-0 >Test: {{ props.testName }}</h1><Button icon="pi pi-file-pdf" @click="confirmPDF"
           :label="$t('global.export.title')"></Button>
