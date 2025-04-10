@@ -34,9 +34,9 @@ import { Card } from "primevue";
 // })
 
 
-const queryFunction = async () => {
+const queryFunction = async (params) => {
 
-  const test = await new Test().getAssignedTests(userStore().user_id)
+  const test = await new Test().getAssignedTests(userStore().user_id, params)
   user.assignedTests = [];
 
   test.data.forEach((test: any) => {
@@ -85,7 +85,7 @@ const gridOptions = {
     <h2 mt-5rem text-left>{{ $t('select-test.title') }}</h2>
 
     
-        <Paginator :query-function="(params) => queryFunction()" :gridOptions :filterOptions="[{name:'Todos', value:'todos'},{ name:'Disponibles', value:'disponibles'}]" :query-key="'users-current-group'">
+        <Paginator :query-function="(params) => queryFunction(params)" :gridOptions :filterOptions="[{name:'Todos', value:'todos'},{ name:'Disponibles', value:'disponibles'}]" :query-key="'users-current-group'">
           <template #item-template="{ data }">
             <VTestCard :test="data" @show-dialog="(value) => showDialog(value)" />
           </template>

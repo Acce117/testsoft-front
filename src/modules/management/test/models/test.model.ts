@@ -65,9 +65,10 @@ export class Test extends BaseModel {
       : new Equation();
   }
 
-  public async getAssignedTests(user_id: string) {
+  public async getAssignedTests(user_id: string, body:object) {
     return await sendRequest({
       url: `${import.meta.env.VITE_API_PATH}/user/${user_id}/tests`,
+      body
     });
   }
   public isPsicometricTest() {
