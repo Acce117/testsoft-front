@@ -51,10 +51,8 @@ const action = (event: MouseEvent) => {
             //     if (key.includes('date'))
             //         updateObject[key] = parseDate(updateObject[key]);
             // }
-            console.log('wqewew')
             updateObject[model?.getFieldAsActive()] = 0
             model?.setData(updateObject)
-            console.log(updateObject)
             mutate(updateObject)
         },
     });

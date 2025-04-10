@@ -110,30 +110,30 @@
                                 height="1.5rem" />
 
                             <div v-else class="custom-table-actions">
-                                <ViewButton :data-to-show="slotProps.data" v-if="props.visibleViewButton &&
-                                    (isLogicErase ? slotProps.data[props.model.getFieldAsActive()] == true : true)
-                                    && (col.visibleViewFunction ? col.visibleViewFunction(slotProps.data) : true)"
+                                <ViewButton :data-to-show="slotProps.node" v-if="props.visibleViewButton &&
+                                    (isLogicErase ? slotProps.node[props.model.getFieldAsActive()] == true : true)
+                                    && (col.visibleViewFunction ? col.visibleViewFunction(slotProps.node) : true)"
                                     :refetch="refetchOfOne" @show-view-dialog="viewDialogVisible = true" />
 
-                                <UpdateButton :data-to-update="slotProps.data" v-if="props.visibleUpdateButton &&
-                                    (isLogicErase ? slotProps.data[props.model.getFieldAsActive()] == true : true)
-                                    && (col.visibleUpdateFunction ? col.visibleUpdateFunction(slotProps.data) : true)"
+                                <UpdateButton :data-to-update="slotProps.node" v-if="props.visibleUpdateButton &&
+                                    (isLogicErase ? slotProps.node[props.model.getFieldAsActive()] == true : true)
+                                    && (col.visibleUpdateFunction ? col.visibleUpdateFunction(slotProps.node) : true)"
                                     @show-update-dialog="updateDialogVisible = true"
                                     :custom-function="customUpdateFunction" />
                                 <template
-                                    v-if="props.visibleDeleteButton && (col.visibleDeleteFunction ? col.visibleDeleteFunction(slotProps.data) : true)">
+                                    v-if="props.visibleDeleteButton && (col.visibleDeleteFunction ? col.visibleDeleteFunction(slotProps.node) : true)">
 
-                                    <DeleteButton :data-to-delete="slotProps.data" v-if="!isLogicErase" />
+                                    <DeleteButton :data-to-delete="slotProps.node" v-if="!isLogicErase" />
 
-                                    <ActivateButton :data-to-activate="slotProps.data"
-                                        v-else-if="slotProps.data[props.model.getFieldAsActive()] == false" />
-                                    <DesactivateButton :data-to-desactivate="slotProps.data" v-else />
+                                    <ActivateButton :data-to-activate="slotProps.node"
+                                        v-else-if="slotProps.node[props.model.getFieldAsActive()] == false" />
+                                    <DesactivateButton :data-to-desactivate="slotProps.node" v-else />
                                 </template>
                                 <template v-if="props.extraOptions">
                                     <template v-for="option in props.extraOptions" :key="option">
-                                        <i v-if="option.renderIf(slotProps.data)" mx-1 :class="option.icon"
+                                        <i v-if="option.renderIf(slotProps.node)" mx-1 :class="option.icon"
                                             v-tooltip="$t(option.tooltip)"
-                                            @click="option.action(slotProps.data, $event)" />
+                                            @click="option.action(slotProps.node, $event)" />
                                     </template>
                                 </template>
 
@@ -292,9 +292,9 @@ const onFilter = (event) => {
 
 
 
-const toggle = (value: MouseEvent) => {
-    menu.value.toggle(value);
-};
+// const toggle = (value: MouseEvent) => {
+//     menu.value.toggle(value);
+// };
 const { data, isPending, isSuccess, isRefetching, isError, refetch } = useQuery({
     queryKey: [queryKey],
     queryFn: (parameter?) => {

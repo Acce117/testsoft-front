@@ -26,10 +26,6 @@ const props = defineProps({
 const emit = defineEmits(['show-update-dialog'])
 
 const action = async (event) => {
-    console.log(event)
-    console.log(props.dataToUpdate)
-
-
     model?.setData(props.dataToUpdate)
     await queryClient.refetchQueries({
         queryKey: [queryKey + '-one']

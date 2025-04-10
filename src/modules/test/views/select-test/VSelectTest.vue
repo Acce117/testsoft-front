@@ -35,11 +35,9 @@ import { Card } from "primevue";
 
 
 const queryFunction = async () => {
-  console.log('asdsa')
 
   const test = await new Test().getAssignedTests(userStore().user_id)
   user.assignedTests = [];
-  console.log(test)
 
   test.data.forEach((test: any) => {
     let availableDate: Date = null;
@@ -55,7 +53,6 @@ const queryFunction = async () => {
     });
     sessionStorage.setItem("user", JSON.stringify(user.$state));
   });
-  console.log(test)
 
   return test
 }

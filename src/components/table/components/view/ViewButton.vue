@@ -28,6 +28,7 @@ const action = async () => {
     model?.setData(props.dataToShow)
     emit('show-view-dialog')
     props.refetch()
+
 }
 
 

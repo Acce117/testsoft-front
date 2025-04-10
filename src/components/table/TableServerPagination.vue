@@ -448,13 +448,9 @@ defineExpose({ refetch })
 }
 td {
     white-space: nowrap;
-    /* Evita el salto de línea */
     overflow: hidden;
-    /* Oculta el texto que sobresale */
     text-overflow: ellipsis;
-    /* Añade puntos suspensivos */
     max-width: 200px;
-    /* O el ancho que necesites */
 }
 .p-datatable-thead{
     z-index: 2 !important;
