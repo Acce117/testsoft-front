@@ -14,7 +14,7 @@
         <Button v-ripple v-if="userStore().assignments[0].item_id == 3"
           class="mx-auto focus:shadow-outline lg:mx-0 transform transition duration-300 ease hover:scale-105 my-6 py-4 px-8 rounded-full shadow-lg"
           rounded iconPos="right" @click="router.push('/select-test')" :label="$t('global.start')"
-          icon="pi pi-arrow-right">
+          icon="pi pi-arrow-right" severity="warn">
         </Button>
       </div>
       <div class="w-full md:w-3/5 py-6 text-center">

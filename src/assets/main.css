@@ -60,9 +60,9 @@ main {
 html {
   width: 100vw;
   overflow-x: hidden;
-  background: -webkit-linear-gradient(10deg, #3faee4,#f8fafc, #f8fafc,#f8fafc,#f8fafc);
+  background: -webkit-linear-gradient(10deg,#9599e2 0%, #8bc6ec 100%,#f8fafc, #f8fafc,#f8fafc,#f8fafc);
   
-  background: linear-gradient(10deg, #3faee4,#f8fafc,#f8fafc,#f8fafc,#f8fafc);
+  background: linear-gradient(80deg, #9599e2 , #9599e2,#8bc6ec,#f8fafc, #f8fafc,#f8fafc);
  
 }
 

@@ -1,5 +1,5 @@
 <template>
-  <div absolute w-full z-50>
+  <div class="home" absolute w-full z-50>
 
     <!--<ul class="navbar">
     <li
@@ -58,10 +58,17 @@ const itemsManagement = [
   {
     label: "Management",
     i18n: "management",
-    icon: 'pi pi-cog',
 
 
     items: [],
+  },
+  {
+    label: "Reports",
+    i18n: "reports",
+
+
+    items: [],
+    command:()=>router.push('incompatibility-leadership')
   },
 ];
 
@@ -92,7 +99,7 @@ const itemsAdmin = [
   },
   {
     label: " ",
-    i18n: "functional-roles",
+    i18n: "functional_roles",
     command: () => router.push("/functional-roles"),
   },
 ];
@@ -109,7 +116,6 @@ const itemsDefault = [
   {
     label: " ",
     i18n: "test",
-    icon: 'pi pi-file-edit',
 
     items: [
       {
@@ -126,37 +132,18 @@ const itemsDefault = [
   },
   {
     label: " ",
-    i18n: "rolesfuncionales",
-    icon: 'pi pi-file-edit',
-
-    items: [
-      {
-        label: " ",
-        i18n: "seleccionar preferidos evitados",
-        command: () => router.push("/functional-roles-selection"),
-      },
-      
-    ]
+    i18n: "functional_roles",
+    command: () => router.push("/functional-roles-selection"),
   },
   {
     label: " ",
     i18n: "compatibility",
-    icon: 'pi pi-file-edit',
-
-    items: [
-      {
-        label: " ",
-        i18n: "seleccionar compatibilidades y liderazgo ",
-        command: () => router.push("/compatibility-selection"),
-      },
-      
-    ]
+    command: () => router.push("/compatibility-selection"),
   },
 
   {
     label: " ",
     i18n: "info",
-    icon: 'pi pi-info-circle',
 
     command: () => router.push("/info"),
   },
@@ -223,4 +210,35 @@ const goHome = () => {
   background-color: transparent;
   backdrop-filter: blur(0.5rem);
 }
+.home .p-menubar{
+  background-color: transparent !important;
+}
 </style>
+<i18n>
+  {
+    "es":{
+      "navbar":{
+        "management":{
+              "functional_roles":{
+                  "name":"Roles Funcionales"
+              },
+              "compatibility":{
+                  "name":"Compatibilidades y Liderazgo",
+              }
+        },
+        "reports":{
+          "name":"Reportes"
+        },
+
+              
+              "functional_roles":{
+                  "name":"Roles Funcionales"
+              },
+              "compatibility":{
+                  "name":"Compatibilidades y Liderazgo",
+              }
+          }
+      }
+  }
+</i18n>
+
