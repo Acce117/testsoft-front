@@ -1,9 +1,7 @@
 <template>
-  <!--Hero-->
   
   <section class="pt-24 anim-opacity-0.5">
     <div class="container px-3 mx-auto flex flex-wrap flex-col md:flex-row items-center">
-      <!--Left Col-->
       <div class="flex flex-col w-full md:w-2/5 justify-center items-start text-center md:text-left">
         <p class="uppercase tracking-loose w-full">{{ $t('home.overtitle') }}</p>
         <h1 class="my-4 text-5xl font-bold leading-tight">
@@ -19,7 +17,6 @@
           icon="pi pi-arrow-right">
         </Button>
       </div>
-      <!--Right Col-->
       <div class="w-full md:w-3/5 py-6 text-center">
         <img class="w-full md:w-4/5 z-50" src="/img/psychometric_practice.webp" />
         <!-- <img hidden lg:block mt-20 w-160 src="/img/psychometric_practice.webp" /> -->

@@ -65,7 +65,7 @@ watch(
 </script>
 <style>
 .test__header {
-  animation: slide-in-from-top 0.5s ease;
+  /* animation: slide-in-from-top 0.5s ease; */
   border: solid 1px rgb(226 232 240) !important;
 
 }
