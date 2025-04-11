@@ -4,11 +4,11 @@
 
 
 
-        <Paginator :query-function="(params) => FunctionalRole.getAll(params)" :gridOptions :query-key="'functional-roles'">
+        <Paginator :query-function="(params) => FunctionalRole.getAll(params)" gridClass="grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5" :query-key="'functional-roles'">
 
             <template #item-template="{ data }">
                 <article
-                    class="rounded-md text-left overflow-hidden border border-solid border-slate-200 bg-white w-full  flex justify-between  gap-2 p-4 shadow-md">
+                    class="rounded-md  text-left overflow-hidden border border-solid border-slate-200 bg-white w-full  flex justify-between  gap-2 p-4 shadow-md">
                     <span class="role-text w-full  text-left whitespace-nowrap overflow-hidden ">{{
                         data.rol_name
                     }}</span>
@@ -46,13 +46,9 @@ const getRoles = () => [
 
 //getBibliosForLoan(startIndex.value, paginationSize.value, searchTerm.value.trim() != '' ? searchTerm.value : null)
 
-const gridOptions = {
-  base:1,
-  md:1,
-  lg:2,
-  xl:3
 
-}
+
+
 
 
 </script>

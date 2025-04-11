@@ -71,13 +71,7 @@ const executeTest = () => {
   router.push(`/execute-test/${selectedTest.value.id_test}`);
 };
 
-const gridOptions = {
-  base:1,
-  md:1,
-  lg:2,
-  xl:3
 
-}
 
 </script>
 <template>
@@ -85,7 +79,7 @@ const gridOptions = {
     <h2 mt-5rem text-left>{{ $t('select-test.title') }}</h2>
 
     
-        <Paginator :query-function="(params) => queryFunction(params)" :gridOptions :filterOptions="[{name:'Todos', value:'todos'},{ name:'Disponibles', value:'disponibles'}]" :query-key="'users-current-group'">
+        <Paginator :query-function="(params) => queryFunction(params)" gridClass="grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5" :filterOptions="[{name:'Todos', value:'todos'},{ name:'Disponibles', value:'disponibles'}]" :query-key="'users-current-group'">
           <template #item-template="{ data }">
             <VTestCard :test="data" @show-dialog="(value) => showDialog(value)" />
           </template>

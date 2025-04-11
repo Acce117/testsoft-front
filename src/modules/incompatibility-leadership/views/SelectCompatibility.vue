@@ -4,11 +4,11 @@
 
 
         <Paginator :query-function="(params) => Group.getUsersFromCurrentGroup(params)"
-            :query-key="'users-current-group'" :gridOptions>
+            :query-key="'users-current-group'" gridClass="grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
 
             <template #item-template="{ data }">
                 <article
-                    class="rounded-md text-left overflow-hidden border border-solid border-slate-200 bg-white w-full  flex  flex-col justify-between  gap-2 p-4 shadow-md">
+                    class="rounded-md min-w-0 break-inside-avoid break-words text-left overflow-hidden border border-solid border-slate-200 bg-white w-full  flex  flex-col justify-between  gap-2 p-4 shadow-md">
                     <div flex items-center w-full>
 
                         <Avatar :label="data.name.charAt(0).toUpperCase()"
@@ -24,7 +24,7 @@
                     <div class="flex flex-col items-center justify-center gap-4 w-full ">
                         <div flex items-center justify-between gap-2 w-full>
                             <span>Para trabajar lo consideras?</span>
-                            <ToggleButton  v-model="data.compatible" :onLabel="$t('Compatible')"
+                            <ToggleButton min-w-10rem v-model="data.compatible" :onLabel="$t('Compatible')"
 
                                 :offLabel="$t('Incompatible')"
                                 onIcon="pi pi-user-plus" offIcon="pi pi-user-minus" />
@@ -54,15 +54,18 @@ import { FunctionalRole } from '@/modules/management/functional-roles/models/fun
 import { Group } from '@/modules/management/group/models/group.model';
 import { userStore } from '@/modules/security/store/user-store';
 import { Avatar, Button, Checkbox, ToggleButton, ToggleSwitch } from 'primevue';
+import { ref } from 'vue';
 
 
-const gridOptions = {
-    base: 1,
-    md: 1,
-    lg: 2,
-    xl: 3
 
-}
+const gridOptions = ref({
+  base:1,
+  sm:2,
+  md:2,
+  lg:3,
+  xl:4,
+  xxl:5
+})
 
 
 

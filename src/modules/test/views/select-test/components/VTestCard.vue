@@ -36,7 +36,7 @@ const availabilityDate =moment(availabilityTime).format("DD/MM/YYYY");
     <div
       class=" h-10rem overflow-hidden  flex flex-col justify-between    ">
 
-      <div class=" text-lg  overflow-auto ">{{ props.test.name }}
+      <div class=" text-lg whitespace-nowrap truncate ">{{ props.test.name }}
         <div class="card mt-2 flex flex-wrap  gap-2">
           <Tag severity="warn" :value="props.test.time_duration > 0 ?
             props.test.time_duration +
