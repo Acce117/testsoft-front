@@ -64,6 +64,16 @@
     margin-left: 0;
   }
 }
+
+@keyframes slide-in-from-bottom {
+  from {
+    margin-top: 50%;
+  }
+  to {
+    margin-left: 0;
+  }
+}
+
 @keyframes slide-in-from-top-table {
   from {
     margin-top: -10%;

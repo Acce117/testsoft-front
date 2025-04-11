@@ -152,7 +152,7 @@ const visibleTimer = ref(true)
       </VTestHeader>
 
 
-      <div class="test__container" bg-sky-200 pt-4  px-4 flex flex-col items-center overflow-auto h-full>
+      <div class="test__container gradient-background"  pt-4  px-4 flex flex-col items-center overflow-auto h-full>
 
 
         <VTestSerie v-if="isSuccess && router.currentRoute.value.params.id_test == data.id_test"

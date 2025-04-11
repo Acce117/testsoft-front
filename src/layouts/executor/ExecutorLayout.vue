@@ -1,30 +1,30 @@
 <script setup lang="ts">
 import VNavbar from '@/components/navbar/VNavbar.vue';
-import AdminNavbar from './components/AdminNavbar.vue';
-import AdminSideBar from './components/AdminSideBar.vue';
+import AdminNavbar from './components/ExecutorNavbar.vue';
+import AdminSideBar from './components/ExecutorSideBar.vue';
 import { ref } from 'vue';
 import Drawer from 'primevue/drawer';
 import Button from 'primevue/button';
-import VUsersManagement from '@/modules/management/users/views/VUsersManagement.vue';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
+import ExecutorSideBar from './components/ExecutorSideBar.vue';
+import ExecutorNavbar from './components/ExecutorNavbar.vue';
 
 const visible=ref(false)
-const products = ref();
 </script>
 
 <template>
   
   <main class="gradient-background" w-screen h-screen flex anim-fade-in-1>
      <aside class="hidden xl:flex ">
-      <AdminSideBar />
+      <ExecutorSideBar />
 
     </aside>
 
     <aside class="card flex justify-center">
       <Drawer v-model:visible="visible" class="!w-fit">
         <template #container>
-          <AdminSideBar @close="visible=false" />
+          <ExecutorSideBar @close="visible=false" />
 
         </template>
 
@@ -35,14 +35,14 @@ const products = ref();
     
 
     <section h-full w-full flex-col flex gap-2 p-2 >
-      <AdminNavbar >
+      <ExecutorNavbar >
         <template #sidebar-button >
           <div xl:hidden block>
             <Button  icon="pi pi-bars" h-fit severity="secondary" @click="visible = true" />
 
           </div>
         </template>
-      </AdminNavbar>
+      </ExecutorNavbar>
       <div h-full overflow-auto max-w-full rounded-xl  w-full>
         <RouterView></RouterView>
       </div>

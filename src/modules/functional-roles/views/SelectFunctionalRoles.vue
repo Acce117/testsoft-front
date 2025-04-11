@@ -1,17 +1,21 @@
 <template>
-    <section h-full flex flex-col m-3>
-        <h2 mt-5rem text-left>Seleccione sus roles preferidos o evitados</h2>
 
 
 
-        <Paginator :query-function="(params) => FunctionalRole.getAll(params)" gridClass="grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5" :query-key="'functional-roles'">
+
+        <Paginator :query-function="(params) => FunctionalRole.getAll(params)"
+            gridClass="grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4"
+            :query-key="'functional-roles'">
+            <template #header>
+                <h2  text-left>Seleccione sus roles preferidos o evitados</h2>
+            </template>
 
             <template #item-template="{ data }">
                 <article
                     class="rounded-md  text-left overflow-hidden border border-solid border-slate-200 bg-white w-full  flex justify-between  gap-2 p-4 shadow-md">
                     <span class="role-text w-full  text-left whitespace-nowrap overflow-hidden ">{{
                         data.rol_name
-                    }}</span>
+                        }}</span>
                     <div class="flex items-center justify-center gap-2">
 
                         <i class="like-button pi pi-thumbs-up"
@@ -26,7 +30,6 @@
             </template>
         </Paginator>
 
-    </section>
 
 </template>
 <script setup lang="ts">
@@ -61,6 +64,7 @@ const getRoles = () => [
 .like-button:active {
     transform: scale(1.1);
 }
+
 .role-text {
     white-space: nowrap;
     overflow: hidden;

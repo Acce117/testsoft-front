@@ -24,9 +24,9 @@ const props = defineProps({
         default: [1, 5, 10, 20]
 
     },
-    gridClass:{
-        type:String,
-        default:'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 '
+    gridClass: {
+        type: String,
+        default: 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 '
     },
     gridOptions: {
         type: {
@@ -81,7 +81,7 @@ const {
     isError
 } = useQuery({
     queryKey: [props.queryKey],
-    queryFn: () => props.queryFunction({ limit: limit.value, offset: offset.value })
+    queryFn: () => props.queryFunction({ limit: limit.value, offset: offset.value, where: filters.value })
 
 })
 
@@ -91,6 +91,7 @@ const emit = defineEmits(['update-start-index', 'update-pagination-size'])
 const searchTerm = ref('')
 
 const offset = ref(0)
+const filters = ref({})
 const totalRecords = ref(0)
 const totalPages = ref(0)
 const actualPage = ref(0)
@@ -113,16 +114,32 @@ watchEffect(() => {
 
 const value = ref(null);
 
+const onFilterOptions = (event) => {
+
+    console.log(event.value.value)
+    filters.value = { name: 'Belbin' }
+
+
+    onFilter()
+
+}
+const onFilter = () => {
+    refetch()
+}
+
+defineExpose({refetch})
 
 
 </script>
 <template>
     <Card h-full flex flex-col>
         <template #content>
-            <div class="flex ">
-                <SelectButton v-model="value" v-if="filterOptions"
+            <slot name="header"></slot>
+
+            <div class="flex " v-if="filterOptions">
+                <SelectButton v-model="value" 
                     :default-value="filterOptions[0] ? filterOptions[0] : null" :options="filterOptions"
-                    optionLabel="name" />
+                    optionLabel="name" @change="onFilterOptions" />
             </div>
             <div class="flex  items-center w-full flex-wrap  gap-2 mt-2 mb-8">
                 <div flex gap-2>
@@ -187,7 +204,7 @@ const value = ref(null);
 
             <template v-if="!isPending && !isRefetching">
                 <!--  -->
-                <section :class="'grid w-full gap-4 '+ gridClass">
+                <section :class="'grid w-full gap-4 ' + gridClass">
 
                     <slot name="item-template" v-for="(item, index) in data.data" :key="index" :data="item">
                     </slot>
@@ -207,7 +224,7 @@ const value = ref(null);
                 v-else>
                 <Skeleton v-for="e in [1, 2, 3, 4]" height="8rem" :key="e" class=" w-full animate-pulse min-w-0 break-inside-avoid break-words  " />
             </div> -->
-            <div :class="'grid w-full gap-4 '+gridClass" v-else>
+            <div :class="'grid w-full gap-4 ' + gridClass" v-else>
                 <Skeleton v-for="e in [1, 2, 3, 4]" height="8rem" :key="e" class=" w-full animate-pulse   " />
             </div>
 

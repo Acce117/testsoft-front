@@ -24,6 +24,7 @@ import FunctionalRoleManagement from "@/modules/management/functional-roles/view
 import SelectFunctionalRoles from "@/modules/functional-roles/views/SelectFunctionalRoles.vue";
 import IncompatibilityLeadershipView from "@/modules/incompatibility-leadership/views/IncompatibilityLeadershipView.vue";
 import SelectCompatibility from "@/modules/incompatibility-leadership/views/SelectCompatibility.vue";
+import ExecutorLayout from "@/layouts/executor/ExecutorLayout.vue";
 
 const autorize = (roles: string[]) => {
   return function (to, from, next) {
@@ -34,8 +35,7 @@ const autorize = (roles: string[]) => {
       canTravel = userRoles.includes(role);
       if (canTravel) next();
     });
-    if (!canTravel) 
-      next("/not-authorized");
+    if (!canTravel) next("/not-authorized");
   };
 };
 const router = createRouter({
@@ -76,14 +76,14 @@ const router = createRouter({
           name: "results",
           component: VResults,
           meta: { requiresAuth: true },
-          beforeEnter: autorize(["Analyst","Super Admin"]),
+          beforeEnter: autorize(["Analyst", "Super Admin"]),
         },
         {
           path: "/functional-roles",
           name: "functional-roles",
           component: FunctionalRoleManagement,
           meta: { requiresAuth: true },
-          beforeEnter: autorize(["Admin","Super Admin"]),
+          beforeEnter: autorize(["Admin", "Super Admin"]),
         },
         {
           path: "/clients",
@@ -97,7 +97,7 @@ const router = createRouter({
           name: "test",
           component: VTestManagement,
           meta: { requiresAuth: true },
-          beforeEnter: autorize(["Analyst","Super Admin"]),
+          beforeEnter: autorize(["Analyst", "Super Admin"]),
         },
         {
           path: "/incompatibility-leadership",
@@ -107,39 +107,12 @@ const router = createRouter({
         },
       ],
     },
-
     {
-      path: "/",
-      name: "general",
-      component: VGeneralVue,
+      path: "/executor",
+      name: "executor",
+      component: ExecutorLayout,
       meta: { requiresAuth: true },
       children: [
-        {
-          path: "/",
-          name: "home",
-          component: VHome,
-          meta: { requiresAuth: true }
-        },
-        {
-          path: "/select-test",
-          name: "select-test",
-          component: VSelecTest,
-          meta: { requiresAuth: true },
-        },
-       
-
-        {
-          path: "/profile",
-          name: "profile",
-          component: VProfile,
-          meta: { requiresAuth: true },
-        },
-        {
-          path: "/my-results",
-          name: "my-results",
-          component: VMyResults,
-          meta: { requiresAuth: true },
-        },
         {
           path: "/functional-roles-selection",
           name: "functional-roles-selection",
@@ -152,7 +125,42 @@ const router = createRouter({
           component: SelectCompatibility,
           meta: { requiresAuth: true },
         },
+        {
+          path: "/select-test",
+          name: "select-test",
+          component: VSelecTest,
+          meta: { requiresAuth: true },
+        },
+        {
+          path: "/my-results",
+          name: "my-results",
+          component: VMyResults,
+          meta: { requiresAuth: true },
+        },
 
+      ],
+    },
+    {
+      path: "/",
+      name: "general",
+      component: VGeneralVue,
+      meta: { requiresAuth: true },
+      children: [
+        {
+          path: "/",
+          name: "home",
+          component: VHome,
+          meta: { requiresAuth: true },
+        },
+        
+
+        {
+          path: "/profile",
+          name: "profile",
+          component: VProfile,
+          meta: { requiresAuth: true },
+        },
+       
         {
           path: "/assign-test",
           name: "assign-test",
@@ -199,7 +207,8 @@ const router = createRouter({
       name: "execute-test",
       component: ExecuteTest,
       meta: { requiresAuth: true },
-      beforeEnter: (to, from, next) => validateTestExecutionPermission(to, from, next)
+      beforeEnter: (to, from, next) =>
+        validateTestExecutionPermission(to, from, next),
     },
     {
       path: "/:catchAll(.*)",
@@ -231,12 +240,11 @@ const validateTestExecutionPermission = (
   } else {
     //next("/not-authorized");
     next();
-
   }
 };
 router.beforeEach((to, from, next) => {
   if (to.meta.requiresAuth && !isUserAuthenticated()) {
-    next('/login')
+    next("/login");
   } else next();
 });
 export default router;

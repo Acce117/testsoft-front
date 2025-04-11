@@ -8,6 +8,7 @@ import VButton from "@/components/VButton.vue";
 import VInput from "@/components/VInput.vue";
 import { Form } from "vee-validate";
 import { loginSchema } from "./loginSchema";
+import { Card } from "primevue";
 const { t } = useI18n();
 
 const credentials = ref({
@@ -24,45 +25,53 @@ window.scrollTo(0, 0);
 
 
 <template>
-  <main centered>
+  <main centered class="gradient-background">
     <!--<div fixed left-0.5rem top-0.5rem>
       <VLanguageChanger />
     </div>-->
 
-    <section flex overflow-hidden h-100 w-xs bg-white shadow-xl rounded-2xl border-solid border-1 border-slate-200>
-      <div overflow-hidden pa-4>
-        <div flex flex-col mb-2rem>
-          <img src="/img/logo.png" w-5rem h-20  />
-          <h1 text-3xl h-20 anim-slide-in-1 w-full m-0 font-bold text-primary>
-            {{ $t("login.title") }}
-          </h1>
+    <Card anim-slide-in-from-bottom-1 h-fit>
+      <template #content>
+
+        <div overflow-hidden flex h-full flex-col anim-fade-in-1>
+          <div flex items-center flex-col mb-2>
+            <img src="/img/logo.png" w-6rem h-20 mb-2 />
+            <h1 text-3xl h-20 w-full m-0 font-bold text-center text-primary>
+              {{ $t("login.title") }}
+            </h1>
+          </div>
+          <Form @submit="login.login(credentials)" flex h-12rem justify-between flex-col
+            :validation-schema="loginSchema">
+
+            <div flex flex-col gap-8>
+
+              <VInput h-10 name="username" id="user-input" :max="8" v-model="credentials.username" label="login.user">
+                <template #icon>
+                  <span class="pi pi-user"></span>
+
+                </template>
+              </VInput>
+              <VInput h-10 name="password" id="password-input" :max="8" password v-model="credentials.password"
+                label="login.password">
+                <template #icon>
+                  <i class="pi pi-lock"></i>
+
+                </template>
+
+              </VInput>
+            </div>
+
+
+            <VButton w-full :disabled="login.loading" id="login-button" type="submit">
+              <span v-if="!login.loading">{{ $t("login.login") }} <span class="pi pi-arrow-right"></span></span>
+              <VLoading v-else />
+            </VButton>
+            <!-- <RouterLink  text-primary to="/sign-up">{{ $t('login.sign-up') }}</RouterLink> -->
+          </Form>
         </div>
-        <Form @submit="login.login(credentials)" centered gap-27px flex-col :validation-schema="loginSchema">
+      </template>
 
-
-          <VInput h-10 name="username" id="user-input" :max="8" v-model="credentials.username" label="login.user">
-            <template #icon>
-              <span class="pi pi-user"></span>
-
-            </template>
-          </VInput>
-          <VInput h-10 name="password" id="password-input" :max="8" type="password" v-model="credentials.password"
-            label="login.password">
-            <template #icon>
-              <i class="pi pi-lock"></i>
-
-            </template>
-
-          </VInput>
-
-          <VButton w-full :disabled="login.loading" id="login-button" type="submit">
-            <span v-if="!login.loading">{{ $t("login.login") }} <span class="pi pi-arrow-right"></span></span>
-            <VLoading v-else />
-          </VButton>
-          <!-- <RouterLink  text-primary to="/sign-up">{{ $t('login.sign-up') }}</RouterLink> -->
-        </Form>
-      </div>
-    </section>
+    </Card>
   </main>
 </template>
 
@@ -71,8 +80,9 @@ window.scrollTo(0, 0);
 <style>
 .title {
   background: -webkit-linear-gradient(45deg, #96dcff, #2388bb);
-
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+
+
 </style>

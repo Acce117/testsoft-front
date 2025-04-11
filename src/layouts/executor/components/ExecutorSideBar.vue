@@ -3,18 +3,18 @@
     <div class="card flex  justify-center h-screen">
         <Menu :model="items">
             <template #start>
-                <span class="inline-flex items-center gap-1 px-2 py-5">
+                <span class="inline-flex items-center gap-1 px-2 py-5 ">
                     <img src="/img/logo.png" size-10 />
-                    <span class="text-xl font-semibold">Test<span class="text-primary font-semibold">Soft</span></span>
+                    <span class="text-xl font-bold">Test<span class="text-primary font-bold">Soft</span></span>
                 </span>
             </template>
             <template #submenulabel="{ item }">
-                <span class="text-primary font-semibold">{{ item.label }}</span>
+                <span class="text-primary font-bold">{{ item.label }}</span>
             </template>
             <template #item="{ item, props }">
                 <a v-ripple class="flex items-center" v-bind="props.action">
                     <span :class="item.icon" />
-                    <span>{{ item.label }}</span>
+                    <span >{{ item.label }}</span>
 
                 </a>
             </template>
@@ -40,82 +40,58 @@ const navigateTo = (route: string) => {
     router.push(route)
     emit('close')
 }
-const itemsManagement = [
+
+
+
+
+
+const itemsDefault = [
     {
-        separator: true
+        label: ' ',
+        i18n: 'test',
+        items: [
+
+            {
+                label: ' ',
+                i18n: 'execute',
+                icon: 'pi pi-file-edit',
+                command: () => navigateTo("/select-test")
+            },
+            {
+                label: " ",
+                i18n: "results",
+                command: () => router.push("/my-results"),
+            },
+        ]
     },
+
+
     {
-        label: "Management",
-        i18n: "management",
-        items: [],
-    },
-    {
-        label: "Reports",
-        i18n: "reports",
+        label: " ",
+        i18n: "others",
+
         items: [
             {
                 label: " ",
-                i18n: "sociometric",
-                icon: 'pi pi-sitemap',
-
-                command: () => navigateTo("/incompatibility-leadership"),
+                i18n: "functional_roles",
+                icon: 'pi pi-file-edit',
+                command: () => router.push("/functional-roles-selection"),
             },
-        ],
-    },
-];
+            {
+                label: " ",
+                icon: 'pi pi-file-edit',
+                i18n: "compatibility",
+                command: () => router.push("/compatibility-selection"),
+            },
 
-const itemsAnalyst = [
+
+        ]
+    },
+   
     {
-        label: " ",
-        i18n: "test",
-        icon: 'pi pi-file-edit',
-
-        command: () => navigateTo("/test"),
+        separator: true
     },
-    {
-        label: " ",
-        i18n: "results",
-        icon: 'pi pi-list-check',
 
-        command: () => navigateTo("/results"),
-    },
-];
-
-const itemsAdmin = [
-
-    {
-        label: " ",
-        i18n: "users",
-        icon: 'pi pi-user',
-
-        command: () => navigateTo("/users"),
-    },
-    {
-        label: " ",
-        icon: 'pi pi-users',
-
-        i18n: "groups",
-        command: () => navigateTo("/groups"),
-    },
-    {
-        label: " ",
-        i18n: "functional_roles",
-        icon: 'pi pi-tags',
-
-        command: () => navigateTo("/functional-roles"),
-    },
-];
-
-const itemsSuperAdmin = [
-    {
-        label: " ",
-        icon: 'pi pi-briefcase',
-
-        i18n: "client",
-        command: () => navigateTo("/clients"),
-    },
-]
-const itemsDefault = [
 
     {
         label: ' ',
@@ -129,6 +105,13 @@ const itemsDefault = [
                 command: () => siteStore().logout()
             }
         ]
+    },
+    {
+        label: " ",
+        i18n: "info",
+        icon: 'pi pi-info-circle',
+
+        command: () => router.push("/info"),
     },
     {
         separator: true
@@ -179,16 +162,15 @@ watch(locale, () => {
 
 <i18n>
     {
-        "es":{
-            "navbar":{
-                "management":{
-                    "functional_roles":"Roles Funcionales"
-                },
-                "reports":{
-                    "name":"Reportes",
-                    "sociometric":"Sociométrico"
-                }
-            }
+      "es": {
+        "navbar": {
+          "others":{
+            "name":"Otros",
+            "compatibility": "Compatibilidades y Liderazgo",
+            "functional_roles": "Roles Funcionales",
+
+          } 
         }
+      }
     }
 </i18n>
