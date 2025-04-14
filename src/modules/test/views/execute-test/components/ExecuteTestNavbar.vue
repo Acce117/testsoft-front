@@ -5,7 +5,7 @@
 
       <template #start>
 
-        <RouterLink to="/" size-10> <img src="/img/logo.png" size-10 /></RouterLink>
+        <!-- <RouterLink to="/general" size-10> <img src="/img/logo.png" size-10 /></RouterLink> -->
         <slot name="sidebar-button"></slot>
 
       </template>

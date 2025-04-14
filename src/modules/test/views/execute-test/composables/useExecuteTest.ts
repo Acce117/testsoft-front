@@ -132,8 +132,8 @@ export const useExecuteTest = () => {
 
   const exitTest = (route: string) => {
     confirmExit.value = true;
-    router.push(`/` + route);
     cleanTestExecution();
+    router.push(`/`+ route);
   };
   const exitTestConfirm = (route: string) => {
     useEvents().dispatch("confirm", {

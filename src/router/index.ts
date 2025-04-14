@@ -137,7 +137,6 @@ const router = createRouter({
           component: VMyResults,
           meta: { requiresAuth: true },
         },
-
       ],
     },
     {
@@ -152,7 +151,6 @@ const router = createRouter({
           component: VHome,
           meta: { requiresAuth: true },
         },
-        
 
         {
           path: "/profile",
@@ -160,7 +158,7 @@ const router = createRouter({
           component: VProfile,
           meta: { requiresAuth: true },
         },
-       
+
         {
           path: "/assign-test",
           name: "assign-test",
@@ -223,7 +221,9 @@ const validateTestExecutionPermission = (
   next: Function
 ) => {
   const user = userStore();
-  if (from.path.includes("select-test")) {
+  if (from.name == undefined || from.path == to.path) {
+    next();
+  } else if (from.path.includes("select-test")) {
     try {
       const id_test = to.path.split("/")[2];
       const test = user.assignedTests.filter((test) => test.id == id_test)[0];
@@ -238,8 +238,7 @@ const validateTestExecutionPermission = (
       next("/not-authorized");
     }
   } else {
-    //next("/not-authorized");
-    next();
+    next("/not-authorized");
   }
 };
 router.beforeEach((to, from, next) => {
