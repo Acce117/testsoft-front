@@ -44,7 +44,7 @@ const updateInput = (value: number, oldValue: number, id_answer: number | string
     test.questions[`${props.id_question}`].answer[`${id_answer}`] = oldValue
   else {
     test.questions[`${props.id_question}`].answer[`${id_answer}`] = value
-    executeTest.saveTestExecutionInLocalStorage(test?.questions)
+    executeTest.saveTestExecutionInLocal(test?.questions)
     toast.add({
       severity: "info",
       summary: "Info",

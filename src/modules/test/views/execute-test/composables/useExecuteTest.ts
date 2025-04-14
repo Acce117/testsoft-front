@@ -10,7 +10,7 @@ export const useExecuteTest = () => {
   const confirmExit = ref(false);
   const validatedTestFirstTime = ref(false);
   const infoVisible = ref(false);
-  let hasSecondOpportunity = true;
+  const secondOpportunityMinutes = 1;
 
   const serieIndex = ref(0);
   let data: {
@@ -23,7 +23,56 @@ export const useExecuteTest = () => {
   };
   const timeCountdown = ref(10000);
 
-  const setData = (d: any) => (data = d);
+  const setData = (d: any) => {
+    data = d;
+    //validateTestDuration()
+    let serieTime: number =
+      d.time_duration > 0
+        ? d.time_duration
+        : d.series[serieIndex.value].time_serie_duration;
+    let testTime = 0;
+
+    let serie = JSON.parse(sessionStorage.getItem("serie_index"));
+    if (serie) {
+      serieIndex.value = parseInt(serie);
+    } else {
+      sessionStorage.setItem("serie_index", JSON.stringify(serieIndex.value));
+    }
+
+    let testInitTime = getInitTestTimeInLocal();
+
+    if (testInitTime) {
+      if (getSecondOpportunity() == 0) {
+        serieTime = secondOpportunityMinutes; // Time of second opportunity
+        useEvents().dispatch("error", {
+          severity: "warn",
+          summary: t("global.warning") + ":",
+
+          detail: t("execute-test.dialogs.test-ended-first-time"),
+          life: 5000,
+        });
+      }
+
+      testTime =
+        serieTime * 60001 -
+        (new Date().getTime() - new Date(testInitTime).getTime());
+    } else {
+      sessionStorage.setItem("init_test_time", JSON.stringify(new Date()));
+      testTime = serieTime * 60001;
+    }
+    timeCountdown.value = testTime;
+  };
+
+  const setSecondOpportunity = (value: boolean) => {
+    sessionStorage.setItem("second_opportunity", value ? "1" : "0");
+  };
+  const getSecondOpportunity = () => {
+    return JSON.parse(sessionStorage.getItem("second_opportunity"));
+  };
+
+  if (getSecondOpportunity() == null) {
+    setSecondOpportunity(true);
+  }
 
   const validateSerie = (serie: any, test: TestExecution) => {
     let isValid = true;
@@ -55,13 +104,36 @@ export const useExecuteTest = () => {
     if (isValid) sendTestConfirm();
   };
 
+  const validateTestDuration = () => {
+
+    const testInitTime = getInitTestTimeInLocal();
+
+    let maxTestTime = 0;
+    if (testInitTime) {
+
+      if (data.time_duration > 0) {
+        maxTestTime += secondOpportunityMinutes;
+        maxTestTime += data.time_duration;
+        maxTestTime = maxTestTime * 60001;
+        console.log(maxTestTime)
+        console.log(new Date().getTime() - new Date(testInitTime).getTime())
+        if (
+          maxTestTime -
+            (new Date().getTime() - new Date(testInitTime).getTime()) <=
+          0
+        ){
+          setSecondOpportunity(false)
+          timeOver();
+        }
+       
+      }
+    }
+  };
+
   const exitTest = (route: string) => {
     confirmExit.value = true;
     router.push(`/` + route);
-    data = undefined;
-    serieIndex.value = 0;
-    deleteTestExecutionInLocalStorage()
-
+    cleanTestExecution();
   };
   const exitTestConfirm = (route: string) => {
     useEvents().dispatch("confirm", {
@@ -97,12 +169,32 @@ export const useExecuteTest = () => {
       timeCountdown.value = time;
     }, 0);
   };
+
+  const cleanTestExecution = () => {
+    data = undefined;
+    changeSerie(0);
+    deleteTestExecutionInLocal();
+    sessionStorage.removeItem("init_test_time");
+    sessionStorage.removeItem("serie_index");
+    sessionStorage.removeItem("second_opportunity");
+  };
+
+  const getInitTestTimeInLocal = () => {
+    return JSON.parse(sessionStorage.getItem("init_test_time"));
+  };
+
+  const setActualTimeInLocal = () => {
+    sessionStorage.setItem("init_test_time", JSON.stringify(new Date()));
+  };
+
+
   const timeOver = () => {
     try {
       if (data.time_duration > 0) {
-        if (hasSecondOpportunity) {
-          setNewTime(300000);
-          hasSecondOpportunity = false;
+        if (getSecondOpportunity() == 1) {
+          setNewTime(secondOpportunityMinutes * 60000);
+          setActualTimeInLocal();
+          setSecondOpportunity(false);
           useEvents().dispatch("error", {
             severity: "warn",
             summary: t("global.warning") + ":",
@@ -113,8 +205,9 @@ export const useExecuteTest = () => {
         } else throw new Error("Time Over");
       } else {
         if (serieIndex.value < data.series.length - 1) {
-          serieIndex.value += 1;
+          changeSerie(serieIndex.value + 1);
           setNewTime(data.series[serieIndex.value].time_serie_duration * 60000);
+          setActualTimeInLocal();
           useEvents().dispatch("clean-toast");
           useEvents().dispatch("error", {
             severity: "warn",
@@ -128,7 +221,7 @@ export const useExecuteTest = () => {
       if (e.message === "Time Over") {
         confirmExit.value = true;
         router.push("/select-test");
-
+        cleanTestExecution();
         useEvents().dispatch("info", {
           message: t("execute-test.dialogs.test-ended"),
         });
@@ -145,13 +238,19 @@ export const useExecuteTest = () => {
     "6": [],
   };
 
+  const changeSerie = (value: number) => {
+    serieIndex.value = value;
+    sessionStorage.setItem("serie_index", JSON.stringify(value));
+  };
+
   const nextSerie = (test: TestExecution) => {
-    if (data.navigable == 1) serieIndex.value += 1;
+    if (data.navigable == 1) changeSerie(serieIndex.value + 1);
     else if (data.data?.completed == 1) {
       if (validateSerie(data.value.series[serieIndex.value], test))
         nextSerieConfirm();
     } else nextSerieConfirm();
   };
+
   const nextSerieConfirm = () => {
     useEvents().dispatch("confirm", {
       message: t("execute-test.dialogs.confirm-next-serie.message"),
@@ -159,8 +258,9 @@ export const useExecuteTest = () => {
       rejectLabel: t("global.cancel"),
       acceptLabel: t("global.confirm"),
       accept: () => {
-        serieIndex.value += 1;
+        changeSerie(serieIndex.value + 1);
         setNewTime(data.series[serieIndex.value].time_serie_duration * 60000);
+        setActualTimeInLocal();
         validatedTestFirstTime.value = false;
       },
     });
@@ -209,16 +309,14 @@ export const useExecuteTest = () => {
     return invalid;
   };
 
-  const saveTestExecutionInLocalStorage = (
-    questions: Array<Question<unknown>>
-  ) => {
-    localStorage.setItem("test_execution", JSON.stringify(questions));
+  const saveTestExecutionInLocal = (questions: Array<Question<unknown>>) => {
+    sessionStorage.setItem("test_execution", JSON.stringify(questions));
   };
-  const deleteTestExecutionInLocalStorage = () => {
-    localStorage.removeItem("test_execution");
+  const deleteTestExecutionInLocal = () => {
+    sessionStorage.removeItem("test_execution");
   };
-  const getTestExecutionInLocalStorage = () => {
-    const testExecution = localStorage.getItem("test_execution");
+  const getTestExecutionInLocal = () => {
+    const testExecution = sessionStorage.getItem("test_execution");
     let questions = {};
     if (testExecution) {
       questions = JSON.parse(testExecution);
@@ -232,12 +330,13 @@ export const useExecuteTest = () => {
     confirmExit,
     validatedTestFirstTime,
     serieIndex,
+    changeSerie,
     infoVisible,
     nextSerie,
     timeOver,
     timeCountdown,
     isAnswerInvalidInQuestion,
-    saveTestExecutionInLocalStorage,
-    getTestExecutionInLocalStorage,
+    saveTestExecutionInLocal,
+    getTestExecutionInLocal,
   };
 };

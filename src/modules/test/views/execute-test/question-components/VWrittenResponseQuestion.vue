@@ -21,7 +21,7 @@ const changeAnswer = (value: string) => {
   if (!test.questions[`${props.id_question}`])
     test.questions[`${props.id_question}`] = new WrittenResponseQuestion(props.id_question);
   test.questions[`${props.id_question}`].setAnswer(value)
-  executeTest.saveTestExecutionInLocalStorage(test?.questions)
+  executeTest.saveTestExecutionInLocal(test?.questions)
 }
 let question = ref(new WrittenResponseQuestion(props.id_question))
 

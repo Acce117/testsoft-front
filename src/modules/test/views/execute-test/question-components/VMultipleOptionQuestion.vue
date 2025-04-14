@@ -24,7 +24,7 @@ const changeAnswer = (value:boolean) => {
   if (!test.questions[`${props.id_question}`])
     test.questions[`${props.id_question}`] = new MultipleOptionQuestion(props.id_question);
   test.questions[`${props.id_question}`].setAnswer(value)
-  executeTest.saveTestExecutionInLocalStorage(test?.questions)
+  executeTest.saveTestExecutionInLocal(test?.questions)
 }
 let question = ref(new MultipleOptionQuestion(props.id_question))
 

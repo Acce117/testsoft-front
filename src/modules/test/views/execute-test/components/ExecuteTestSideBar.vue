@@ -9,7 +9,7 @@
             <article
                 :class="`serie-button ${serieIndex == index ? 'selected' : data.navigable == 1 ? 'bg-sky-100' : 'disabled'}`"
                 v-for="(serie, index) in props.data.series" :key="serie.id_serie"
-                @click="() => { if (data.navigable == 1) serieIndex = index }">{{ index + 1
+                @click="() => { if (data.navigable == 1) executeTest.changeSerie(index) }">{{ index + 1
                 }}
             </article>
         </div>

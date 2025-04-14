@@ -45,7 +45,7 @@ const nextSerie = () => {
   emit('next-serie')
 }
 const prevSerie = () => {
-  serieIndex.value -= 1;
+  executeTest.changeSerie(serieIndex.value - 1)
 };
 
 const getSeriesNames = () => {
