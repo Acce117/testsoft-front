@@ -21,7 +21,9 @@ const props = defineProps({
   <VQuestion v-for="(question, index) in props.serie?.questions" :key="question.id_question"
     :id_question="question.id_question" :question_index="index + 1" :title="question.statement">
     <template #default="{ changeInvalid }">
-      <VMultipleOptionQuestion v-if="question.type.id_type_question == 1" :changeInvalid
+      <VWrittenResponseQuestion v-if="question.type.id_type_question == 2" :changeInvalid
+        :id_question="question.id_question" />
+      <VMultipleOptionQuestion v-else-if="question.type.id_type_question == 1" :changeInvalid
         :id_question="question.id_question" :possible_answers="question.answers" />
 
       <VSingleOptionQuestion v-else-if="question.type.id_type_question == 2" :changeInvalid

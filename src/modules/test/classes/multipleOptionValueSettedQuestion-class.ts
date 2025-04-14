@@ -4,7 +4,8 @@ export class MultipleOptionsValueSettedQuestion extends Question<{[key:string]:n
     
     constructor(
         id_question: number | string,
-        readonly top_value: number | string
+        readonly top_value: number | string,
+        
     ){
         super(id_question);
         this.answer = {};

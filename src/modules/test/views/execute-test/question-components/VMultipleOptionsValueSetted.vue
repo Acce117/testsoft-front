@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, inject, ref } from "vue";
+import { computed, inject, onMounted, ref } from "vue";
 import VInputNumber from "./VInputNumber.vue";
 import { useToast } from "primevue/usetoast";
 import { MultipleOptionsValueSettedQuestion } from "@/modules/test/classes/multipleOptionValueSettedQuestion-class";
@@ -32,7 +32,7 @@ const distributedPoints = ref(0);
 const actualPoints = computed(() => props.maxPoints - distributedPoints.value);
 
 let timeOutIdToast: number;
-const updateInput = (value: number, oldValue: number, id_answer: number) => {
+const updateInput = (value: number, oldValue: number, id_answer: number | string) => {
   if (!test.questions[`${props.id_question}`])
     test.questions[`${props.id_question}`] = new MultipleOptionsValueSettedQuestion(props.id_question, props.maxPoints);
  
@@ -44,6 +44,7 @@ const updateInput = (value: number, oldValue: number, id_answer: number) => {
     test.questions[`${props.id_question}`].answer[`${id_answer}`] = oldValue
   else {
     test.questions[`${props.id_question}`].answer[`${id_answer}`] = value
+    executeTest.saveTestExecutionInLocalStorage(test?.questions)
     toast.add({
       severity: "info",
       summary: "Info",
@@ -59,8 +60,20 @@ const updateInput = (value: number, oldValue: number, id_answer: number) => {
 };
 
 const invalid = computed(() =>
-  executeTest.isAnswerInvalidInQuestion(question, props.changeInvalid)
+  executeTest.isAnswerInvalidInQuestion(test.questions[`${props.id_question}`], props.changeInvalid)
 )
+
+onMounted(() => {
+  if (test.questions[`${props.id_question}`]){
+    const recoveredQuestion = new MultipleOptionsValueSettedQuestion(props.id_question, props.maxPoints)
+    recoveredQuestion.setAnswer(test.questions[`${props.id_question}`].answer)
+    question.value = recoveredQuestion
+    test.questions[`${props.id_question}`] = recoveredQuestion
+    console.log(Object.values(recoveredQuestion.answer))
+    distributedPoints.value = Object.values(recoveredQuestion.answer).reduce((total, current)=>total+current)
+
+  }  
+})
 </script>
 
 <template>

@@ -40,6 +40,8 @@ const setInitialData = (d: { time_duration: number; series: { time_serie_duratio
   executeTest.timeCountdown.value = time * 60001;
   test.name = d.name;
   test.type = d.fk_id_type_test;
+  test.questions = executeTest.getTestExecutionInLocalStorage()
+  executeTest.saveTestExecutionInLocalStorage(test?.questions)
 }
 
 const { data, isSuccess, isError, isPending, refetch } = useTest(

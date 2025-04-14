@@ -13,7 +13,14 @@ export const useExecuteTest = () => {
   let hasSecondOpportunity = true;
 
   const serieIndex = ref(0);
-  let data: { completed: number; series: any[]; time_duration: number; navigable: number; data: { completed: number; }; value: { series: any[]; }; } ;
+  let data: {
+    completed: number;
+    series: any[];
+    time_duration: number;
+    navigable: number;
+    data: { completed: number };
+    value: { series: any[] };
+  };
   const timeCountdown = ref(10000);
 
   const setData = (d: any) => (data = d);
@@ -51,8 +58,10 @@ export const useExecuteTest = () => {
   const exitTest = (route: string) => {
     confirmExit.value = true;
     router.push(`/` + route);
-    data= undefined
-    serieIndex.value = 0
+    data = undefined;
+    serieIndex.value = 0;
+    deleteTestExecutionInLocalStorage()
+
   };
   const exitTestConfirm = (route: string) => {
     useEvents().dispatch("confirm", {
@@ -105,9 +114,7 @@ export const useExecuteTest = () => {
       } else {
         if (serieIndex.value < data.series.length - 1) {
           serieIndex.value += 1;
-          setNewTime(
-            data.series[serieIndex.value].time_serie_duration * 60000
-          );
+          setNewTime(data.series[serieIndex.value].time_serie_duration * 60000);
           useEvents().dispatch("clean-toast");
           useEvents().dispatch("error", {
             severity: "warn",
@@ -121,9 +128,9 @@ export const useExecuteTest = () => {
       if (e.message === "Time Over") {
         confirmExit.value = true;
         router.push("/select-test");
-        
+
         useEvents().dispatch("info", {
-          message: t('execute-test.dialogs.test-ended'),          
+          message: t("execute-test.dialogs.test-ended"),
         });
       } else console.error(e);
     }
@@ -153,16 +160,18 @@ export const useExecuteTest = () => {
       acceptLabel: t("global.confirm"),
       accept: () => {
         serieIndex.value += 1;
-        setNewTime(
-          data.series[serieIndex.value].time_serie_duration * 60000
-        );
+        setNewTime(data.series[serieIndex.value].time_serie_duration * 60000);
         validatedTestFirstTime.value = false;
       },
     });
   };
 
   const pushQuestionsNotAnswered = (questions: []) => {
-    questions.forEach(question => questionsNotAnswered[question.question.type.id_type_question+''].push(question))
+    questions.forEach((question) =>
+      questionsNotAnswered[question.question.type.id_type_question + ""].push(
+        question
+      )
+    );
   };
 
   const getErrorMessages = (questions: []) => {
@@ -189,13 +198,33 @@ export const useExecuteTest = () => {
     return errorMessages;
   };
 
-  const isAnswerInvalidInQuestion = (question:Question, changeInvalid:Function) => {
+  const isAnswerInvalidInQuestion = (
+    question: Question,
+    changeInvalid: Function
+  ) => {
     const invalid = validatedTestFirstTime.value
       ? !question || !question.validateQuestion()
-      : false
-    changeInvalid(invalid)
-    return invalid
-  }
+      : false;
+    changeInvalid(invalid);
+    return invalid;
+  };
+
+  const saveTestExecutionInLocalStorage = (
+    questions: Array<Question<unknown>>
+  ) => {
+    localStorage.setItem("test_execution", JSON.stringify(questions));
+  };
+  const deleteTestExecutionInLocalStorage = () => {
+    localStorage.removeItem("test_execution");
+  };
+  const getTestExecutionInLocalStorage = () => {
+    const testExecution = localStorage.getItem("test_execution");
+    let questions = {};
+    if (testExecution) {
+      questions = JSON.parse(testExecution);
+    }
+    return questions;
+  };
   return {
     setData,
     exitTestConfirm,
@@ -207,6 +236,8 @@ export const useExecuteTest = () => {
     nextSerie,
     timeOver,
     timeCountdown,
-    isAnswerInvalidInQuestion
+    isAnswerInvalidInQuestion,
+    saveTestExecutionInLocalStorage,
+    getTestExecutionInLocalStorage,
   };
 };

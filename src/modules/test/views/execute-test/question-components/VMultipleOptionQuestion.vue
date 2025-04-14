@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, inject, ref } from "vue";
+import { computed, inject, onMounted, ref } from "vue";
 
 import { MultipleOptionQuestion } from "@/modules/test/classes/multipleOptionQuestion-class";
 import Checkbox from "primevue/checkbox";
@@ -20,16 +20,26 @@ const executeTest = inject('executeTest')
 
 
 
-const changeAnswer = (value) => {
+const changeAnswer = (value:boolean) => {
   if (!test.questions[`${props.id_question}`])
     test.questions[`${props.id_question}`] = new MultipleOptionQuestion(props.id_question);
-  test.questions[`${props.id_question}`].answer = value
+  test.questions[`${props.id_question}`].setAnswer(value)
+  executeTest.saveTestExecutionInLocalStorage(test?.questions)
 }
 let question = ref(new MultipleOptionQuestion(props.id_question))
 
 const invalid = computed(() =>
-  executeTest.isAnswerInvalidInQuestion(question, props.changeInvalid)
+  executeTest.isAnswerInvalidInQuestion(test.questions[`${props.id_question}`], props.changeInvalid)
 )
+
+onMounted(() => {
+  if (test.questions[`${props.id_question}`]){
+    const recoveredQuestion = new MultipleOptionQuestion(props.id_question)
+    recoveredQuestion.setAnswer(test.questions[`${props.id_question}`].answer)
+    question.value = recoveredQuestion
+    test.questions[`${props.id_question}`] = recoveredQuestion
+  }  
+})
 
 </script>
 <template>
