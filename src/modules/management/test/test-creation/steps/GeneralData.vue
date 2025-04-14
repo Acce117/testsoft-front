@@ -18,9 +18,9 @@
                 <VYesNoQuestion v-model="test.completed" :default="test.completed"
                     label="¿Es necesario chequear el completamiento para que el procesamiento del test sea correcto?"
                     name="completed" />
-                <VSelect :disabled="forUpdate" @update:model-value="(value) => cleanEquationField(value)"
+                <!-- <VSelect :disabled="forUpdate" @update:model-value="(value) => cleanEquationField(value)"
                     v-model="test.fk_id_type_test" optionId="id_type_test" :defaultValue="test.type_psi_test"
-                    name="fk_id_type_test" label="Tipo de Test" :options="testTypes" optionLabel="type_test_name" />
+                    name="fk_id_type_test" label="Tipo de Test" :options="testTypes" optionLabel="type_test_name" /> -->
                 <VSelect v-model="test.language" name="language"
                     :defaultValue="languages.filter((l) => l.id == test.language)[0]" label="Idioma"
                     :options="languages" optionLabel="name" />

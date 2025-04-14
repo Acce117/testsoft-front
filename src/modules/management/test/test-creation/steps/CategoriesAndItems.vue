@@ -16,10 +16,10 @@
                 <div shadow-md rounded-lg pa-2 shadow-slate-500 bg-white>
                     <div flex mb-2 items-center justify-between>
                         <span font-bold>{{ test.category[selectedCategoryIndex].name }}</span>
-                        <div flex gap-2>
-                            <Button icon="pi pi-eye" severity="secondary"
+                        <div flex >
+                            <Button icon="pi pi-pencil" severity="secondary" variant="text"
                                 @click="showCategoryDialog(test.category[selectedCategoryIndex])" />
-                            <Button severity="danger" @click="deleteCategory()" icon="pi pi-minus" />
+                            <Button severity="danger" variant="text"  @click="deleteCategory()" icon="pi pi-trash" />
 
                         </div>
 
@@ -40,10 +40,10 @@
                                     <span>{{ item.name }}</span>
 
 
-                                    <div flex gap-2>
-                                        <Button icon="pi pi-eye" severity="secondary" @click="showItemDialog(item)" />
+                                    <div flex > 
+                                        <Button icon="pi pi-pencil" severity="secondary" @click="showItemDialog(item)" variant="text" />
                                         <Button severity="danger" @click="deleteItem(item.id_item)"
-                                            icon="pi pi-minus" />
+                                            icon="pi pi-trash" variant="text" />
                                     </div>
                                 </div>
                                 <div shadow-md rounded-lg pa-2 shadow-slate-200 bg-white>
@@ -61,11 +61,11 @@
                                                 <span>{{ range.indicator }} (de {{ range.min_val }} a {{ range.max_val
                                                     }})</span>
 
-                                                <div flex gap-2>
-                                                    <Button icon="pi pi-eye" severity="secondary"
+                                                <div flex >
+                                                    <Button icon="pi pi-pencil" severity="secondary" variant="text"
                                                         @click="showRangeDialog(item.id_item, range)" />
-                                                    <Button severity="danger" @click="deleteRange(range.id_range)"
-                                                        icon="pi pi-minus" />
+                                                    <Button severity="danger" @click="deleteRange(range.id_range)" variant="text"
+                                                        icon="pi pi-trash" />
                                                 </div>
                                             </div>
 

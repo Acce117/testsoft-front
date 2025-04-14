@@ -191,7 +191,7 @@ export const useExecuteTest = () => {
 
   const isAnswerInvalidInQuestion = (question:Question, changeInvalid:Function) => {
     const invalid = validatedTestFirstTime.value
-      ? !question.validateQuestion()
+      ? !question || !question.validateQuestion()
       : false
     changeInvalid(invalid)
     return invalid

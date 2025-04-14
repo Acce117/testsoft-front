@@ -16,10 +16,10 @@
                 <div shadow-md rounded-lg pa-2 shadow-slate-500 bg-white>
                     <div flex mb-2 items-center justify-between>
                         <span font-bold>{{ test.series[selectedSerieIndex].name }}</span>
-                        <div flex gap-2>
-                            <Button icon="pi pi-eye" severity="secondary"
+                        <div flex >
+                            <Button icon="pi pi-pencil" severity="secondary" variant="text"
                                 @click="showSerieDialog(test.series[selectedSerieIndex])" />
-                            <Button severity="danger" @click="deleteSerie()" icon="pi pi-minus" />
+                            <Button severity="danger" @click="deleteSerie()" icon="pi pi-trash" variant="text" />
 
                         </div>
 
@@ -40,11 +40,11 @@
                                     <span>{{ question.statement }}</span>
 
 
-                                    <div flex gap-2>
-                                        <Button icon="pi pi-eye" severity="secondary"
+                                    <div flex >
+                                        <Button icon="pi pi-pencil" severity="secondary" variant="text"
                                             @click="showQuestionDialog(question)" />
                                         <Button severity="danger" @click="deleteQuestion(question.id_question)"
-                                            icon="pi pi-minus" />
+                                            icon="pi pi-trash" variant="text" />
                                     </div>
                                 </div>
                                 <div shadow-md rounded-lg pa-2 shadow-slate-200 bg-white>
@@ -63,11 +63,11 @@
                                                 <span>{{ answer.text }}</span>
 
 
-                                                <div flex gap-2>
-                                                    <Button icon="pi pi-eye" severity="secondary"
+                                                <div flex >
+                                                    <Button icon="pi pi-pencil" severity="secondary" variant="text"
                                                         @click="showAnswerDialog(question.id_question, answer)" />
                                                     <Button severity="danger" @click="deleteAnswer(answer.id_answer)"
-                                                        icon="pi pi-minus" />
+                                                        icon="pi pi-trash"  variant="text"/>
                                                 </div>
                                             </div>
 
@@ -213,6 +213,7 @@ const showSerieDialog = (data?: Serie) => {
 
 
 const showQuestionDialog = (data?: Question) => {
+    console.log(data)
     if (data)
         question.value.setData({ ...data })
     questionDialog.value.show()

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, inject } from "vue";
+import { computed, inject, ref } from "vue";
 
 import RadioButton from "primevue/radiobutton";
 import type { TestExecution } from "@/modules/test/classes/testExecution";
@@ -17,20 +17,27 @@ const props = defineProps({
 const test = inject<TestExecution>("test");
 const executeTest = inject('executeTest')
 
-if (!test.questions[`${props.id_question}`])
-  test.questions[`${props.id_question}`] = new SingleOptionQuestion(props.id_question);
-let question = test.questions[`${props.id_question}`]
+
+
+
+const changeAnswer = (value) => {
+  if (!test.questions[`${props.id_question}`])
+    test.questions[`${props.id_question}`] = new SingleOptionQuestion(props.id_question);
+  test.questions[`${props.id_question}`].answer = value
+}
+let question = ref(new SingleOptionQuestion(props.id_question))
 
 const invalid = computed(() =>
-  executeTest.isAnswerInvalidInQuestion(question, props.changeInvalid)
+  executeTest.isAnswerInvalidInQuestion(test.questions[`${props.id_question}`], props.changeInvalid)
 )
 
 </script>
 <template>
   <div class="radio-button-answer answer" v-for="answer in props.possible_answers" :key="answer.id_answer">
-    <label cursor-pointer :for="answer.id_answer" flex text-base md:text-lg text-justify  gap-2 flex-items-center w-fit h-full>
-      <RadioButton v-model="question.answer" :inputId="'answer-'+answer.id_answer" :name="props.id_question + ''"
-        :value="answer.id_answer" :invalid />
+    <label cursor-pointer :for="'answer-'+ answer.id_answer" flex text-base md:text-lg text-justify gap-2 flex-items-center w-fit
+      h-full>
+      <RadioButton v-model="question.answer" :inputId="'answer-' + answer.id_answer" :name="props.id_question + ''"
+        :value="answer.id_answer" :invalid @update:modelValue="changeAnswer" />
       {{ answer.text }}
     </label>
   </div>
@@ -41,5 +48,7 @@ const invalid = computed(() =>
   display: flex;
   align-items: center;
 }
-
 </style>
+
+
+

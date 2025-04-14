@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, inject } from "vue";
+import { computed, inject, ref } from "vue";
 
 import { MultipleOptionQuestion } from "@/modules/test/classes/multipleOptionQuestion-class";
 import Checkbox from "primevue/checkbox";
@@ -18,9 +18,14 @@ const test = inject<TestExecution>("test");
 const executeTest = inject('executeTest')
 
 
-if (!test.questions[`${props.id_question}`])
-  test.questions[`${props.id_question}`] = new MultipleOptionQuestion(props.id_question);
-let question = test.questions[`${props.id_question}`]
+
+
+const changeAnswer = (value) => {
+  if (!test.questions[`${props.id_question}`])
+    test.questions[`${props.id_question}`] = new MultipleOptionQuestion(props.id_question);
+  test.questions[`${props.id_question}`].answer = value
+}
+let question = ref(new MultipleOptionQuestion(props.id_question))
 
 const invalid = computed(() =>
   executeTest.isAnswerInvalidInQuestion(question, props.changeInvalid)
@@ -29,9 +34,10 @@ const invalid = computed(() =>
 </script>
 <template>
   <div class="checkbox-answer answer" v-for="answer in props.possible_answers" :key="answer.id_answer">
-    <label cursor-pointer :for="answer.id_answer" flex text-base md:text-lg text-justify  gap-2 flex-items-center w-fit h-full>
+    <label cursor-pointer :for="answer.id_answer" flex text-base md:text-lg text-justify gap-2 flex-items-center w-fit
+      h-full>
       <Checkbox v-model="question.answer" :inputId="answer.id_answer + ''" :name="props.id_question + ''"
-        :value="answer.id_answer" :invalid />
+        :value="answer.id_answer" :invalid @update:model-value="changeAnswer" />
       {{ answer.text }}
     </label>
   </div>

@@ -4,7 +4,7 @@
 
             <DataTable :class="internDatatable ? 'intern-datatable' : ''" v-model:expandedRows="expandedRows" scrollable
                 v-model:filters="filters" :lazy="true" @filter="onFilter" filterDisplay="menu" scrollHeight="flex"
-                removableSort ref="dt" size="small" tableStyle="min-width: 50rem" :value="tableData" :rows="5">
+                removableSort ref="dt" size="small" tableStyle="min-width: 50rem" :value="tableData" :rows="5"  >
 
 
                 <template #header>

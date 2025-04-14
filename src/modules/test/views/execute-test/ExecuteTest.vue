@@ -153,7 +153,7 @@ const visibleTimer = ref(true)
 
 
       <div class="test__container gradient-background"  pt-4  px-4 flex flex-col items-center overflow-auto h-full>
-
+        {{test.questions}}
 
         <VTestSerie v-if="isSuccess && router.currentRoute.value.params.id_test == data.id_test"
           :serie="data.series[executeTest.serieIndex.value]" />

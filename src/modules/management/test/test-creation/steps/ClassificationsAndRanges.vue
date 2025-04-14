@@ -13,11 +13,11 @@
                     rounded-lg pa-2 shadow-slate-500 bg-white>
                     <div flex mb-2 items-center justify-between>
                         <span font-bold>{{ classification.name_classification }}</span>
-                        <div flex gap-2>
-                            <Button icon="pi pi-eye" severity="secondary"
+                        <div flex >
+                            <Button icon="pi pi-pencil" severity="secondary" variant="text"
                                 @click="showClassificationDialog(classification)" />
                             <Button severity="danger" @click="deleteClassification(classification.id_classification)"
-                                icon="pi pi-minus" />
+                                icon="pi pi-trash" variant="text" />
 
                         </div>
 
@@ -39,11 +39,11 @@
                                     <span>{{ test_range.indicator }}</span>
 
 
-                                    <div flex gap-2>
-                                        <Button icon="pi pi-eye" severity="secondary"
+                                    <div flex >
+                                        <Button icon="pi pi-pencil" severity="secondary" variant="text"
                                             @click="showTestRangeDialog(classification.id_classification, test_range)" />
                                         <Button severity="danger" @click="deleteTestRange(test_range.id_test_range)"
-                                            icon="pi pi-minus" />
+                                            icon="pi pi-trash" variant="text" />
                                     </div>
                                 </div>
 

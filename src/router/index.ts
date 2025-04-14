@@ -180,7 +180,7 @@ const router = createRouter({
           name: "update-test",
           component: AddTest,
           meta: { requiresAuth: true },
-          beforeEnter: autorize(["Analyst"]),
+          beforeEnter: autorize(["Analyst", "Super Admin"]),
         },
         {
           path: "/info",
