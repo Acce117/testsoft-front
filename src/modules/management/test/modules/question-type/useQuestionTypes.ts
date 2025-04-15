@@ -12,7 +12,11 @@ export const useQuestionTypes = () => {
     isError,
   } = useQuery({
     queryKey: ["question-types"],
-    queryFn: async () => await  QuestionType.getAll(),
+    queryFn: async () => {
+      const questionTypes = await  QuestionType.getAll()
+      return questionTypes.data
+    }
+      
   });
   return {
     questionTypes,

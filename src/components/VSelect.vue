@@ -1,6 +1,6 @@
 <template>
 
-  <div w-full>
+  <div :class="$attrs.class" flex-1 min-w-25rem>
     <Field v-model="model" :name="props.name" v-slot="{ meta, errors }">
       <FloatLabel variant="on">
         <MultiSelect v-if="props.multi" filter   showClear :loading="props.loading" v-bind="{ ...$attrs }" w-full v-model="model"

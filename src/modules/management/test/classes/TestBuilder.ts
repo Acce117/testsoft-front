@@ -7,9 +7,12 @@ import { Answer } from "../modules/answer/answer.model";
 import { Classification } from "../modules/classification/classification.model";
 import { TestRange } from "../modules/test_range/test_range.model";
 import { Range } from "../modules/range/range.model";
+import { userStore } from "@/modules/security/store/user-store";
+import { sendRequest } from "@/common/utils/sendRequest";
+import { Equation } from "../modules/equation/equation.model";
 
 export class TestBuilder {
-   test: Test;
+  test: Test;
 
   constructor(test: Test) {
     this.test = test;
@@ -20,22 +23,42 @@ export class TestBuilder {
   }
 
   public async closeTest() {
-    this.test.done = true
+    this.test.done = true;
     await this.test.update();
   }
 
   public async setGeneralData() {
-    this.test.done = false
-    await this.test.update();
-    await this.setEquation();
+    if (this.test.id_test) {
+      delete this.test["authors"];
+      await this.test.update();
+    } else {
+      this.test.done = false;
+      const clientGroupResponse = await sendRequest({
+        url: `${import.meta.env.VITE_API_PATH}/groups/parents/${
+          userStore().assignments[0].group_id
+        }`,
+      });
+      this.test.id_owner = clientGroupResponse[0].id_group;
+      this.test.authors = [userStore().user_id];
+
+      const test = await this.test.create();
+      this.test.id_test = test.id_test;
+    }
   }
 
-  public async setEquation() {
-    if (this.test.equation?.fk_id_test) {
-      await this.test.equation?.update();
-    } else if (this.test.equation.equation && this.test.equation?.equation.trim() != "") {
-      this.test.equation.fk_id_test = this.test.id_test;
-      await this.test.equation?.create();
+  public async setEquation(equation: string) {
+    if (equation && equation.trim() != "") {
+      
+      if (this.test.equation?.fk_id_test) {
+        this.test.equation.equation = equation
+        await this.test.equation?.update();
+      } else {
+        this.test.equation =new Equation({
+          equation: equation,
+          fk_id_test: this.test.id_test
+        })
+        await this.test.equation?.create();
+      }
     }
   }
   //SERIE
@@ -90,8 +113,8 @@ export class TestBuilder {
       answer.id_answer = response.id_answer;
     }
     if (answer.tribute.fk_id_item) await this.setTribute(answer);
-    if (this.test.type_psi_test.id_type_test==1) await this.setCorrectAnswer(answer);
-
+    if (this.test.type_psi_test.id_type_test == 1)
+      await this.setCorrectAnswer(answer);
   }
 
   public async setTribute(answer: Answer) {
@@ -106,8 +129,8 @@ export class TestBuilder {
     if (answer.is_correct) {
       answer.correct_answer.fk_id_answer = answer.id_answer;
       await answer.correct_answer.create();
-    } else if(answer.correct_answer.id_correct_answer) {
-      await answer.correct_answer.delete()
+    } else if (answer.correct_answer.id_correct_answer) {
+      await answer.correct_answer.delete();
     }
   }
 

@@ -1,6 +1,6 @@
 <template>
 
-  <div w-full>
+  <div :class="$attrs.class" flex-1 min-w-20rem >
     <Field v-model="model" :name="props.name" v-slot="{ meta, errors }">
       <InputGroup>
         

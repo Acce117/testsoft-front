@@ -4,7 +4,8 @@ import { Test } from "../models/test.model";
 export const useTest = (
   id: string,
   cb: (d) => void,
-  getRelationsCb: () => []
+  getRelationsCb: () => [],
+  enabled:boolean=true
 ) => {
   const { data, isPending, isSuccess, error, isRefetching, refetch, isError } =
     useQuery({
@@ -19,6 +20,7 @@ export const useTest = (
         cb(test);
         return test;
       },
+      enabled:enabled
     });
   return { data, isPending, isSuccess, error, isError, refetch, isRefetching };
 };

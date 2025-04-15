@@ -23,6 +23,7 @@ export class Test extends BaseModel {
   done: boolean | number | undefined;
   language: string | undefined;
   fk_id_type_test: number | undefined;
+  fk_id_owner: number | undefined;
   @NotSavable
   type_psi_test: TestType | undefined;
   @NotSavable
@@ -74,13 +75,13 @@ export class Test extends BaseModel {
   public isPsicometricTest() {
     return this.fk_id_type_test == 1 || this.type_psi_test?.id_type_test == 1;
   }
-  public isPsicometricTestWithEquation() {
-    return (
-      this.isPsicometricTest() &&
-      this.equation?.equation &&
-      this.equation.equation?.trim() != ""
-    );
-  }
+  // public isPsicometricTestWithEquation() {
+  //   return (
+  //     this.isPsicometricTest() &&
+  //     this.equation?.equation &&
+  //     this.equation.equation?.trim() != ""
+  //   );
+  // }
   public isPersonalityTest() {
     return this.type_psi_test?.id_type_test == 2 || this.fk_id_type_test == 2;
   }

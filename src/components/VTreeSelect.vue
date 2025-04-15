@@ -1,5 +1,5 @@
 <template>
-    <div w-full>
+    <div :class="$attrs.class" min-w-20rem>
         <Field v-model="model" :name="props.name" v-slot="{ meta, errors }">
             <FloatLabel variant="on">
                 <TreeSelect :invalid="meta.validated && !meta.valid" @change="updateModel($event)"

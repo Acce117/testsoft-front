@@ -32,11 +32,11 @@ export const useExecuteTest = () => {
         : d.series[serieIndex.value].time_serie_duration;
     let testTime = 0;
 
-    let serie = JSON.parse(sessionStorage.getItem("serie_index"));
+    let serie = JSON.parse(localStorage.getItem("serie_index"));
     if (serie) {
       serieIndex.value = parseInt(serie);
     } else {
-      sessionStorage.setItem("serie_index", JSON.stringify(serieIndex.value));
+      localStorage.setItem("serie_index", JSON.stringify(serieIndex.value));
     }
 
     let testInitTime = getInitTestTimeInLocal();
@@ -57,17 +57,17 @@ export const useExecuteTest = () => {
         serieTime * 60001 -
         (new Date().getTime() - new Date(testInitTime).getTime());
     } else {
-      sessionStorage.setItem("init_test_time", JSON.stringify(new Date()));
+      localStorage.setItem("init_test_time", JSON.stringify(new Date()));
       testTime = serieTime * 60001;
     }
     timeCountdown.value = testTime;
   };
 
   const setSecondOpportunity = (value: boolean) => {
-    sessionStorage.setItem("second_opportunity", value ? "1" : "0");
+    localStorage.setItem("second_opportunity", value ? "1" : "0");
   };
   const getSecondOpportunity = () => {
-    return JSON.parse(sessionStorage.getItem("second_opportunity"));
+    return JSON.parse(localStorage.getItem("second_opportunity"));
   };
 
   if (getSecondOpportunity() == null) {
@@ -174,17 +174,17 @@ export const useExecuteTest = () => {
     data = undefined;
     changeSerie(0);
     deleteTestExecutionInLocal();
-    sessionStorage.removeItem("init_test_time");
-    sessionStorage.removeItem("serie_index");
-    sessionStorage.removeItem("second_opportunity");
+    localStorage.removeItem("init_test_time");
+    localStorage.removeItem("serie_index");
+    localStorage.removeItem("second_opportunity");
   };
 
   const getInitTestTimeInLocal = () => {
-    return JSON.parse(sessionStorage.getItem("init_test_time"));
+    return JSON.parse(localStorage.getItem("init_test_time"));
   };
 
   const setActualTimeInLocal = () => {
-    sessionStorage.setItem("init_test_time", JSON.stringify(new Date()));
+    localStorage.setItem("init_test_time", JSON.stringify(new Date()));
   };
 
 
@@ -240,7 +240,7 @@ export const useExecuteTest = () => {
 
   const changeSerie = (value: number) => {
     serieIndex.value = value;
-    sessionStorage.setItem("serie_index", JSON.stringify(value));
+    localStorage.setItem("serie_index", JSON.stringify(value));
   };
 
   const nextSerie = (test: TestExecution) => {
@@ -310,13 +310,13 @@ export const useExecuteTest = () => {
   };
 
   const saveTestExecutionInLocal = (questions: Array<Question<unknown>>) => {
-    sessionStorage.setItem("test_execution", JSON.stringify(questions));
+    localStorage.setItem("test_execution", JSON.stringify(questions));
   };
   const deleteTestExecutionInLocal = () => {
-    sessionStorage.removeItem("test_execution");
+    localStorage.removeItem("test_execution");
   };
   const getTestExecutionInLocal = () => {
-    const testExecution = sessionStorage.getItem("test_execution");
+    const testExecution = localStorage.getItem("test_execution");
     let questions = {};
     if (testExecution) {
       questions = JSON.parse(testExecution);

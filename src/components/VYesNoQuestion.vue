@@ -1,6 +1,6 @@
 <template>
 
-  <div w-full text-left flex flex-col gap-4>
+  <div :class="$attrs.class" flex-1 min-w-20rem text-left flex flex-col gap-4>
     <Field v-model="model"  :name="props.name" v-slot="{ meta, errors }">
       <label for="" >
         <slot name="icon"></slot>{{ $t(props.label) }}
