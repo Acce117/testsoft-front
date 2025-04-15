@@ -36,19 +36,19 @@ const executeTest = useExecuteTest()
 const setInitialData = (d: { time_duration: number; series: { time_serie_duration: number; }[]; name: string | undefined; fk_id_type_test: string | number | undefined; }) => {
   executeTest.setData(d)
 
-  
-  
+
+
   test.name = d.name;
   test.type = d.fk_id_type_test;
   test.questions = executeTest.getTestExecutionInLocal()
   executeTest.saveTestExecutionInLocal(test?.questions)
 
 
-  
-  
 
-  
-  
+
+
+
+
 
 
 
@@ -79,22 +79,29 @@ provide("executeTest", executeTest);
 provide<TestExecution>("test", test);
 
 //DIALOGS
+const dialogRef = ref(null)
 
-provide("dialogRef", dialog);
+provide("dialogRef", dialogRef);
 
 
 
 const showResults = () => {
-  dialog.open(VTestResult, {
-    props: {
-      header: t("results.title"),
-      modal: true,
-    },
-    templates: {},
-    data: {
-      test,
-    },
-  });
+  if (dialogRef.value) {
+    dialogRef.value.close();
+  } else {
+    dialogRef.value =
+      dialog.open(VTestResult, {
+        props: {
+          header: t("results.title"),
+          modal: true,
+        },
+        templates: {},
+        data: {
+          test,
+        },
+      });
+  }
+
 };
 useEvents().addListener("dialog-results", () => {
   showResults()

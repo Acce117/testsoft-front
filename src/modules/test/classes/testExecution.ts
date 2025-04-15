@@ -11,12 +11,12 @@ export class TestExecution {
     this.questions = {};
   }
 
-  public sendTest() {
+  public async sendTest(cb:()=>void) {
     return useSendRequest(
       true,
       `${import.meta.env.VITE_API_PATH}/execute_test`,
       { id_test: parseInt(this.id_test), answers: Object.values(this.questions) },
-      "POST"
+      "POST",cb
     );
   }
 
