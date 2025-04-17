@@ -7,12 +7,12 @@
                 Clasificaciones<Button w-fit @click="showClassificationDialog()" icon="pi pi-plus" />
 
             </h4>
-            <section v-if="test.classifications.length > 0" bg-slate-200 flex flex-col gap-4 pa-3 rounded-xl>
+            <section v-if="test.classifications.length > 0" bg-slate-200 grid grid-cols-1 lg:grid-cols-2 gap-4 pa-3 rounded-xl>
 
                 <div v-for="classification in test.classifications" :key="classification.id_classification" shadow-md
                     rounded-lg pa-2 shadow-slate-500 bg-white>
                     <div flex mb-2 items-center justify-between>
-                        <span font-bold>{{ classification.name_classification }}</span>
+                        <span font-bold truncate>{{ classification.name_classification }}</span>
                         <div flex >
                             <Button icon="pi pi-pencil" severity="secondary" variant="text"
                                 @click="showClassificationDialog(classification)" />
@@ -24,7 +24,7 @@
                     </div>
                     <hr border-solid border-1 border-slate-400 />
                     <div shadow-md rounded-lg pa-2 shadow-slate-200 bg-white>
-                        <h3 mt-0 flex gap-4 text-sm items-center>
+                        <h3 mt-0 flex gap-4 text-sm items-center truncate>
                             Rangos<Button w-fit @click="showTestRangeDialog(classification.id_classification)"
                                 icon="pi pi-plus" />
 
@@ -57,8 +57,8 @@
             </section>
             <span v-else>No existen clasificaciones</span>
             <div class="flex pt-6 justify-between">
-                <Button label="Back" severity="secondary" icon="pi pi-arrow-left" @click="activateCallback(`${parseInt(props.value)-1}`)" />
-                <Button label="Next" icon="pi pi-arrow-right" iconPos="right" @click="nextStep(activateCallback)" />
+                <Button :label="$t('global.prev')" severity="secondary" icon="pi pi-arrow-left" @click="activateCallback(`${parseInt(props.value)-1}`)" />
+                <Button :label="$t('global.next')" icon="pi pi-arrow-right" iconPos="right" @click="nextStep(activateCallback)" />
             </div>
         </div>
     </StepPanel>

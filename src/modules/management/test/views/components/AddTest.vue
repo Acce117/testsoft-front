@@ -13,7 +13,7 @@
           <StepList>
             <Step v-for="(step, index) in steps" :key="step" :value="`${index + 1}`">{{ $t('steps.' + step) }}</Step>
           </StepList>
-          <StepPanels>
+          <StepPanels v-if="!isRefetching && !isTestPending">
             <GeneralData :forUpdate :value="`${steps.indexOf('data') + 1}`" />
             <Equation :value="`${steps.indexOf('equation') + 1}`" />
             <CategoriesAndItems :value="`${steps.indexOf('categories') + 1}`" />
@@ -53,7 +53,7 @@ import router from "@/router";
 import handlePromise from "@/common/utils/handlePromise";
 import ClassificationsAndRanges from "../../test-creation/steps/ClassificationsAndRanges.vue";
 import CloseTest from "../../test-creation/steps/CloseTest.vue";
-import { useQuery } from "@tanstack/vue-query";
+import { useQuery, useQueryClient } from "@tanstack/vue-query";
 import { Dialog } from "primevue";
 import LoadingPanel from "@/components/LoadingPanel.vue";
 import Equation from "../../test-creation/steps/Equation.vue";
@@ -103,30 +103,36 @@ const { data, isPending: isTestPending, isSuccess, isRefetching, refetch, isErro
   useQuery({
     queryKey: ["test"],
     queryFn: async () => {
+      try {
 
-      const test = testBuilder.value.getTest()
-      if (test.id_test) {
-        const relations = getRelationsCb();
-        const testResponse = await Test.getOne(test.id_test, {
-          relations: relations,
-        });
 
-        testResponse.fk_id_type_test = testResponse.type_psi_test.id_type_test;
-        testBuilder.value.getTest().setData({ ...testResponse })
-        renderSteps()
-        console.log(testResponse)
+        const test = testBuilder.value.getTest()
+        if (test.id_test) {
+          const relations = getRelationsCb();
+          const testResponse = await Test.getOne(test.id_test, {
+            relations: relations,
+          });
+          console.log('roveasdas')
 
-        console.log(testBuilder.value.getTest())
-      } else {
-        test.time_duration = 0
-        test.recurring_time = 0
+          testResponse.fk_id_type_test = testResponse.type_psi_test.id_type_test;
+          testBuilder.value.test = new Test()
+          testBuilder.value.getTest().setData({ ...testResponse })
+          renderSteps()
+          console.log(testResponse)
+
+          console.log(testBuilder.value.getTest())
+        } else {
+          test.time_duration = 0
+          test.recurring_time = 0
+        }
+
+        console.log('juanes')
+        return test;
+      } catch (e) {
+        throw new Error(e.message)
       }
-
-      console.log('juanes')
-
-
       // cb(test);
-      return test;
+      
     },
   });
 
@@ -165,9 +171,10 @@ provide('renderSteps', renderSteps)
 
 
 
-
+const queryClient =useQueryClient()
 
 const reloadData = async (index: string) => {
+  queryClient.resetQueries({'queryKey':'test'})
   const mode = steps.value[parseInt(index) - 1]
   relations.value = [{
     name: "type_psi_test",

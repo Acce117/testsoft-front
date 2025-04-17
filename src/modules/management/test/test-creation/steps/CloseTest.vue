@@ -7,7 +7,7 @@
                 ¿Desea cerrar el test? Solo de esta forma podrá asignarlo a los grupos, pero no podrá volver a editarlo.
             </h4>
             <div class="flex pt-6 justify-between">
-                <Button label="Back" severity="secondary" icon="pi pi-arrow-left"
+                <Button :label="$t('global.prev')" severity="secondary" icon="pi pi-arrow-left"
                     @click="activateCallback(`${parseInt(props.value) - 1}`)" />
                 <Button label="Cerrar Test" icon="pi pi-lock" iconPos="right" @click="closeTest()" />
             </div>

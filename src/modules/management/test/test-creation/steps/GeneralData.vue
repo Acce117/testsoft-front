@@ -44,7 +44,7 @@
 
 
                 <div class="flex pt-6 justify-end">
-                    <Button :disabled="isPending" label="Next" icon="pi pi-arrow-right" iconPos="right" type="submit" />
+                    <Button :disabled="isPending" :label="$t('global.next')" icon="pi pi-arrow-right" iconPos="right" type="submit" />
                 </div>
             </div>
         </Form>

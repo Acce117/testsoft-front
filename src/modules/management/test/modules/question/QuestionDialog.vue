@@ -1,9 +1,11 @@
 <template>
     <FormDialog :model :submit-function :success-function ref="dialog" :is-data-loading="isPending">
         <template #form>
+            {{ model }}
             <VInput v-model="model.statement" textarea name="statement" label="Enunciado" />
             <VSelect :disabled="model.id_question" @update:model-value="(value) => handleTopValueField(value)"
-                v-model="model.fk_id_type_question" :defaultValue="model.type && model.type.id_type_question ? model.type : null"
+                v-model="model.fk_id_type_question"
+                 :defaultValue="model.type && model.type.id_type_question ? model.type : null"
                 optionId="id_type_question" name="fk_id_type_question" label="Tipo de Pregunta" :options="questionTypes"
                 optionLabel="name" />
             <VInput v-if="model.fk_id_type_question == 5 || (model.type && model.type.id_type_question == 5)" :min="1"
@@ -40,8 +42,9 @@ const dialog = ref()
 const show = () => {
     dialog.value.show()
     console.log(model.value)
-    if (model.value.fk_id_type_question)
+    if (model.value.id_question)
         model.value.fk_id_type_question = model.value.type.id_type_question
+   
 
 }
 defineExpose({ show })

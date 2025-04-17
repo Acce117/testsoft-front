@@ -15,7 +15,7 @@
 
                 <div shadow-md rounded-lg pa-2 shadow-slate-500 bg-white>
                     <div flex mb-2 items-center justify-between>
-                        <span font-bold>{{ test.series[selectedSerieIndex].name }}</span>
+                        <span font-bold truncate>{{ test.series[selectedSerieIndex].name }}</span>
                         <div flex >
                             <Button icon="pi pi-pencil" severity="secondary" variant="text"
                                 @click="showSerieDialog(test.series[selectedSerieIndex])" />
@@ -30,16 +30,15 @@
                             Preguntas<Button w-fit @click="showQuestionDialog()" icon="pi pi-plus" />
 
                         </h3>
-                        <section v-if="test.series[selectedSerieIndex].questions.length > 0" bg-slate-200 pa-3 flex
-                            flex-col gap-4 rounded-xl>
+                        <section v-if="test.series[selectedSerieIndex].questions.length > 0" bg-slate-200 pa-3 grid grid-cols-1 lg:grid-cols-2  gap-4 rounded-xl>
 
                             <div v-for="(question, questionIndex) in test.series[selectedSerieIndex].questions"
                                 :key="questionIndex" shadow-md rounded-lg pa-2 shadow-slate-500 bg-white>
                                 <div flex justify-between items-center>
 
-                                    <span>{{ question.statement }}</span>
+                                    <span truncate>{{ question.statement }}</span>
 
-
+                                    {{question}}
                                     <div flex >
                                         <Button icon="pi pi-pencil" severity="secondary" variant="text"
                                             @click="showQuestionDialog(question)" />
@@ -49,7 +48,7 @@
                                 </div>
                                 <div shadow-md rounded-lg pa-2 shadow-slate-200 bg-white>
                                     <h3 mt-0 flex gap-4 text-sm items-center>
-                                        Respuestas<Button w-fit @click="showAnswerDialog(question.id_question)"
+                                        Respuestas<Button w-fit @click="showAnswerDialog(question.id_question, question.type?.id_type_question)"
                                             icon="pi pi-plus" />
 
                                     </h3>
@@ -60,12 +59,12 @@
                                             rounded-lg pa-2 shadow-slate-500 bg-white>
                                             <div flex justify-between items-center>
 
-                                                <span>{{ answer.text }}</span>
+                                                <span truncate>{{ answer.text }}</span>
 
 
                                                 <div flex >
                                                     <Button icon="pi pi-pencil" severity="secondary" variant="text"
-                                                        @click="showAnswerDialog(question.id_question, answer)" />
+                                                        @click="showAnswerDialog(question.id_question, question.type?.id_type_question, answer)" />
                                                     <Button severity="danger" @click="deleteAnswer(answer.id_answer)"
                                                         icon="pi pi-trash"  variant="text"/>
                                                 </div>
@@ -90,8 +89,8 @@
             <VConditions ref="condition" :conditions />
 
             <div class="flex pt-6 justify-between">
-                <Button label="Back" severity="secondary" icon="pi pi-arrow-left" @click="activateCallback(`${parseInt(props.value)-1}`)" />
-                <Button label="Next" :disabled="canSubmit" icon="pi pi-arrow-right" iconPos="right"
+                <Button :label="$t('global.prev')" severity="secondary" icon="pi pi-arrow-left" @click="activateCallback(`${parseInt(props.value)-1}`)" />
+                <Button :label="$t('global.next')" :disabled="canSubmit" icon="pi pi-arrow-right" iconPos="right"
                     @click="nextStep(activateCallback)" />
             </div>
         </div>
@@ -219,11 +218,11 @@ const showQuestionDialog = (data?: Question) => {
     questionDialog.value.show()
 }
 
-const showAnswerDialog = (index: number, data?: Answer) => {
+const showAnswerDialog = (index: number, question_type:number|string, data?: Answer) => {
     if (data)
         answer.value.setData({ ...data })
     selectedQuestionIndex.value = index
-    answerDialog.value.show()
+    answerDialog.value.show(question_type)
 }
 
 

@@ -33,24 +33,18 @@ export class Test extends BaseModel {
   @NotSavable
   classifications: Classification[] = [];
   @NotSavable
-  display_parameters: ParameterDisplayResult | undefined;
+  display_parameters: ParameterDisplayResult | undefined =
+    new ParameterDisplayResult();
   @NotSavable
-  equation: Equation | undefined;
+  equation: Equation | undefined = new Equation();
   static readonly url: string = "psi_test";
   static readonly columns = columns;
   static readonly schema = schema;
 
   constructor(data: any = null) {
     super(data);
+    this.setData = this.setData.bind(this);
     if (data) this.setData(data);
-
-    // } else {
-    //   this.equation = new Equation();
-    //   this.display_parameters = new ParameterDisplayResult({
-    //     count_max: 0,
-    //     count_min: 0,
-    //   });
-    // }
   }
 
   public setData(data: any) {
@@ -58,18 +52,17 @@ export class Test extends BaseModel {
     this.navigable = data.navigable == 1;
     this.completed = data.completed == 1;
     this.done = data.done == 1;
-    this.display_parameters = data.display_parameters
-      ? new ParameterDisplayResult(data.display_parameters)
-      : new ParameterDisplayResult();
-    this.equation = data.equation
-      ? new Equation(data.equation)
-      : new Equation();
+    this.display_parameters = new ParameterDisplayResult()
+    this.equation = new Equation()
+    this.display_parameters.setData(data.display_parameters);
+    console.log(this.display_parameters)
+    this.equation?.setData(data.equation);
   }
 
-  public async getAssignedTests(user_id: string, body:object) {
+  public async getAssignedTests(user_id: string, body: object) {
     return await sendRequest({
       url: `${import.meta.env.VITE_API_PATH}/user/${user_id}/tests`,
-      body
+      body,
     });
   }
   public isPsicometricTest() {

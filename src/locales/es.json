@@ -151,7 +151,9 @@
     "days": "días",
     "hours": "horas",
     "active":"Activado",
-    "inactive":"Desactivado"
+    "inactive":"Desactivado",
+    "next":"Siguiente",
+    "prev":"Atrás"
   },
   "user": {
     "title": "Usuarios",

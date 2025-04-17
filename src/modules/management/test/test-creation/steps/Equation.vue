@@ -9,7 +9,7 @@
                 <VInput v-if="test.fk_id_type_test == 1" @blur="renderSteps" v-model="equation"
                     name="equation" label="Formula" />
                 <div class="flex pt-6 justify-end">
-                    <Button :disabled="loading" label="Next" icon="pi pi-arrow-right" iconPos="right" type="submit" />
+                    <Button :disabled="loading" :label="$t('global.next')" icon="pi pi-arrow-right" iconPos="right" type="submit" />
                 </div>
 
 

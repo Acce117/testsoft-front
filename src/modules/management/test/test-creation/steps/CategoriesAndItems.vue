@@ -7,7 +7,7 @@
                 Categorías<Button w-fit @click="showCategoryDialog()" icon="pi pi-plus" />
 
             </h4>
-            <section v-if="test.category.length > 0" bg-slate-200 flex flex-col gap-4 pa-3 rounded-xl overflow-hidden>
+            <section v-if="test.category.length > 0" bg-slate-200 grid grid-cols-1 lg:grid-cols-2 gap-4 pa-3 rounded-xl overflow-hidden>
                 <div w-full pb-4 overflow-auto>
                     <Steps class="!flex !gap-2" :readonly="false" flex-1 :model="getCategoriesNames()"
                         v-model:activeStep="selectedCategoryIndex" />
@@ -16,11 +16,11 @@
 
                 <div shadow-md rounded-lg pa-2 shadow-slate-500 bg-white>
                     <div flex mb-2 items-center justify-between>
-                        <span font-bold>{{ test.category[selectedCategoryIndex].name }}</span>
-                        <div flex >
+                        <span font-bold truncate>{{ test.category[selectedCategoryIndex].name }}</span>
+                        <div flex>
                             <Button icon="pi pi-pencil" severity="secondary" variant="text"
                                 @click="showCategoryDialog(test.category[selectedCategoryIndex])" />
-                            <Button severity="danger" variant="text"  @click="deleteCategory()" icon="pi pi-trash" />
+                            <Button severity="danger" variant="text" @click="deleteCategory()" icon="pi pi-trash" />
 
                         </div>
 
@@ -38,17 +38,18 @@
                                 shadow-md rounded-lg pa-2 shadow-slate-500 bg-white>
                                 <div flex justify-between items-center>
 
-                                    <span>{{ item.name }}</span>
+                                    <span truncate>{{ item.name }}</span>
 
 
-                                    <div flex > 
-                                        <Button icon="pi pi-pencil" severity="secondary" @click="showItemDialog(item)" variant="text" />
-                                        <Button severity="danger" @click="deleteItem(item.id_item)"
-                                            icon="pi pi-trash" variant="text" />
+                                    <div flex>
+                                        <Button icon="pi pi-pencil" severity="secondary" @click="showItemDialog(item)"
+                                            variant="text" />
+                                        <Button severity="danger" @click="deleteItem(item.id_item)" icon="pi pi-trash"
+                                            variant="text" />
                                     </div>
                                 </div>
                                 <div shadow-md rounded-lg pa-2 shadow-slate-200 bg-white>
-                                    <h3 mt-0 flex gap-4 text-sm items-center>
+                                    <h3 mt-0 flex gap-4 text-sm items-center truncate>
                                         Rangos<Button w-fit @click="showRangeDialog(item.id_item)" icon="pi pi-plus" />
 
                                     </h3>
@@ -60,13 +61,13 @@
                                             <div flex justify-between items-center>
 
                                                 <span>{{ range.indicator }} (de {{ range.min_val }} a {{ range.max_val
-                                                    }})</span>
+                                                }})</span>
 
-                                                <div flex >
+                                                <div flex>
                                                     <Button icon="pi pi-pencil" severity="secondary" variant="text"
                                                         @click="showRangeDialog(item.id_item, range)" />
-                                                    <Button severity="danger" @click="deleteRange(range.id_range)" variant="text"
-                                                        icon="pi pi-trash" />
+                                                    <Button severity="danger" @click="deleteRange(range.id_range)"
+                                                        variant="text" icon="pi pi-trash" />
                                                 </div>
                                             </div>
 
@@ -90,8 +91,10 @@
 
 
             <div class="flex pt-6 justify-between">
-                <Button label="Back" severity="secondary" icon="pi pi-arrow-left" @click="activateCallback('1')" />
-                <Button label="Next" icon="pi pi-arrow-right" iconPos="right" @click="nextStep(activateCallback)" />
+                <Button :label="$t('global.prev')" severity="secondary" icon="pi pi-arrow-left"
+                    @click="activateCallback('1')" />
+                <Button :label="$t('global.next')" icon="pi pi-arrow-right" iconPos="right"
+                    @click="nextStep(activateCallback)" />
             </div>
         </div>
     </StepPanel>
@@ -224,15 +227,15 @@ const showRangeDialog = (index: number, data?: Range) => {
 
 const saveCategory = () => testBuilder.value.saveCategory(category.value)
 
-const deleteCategory = async () =>  makeAction(()=> testBuilder.value.deleteCategory(test.category[selectedCategoryIndex.value].id_category), () => { })
+const deleteCategory = async () => makeAction(() => testBuilder.value.deleteCategory(test.category[selectedCategoryIndex.value].id_category), () => { })
 
 const saveItem = () => testBuilder.value.saveItem(item.value, test.category[selectedCategoryIndex.value].id_category)
 
-const deleteItem = async (id: number) =>  makeAction(()=>testBuilder.value.deleteItem(id), () => { })
+const deleteItem = async (id: number) => makeAction(() => testBuilder.value.deleteItem(id), () => { })
 
 const saveRange = () => testBuilder.value.saveRange(range.value, selectedItemIndex.value)
 
-const deleteRange = async (id: number) =>  makeAction(()=>testBuilder.value.deleteRange(id), () => { })
+const deleteRange = async (id: number) => makeAction(() => testBuilder.value.deleteRange(id), () => { })
 
 
 
@@ -240,7 +243,8 @@ const deleteRange = async (id: number) =>  makeAction(()=>testBuilder.value.dele
 const nextStep = (activateCallback: Function) => {
     try {
         if (condition.value.verify())
-            activateCallback('3')
+
+            activateCallback(`${parseInt(props.value)+1}`)
         else throw new Error("existen condiciones no satisfechas")
 
     } catch (e: any) {

@@ -2,6 +2,7 @@
     <StepPanel v-slot="{ activateCallback }" :value="`${props.value}`">
         <Form  v-if="test.display_parameters" @submit="setParameterDisplayResult(activateCallback)"
             :validation-schema="test.display_parameters.getSchema()">
+            {{ test }}
 
             <div flex gap-6 flex-col>
                 <h3 my-0 text-slate-600 font-bold>Configure la visualización de resultados</h3>
@@ -23,13 +24,13 @@
 
 
                 <div class="flex pt-6 justify-between">
-                    <Button label="Back"  severity="secondary" icon="pi pi-arrow-left" @click="activateCallback(`${parseInt(props.value)-1}`)" />
-                    <Button label="Next" @click="()=>canValidate=true" icon="pi pi-arrow-right" iconPos="right" type="submit" />
+                    <Button :label="$t('global.prev')"  severity="secondary" icon="pi pi-arrow-left" @click="activateCallback(`${parseInt(props.value)-1}`)" />
+                    <Button :label="$t('global.next')" @click="()=>canValidate=true" icon="pi pi-arrow-right" iconPos="right" type="submit" />
                 </div>
 
             </div>
         </Form>
-{{ canValidate }}
+
     </StepPanel>
 
 
@@ -39,7 +40,7 @@
 import VYesNoQuestion from '@/components/VYesNoQuestion.vue';
 import Button from 'primevue/button';
 import StepPanel from 'primevue/steppanel';
-import {  inject, ref, type Ref } from 'vue';
+import {  inject, onMounted, ref, type Ref } from 'vue';
 import { Form } from 'vee-validate';
 import VInput from '@/components/VInput.vue';
 import type { TestBuilder } from '../../classes/TestBuilder';
@@ -55,7 +56,7 @@ const test = ref(testBuilder.value.getTest())
 
 const canValidate = ref(false)
 
-
+const showForm = ref(false)
 
 const  setParameterDisplayResult = async (activateCallback: (value:string)=>void) => {
     canValidate.value=true
@@ -65,11 +66,16 @@ const  setParameterDisplayResult = async (activateCallback: (value:string)=>void
 }
 
 const resetCounts = (topsValuesFlag: boolean) => {
+    console.log('lllll')
     if (!topsValuesFlag) {
         test.value.display_parameters.count_max = 0
         test.value.display_parameters.count_min = 0
     }
 
 }
+
+onMounted(()=>{
+    showForm.value = true
+})
 
 </script>

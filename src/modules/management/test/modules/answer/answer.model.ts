@@ -10,13 +10,15 @@ export class Answer extends BaseModel {
   id_answer;
   text;
   fk_id_question;
-  correct_answer;
-  tribute;
+  correct_answer = new CorrectAnswer();
+  tribute = new Tribute();
   is_correct;
   image = null;
   static readonly url: string = "answer";
 
+  
   public setData(data: object) {
+    console.log('asdsadasds')
     super.setData(data);
     this.correct_answer = data.correct_answer
       ? new CorrectAnswer(data.correct_answer)

@@ -15,21 +15,24 @@ export class Question extends BaseModel {
   fk_id_serie:number|undefined;
   fk_id_type_question:number|undefined;
   answers: Answer[] = [];
-  top_value:QuestionTopValue|undefined;
-  type:QuestionType|undefined;
+  top_value:QuestionTopValue|undefined = new QuestionTopValue();;
+  type:QuestionType|undefined = new QuestionType();
   static readonly url: string = "question";
   static readonly schema = schema;
 
-
+  constructor(data?: object) {
+    super(data)
+    if (data) this.setData(data);
+  }
 
   public setData(data: object) {
     super.setData(data);
-    this.top_value = data.top_value
-      ? new QuestionTopValue(data.top_value)
-      : new QuestionTopValue();
-      this.type = data.type
-      ? new QuestionType(data.type)
-      : new QuestionType();
+    // this.top_value = data.top_value
+    //   ? new QuestionTopValue(data.top_value)
+    //   : new QuestionTopValue();
+    //   this.type = data.type
+    //   ? new QuestionType(data.type)
+    //   : new QuestionType();
   }
 
   

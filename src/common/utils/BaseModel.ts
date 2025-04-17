@@ -47,7 +47,7 @@ export class BaseModel {
         return property;
       }
     }
-    return ''
+    return "";
   }
   public getSavableData() {
     const submitData = { ...this };
@@ -63,8 +63,8 @@ export class BaseModel {
     return (this.constructor as typeof BaseModel).columns;
   }
   public getFilters() {
-    const columns = this.getColumns()
-    return columns?.filter((c)=>c.filter)
+    const columns = this.getColumns();
+    return columns?.filter((c) => c.filter);
   }
   public getSchema() {
     return (this.constructor as typeof BaseModel).schema;
@@ -79,7 +79,7 @@ export class BaseModel {
   }
 
   public async getAll(params: object = {}) {
-    console.log(params)
+    console.log(params);
     return await sendRequest({
       url: `${import.meta.env.VITE_API_PATH}/${this.getURL()}`,
       body: params,
