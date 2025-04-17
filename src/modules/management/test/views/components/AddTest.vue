@@ -70,8 +70,9 @@ const props = defineProps({
 const model: ModelRef<Test> = defineModel({ required: true })
 const visible: ModelRef<boolean> = defineModel("visible")
 console.log(model.value)
+const test = {...model.value}
 
-const testBuilder = ref(new TestBuilder(model.value))
+const testBuilder = ref(new TestBuilder(new Test(model.value)))
 const loading = ref(false)
 const error = ref(false)
 
@@ -103,8 +104,6 @@ const { data, isPending: isTestPending, isSuccess, isRefetching, refetch, isErro
   useQuery({
     queryKey: ["test"],
     queryFn: async () => {
-      try {
-
 
         const test = testBuilder.value.getTest()
         if (test.id_test) {
@@ -112,25 +111,18 @@ const { data, isPending: isTestPending, isSuccess, isRefetching, refetch, isErro
           const testResponse = await Test.getOne(test.id_test, {
             relations: relations,
           });
-          console.log('roveasdas')
 
           testResponse.fk_id_type_test = testResponse.type_psi_test.id_type_test;
-          testBuilder.value.test = new Test()
           testBuilder.value.getTest().setData({ ...testResponse })
           renderSteps()
-          console.log(testResponse)
-
-          console.log(testBuilder.value.getTest())
+         
         } else {
           test.time_duration = 0
           test.recurring_time = 0
         }
 
-        console.log('juanes')
         return test;
-      } catch (e) {
-        throw new Error(e.message)
-      }
+      
       // cb(test);
       
     },

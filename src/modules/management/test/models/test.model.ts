@@ -43,7 +43,7 @@ export class Test extends BaseModel {
 
   constructor(data: any = null) {
     super(data);
-    this.setData = this.setData.bind(this);
+    //this.setData = this.setData.bind(this);
     if (data) this.setData(data);
   }
 
