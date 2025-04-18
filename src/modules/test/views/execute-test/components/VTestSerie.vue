@@ -17,7 +17,6 @@ const props = defineProps({
 </script>
 
 <template>
-
   <VQuestion v-for="(question, index) in props.serie?.questions" :key="question.id_question"
     :id_question="question.id_question" :question_index="index + 1" :title="question.statement">
     <template #default="{ changeInvalid }">
@@ -29,7 +28,7 @@ const props = defineProps({
         :id_question="question.id_question" :possible_answers="question.answers" />
 
       <VWrittenResponseQuestion v-else-if="question.type.id_type_question == 3" :changeInvalid
-        :id_question="question.id_question" />
+        :id_question="question.id_question" :possible_answers="question.answers.map(q=>q.id_answer)" />
 
       <VMultipleOptionQuestion v-else-if="question.type.id_type_question == 4" :changeInvalid
         :id_question="question.id_question" :possible_answers="question.answers" />
@@ -39,7 +38,7 @@ const props = defineProps({
         :maxPoints="question.top_value.top_value" />
 
       <VWrittenResponseQuestion v-else-if="question.type.id_type_question == 6" :changeInvalid
-        :id_question="question.id_question" />
+        :id_question="question.id_question" :possible_answers="question.answers.map(q=>q.id_answer)" />
     </template>
 
   </VQuestion>

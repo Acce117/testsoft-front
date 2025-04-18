@@ -2,8 +2,11 @@ import { Question } from './question-class';
 
 export class WrittenResponseQuestion extends Question<string | undefined>{
 
-    constructor(id_question: number | string){
+    id_answer: Array<number>;
+
+    constructor(id_question: number | string, possible_answers:number[]){
         super(id_question);
+        this.id_answer = possible_answers
     }
 
     validateQuestion(): boolean {
