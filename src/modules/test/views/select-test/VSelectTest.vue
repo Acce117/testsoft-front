@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import VTestCard from "./components/VTestCard.vue";
-import { ref } from "vue";
+import { ref, watch } from "vue";
 
 import { userStore } from "@/modules/security/store/user-store";
 const user = userStore();
@@ -10,8 +10,10 @@ import { Test } from "@/modules/management/test/models/test.model";
 import router from "@/router";
 import Paginator from "@/components/Paginator.vue";
 import { SelectButton } from "primevue";
+import { useI18n } from "vue-i18n";
 
 
+const { t, locale } = useI18n()
 
 
 const queryFunction = async (params) => {
@@ -66,17 +68,22 @@ const selectedTest = ref();
 const executeTest = () => {
   router.push(`/execute-test/${selectedTest.value.id_test}`);
 };
-const filterOptions = [
-  { name: 'Disponibles', value: 'disponibles' },
-  { name: 'Todos', value: 'todos' }
+const filterOptions = ref([
+  { name: t('available'), value: 'disponibles' },
+  { name: t('all'), value: 'todos' }
 
-]
+])
 
 const filterMode = ref({ name: 'Disponibles', value: 'disponibles' },)
 
 const onFilterOptions = () => {
   paginator.value.refetch()
 }
+
+watch(locale, () => {
+  filterOptions.value[0].name = t('available')
+  filterOptions.value[1].name = t('all')
+});
 
 </script>
 <template>
@@ -87,7 +94,7 @@ const onFilterOptions = () => {
     gridClass="grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4"
     :query-key="'users-current-group'">
     <template #header>
-      <h2 text-left>{{ $t('select-test.title') }}</h2>
+      <h2 text-left>{{ t('title') }}</h2>
       <div class="flex ">
         <SelectButton v-model="filterMode" :default-value="filterOptions[0] ? filterOptions[0] : null"
           :options="filterOptions" optionLabel="name" @change="onFilterOptions" />
@@ -130,3 +137,15 @@ const onFilterOptions = () => {
   min-height: 18rem !important;
 }
 </style>
+<i18n lang="json">{
+  "es": {
+    "title": "Seleccione un test para realizar",
+    "available": "Disponibles",
+    "all": "Todos"
+  },
+  "en": {
+    "title": "Select a test",
+    "available": "Available",
+    "all": "All"
+  }
+}</i18n>

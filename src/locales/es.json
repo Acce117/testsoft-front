@@ -1,119 +1,4 @@
 {
-  "login": {
-    "user": "Usuario",
-    "password": "Contraseña",
-    "title": "Bienvenido a TestSoft",
-    "login": "Iniciar Sesión",
-    "error": "Inicio de sesión inválido",
-    "sign-up": "Regístrate como nuestro cliente"
-  },
-  "home": {
-    "subtitle": "Tu plataforma digital para aplicar, crear y analizar test psicológicos",
-    "overtitle":"Software para evaluación psicológica",
-    "title":"Te presentamos TestSoft",
-    "option1": "Realiza un test",
-    "option2": "Descubre compatibilidades y líderes",
-    "option3": "Encuentra los roles más efectivos",
-    "option4": "Analiza los resultados",
-    "option5": "Analiza la información",
-    "option6": "Asigna un test",
-    "option7": "Gestiona grupos",
-    "option8": "Gestiona los usuarios"
-  },
-
-  "select-test": {
-    "title": "Seleccione un test para realizar",
-    "not-available": "Disponible el ",
-    "available": "Disponible",
-    "availability": "Disponibilidad"
-  },
-  "execute-test": {
-    "dialogs": {
-      "serie-ended": "El tiempo de la serie ha terminado. Se ha avanzado a la próxima serie.",
-      "test-ended-first-time": "El tiempo del test ha terminado. Se agregarán 5 minutos más.",
-      "test-ended": "El tiempo del test ha terminado",
-      "confirm-next-serie": {
-        "title": "Serie",
-        "message": "¿Desea avanzar a la siguiente serie? No podrá regresar a la anterior..."
-      },
-      "confirm-save-test": {
-        "title": "Salir",
-        "message": "¿Desea guardar las respuestas del test?"
-      },
-      "confirm-exit-test": {
-        "title": "Salir",
-        "message": "¿Desea salir del test? Las respuestas se perderán."
-      },
-      "description": {
-        "title": "Descripción del test",
-        "message": "Responda las preguntas en el tiempo asignado, que puede consultar en la parte izquierda de la pantalla a través del temporizador. Utilice los botones del sector superior derecho para navegar entre series. Los botones a la derecha se utilizan para guardar sus respuestas, mostrar información y salir del test respectivamente."
-      }
-    },
-    "tooltips": {
-      "next": "Siguiente Serie",
-      "prev": "Serie Anterior",
-      "save": "Finalizar",
-      "hide": "Ocultar",
-      "show": "Mostrar",
-      "info": "Información"
-    },
-    "question-components": {
-      "5": {
-        "remaining-points": "Puntos restantes en la pregunta"
-      }
-    },
-    "error": {
-      "2": "Debe seleccionar una respuesta",
-      "5": "Existen puntos por asignar aún",
-      "in-question": "en la pregunta"
-    }
-  },
-  "results": {
-    "title": "Resultados",
-    "my-results": "Mis Resultados",
-    "by_user": "Resultados por Usuario",
-
-    "results-of": "Resultados de",
-    "date": "Fecha",
-    "test": "Test",
-    "name": "Nombre",
-    "value": "Valor",
-    "global-result": "Resultado Global",
-    "dialogs": {},
-    "all-elements-top-values": {
-      "preferred": "Preferidos",
-      "avoided": "Evitados"
-    },
-    "by-category": {
-      "1": "En la categoría",
-      "2": "usted se caracteriza por",
-      "3": "con una puntuación de",
-      "4": "lo que se considera un valor",
-      "5": "El elemento",
-      "6": "consiste en",
-      "7": "Descripción de la categoría"
-    },
-    "by-element": {
-      "1": "Con",
-      "2": "puntos"
-    }
-  },
-  "profile": {
-    "title": "Mi perfil",
-    "dialogs": {
-      "close-session": {
-        "header": "Salir",
-        "message": "¿Desea cerrar sesión?"
-      }
-    }
-  },
-  "info": {
-    "developers": "Desarrolladores",
-    "roles": {
-      "project_manager": "Jefe de Proyecto",
-      "developer": "Desarrollador"
-    }
-  },
   "global": {
     "and": "y",
     "export": {
@@ -128,8 +13,11 @@
     "save": "Guardar",
     "deleted": "Eliminado",
     "edit": "Editar",
-    "find": "Buscar",
-    "add": "Añadir",
+    "search": "Buscar...",
+    "add": "Añadir Elemento",
+    "update": "Actualizar",
+    "recover": "Activar",
+    "desactivate": "Desactivar",
     "yes": "Sí",
     "no": "No",
     "error": "Algo ha salido mal...",
@@ -141,20 +29,60 @@
     "info": "Información",
     "no-results": "No se encontraron resultados",
     "loading": "Cargando",
-    "not-authorized": "Usted no está autorizado",
     "language": "Idioma",
     "enabled": "Habilitado",
-    "completed": "Operación completada satisfactoriamente",
-    "failed": "Operación fallida",
+    "operation_failed": "Operación Fallida",
+    "operation_succeded": "Operación Completada",
     "confirm-delete": "¿Desea eliminar el elemento?",
     "minutes": "minutos",
     "days": "días",
     "hours": "horas",
-    "active":"Activado",
-    "inactive":"Desactivado",
-    "next":"Siguiente",
-    "prev":"Atrás"
+    "active": "Activado",
+    "inactive": "Desactivado",
+    "next": "Siguiente",
+    "prev": "Atrás",
+    "options": "Opciones"
   },
+  "table": {
+    "actions": "Acciones",
+    "element_ok_updated": "Elemento actualizado correctamente",
+    "element_ok_deleted": "Elemento eliminado correctamente",
+    "element_ok_added": "Elemento añadido correctamente",
+    "information": "Detalles",
+    "view_information": "Ver Detalles",
+    "retire": "Retirar",
+
+    "new_element": "Inserte los datos del nuevo elemento",
+    "update_element": "Inserte los datos del elemento a actualizar",
+    "assign": "Asignar",
+    "open": "Abierto",
+    "closed": "Cerrado"
+  },
+  "error": {
+    "error": "Error",
+    "operation_failed": "Operación Fallida",
+    "operation_succeded": "Operación Completada",
+    "empty": "El campo no puede estar vacío",
+    "email": "El dato introducido no es un correo",
+    "ci": "El carnet no es correcto",
+    "ci_date": "La fecha no es correcta",
+    "existent_ci": "Este carnet ya existe",
+    "existent_username": "Este nombre de usuario ya existe"
+  },
+  "errors": {
+    "title": "Ha ocurrido un error...",
+    "button": "Volver",
+    "403": "Usted no está autorizado",
+    "404": "Esta página no existe"
+  },
+  "roles": {
+    "Executor": "Ejecutor",
+    "Admin": "Administrador",
+    "Analyst": "Analista",
+    "Super Admin": "Proveedor",
+    "Client": "Cliente"
+  },
+
   "user": {
     "title": "Usuarios",
     "name": "Nombres",
@@ -179,24 +107,11 @@
     "name_group": "Nombre del Grupo",
     "father_group": "Grupo al que Pertenece"
   },
-  "roles": {
-    "Executor": "Ejecutor",
-    "Admin": "Administrador",
-    "Analyst": "Analista",
-    "Super Admin": "Proveedor",
-    "Client": "Cliente"
-  },
+
   "clients": {
     "title": "Clientes"
   },
-  "steps": {
-    "series": "Series y Preguntas",
-    "categories": "Categorías y Elementos",
-    "classifications": "Clasificaciones",
-    "close": "Cerrar Test",
-    "results": "Visualización de resultados",
-    "data": "Datos Generales"
-  },
+  
 
   "test": {
     "name": "Test",
@@ -257,61 +172,12 @@
       "functional_roles": "Roles Funcionales"
     }
   },
-  "table": {
-    "search": "Buscar...",
-    "actions": "Acciones",
-    "options": "Opciones",
-    "confirmation": "Operación Completada",
-    "element_ok_updated": "Elemento actualizado correctamente",
-    "element_ok_deleted": "Elemento eliminado correctamente",
-    "element_ok_added": "Elemento añadido correctamente",
-    "something_wrong": "Operación Fallida",
-    "no_results": "No existen elementos",
-    "information": "Detalles",
-    "view_information": "Ver Detalles",
-    "update": "Actualizar",
-    "delete": "Eliminar",
-    "recover": "Activar",
-    "desactivate": "Desactivar",
-    "retire": "Retirar",
-    "add": "Añadir Elemento",
-    "new_element": "Inserte los datos del nuevo elemento",
-    "update_element": "Inserte los datos del elemento a actualizar",
-    "assign": "Asignar",
-    "open": "Abierto",
-    "closed": "Cerrado",
-    "desactivate_element_ask": "¿Desea desactivar el elemento?",
-    "activate_element_ask": "¿Desea activar el elemento?",
-    "delete_element_ask": "¿Desea eliminar el elemento? Se perderá toda la información correspondiente"
-  },
-  "error": {
-    "error": "Error",
-    "empty": "El campo no puede estar vacío",
-    "email": "El dato introducido no es un correo",
-    "ci": "El carnet no es correcto",
-    "ci_date": "La fecha no es correcta",
-    "existent_ci": "Este carnet ya existe",
-    "existent_username": "Este nombre de usuario ya existe"
-  },
-  "errors": {
-    "title": "Ha ocurrido un error...",
-    "button": "Volver",
-    "403": "Usted no está autorizado",
-    "404": "Esta página no existe"
-  },
-  "change_password": {
-    "title": "Cambio de Contraseña",
-    "subtitle": "Introduzca su anterior contraseña, la nueva contraseña y confírmela:",
-    "new_password": "Nueva Contraseña",
-    "old_password": "Contraseña Anterior",
-    "confirm_password": "Confirmar Contraseña",
-    "wrong_password":"La contraseña actual no coincide con la insertada"
-  },
+
   "general": {
     "name": "Nombre",
     "description": "Descripción"
   },
-  "functional_role":{
-    "title":"Roles Funcionales"
+  "functional_role": {
+    "title": "Roles Funcionales"
   }
 }

@@ -1,14 +1,14 @@
 <template>
-  
+
   <section class="pt-24 anim-opacity-0.5">
     <div class="container px-3 mx-auto flex flex-wrap flex-col md:flex-row items-center">
       <div class="flex flex-col w-full md:w-2/5 justify-center items-start text-center md:text-left">
-        <p class="uppercase tracking-loose w-full">{{ $t('home.overtitle') }}</p>
+        <p class="uppercase tracking-loose w-full">{{ t('overtitle') }}</p>
         <h1 class="my-4 text-5xl font-bold leading-tight">
-          {{ $t('home.title') }}
+          {{ t('title') }}
         </h1>
         <p class="leading-normal text-2xl mb-8">
-          {{ $t('home.subtitle') }}
+          {{ t('subtitle') }}
         </p>
 
         <Button v-ripple v-if="userStore().assignments[0].item_id == 3"
@@ -29,10 +29,12 @@
   <VPresentation />
 </template>
 <script setup lang="ts">
-import VPresentation from "./components/VPresentation.vue";
 import Button from "primevue/button";
 import router from "@/router";
 import { userStore } from "@/modules/security/store/user-store";
+import { useI18n } from "vue-i18n";
+const { t } = useI18n();
+
 </script>
 <style>
 .home-background {
@@ -40,5 +42,16 @@ import { userStore } from "@/modules/security/store/user-store";
 
   background: linear-gradient(10deg, #3faee4, #ffffff, #ffffff, #ffffff, #ffffff);
 }
-
 </style>
+<i18n lang="json">{
+  "es": {
+    "subtitle": "Tu plataforma digital para aplicar, crear y analizar test psicológicos",
+    "overtitle": "Software para evaluación psicológica",
+    "title": "Te presentamos TestSoft"
+  },
+  "en": {
+    "subtitle": "Your digital platform to administer, create, and analyze psychological tests",
+    "overtitle": "Psychological assessment software",
+    "title": "Meet TestSoft",
+  }
+}</i18n>

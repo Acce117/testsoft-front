@@ -15,7 +15,7 @@
             v-model="model" :invalid="meta.validated && !meta.valid" />
           <InputText :id  v-else v-bind="{ ...$attrs }" fluid v-model="model" :invalid="meta.validated && !meta.valid" />
           <label :for="id" flex items-center justify-center gap-2>
-            <slot name="icon"></slot>{{ $t(props.label) }}
+            <slot name="icon"></slot>{{ props.label }}
           </label>
         </FloatLabel>
         <InputGroupAddon v-if="props.tooltip">
@@ -52,7 +52,6 @@ const props = defineProps({
   tooltip:String
 
 });
-const error = ref('error.error')
 const model = defineModel();
 
 </script>

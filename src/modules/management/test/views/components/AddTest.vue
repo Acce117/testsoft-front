@@ -70,7 +70,7 @@ const props = defineProps({
 const model: ModelRef<Test> = defineModel({ required: true })
 const visible: ModelRef<boolean> = defineModel("visible")
 console.log(model.value)
-const test = {...model.value}
+const test = { ...model.value }
 
 const testBuilder = ref(new TestBuilder(new Test(model.value)))
 const loading = ref(false)
@@ -105,26 +105,26 @@ const { data, isPending: isTestPending, isSuccess, isRefetching, refetch, isErro
     queryKey: ["test"],
     queryFn: async () => {
 
-        const test = testBuilder.value.getTest()
-        if (test.id_test) {
-          const relations = getRelationsCb();
-          const testResponse = await Test.getOne(test.id_test, {
-            relations: relations,
-          });
+      const test = testBuilder.value.getTest()
+      if (test.id_test) {
+        const relations = getRelationsCb();
+        const testResponse = await Test.getOne(test.id_test, {
+          relations: relations,
+        });
 
-          testResponse.fk_id_type_test = testResponse.type_psi_test.id_type_test;
-          testBuilder.value.getTest().setData({ ...testResponse })
-          renderSteps()
-         
-        } else {
-          test.time_duration = 0
-          test.recurring_time = 0
-        }
+        testResponse.fk_id_type_test = testResponse.type_psi_test.id_type_test;
+        testBuilder.value.getTest().setData({ ...testResponse })
+        renderSteps()
 
-        return test;
-      
+      } else {
+        test.time_duration = 0
+        test.recurring_time = 0
+      }
+
+      return test;
+
       // cb(test);
-      
+
     },
   });
 
@@ -163,10 +163,10 @@ provide('renderSteps', renderSteps)
 
 
 
-const queryClient =useQueryClient()
+const queryClient = useQueryClient()
 
 const reloadData = async (index: string) => {
-  queryClient.resetQueries({'queryKey':'test'})
+  queryClient.resetQueries({ 'queryKey': 'test' })
   const mode = steps.value[parseInt(index) - 1]
   relations.value = [{
     name: "type_psi_test",
@@ -248,3 +248,24 @@ const reloadData = async (index: string) => {
   gap: 2rem !important
 }
 </style>
+<i18n lang="json">{
+  "es": {
+    "series": "Series y Preguntas",
+    "equation": "Fórmula para el cálculo de los resultados",
+    "categories": "Categorías y Elementos",
+    "classifications": "Clasificaciones",
+    "close": "Cerrar Test",
+    "results": "Visualización de resultados",
+    "data": "Datos Generales"
+  },
+  "en": {
+    "en": {
+    "series": "Series and Questions",
+    "equation": "Results calculation formula",
+    "categories": "Categories and Elements",
+    "classifications": "Classifications",
+    "close": "Close Test",
+    "results": "Results Display",
+    "data": "General Data"
+} }
+}</i18n>

@@ -1,6 +1,6 @@
 <template>
     <Button icon="pi pi-trash" severity="danger" variant="text" rounded aria-label="Trash"
-    v-tooltip="$t('table.desactivate')" @click="action($event)" />
+    v-tooltip="$t('global.desactivate')" @click="action($event)" />
 </template>
 <script setup lang="ts">
 import { inject, type Ref } from 'vue';
@@ -32,9 +32,9 @@ const action = (event: MouseEvent) => {
 
     confirm.require({
         target: event.currentTarget,
-        header: t('table.desactivate'),
+        header: t('global.desactivate'),
 
-        message: t('table.desactivate_element_ask'),
+        message: t('desactivate_element_ask'),
         icon: 'pi pi-exclamation-triangle',
         rejectProps: {
             label: t('global.cancel'),
@@ -42,7 +42,7 @@ const action = (event: MouseEvent) => {
             outlined: true
         },
         acceptProps: {
-            label: t('table.desactivate'),
+            label: t('global.desactivate'),
             severity: 'danger',
         },
         accept: () => {
@@ -66,14 +66,23 @@ const { mutate } = useMutation({
         await queryClient.refetchQueries({
             queryKey: [queryKey]
         })
-        toast.add({ severity: 'info', summary: t('table.confirmation'), detail: t('table.element_ok_updated'), life: 5000 });
+        toast.add({ severity: 'info', summary: t('global.operation_succeded'), detail: t('table.element_ok_updated'), life: 5000 });
         model?.clearData()
     },
     onError: (error) => {
-        toast.add({ severity: 'error', summary: t('table.something_wrong'), detail: error.statusCode == 404 ? t('table.relations_error') : t(error.message), life: 5000 });
+        toast.add({ severity: 'error', summary: t('global.operation_failed'), detail: error.statusCode == 404 ? t('table.relations_error') : t(error.message), life: 5000 });
     }
 })
 
 
 
 </script>
+<i18n lang="json">{
+    "es": {
+        "desactivate_element_ask": "¿Desea desactivar el elemento?"
+
+    },
+    "en": {
+        "desactivate_element_ask": "Would you like to desactivate this element?"
+    }
+}</i18n>

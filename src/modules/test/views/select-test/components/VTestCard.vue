@@ -52,7 +52,7 @@ const availabilityDate =moment(availabilityTime).format("DD/MM/YYYY");
 
       <Button w-full mt-2 v-if="!availabilityTime" :id="'execute-test-' + test.id_test + '-button'" icon="pi pi-file-edit" fluid
         :label="$t('global.execute')" h-10 @click="emit('show-dialog', props.test)" />
-      <Button mt-2 v-else w-full severity="danger" :label="$t('select-test.not-available')+ availabilityDate "  disabled :id="'execute-test-' + test.id_test + '-button-disabled'">
+      <Button mt-2 v-else w-full severity="danger" :label="t('not-available')+ availabilityDate "  disabled :id="'execute-test-' + test.id_test + '-button-disabled'">
         
         
       </Button>
@@ -63,3 +63,11 @@ const availabilityDate =moment(availabilityTime).format("DD/MM/YYYY");
 
 
 </template>
+<i18n lang="json">{
+  "es": {
+    "not-available": "Disponible el "
+  },
+  "en": {
+    "not-available": "Available in "
+  }
+}</i18n>

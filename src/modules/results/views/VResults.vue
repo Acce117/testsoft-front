@@ -1,7 +1,7 @@
 <template>
 
-  <TableServerPagination hasExpander hide-create ref="table" title="results.by_user" :visible-actions="false"   :model="user"
-    :custom-get-all-function="getUsersByGroup">
+  <TableServerPagination hasExpander hide-create ref="table" :title="t('by_user')" :visible-actions="false"
+    :model="user" :custom-get-all-function="getUsersByGroup">
     <template #header>
       <div w-full>
         <TreeSelect @change="() => table.refetch()" :defaultValue :placeholder="$t('user.filtergroup')"
@@ -11,9 +11,10 @@
 
 
     <template #expansion="slotProps">
-      <TableServerPagination title="results.title" intern-datatable
-        :custom-get-one-function="(id_test_application: number) => TestResult.getOne(id_test_application)" :visibleUpdateButton="false"
-        :visibleDeleteButton="false" :visibleCreateButton="false" :model="result" :query-options="{
+      <TableServerPagination :title="t('title')" intern-datatable
+        :custom-get-one-function="(id_test_application: number) => TestResult.getOne(id_test_application)"
+        :visibleUpdateButton="false" :visibleDeleteButton="false" :visibleCreateButton="false" :model="result"
+        :query-options="{
 
           relations: [
             {
@@ -69,7 +70,7 @@ const { groups } = useGroups()
 
 const getUsersByGroup = async () => {
   const id_group = Object.keys(selectedGroup.value)[0]
-  return await user.value.getUsersByGroup({},id_group ? id_group : userStore().assignments[0].group_id)
+  return await user.value.getUsersByGroup({}, id_group ? id_group : userStore().assignments[0].group_id)
 }
 let defaultValue = {}
 defaultValue[userStore().assignments[0].group_id] = true
@@ -77,3 +78,28 @@ onUnmounted(() => {
   toast.removeAllGroups();
 });
 </script>
+
+<i18n lang="json">{
+  "es": {
+    "title": "Resultados",
+    "my-results": "Mis Resultados",
+    "by_user": "Resultados por Usuario",
+    "results-of": "Resultados de",
+    "date": "Fecha",
+    "test": "Test",
+    "name": "Nombre",
+    "value": "Valor",
+    "global-result": "Resultado Global"
+  },
+  "en": {
+    "title": "Results",
+    "my-results": "My Results",
+    "by_user": "Results by User",
+    "results-of": "Results of",
+    "date": "Date",
+    "test": "Test",
+    "name": "Name",
+    "value": "Value",
+    "global-result": "Global Result"
+  }
+}</i18n>

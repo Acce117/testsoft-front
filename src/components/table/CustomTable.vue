@@ -17,7 +17,7 @@
                                     <i class="pi pi-search" />
                                 </InputIcon>
                                 <InputText w-12rem lg:w-20rem v-model="filters['global'].value"
-                                    :placeholder="$t('table.search')" />
+                                    :placeholder="$t('global.search')" />
                             </IconField>
                             <slot name="header"></slot>
                             <div flex gap-2>
@@ -89,7 +89,7 @@
                 </Column>
                 <template #empty>
                     <span v-if="isError">{{ $t('errors.title') }}</span>
-                    <span v-else id="empty-message">{{ $t('table.no_results') }}</span>
+                    <span v-else id="empty-message">{{ $t('global.no-results') }}</span>
                 </template>
                 <template #expansion="slotProps">
                     <slot name="expansion" :slotProps></slot>
@@ -113,7 +113,7 @@
     </Dialog>
 
 
-    <Dialog v-model:visible="showUpdateDialog" modal :header="$t('table.update')" class="w-4/5 max-w-50rem min-w-25rem">
+    <Dialog v-model:visible="showUpdateDialog" modal :header="$t('global.update')" class="w-4/5 max-w-50rem min-w-25rem">
         <span>{{ $t('table.update_element') }}</span>
         <Form @submit="updateElement" :validation-schema="props.model.getUpdateSchema()">
             <div class="dialog-form">
@@ -129,7 +129,7 @@
             </div>
         </Form>
     </Dialog>
-    <Dialog v-model:visible="showUpdateDialog" modal :header="$t('table.update')" class="w-4/5 max-w-50rem min-w-25rem">
+    <Dialog v-model:visible="showUpdateDialog" modal :header="$t('global.update')" class="w-4/5 max-w-50rem min-w-25rem">
         <span>{{ $t('table.update_element') }}</span>
         <Form @submit="updateElement" :validation-schema="props.model.getUpdateSchema()">
             <div class="dialog-form">
@@ -240,26 +240,26 @@ const options = ref([{
 {
     renderIf: (value) => props.visibleUpdateButton ? isLogicErase ? value[props.model.getFieldAsActive()] == true : true : false,
     icon: 'pi pi-file-edit',
-    tooltip: 'table.update',
+    tooltip: 'global.update',
     action: (value) => showUpdate(value)
 }
     ,
 {
     renderIf: () => !props.hideDelete && props.model.getFieldAsActive() == '',
     icon: 'pi pi-trash',
-    tooltip: 'table.delete',
+    tooltip: 'global.delete',
     action: (value, event) => deleteElement(value, event)
 },
 {
     renderIf: (value) => !props.hideDelete && value[props.model.getFieldAsActive()] == true,
     icon: 'pi pi-trash',
-    tooltip: 'table.desactivate',
+    tooltip: 'global.desactivate',
     action: (value, event) => desactivateElement(value, event)
 },
 {
     renderIf: (value) => !props.hideDelete && value[props.model.getFieldAsActive()] == false,
     icon: 'pi pi-history',
-    tooltip: 'table.recover',
+    tooltip: 'global.recover',
     action: (value, event) => activateElement(value, event)
 }
 ])
@@ -274,7 +274,7 @@ const { t } = useI18n();
 
 const exportOptions = ref([
     {
-        label: t('table.options'),
+        label: t('global.options'),
         items: [
             {
                 label: 'CSV',
@@ -358,84 +358,8 @@ const updateElement = (data: object) => {
     mutateUpdate(data)
 }
 
-const deleteElement = (data: object, event) => {
 
-    confirm.require({
-        target: event.currentTarget,
-        header: t('table.delete'),
-        message: t('table.delete_element_ask'),
-        icon: 'pi pi-exclamation-triangle',
-        rejectProps: {
-            label: t('global.cancel'),
-            severity: 'secondary',
-            outlined: true
-        },
-        acceptProps: {
-            label: t('global.confirm')
-        },
-        accept: () => {
-            props.model.setData(data)
-            mutateDelete()
-        },
-    });
-};
-const desactivateElement = (data: object, event) => {
 
-    confirm.require({
-        target: event.currentTarget,
-        header: t('table.desactivate'),
-        message: t('table.desactivate_element_ask'),
-        icon: 'pi pi-exclamation-triangle',
-        rejectProps: {
-            label: t('global.cancel'),
-            severity: 'secondary',
-            outlined: true
-        },
-        acceptProps: {
-            label: t('global.confirm')
-        },
-        accept: () => {
-            let updateObject = { ...data }
-            // for (const key in updateObject) {
-            //     if (key.includes('date'))
-            //         updateObject[key] = parseDate(updateObject[key]);
-            // }
-            updateObject[props.model.getFieldAsActive()] = 0
-            props.model.setData(updateObject)
-            mutateUpdate(updateObject)
-        },
-    });
-};
-const activateElement = (data: object, event) => {
-
-    confirm.require({
-        target: event.currentTarget,
-        header: t('table.activate'),
-
-        message: t('table.activate_element_ask'),
-        icon: 'pi pi-exclamation-triangle',
-        rejectProps: {
-            label: t('global.cancel'),
-            severity: 'secondary',
-            outlined: true
-        },
-        acceptProps: {
-            label: t('global.confirm')
-        },
-        accept: () => {
-            let updateObject = { ...data }
-            // for (const key in updateObject) {
-            //     if (key.includes('date'))
-            //         updateObject[key] = parseDate(updateObject[key]);
-            // }
-
-            updateObject[props.model.getFieldAsActive()] = 1
-            props.model.setData(updateObject)
-
-            mutateUpdate(updateObject)
-        },
-    });
-};
 
 //
 
@@ -444,12 +368,12 @@ const { mutate: mutateAdd, isPending: isAddPending } = useMutation({
     mutationFn: () => props.model.create(),
     onSuccess: async () => {
         await refetch()
-        toast.add({ severity: 'info', summary: t('table.confirmation'), detail: t('table.element_ok_added'), life: 5000 });
+        toast.add({ severity: 'info', summary: t('global.operation_succeded'), detail: t('table.element_ok_added'), life: 5000 });
         showAddDialog.value = false
         props.model.clearData()
     },
     onError: (error) => {
-        toast.add({ severity: 'error', summary: t('table.something_wrong'), detail: t(error.message), life: 5000 });
+        toast.add({ severity: 'error', summary: t('global.operation_failed'), detail: t(error.message), life: 5000 });
     }
 })
 
@@ -459,12 +383,12 @@ const { mutate: mutateUpdate, isPending: isUpdatePending } = useMutation({
     mutationFn: (data: object) => props.model.update(data),
     onSuccess: async () => {
         await refetch()
-        toast.add({ severity: 'info', summary: t('table.confirmation'), detail: t('table.element_ok_updated'), life: 5000 });
+        toast.add({ severity: 'info', summary: t('global.operation_succeded'), detail: t('table.element_ok_updated'), life: 5000 });
         showUpdateDialog.value = false
         props.model.clearData()
     },
     onError: (error) => {
-        toast.add({ severity: 'error', summary: t('table.something_wrong'), detail: error.statusCode == 404 ? t('table.relations_error') : t(error.message), life: 5000 });
+        toast.add({ severity: 'error', summary: t('global.operation_failed'), detail: error.statusCode == 404 ? t('table.relations_error') : t(error.message), life: 5000 });
     }
 })
 
@@ -476,19 +400,19 @@ const { mutate: mutateDelete } = useMutation({
     mutationFn: () => props.model.delete(),
     onSuccess: async () => {
         await refetch()
-        toast.add({ severity: 'info', summary: t('table.confirmation'), detail: t('table.element_ok_deleted'), life: 5000 });
+        toast.add({ severity: 'info', summary: t('global.operation_succeded'), detail: t('table.element_ok_deleted'), life: 5000 });
         props.model.clearData()
     },
     onError: async (error) => {
         // if (error instanceof EmailError) {
         //     await refetch()
 
-        //     toast.add({ severity: 'info', summary: t('table.confirmation'), detail: t('table.element_ok_deleted'), life: 5000 });
+        //     toast.add({ severity: 'info', summary: t('global.operation_succeded'), detail: t('table.element_ok_deleted'), life: 5000 });
 
-        //     toast.add({ severity: 'error', summary: t('table.something_wrong'), detail:t(error.message), life: 5000 });
+        //     toast.add({ severity: 'error', summary: t('global.operation_failed'), detail:t(error.message), life: 5000 });
 
         // } else
-        toast.add({ severity: 'error', summary: t('table.something_wrong'), detail: t(error.message), life: 5000 });
+        toast.add({ severity: 'error', summary: t('global.operation_failed'), detail: t(error.message), life: 5000 });
     }
 })
 

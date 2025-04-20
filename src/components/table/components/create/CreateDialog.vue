@@ -1,6 +1,6 @@
 <template>
 
-    <Dialog v-model:visible="visible" modal :header="$t('table.add')" class="w-4/5 max-w-50rem min-w-25rem">
+    <Dialog v-model:visible="visible" modal :header="$t('global.add')" class="w-4/5 max-w-50rem min-w-25rem">
 
         <span>{{ $t('table.new_element') }}</span>
         <Form @submit="() => mutate()" :validation-schema="model?.getSchema()">
@@ -48,12 +48,12 @@ const { mutate, isPending } = useMutation({
         await queryClient.refetchQueries({
             queryKey: [queryKey]
         })
-        toast.add({ severity: 'info', summary: t('table.confirmation'), detail: t('table.element_ok_added'), life: 5000 });
+        toast.add({ severity: 'info', summary: t('global.operation_succeded'), detail: t('table.element_ok_added'), life: 5000 });
         visible.value = false
         model?.clearData()
     },
     onError: (error) => {
-        toast.add({ severity: 'error', summary: t('table.something_wrong'), detail: t(error.message), life: 5000 });
+        toast.add({ severity: 'error', summary: t('global.operation_failed'), detail: t(error.message), life: 5000 });
     }
 })
 

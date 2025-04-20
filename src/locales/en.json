@@ -1,124 +1,10 @@
 {
-  "login": {
-    "user": "User",
-    "password": "Password",
-    "title": "Welcome to TestSoft",
-    "login": "Log In",
-    "error": "Invalid login"
-  },
-  "home": {
-    "subtitle": "Your digital platform to administer, create, and analyze psychological tests",
-    "overtitle": "Psychological assessment software",
-    "title": "Meet TestSoft",
-    "option1": "Take a test",
-    "option2": "Discover compatibilities and leaders",
-    "option3": "Find the most effective roles",
-    "option4": "Analyze the results",
-    "option5": "Analyze the information",
-    "option6": "Assign a test",
-    "option7": "Manage groups",
-    "option8": "Manage users"
-  },
+  
+  
 
-  "select-test": {
-    "title": "Select a test",
-    "dialogs": {},
-    "test-card": {
-      "duration": "Duration",
-      "description": "Description",
-      "not-available": "Not Available",
-      "available": "Available in"
-    }
-  },
-  "execute-test": {
-    "dialogs": {
-      "serie-ended": "The time for the series has ended. You have been advanced to the next series.",
-      "test-ended-first-time": "The time for the test has ended. An additional 5 minutes will be added.",
-      "test-ended": "The time for the test has ended",
-      "confirm-next-serie": {
-        "title": "Series",
-        "message": "Do you want to proceed to the next series? You won't be able to return to the previous one..."
-      },
-      "confirm-save-test": {
-        "title": "Exit",
-        "message": "Do you want to save the test answers?"
-      },
-      "confirm-exit-test": {
-        "title": "Exit",
-        "message": "Do you want to exit the test? The answers will be lost."
-      },
-      "description": {
-        "title": "Test Description",
-        "message": "Answer the questions within the assigned time, which you can check on the left side of the screen through the timer. Use the buttons in the upper right section to navigate between series. The buttons on the right are used to save your answers, show information, and exit the test respectively."
-      }
-    },
-    "tooltips": {
-      "next": "Next Series",
-      "prev": "Previous Serie",
-      "exit": "Cancel Test",
-      "save": "Finish",
-      "hide": "Hide",
-      "show": "Show",
-      "info": "Information"
-    },
-    "question-components": {
-      "5": {
-        "remaining-points": "Remaining points in the question"
-      }
-    },
-    "error": {
-      "2": "You must select an answer",
-      "5": "There are points to be assigned yet",
-      "in-question": "in the question"
-    }
-  },
-  "results": {
-    "title": "Results",
-    "info": "On this screen, you can check the results of your tests. Press the left arrow of a row to show the general results of the corresponding test, or the button on the right to view the final results. Use the buttons in the header to display results of all tests or hide them.",
-    "show-all": "Show All",
-    "hide-all": "Hide All",
-    "final-results": "View Final Results",
-    "results-of": "Results of",
-    "date": "Date",
-    "test": "Test",
-    "name": "Name",
-    "value": "Value",
-    "global-result": "Global Result",
-    "dialogs": {},
-    "all-elements-top-values": {
-      "preferred": "Preferred",
-      "avoided": "Avoided"
-    },
-    "by-category": {
-      "1": "In the category",
-      "2": "you are characterized by",
-      "3": "with a score of",
-      "4": "which is considered a value",
-      "5": "The element",
-      "6": "consists of",
-      "7": "Category Description"
-    },
-    "by-element": {
-      "1": "With",
-      "2": "points"
-    }
-  },
-  "profile": {
-    "title": "My Profile",
-    "dialogs": {
-      "close-session": {
-        "header": "Logout",
-        "message": "Do you want to log out?"
-      }
-    }
-  },
-  "info": {
-    "developers": "Developers",
-    "roles": {
-      "project_manager": "Project Manager",
-      "developer": "Developer"
-    }
-  },
+ 
+
+
   "global": {
     "export": {
       "title": "Export",
@@ -131,7 +17,7 @@
     "delete": "Delete",
     "deleted": "Deleted",
     "edit": "Edit",
-    "find": "Search",
+    "search": "Search...",
     "add": "Add",
     "and": "and",
     "error": "Something went wrong",
@@ -141,10 +27,10 @@
     "info": "Information",
     "no-results": "No results found",
     "loading": "Loading",
-    "not-authorized": "You are not authorized",
     "language": "Language",
-    "completed": "Operation completed successfully",
-    "failed": "Operation failed",
+    "yes": "Yes",
+    "no": "No",
+    
     "confirm-delete": "Do you want to delete the item?"
   },
   "users": {

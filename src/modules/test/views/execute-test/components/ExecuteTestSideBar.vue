@@ -3,9 +3,10 @@
     <div class="p-4 card flex  w-18rem h-full flex-col  border-solid border-slate-200 border-1">
         <h3 font-bold mt-14 mb-2 text-primary>{{ props.data.name }}</h3>
 
-        
+
         <h4 text-slate-600 font-bold mb-2>Series</h4>
-        <div w-full max-h-20rem h-fit overflow-auto flex flex-wrap gap-2 p-2 border-solid rounded-xl mb-4 border-slate-200 border-1>
+        <div w-full max-h-20rem h-fit overflow-auto flex flex-wrap gap-2 p-2 border-solid rounded-xl mb-4
+            border-slate-200 border-1>
             <article
                 :class="`serie-button ${serieIndex == index ? 'selected' : data.navigable == 1 ? 'bg-sky-100' : 'disabled'}`"
                 v-for="(serie, index) in props.data.series" :key="serie.id_serie"
@@ -14,7 +15,7 @@
             </article>
         </div>
         <Button @click="executeTest.validateTest(test)" id="finish-test-button" icon="pi pi-file-check"
-            :label="t('execute-test.tooltips.save')" />
+            :label="t('save')" />
     </div>
 </template>
 <script setup lang="ts">
@@ -124,7 +125,15 @@ watch(locale, () => {
 
 .serie-button:not(.disabled):hover {
     cursor: pointer;
-    
+
 
 }
 </style>
+<i18n lang="json">{
+    "es": {
+        "save": "Finalizar"
+    },
+    "en": {
+        "save": "Finish"
+    }
+}</i18n>

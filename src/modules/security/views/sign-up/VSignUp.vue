@@ -47,7 +47,7 @@ const { mutate: signUp, isPending } = useMutation({
   },
   onError: (error) => {
     console.log(error)
-    toast.add({ severity: 'error', summary: t('table.something_wrong'), detail: t('sign-up.error'), life: 5000 });
+    toast.add({ severity: 'error', summary: t('global.operation_failed'), detail: t('sign-up.error'), life: 5000 });
   }
 })
 

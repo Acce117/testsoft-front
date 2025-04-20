@@ -177,18 +177,27 @@ watch(locale, () => {
 }
 </style>
 
-<i18n>
-    {
-        "es":{
-            "navbar":{
-                "management":{
-                    "functional_roles":"Roles Funcionales"
-                },
-                "reports":{
-                    "name":"Reportes",
-                    "sociometric":"Sociométrico"
-                }
+<i18n lang="json">{
+    "es": {
+        "navbar": {
+            "management": {
+                "functional_roles": "Roles Funcionales"
+            },
+            "reports": {
+                "name": "Reportes",
+                "sociometric": "Sociométrico"
+            }
+        }
+    },
+    "en": {
+        "navbar": {
+            "management": {
+                "functional_roles": "Functional Roles"
+            },
+            "reports": {
+                "name": "Reports",
+                "sociometric": "Sociometric"
             }
         }
     }
-</i18n>
+}</i18n>

@@ -1,27 +1,28 @@
 <template>
-  <section class="test__header" bg-white rounded-xl border  border-solid  px-4 pb-2 pt-20>
+  <section class="test__header" bg-white rounded-xl border border-solid px-4 pb-2 pt-20>
     <div justify-between h-fit flex p-2 w-full items-center>
 
 
 
       <h3 text-lg text-justify md:text-xl w-full text-center mb-2 mt-0 text-slate-800>
-        <span text-primary font-bold>{{ props.data?.series[serieIndex].name }}:</span> {{ props.data?.series[serieIndex].description }}
+        <span text-primary font-bold>{{ props.data?.series[serieIndex].name }}:</span> {{
+          props.data?.series[serieIndex].description }}
       </h3>
 
 
 
 
     </div>
-    <div flex justify-between pb-2 >
+    <div flex justify-between pb-2>
       <Button severity="secondary" class=" p-ripple" icon="pi pi-arrow-left" v-ripple :disabled="!(serieIndex > 0)"
-        v-if="props.data?.navigable == 1" @click="prevSerie()" :label="t('execute-test.tooltips.prev')"
+        v-if="props.data?.navigable == 1" @click="prevSerie()" :label="t('prev')"
         placeholder="Bottom" />
       <slot name="timer"></slot>
-      <Button :label="t('execute-test.tooltips.next')" id="next-serie-button"
-        v-if="props.data?.series.length > 1 && serieIndex < props.data?.series.length - 1" class="p-ripple" icon="pi pi-arrow-right" v-ripple @click="nextSerie()"
-        placeholder="Bottom" />
-      <Button v-if="serieIndex == props.data?.series.length - 1" @click="executeTest.validateTest(test)" icon="pi pi-file-check"
-        :label="t('execute-test.tooltips.save')" />
+      <Button :label="t('next')" id="next-serie-button"
+        v-if="props.data?.series.length > 1 && serieIndex < props.data?.series.length - 1" class="p-ripple"
+        icon="pi pi-arrow-right" v-ripple @click="nextSerie()" placeholder="Bottom" />
+      <Button v-if="serieIndex == props.data?.series.length - 1" @click="executeTest.validateTest(test)"
+        icon="pi pi-file-check" :label="t('save')" />
     </div>
   </section>
 </template>
@@ -48,15 +49,6 @@ const prevSerie = () => {
   executeTest.changeSerie(serieIndex.value - 1)
 };
 
-const getSeriesNames = () => {
-  let names = Array();
-  if (props.data) {
-    props.data.series.forEach((serie: { name: string }) => {
-      names.push({ label: serie.name });
-    });
-  }
-  return names;
-};
 
 watch(
   serieIndex,
@@ -79,3 +71,15 @@ watch(
   gap: 0rem !important;
 }
 </style>
+<i18n lang="json">{
+  "es": {
+    "next": "Siguiente Serie",
+    "prev": "Serie Anterior",
+    "save": "Finalizar"
+  },
+  "en": {
+    "next": "Next Serie",
+    "prev": "Previous Serie",
+    "save": "Finish"
+  }
+}</i18n>

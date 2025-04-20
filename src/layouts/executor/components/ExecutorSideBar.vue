@@ -14,7 +14,7 @@
             <template #item="{ item, props }">
                 <a v-ripple class="flex items-center" v-bind="props.action">
                     <span :class="item.icon" />
-                    <span >{{ item.label }}</span>
+                    <span>{{ item.label }}</span>
 
                 </a>
             </template>
@@ -87,7 +87,7 @@ const itemsDefault = [
 
         ]
     },
-   
+
     {
         separator: true
     },
@@ -160,17 +160,23 @@ watch(locale, () => {
 }
 </style>
 
-<i18n>
-    {
-      "es": {
+<i18n lang="json">{
+    "es": {
         "navbar": {
-          "others":{
-            "name":"Otros",
-            "compatibility": "Compatibilidades y Liderazgo",
-            "functional_roles": "Roles Funcionales",
-
-          } 
+            "others": {
+                "name": "Otros",
+                "compatibility": "Selección de Equipo y Liderazgo",
+                "functional_roles": "Roles Funcionales",
+            }
         }
-      }
+    },
+    "en": {
+        "navbar": {
+            "others": {
+                "name": "Others",
+                "compatibility": "Team Compatibility and Leadership Assessment",
+                "functional_roles": "Functional Roles"
+            }
+        }
     }
-</i18n>
+}</i18n>

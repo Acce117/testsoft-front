@@ -68,7 +68,7 @@ const itemsManagement = [
 
 
     items: [],
-    command:()=>router.push('incompatibility-leadership')
+    command: () => router.push('incompatibility-leadership')
   },
 ];
 
@@ -210,35 +210,52 @@ const goHome = () => {
   background-color: transparent;
   backdrop-filter: blur(0.5rem);
 }
-.home .p-menubar{
+
+.home .p-menubar {
   background-color: transparent !important;
 }
 </style>
-<i18n>
-  {
-    "es":{
-      "navbar":{
-        "management":{
-              "functional_roles":{
-                  "name":"Roles Funcionales"
-              },
-              "compatibility":{
-                  "name":"Compatibilidades y Liderazgo",
-              }
+<i18n lang="json">{
+  "es": {
+    "navbar": {
+      "management": {
+        "functional_roles": {
+          "name": "Roles Funcionales"
         },
-        "reports":{
-          "name":"Reportes"
-        },
-
-              
-              "functional_roles":{
-                  "name":"Roles Funcionales"
-              },
-              "compatibility":{
-                  "name":"Compatibilidades y Liderazgo",
-              }
-          }
+        "compatibility": {
+          "name": "Selección de Equipo y Liderazgo",
+        }
+      },
+      "reports": {
+        "name": "Reportes"
+      },
+      "functional_roles": {
+        "name": "Roles Funcionales"
+      },
+      "compatibility": {
+        "name": "Selección de Equipo y Liderazgo",
       }
+    }
+  },
+  "en": {
+    "navbar": {
+      "management": {
+        "functional_roles": {
+          "name": "Functional Roles"
+        },
+        "compatibility": {
+          "name": "Team Compatibility and Leadership Assessment"
+        }
+      },
+      "reports": {
+        "name": "Reports"
+      },
+      "functional_roles": {
+        "name": "Functional Roles"
+      },
+      "compatibility": {
+        "name": "Team Compatibility and Leadership Assessment"
+      }
+    }
   }
-</i18n>
-
+}</i18n>

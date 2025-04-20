@@ -48,7 +48,7 @@ const updateInput = (value: number, oldValue: number, id_answer: number | string
     toast.add({
       severity: "info",
       summary: "Info",
-      detail: `${t('execute-test.question-components.5.remaining-points')} ${props.question_index}: ${actualPoints.value}`,
+      detail: `${t('remaining-points')} ${props.question_index}: ${actualPoints.value}`,
       life: 30000,
     });
     timeOutIdToast = setTimeout(() => {
@@ -77,7 +77,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <span text-base md:text-lg>{{ $t('execute-test.question-components.5.remaining-points') }}: <span text-primary
+  <span text-base md:text-lg>{{ t('remaining-points') }}: <span text-primary
       font-bold>{{ actualPoints }}</span></span>
   <div class="answer" v-for="answer in props.possible_answers" :key="answer.id_answer">
     <label :for="answer.id_answer" flex text-base md:text-lg text-justify gap-2 flex-items-center h-full w-full
@@ -90,3 +90,11 @@ onMounted(() => {
     </label>
   </div>
 </template>
+<i18n lang="json">{
+  "es": {
+    "remaining-points": "Puntos restantes en la pregunta"
+  },
+  "en": {
+    "remaining-points": "Remaining points in the question"
+  }
+}</i18n>

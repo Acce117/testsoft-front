@@ -7,13 +7,13 @@
   {
     renderIf: (value:User) => value.enabled == true ,
     icon: 'pi pi-trash',
-    tooltip: 'table.desactivate',
+    tooltip: 'global.desactivate',
     action: (value, event) => table.desactivateElement(value, event)
   },
   {
     renderIf: (value:User) =>  value.enabled == false ,
     icon: 'pi pi-history',
-    tooltip: 'table.recover',
+    tooltip: 'global.recover',
     action: (value, event) => table.activateElement(value, event)
   }]">
 

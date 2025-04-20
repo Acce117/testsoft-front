@@ -4,7 +4,7 @@
     <Paginator :query-function="(params) => Group.getUsersFromCurrentGroup(params)" :query-key="'users-current-group'"
         gridClass="grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4">
         <template #header>
-            <h2 text-left>Seleccione usuarios compatibles y liderazgo</h2>
+            <h2 text-left>{{ t('title') }}</h2>
         </template>
         <template #item-template="{ data }">
             <article
@@ -23,13 +23,13 @@
 
                 <div class="flex flex-col items-center justify-center gap-4 w-full ">
                     <div flex items-center justify-between gap-2 w-full>
-                        <span>Para trabajar lo consideras?</span>
-                        <ToggleButton min-w-10rem v-model="data.compatible" :onLabel="$t('Compatible')"
-                            :offLabel="$t('Incompatible')" onIcon="pi pi-user-plus" offIcon="pi pi-user-minus" />
+                        <span>{{ t('compatibility') }}</span>
+                        <ToggleButton  v-model="data.compatible" :onLabel="$t('global.yes')"
+                            :offLabel="$t('global.no')" onIcon="pi pi-user-plus" offIcon="pi pi-user-minus" />
                     </div>
                     <div flex w-full items-center justify-between gap-2>
 
-                        <span> Lo consideras lider?</span>
+                        <span>{{ t('leadership') }} </span>
                         <ToggleButton v-model="data.leadership" onIcon="pi pi-crown" offIcon="pi pi-times"
                             :onLabel="$t('global.yes')" :offLabel="$t('global.no')" />
 
@@ -52,9 +52,10 @@ import { Group } from '@/modules/management/group/models/group.model';
 import { userStore } from '@/modules/security/store/user-store';
 import { Avatar, Button, Checkbox, ToggleButton, ToggleSwitch } from 'primevue';
 import { ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 
-
+const {t} = useI18n()
 const gridOptions = ref({
     base: 1,
     sm: 2,
@@ -77,3 +78,15 @@ const gridOptions = ref({
     transform: scale(1.1);
 }
 </style>
+<i18n lang="json">{
+    "es": {
+        "title": "Selección de Equipo y Liderazgo",
+        "compatibility": "¿Trabajarías bien con esta persona?",
+        "leadership": "¿Lo considera apto para liderazgo?"
+    },
+    "en": {
+        "title": "Team Compatibility and Leadership Assessment",
+        "compatibility": "Would this person be compatible to work with you?",
+        "leadership": "Does this person demonstrate leadership potential?"
+    }
+}</i18n>

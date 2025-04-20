@@ -8,7 +8,9 @@ import InputText from 'primevue/inputtext';
 import Select from 'primevue/select';
 import Skeleton from 'primevue/skeleton';
 import { computed, ref, watchEffect } from 'vue';
+import { useI18n } from 'vue-i18n';
 
+const {t}=useI18n()
 
 const props = defineProps({
     queryFunction: {
@@ -148,7 +150,7 @@ defineExpose({refetch})
                         <InputIcon>
                             <i class="pi pi-search" />
                         </InputIcon>
-                        <InputText w-full v-model="searchTerm" :placeholder="$t('table.search')"
+                        <InputText w-full v-model="searchTerm" :placeholder="$t('global.search')"
                             @keydown="(e) => { if (e.key == 'Enter') { offset = 0; refetch() } }" />
                     </IconField>
 
@@ -180,8 +182,8 @@ defineExpose({refetch})
                     <template #end="slotProps">
                         <section class="flex flex-col ml-4">
                             <span v-if="data && data.data.length > 0">
-                                {{ slotProps.state.first + 1 }} al {{ slotProps.state.first + 1 + limit > totalRecords ?
-                                    totalRecords : slotProps.state.first + 1 + limit }}, de
+                                {{ slotProps.state.first + 1 }} {{ t('to') }} {{ slotProps.state.first + 1 + limit > totalRecords ?
+                                    totalRecords : slotProps.state.first + 1 + limit }}, {{ t('of') }}
                                 {{ totalRecords }}
 
                             </span>
@@ -211,19 +213,13 @@ defineExpose({refetch})
 
                 </section>
 
-                <span v-if="data.data.length === 0" class="text-red-500 font-medium cursor-pointer text-base">No
-                    existen
-                    elementos</span>
+                <span v-if="data.data.length === 0" class="text-red-500 font-medium cursor-pointer text-base">{{ t('global.no-results') }}</span>
 
             </template>
-            <span v-else-if="isError" @click="refetch" class="text-red-500 font-medium cursor-pointer text-base">Ha
-                ocurrido
-                un
-                error, inténtelo de nuevo...</span>
-            <!-- <div :class="`w-full grid grid-cols-[${props.gridOptions.base}] sm:grid-cols-[${props.gridOptions.sm}] md:grid-cols-[${props.gridOptions.md}] lg:grid-cols-${props.gridOptions.lg} xl:grid-cols-${props.gridOptions.xl} 2xl:grid-cols-${props.gridOptions.xxl}  gap-8 overflow-auto  `"
-                v-else>
-                <Skeleton v-for="e in [1, 2, 3, 4]" height="8rem" :key="e" class=" w-full animate-pulse min-w-0 break-inside-avoid break-words  " />
-            </div> -->
+            <span v-else-if="isError" @click="refetch" class="text-red-500 font-medium cursor-pointer text-base">{{ t('global.error') }}
+                <Button @click="refetch" :label="t('global.retry')"></Button>
+            </span>
+            
             <div :class="'grid w-full gap-4 ' + gridClass" v-else>
                 <Skeleton v-for="e in [1, 2, 3, 4]" height="8rem" :key="e" class=" w-full animate-pulse   " />
             </div>
@@ -243,3 +239,14 @@ defineExpose({refetch})
     margin-left: 0 !important;
 }
 </style>
+
+<i18n lang="json">{
+    "es": {
+        "of":"de",
+        "to":"al"
+    },
+    "en": {
+        "of":"of",
+        "to":"to"
+    }
+}</i18n>

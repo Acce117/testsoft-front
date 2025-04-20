@@ -1,6 +1,6 @@
 <template>
     <Button icon="pi pi-history" severity="success" variant="text" rounded aria-label="Recover"
-    v-tooltip="$t('table.recover')" @click="action($event)" />
+        v-tooltip="$t('global.recover')" @click="action($event)" />
 </template>
 <script setup lang="ts">
 import { inject, type Ref } from 'vue';
@@ -33,7 +33,7 @@ const action = (event: MouseEvent) => {
         target: event.currentTarget,
         header: t('table.activate'),
 
-        message: t('table.activate_element_ask'),
+        message: t('activate_element_ask'),
         icon: 'pi pi-exclamation-triangle',
         rejectProps: {
             label: t('global.cancel'),
@@ -66,14 +66,22 @@ const { mutate } = useMutation({
         await queryClient.refetchQueries({
             queryKey: [queryKey]
         })
-        toast.add({ severity: 'info', summary: t('table.confirmation'), detail: t('table.element_ok_updated'), life: 5000 });
+        toast.add({ severity: 'info', summary: t('global.operation_succeded'), detail: t('table.element_ok_updated'), life: 5000 });
         model?.clearData()
     },
     onError: (error) => {
-        toast.add({ severity: 'error', summary: t('table.something_wrong'), detail: error.statusCode == 404 ? t('table.relations_error') : t(error.message), life: 5000 });
+        toast.add({ severity: 'error', summary: t('global.operation_failed'), detail: error.statusCode == 404 ? t('table.relations_error') : t(error.message), life: 5000 });
     }
 })
 
 
 
 </script>
+<i18n lang="json">{
+    "es": {
+        "activate_element_ask": "¿Desea activar el elemento?"
+    },
+    "en": {
+        "activate_element_ask": "Would you like to activate this element?"
+    }
+}</i18n>

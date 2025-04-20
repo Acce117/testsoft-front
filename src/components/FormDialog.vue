@@ -1,5 +1,5 @@
 <template>
-    <Dialog @after-hide="props.model.clearData()" v-model:visible="visible" modal :header="props.model.getID()? $t('table.update'):$t('table.add')" class="w-4/5 max-w-50rem min-w-25rem">
+    <Dialog @after-hide="props.model.clearData()" v-model:visible="visible" modal :header="props.model.getID()? $t('global.update'):$t('global.add')" class="w-4/5 max-w-50rem min-w-25rem">
         <Form @submit="onSubmit" :validation-schema="model.getSchema()">
             <div class="dialog-form">
                 <slot name="form">

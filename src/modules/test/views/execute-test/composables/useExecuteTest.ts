@@ -1,10 +1,9 @@
 import useEvents from "@/common/utils/useEvents";
-import { i18n } from "@/plugins/i18n";
 import router from "@/router";
 import { ref } from "vue";
 import type { Question } from "../../../classes/question-class";
 import type { TestExecution } from "@/modules/test/classes/testExecution";
-const { t } = i18n.global;
+import { useLocalI18n } from "@/common/utils/useLocalI18n";
 
 export const useExecuteTest = () => {
   const confirmExit = ref(false);
@@ -46,9 +45,9 @@ export const useExecuteTest = () => {
         serieTime = secondOpportunityMinutes; // Time of second opportunity
         useEvents().dispatch("error", {
           severity: "warn",
-          summary: t("global.warning") + ":",
+          summary: t("warning") + ":",
 
-          detail: t("execute-test.dialogs.test-ended-first-time"),
+          detail: t("test-ended-first-time"),
           life: 5000,
         });
       }
@@ -105,27 +104,24 @@ export const useExecuteTest = () => {
   };
 
   const validateTestDuration = () => {
-
     const testInitTime = getInitTestTimeInLocal();
 
     let maxTestTime = 0;
     if (testInitTime) {
-
       if (data.time_duration > 0) {
         maxTestTime += secondOpportunityMinutes;
         maxTestTime += data.time_duration;
         maxTestTime = maxTestTime * 60001;
-        console.log(maxTestTime)
-        console.log(new Date().getTime() - new Date(testInitTime).getTime())
+        console.log(maxTestTime);
+        console.log(new Date().getTime() - new Date(testInitTime).getTime());
         if (
           maxTestTime -
             (new Date().getTime() - new Date(testInitTime).getTime()) <=
           0
-        ){
-          setSecondOpportunity(false)
+        ) {
+          setSecondOpportunity(false);
           timeOver();
         }
-       
       }
     }
   };
@@ -133,14 +129,15 @@ export const useExecuteTest = () => {
   const exitTest = (route: string) => {
     confirmExit.value = true;
     cleanTestExecution();
-    router.push(`/`+ route);
+    router.push(`/` + route);
   };
   const exitTestConfirm = (route: string) => {
+    const t = useLocalI18n(localMessages);
     useEvents().dispatch("confirm", {
-      message: t("execute-test.dialogs.confirm-exit-test.message"),
-      header: t("execute-test.dialogs.confirm-exit-test.title"),
-      rejectLabel: t("global.cancel"),
-      acceptLabel: t("global.confirm"),
+      message: t("confirm-exit-test.message"),
+      header: t("confirm-exit-test.title"),
+      rejectLabel: t("cancel"),
+      acceptLabel: t("confirm"),
       accept: () => {
         exitTest(route);
       },
@@ -148,11 +145,12 @@ export const useExecuteTest = () => {
   };
 
   const sendTestConfirm = () => {
+    const t = useLocalI18n(localMessages);
     useEvents().dispatch("confirm", {
-      message: t("execute-test.dialogs.confirm-save-test.message"),
-      header: t("execute-test.dialogs.confirm-save-test.title"),
-      rejectLabel: t("global.cancel"),
-      acceptLabel: t("global.confirm"),
+      message: t("confirm-save-test.message"),
+      header: t("confirm-save-test.title"),
+      rejectLabel: t("cancel"),
+      acceptLabel: t("confirm"),
       accept: () => {
         useEvents().dispatch("dialog-results");
         exitTest("my-results");
@@ -187,8 +185,8 @@ export const useExecuteTest = () => {
     sessionStorage.setItem("init_test_time", JSON.stringify(new Date()));
   };
 
-
   const timeOver = () => {
+    const t = useLocalI18n(localMessages);
     try {
       if (data.time_duration > 0) {
         if (getSecondOpportunity() == 1) {
@@ -197,9 +195,9 @@ export const useExecuteTest = () => {
           setSecondOpportunity(false);
           useEvents().dispatch("error", {
             severity: "warn",
-            summary: t("global.warning") + ":",
+            summary: t("warning") + ":",
 
-            detail: t("execute-test.dialogs.test-ended-first-time"),
+            detail: t("test-ended-first-time"),
             life: 5000,
           });
         } else throw new Error("Time Over");
@@ -211,8 +209,8 @@ export const useExecuteTest = () => {
           useEvents().dispatch("clean-toast");
           useEvents().dispatch("error", {
             severity: "warn",
-            summary: t("global.warning") + ":",
-            detail: t("execute-test.dialogs.serie-ended"),
+            summary: t("warning") + ":",
+            detail: t("serie-ended"),
             life: 5000,
           });
         } else throw new Error("Time Over");
@@ -223,7 +221,7 @@ export const useExecuteTest = () => {
         router.push("/select-test");
         cleanTestExecution();
         useEvents().dispatch("info", {
-          message: t("execute-test.dialogs.test-ended"),
+          message: t("test-ended"),
         });
       } else console.error(e);
     }
@@ -252,11 +250,12 @@ export const useExecuteTest = () => {
   };
 
   const nextSerieConfirm = () => {
+    const t = useLocalI18n(localMessages);
     useEvents().dispatch("confirm", {
-      message: t("execute-test.dialogs.confirm-next-serie.message"),
-      header: t("execute-test.dialogs.confirm-next-serie.title"),
-      rejectLabel: t("global.cancel"),
-      acceptLabel: t("global.confirm"),
+      message: t("confirm-next-serie.message"),
+      header: t("confirm-next-serie.title"),
+      rejectLabel: t("cancel"),
+      acceptLabel: t("confirm"),
       accept: () => {
         changeSerie(serieIndex.value + 1);
         setNewTime(data.series[serieIndex.value].time_serie_duration * 60000);
@@ -275,18 +274,19 @@ export const useExecuteTest = () => {
   };
 
   const getErrorMessages = (questions: []) => {
+    const t = useLocalI18n(localMessages);
     const errorMessages = [];
     pushQuestionsNotAnswered(questions);
     for (const key in questionsNotAnswered) {
       if (questionsNotAnswered[key].length > 0) {
-        let error = t(`execute-test.error.${key}`) + " ";
+        let error = t(`error.${key}`) + " ";
         if (questionsNotAnswered[key].length == 1)
-          error += `${t("execute-test.error.in-question")} `;
-        else error += `${t("execute-test.error.in-question")}s `;
+          error += `${t("error.in-question")} `;
+        else error += `${t("error.in-question")}s `;
         questionsNotAnswered[key].forEach((question: any, index: number) => {
           if (index > 0) {
             if (index == questionsNotAnswered[key].length - 1)
-              error += ` ${t("global.and")} `;
+              error += ` ${t("and")} `;
             else error += ", ";
           }
           error += question.questionIndex;
@@ -339,4 +339,77 @@ export const useExecuteTest = () => {
     saveTestExecutionInLocal,
     getTestExecutionInLocal,
   };
+};
+
+const localMessages = {
+  es: {
+    "and":"y",
+    "cancel":"Cancelar",
+    "confirm": "Aceptar",
+    "warning": "Advertencia",
+
+    "serie-ended":
+      "El tiempo de la serie ha terminado. Se ha avanzado a la próxima serie.",
+    "test-ended-first-time":
+      "El tiempo del test ha terminado. Se agregarán 5 minutos más.",
+    "test-ended": "El tiempo del test ha terminado",
+    "confirm-next-serie": {
+      title: "Serie",
+      message:
+        "¿Desea avanzar a la siguiente serie? No podrá regresar a la anterior...",
+    },
+    "confirm-save-test": {
+      title: "Salir",
+      message: "¿Desea guardar las respuestas del test?",
+    },
+    "confirm-exit-test": {
+      title: "Salir",
+      message: "¿Desea salir del test? Las respuestas se perderán.",
+    },
+
+    error: {
+      "1": "Debe seleccionar una respuesta",
+      "2": "Debe seleccionar una respuesta",
+      "3": "Debe escribir una respuesta",
+      "4": "Debe seleccionar una respuesta",
+      "5": "Existen puntos por asignar aún",
+      "6": "Debe escribir una respuesta",
+      "in-question": "en la pregunta",
+    },
+  },
+  en: {
+    "and":"and",
+    "cancel":"Cancel",
+    "confirm": "Confirm",
+    "warning": "Warning",
+    "serie-ended":
+      "The time for the series has ended. You have been advanced to the next series.",
+    "test-ended-first-time":
+      "The time for the test has ended. An additional 5 minutes will be added.",
+    "test-ended": "The time for the test has ended",
+    "confirm-next-serie": {
+      title: "Series",
+      message:
+        "Do you want to proceed to the next series? You won't be able to return to the previous one...",
+    },
+    "confirm-save-test": {
+      title: "Exit",
+      message: "Do you want to save the test answers?",
+    },
+    "confirm-exit-test": {
+      title: "Exit",
+      message: "Do you want to cancel the test? The answers will be lost.",
+    },
+
+    
+    error: {
+      "1": "You must select an answer",
+      "2": "You must select an answer",
+      "3": "You must write an answer",
+      "4": "You must select an answer",
+      "5": "There are points to be assigned yet",
+      "6": "You must write an answer",
+      "in-question": "in question",
+    },
+  },
 };

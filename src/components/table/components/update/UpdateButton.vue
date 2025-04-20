@@ -1,6 +1,6 @@
 <template>
     <Button icon="pi pi-pencil" severity="primary" variant="text" rounded aria-label="Pencil"
-        v-tooltip="$t('table.update')" @click="action($event)" />
+        v-tooltip="$t('global.update')" @click="action($event)" />
 </template>
 <script setup lang="ts">
 import { inject, type Ref } from 'vue';

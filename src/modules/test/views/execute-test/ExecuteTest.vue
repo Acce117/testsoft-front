@@ -14,13 +14,11 @@ import { useToast } from "primevue/usetoast";
 import { useConfirm } from "primevue/useconfirm";
 import { useDialog } from "primevue/usedialog";
 import { useI18n } from "vue-i18n";
-import AdminNavbar from "@/layouts/admin/components/AdminNavbar.vue";
 import { useExecuteTest } from "./composables/useExecuteTest";
 import Button from "primevue/button";
 import useEvents from "@/common/utils/useEvents";
 import { useTest } from "@/modules/management/test/composables/useTest";
 import LoadingPanel from "@/components/LoadingPanel.vue";
-import AdminSideBar from "@/layouts/admin/components/AdminSideBar.vue";
 import ExecuteTestSideBar from "./components/ExecuteTestSideBar.vue";
 import Drawer from "primevue/drawer";
 import ExecuteTestNavbar from "./components/ExecuteTestNavbar.vue";
@@ -157,8 +155,8 @@ const visibleTimer = ref(true)
             <vue-countdown text-slate-600 text-xl :time="executeTest.timeCountdown.value" v-slot="{ minutes, seconds }"
               @end="executeTest.timeOver()">
               <div flex items-center gap-2 border-solid border-1 border-slate-200 rounded-xl p-1 min-w-12rem>
-                <Button :label="visibleTimer ? t('execute-test.tooltips.hide') : t('execute-test.tooltips.show')"
-                  @click="visibleTimer = !visibleTimer" icon="pi pi-clock" severity="secondary"></Button>
+                <Button :label="visibleTimer ? t('hide') : t('show')" @click="visibleTimer = !visibleTimer"
+                  icon="pi pi-clock" severity="secondary"></Button>
                 <span font-bold v-if="visibleTimer">{{ `${minutes > 9 ? minutes : `0` + minutes}:${seconds > 9 ? seconds
                   : `0` + seconds}` }}</span>
               </div>
@@ -209,3 +207,13 @@ const visibleTimer = ref(true)
 
 
 </template>
+<i18n lang="json">{
+  "es": {
+    "show": "Mostrar",
+    "hide": "Ocultar"
+  },
+  "en": {
+    "show": "Show",
+    "hide": "Hide"
+  }
+}</i18n>

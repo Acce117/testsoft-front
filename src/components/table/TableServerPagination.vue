@@ -17,7 +17,7 @@
                                     <i class="pi pi-search" />
                                 </InputIcon>
                                 <!-- <InputText w-12rem lg:w-20rem v-model="filters['global'].value"
-                                    :placeholder="$t('table.search')" /> -->
+                                    :placeholder="$t('global.search')" /> -->
                             </IconField>
                             <slot name="header"></slot>
                             <div flex gap-2>
@@ -139,7 +139,7 @@
                     <LoadingPanel v-if="isRefetching || isPending" centered :error="isError" :refetch="refetch"
                         :loading="isRefetching || isPending" />
                     <span v-else-if="isError">{{ $t('errors.title') }}</span>
-                    <span v-else id="empty-message">{{ $t('table.no_results') }}</span>
+                    <span v-else id="empty-message">{{ $t('global.no-results') }}</span>
                 </template>
                 <template #expansion="slotProps">
                     <slot name="expansion" :slotProps></slot>
@@ -349,7 +349,7 @@ const isLogicErase = props.model.getFieldAsActive() != ''
 
 const exportOptions = ref([
     {
-        label: t('table.options'),
+        label: t('global.options'),
         items: [
             {
                 label: 'CSV',
