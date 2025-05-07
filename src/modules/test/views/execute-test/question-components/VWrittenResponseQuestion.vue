@@ -21,10 +21,12 @@ const test = inject<TestExecution>("test");
 const executeTest = inject('executeTest')
 
 
-const changeAnswer = (value: string) => {
+const changeAnswer = (value: string, id_answer:string) => {
   if (!test.questions[`${props.id_question}`])
     test.questions[`${props.id_question}`] = new WrittenResponseQuestion(props.id_question, props.possible_answers);
-  test.questions[`${props.id_question}`].setAnswer(value)
+  const newValue = {...test.questions[`${props.id_question}`].answer}
+  newValue[id_answer] = value
+  test.questions[`${props.id_question}`].setAnswer(newValue)
   executeTest.saveTestExecutionInLocal(test?.questions)
 }
 let question = ref(new WrittenResponseQuestion(props.id_question, props.possible_answers))
@@ -46,7 +48,7 @@ onMounted(() => {
 </script>
 <template>
   <div class=" answer overflow-auto">
-    <Textarea rows="2" @update:model-value="changeAnswer" fluid v-model="question.answer" text-lg :invalid />
+    <Textarea rows="1" v-for="answer in possible_answers" :key="answer" @update:model-value="(value)=>changeAnswer(value,answer )" fluid v-model="question.answer[answer]" text-lg :invalid />
   </div>
 </template>
 <style></style>

@@ -10,13 +10,14 @@
             <section v-if="test.series.length > 0" bg-slate-200 flex flex-col gap-4 pa-3 rounded-xl overflow-hidden>
                 <div w-full pb-4 overflow-auto>
 
-                    <Steps class="!flex !gap-2" :readonly="false" flex-1 :model="getSeriesNames()" v-model:activeStep="selectedSerieIndex" />
+                    <Steps class="!flex !gap-2" :readonly="false" flex-1 :model="getSeriesNames()"
+                        v-model:activeStep="selectedSerieIndex" />
                 </div>
 
                 <div shadow-md rounded-lg pa-2 shadow-slate-500 bg-white>
                     <div flex mb-2 items-center justify-between>
                         <span font-bold truncate>{{ test.series[selectedSerieIndex].name }}</span>
-                        <div flex >
+                        <div flex>
                             <Button icon="pi pi-pencil" severity="secondary" variant="text"
                                 @click="showSerieDialog(test.series[selectedSerieIndex])" />
                             <Button severity="danger" @click="deleteSerie()" icon="pi pi-trash" variant="text" />
@@ -30,16 +31,18 @@
                             Preguntas<Button w-fit @click="showQuestionDialog()" icon="pi pi-plus" />
 
                         </h3>
-                        <section v-if="test.series[selectedSerieIndex].questions.length > 0" bg-slate-200 pa-3 grid grid-cols-1 lg:grid-cols-2  gap-4 rounded-xl>
+                        <section v-if="test.series[selectedSerieIndex].questions.length > 0" bg-slate-200 pa-3 grid
+                            grid-cols-1 lg:grid-cols-2 gap-4 rounded-xl>
 
                             <div v-for="(question, questionIndex) in test.series[selectedSerieIndex].questions"
                                 :key="questionIndex" shadow-md rounded-lg pa-2 shadow-slate-500 bg-white>
                                 <div flex justify-between items-center>
+                                    <div flex gap-2 items-center>
+                                        <span truncate>{{ question.statement }}</span>
+                                        <Tag :value="question.type?.name" severity="info" />
+                                    </div>
 
-                                    <span truncate>{{ question.statement }}</span>
-
-                                    {{question}}
-                                    <div flex >
+                                    <div flex>
                                         <Button icon="pi pi-pencil" severity="secondary" variant="text"
                                             @click="showQuestionDialog(question)" />
                                         <Button severity="danger" @click="deleteQuestion(question.id_question)"
@@ -48,7 +51,8 @@
                                 </div>
                                 <div shadow-md rounded-lg pa-2 shadow-slate-200 bg-white>
                                     <h3 mt-0 flex gap-4 text-sm items-center>
-                                        Respuestas<Button w-fit @click="showAnswerDialog(question.id_question, question.type?.id_type_question)"
+                                        Respuestas<Button w-fit
+                                            @click="showAnswerDialog(question.id_question, question.type?.id_type_question)"
                                             icon="pi pi-plus" />
 
                                     </h3>
@@ -62,11 +66,11 @@
                                                 <span truncate>{{ answer.text }}</span>
 
 
-                                                <div flex >
+                                                <div flex>
                                                     <Button icon="pi pi-pencil" severity="secondary" variant="text"
                                                         @click="showAnswerDialog(question.id_question, question.type?.id_type_question, answer)" />
                                                     <Button severity="danger" @click="deleteAnswer(answer.id_answer)"
-                                                        icon="pi pi-trash"  variant="text"/>
+                                                        icon="pi pi-trash" variant="text" />
                                                 </div>
                                             </div>
 
@@ -89,7 +93,8 @@
             <VConditions ref="condition" :conditions />
 
             <div class="flex pt-6 justify-between">
-                <Button :label="$t('global.prev')" severity="secondary" icon="pi pi-arrow-left" @click="activateCallback(`${parseInt(props.value)-1}`)" />
+                <Button :label="$t('global.prev')" severity="secondary" icon="pi pi-arrow-left"
+                    @click="activateCallback(`${parseInt(props.value) - 1}`)" />
                 <Button :label="$t('global.next')" :disabled="canSubmit" icon="pi pi-arrow-right" iconPos="right"
                     @click="nextStep(activateCallback)" />
             </div>
@@ -98,7 +103,7 @@
     <SerieDialog ref="serieDialog" v-model="serie" :submit-function="saveSerie" :success-function="() => refetch()" />
     <QuestionDialog ref="questionDialog" v-model="question" :submit-function="saveQuestion"
         :success-function="() => refetch()" />
-    <AnswerDialog ref="answerDialog" v-model="answer"  :options="getItems()" :submit-function="saveAnswer"
+    <AnswerDialog ref="answerDialog" v-model="answer" :options="getItems()" :submit-function="saveAnswer"
         :success-function="() => refetch()" />
 
 
@@ -119,11 +124,12 @@ import AnswerDialog from '../../modules/answer/AnswerDialog.vue';
 import { Answer } from '../../modules/answer/answer.model';
 import Steps from 'primevue/steps';
 import VConditions from './VConditions.vue';
+import { Tag } from 'primevue';
 
 const props = defineProps({
-    value:{
-        type:String,
-        required:true
+    value: {
+        type: String,
+        required: true
     }
 })
 
@@ -218,7 +224,7 @@ const showQuestionDialog = (data?: Question) => {
     questionDialog.value.show()
 }
 
-const showAnswerDialog = (index: number, question_type:number|string, data?: Answer) => {
+const showAnswerDialog = (index: number, question_type: number | string, data?: Answer) => {
     if (data)
         answer.value.setData({ ...data })
     selectedQuestionIndex.value = index
@@ -228,22 +234,22 @@ const showAnswerDialog = (index: number, question_type:number|string, data?: Ans
 
 const saveSerie = () => testBuilder.value.saveSerie(serie.value)
 
-const deleteSerie = async () => await makeAction(()=>testBuilder.value.deleteSerie(test.series[selectedSerieIndex.value].id_serie), () => { })
+const deleteSerie = async () => await makeAction(() => testBuilder.value.deleteSerie(test.series[selectedSerieIndex.value].id_serie), () => { })
 
 const saveQuestion = () => testBuilder.value.saveQuestion(question.value, test.series[selectedSerieIndex.value].id_serie)
 
-const deleteQuestion = async (id: number) => await makeAction(()=>testBuilder.value.deleteQuestion(id), () => { })
+const deleteQuestion = async (id: number) => await makeAction(() => testBuilder.value.deleteQuestion(id), () => { })
 
 const saveAnswer = () => testBuilder.value.saveAnswer(answer.value, selectedQuestionIndex.value)
 
-const deleteAnswer = async (id: number) => await makeAction(()=>testBuilder.value.deleteAnswer(id), () => { })
+const deleteAnswer = async (id: number) => await makeAction(() => testBuilder.value.deleteAnswer(id), () => { })
 
 
 
 const nextStep = (activateCallback: Function) => {
     try {
         if (condition.value.verify())
-            activateCallback(`${parseInt(props.value)+1}`)
+            activateCallback(`${parseInt(props.value) + 1}`)
         else throw new Error("existen condiciones no satisfechas")
 
     } catch (e: any) {

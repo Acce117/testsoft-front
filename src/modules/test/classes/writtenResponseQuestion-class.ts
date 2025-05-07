@@ -1,15 +1,25 @@
-import { Question } from './question-class';
+import { Question } from "./question-class";
 
-export class WrittenResponseQuestion extends Question<string | undefined>{
+export class WrittenResponseQuestion extends Question<
+  Record<number, string> | undefined
+> {
 
-    id_answer: Array<number>;
+  constructor(id_question: number | string, possible_answers: number[]) {
+    super(id_question);
+    this.answer={}
+    possible_answers.forEach((answer)=>this.answer[answer]='')
+  }
 
-    constructor(id_question: number | string, possible_answers:number[]){
-        super(id_question);
-        this.id_answer = possible_answers
-    }
 
-    validateQuestion(): boolean {
-        return this.answer != undefined && this.answer.trim()!='';
-    }
+  validateQuestion(): boolean {
+    if (!this.answer) return false;
+    return Object.entries(this.answer).every((answer) => {
+      const answerText = answer[1];
+      return (
+        answerText !== undefined &&
+        answerText !== null &&
+        answerText.trim() !== ""
+      );
+    });
+  }
 }

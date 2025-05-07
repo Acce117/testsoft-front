@@ -3,11 +3,13 @@
     <div justify-between h-fit flex p-2 w-full items-center>
 
 
+      <div>
+        <h3 text-lg text-justify md:text-xl w-full mb-0 text-center  mt-0 text-primary font-bold >
+          {{ props.data?.series[serieIndex].name }}:
+        </h3>
+        <p text-slate-800 my-1 >{{ props.data?.series[serieIndex].description }}</p>
+      </div>
 
-      <h3 text-lg text-justify md:text-xl w-full text-center mb-2 mt-0 text-slate-800>
-        <span text-primary font-bold>{{ props.data?.series[serieIndex].name }}:</span> {{
-          props.data?.series[serieIndex].description }}
-      </h3>
 
 
 
@@ -15,8 +17,7 @@
     </div>
     <div flex justify-between pb-2>
       <Button severity="secondary" class=" p-ripple" icon="pi pi-arrow-left" v-ripple :disabled="!(serieIndex > 0)"
-        v-if="props.data?.navigable == 1" @click="prevSerie()" :label="t('prev')"
-        placeholder="Bottom" />
+        v-if="props.data?.navigable == 1" @click="prevSerie()" :label="t('prev')" placeholder="Bottom" />
       <slot name="timer"></slot>
       <Button :label="t('next')" id="next-serie-button"
         v-if="props.data?.series.length > 1 && serieIndex < props.data?.series.length - 1" class="p-ripple"

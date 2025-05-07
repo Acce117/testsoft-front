@@ -1,31 +1,31 @@
 <template>
 
-  <Dialog v-model:visible="visible" modal :header="$t('table.create')" class="w-full  min-w-25rem">
+  <Dialog v-model:visible="visible" modal :header="$t('table.create')" class="w-full create-test-dialog  min-w-25rem">
 
+    <template #header>
 
-    <div class="dialog-form" min-h-40rem>
+    </template>
+    <div class="dialog-form" h-full overflow-hidden>
 
       <LoadingPanel centered v-if="isTestPending || isRefetching || isError"
         :loading="isTestPending || loading || isRefetching" :error="isError || error" :refetch="refetch" />
-      <div flex flex-col gap-4 relative min-h-40rem>
 
-        <Stepper pb-4 @update:value="(index) => reloadData(index)" value="1" h-full>
-          <StepList>
-            <Step v-for="(step, index) in steps" :key="step" :value="`${index + 1}`">{{ $t('steps.' + step) }}</Step>
-          </StepList>
-          <StepPanels v-if="!isRefetching && !isTestPending">
-            <GeneralData :forUpdate :value="`${steps.indexOf('data') + 1}`" />
-            <Equation :value="`${steps.indexOf('equation') + 1}`" />
-            <CategoriesAndItems :value="`${steps.indexOf('categories') + 1}`" />
-            <SeriesAndQuestions :value="`${steps.indexOf('series') + 1}`" />
-            <ResultVisualization :value="`${steps.indexOf('results') + 1}`" />
-            <ClassificationsAndRanges :value="`${steps.indexOf('classifications') + 1}`" />
-            <CloseTest :value="`${steps.indexOf('close') + 1}`" />
+      <Stepper pb-4 @update:value="(index) => reloadData(index)" value="1" h-full>
+        <StepList>
+          <Step v-for="(step, index) in steps" :key="step" :value="`${index + 1}`">{{ $t('steps.' + step) }}</Step>
+        </StepList>
+        <StepPanels v-if="!isRefetching && !isTestPending" overflow-auto  h-40rem>
+          <GeneralData :forUpdate :value="`${steps.indexOf('data') + 1}`" />
+          <Equation :value="`${steps.indexOf('equation') + 1}`" />
+          <CategoriesAndItems :value="`${steps.indexOf('categories') + 1}`" />
+          <SeriesAndQuestions :value="`${steps.indexOf('series') + 1}`" />
+          <ResultVisualization :value="`${steps.indexOf('results') + 1}`" />
+          <ClassificationsAndRanges :value="`${steps.indexOf('classifications') + 1}`" />
+          <CloseTest :value="`${steps.indexOf('close') + 1}`" />
 
 
-          </StepPanels>
-        </Stepper>
-      </div>
+        </StepPanels>
+      </Stepper>
 
     </div>
   </Dialog>
@@ -247,6 +247,9 @@ const reloadData = async (index: string) => {
 .p-steps-list {
   gap: 2rem !important
 }
+.create-test-dialog .p-dialog-content {
+  overflow: hidden !important
+}
 </style>
 <i18n lang="json">{
   "es": {
@@ -260,12 +263,13 @@ const reloadData = async (index: string) => {
   },
   "en": {
     "en": {
-    "series": "Series and Questions",
-    "equation": "Results calculation formula",
-    "categories": "Categories and Elements",
-    "classifications": "Classifications",
-    "close": "Close Test",
-    "results": "Results Display",
-    "data": "General Data"
-} }
+      "series": "Series and Questions",
+      "equation": "Results calculation formula",
+      "categories": "Categories and Elements",
+      "classifications": "Classifications",
+      "close": "Close Test",
+      "results": "Results Display",
+      "data": "General Data"
+    }
+  }
 }</i18n>
