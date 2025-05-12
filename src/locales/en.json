@@ -15,6 +15,8 @@
     "confirm": "Confirm",
     "cancel": "Cancel",
     "delete": "Delete",
+    "start": "Start",
+
     "deleted": "Deleted",
     "edit": "Edit",
     "search": "Search...",
@@ -82,5 +84,12 @@
     "ci_date": "Date is incorrect",
     "existent_ci": "This ID number already exists",
     "existent_username": "This username already exists"
-  }
+  },
+  "roles": {
+    "Executor": "Executor",
+    "Admin": "Admin",
+    "Analyst": "Analyst",
+    "Super Admin": "Provider",
+    "Client": "Client"
+  },
 }

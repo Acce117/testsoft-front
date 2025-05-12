@@ -1,23 +1,9 @@
 <template>
   <div class="home" absolute w-full z-50>
 
-    <!--<ul class="navbar">
-    <li
-      mt-0.5rem
-      trans-0.2
-      z-5
-      hover:scale-110
-      active:opacity-50
-      active:scale-100
-      cursor-pointer
-      pointer-events-initial
-      @click="goHome()"
-    >
-      <img src="/img/home.svg" w-3rem alt="home" />
-    </li>
+    
     
 
-  </ul>-->
     <Menubar :model="items">
 
       <template #start>
@@ -26,7 +12,7 @@
       </template>
       <template #end>
         <div flex items-center gap-2>
-          <Select w-19 v-model="$i18n.locale" :options="$i18n.availableLocales">
+          <Select w-fit v-model="$i18n.locale" :options="$i18n.availableLocales">
 
           </Select>
           <UserAvatar />

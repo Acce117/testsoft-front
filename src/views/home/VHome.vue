@@ -1,7 +1,7 @@
 <template>
 
   <section class="pt-24 anim-opacity-0.5">
-    <div class="container px-3 mx-auto flex flex-wrap flex-col md:flex-row items-center">
+    <div class=" gap-8 px-8 mx-auto flex flex-wrap flex-col md:flex-row items-center">
       <div class="flex flex-col w-full md:w-2/5 justify-center items-start text-center md:text-left">
         <p class="uppercase tracking-loose w-full">{{ t('overtitle') }}</p>
         <h1 class="my-4 text-5xl font-bold leading-tight">
@@ -12,13 +12,13 @@
         </p>
 
         <Button v-ripple v-if="userStore().assignments[0].item_id == 3"
-          class="mx-auto focus:shadow-outline lg:mx-0 transform transition duration-300 ease hover:scale-105 my-6 py-4 px-8 rounded-full shadow-lg"
-          rounded iconPos="right" @click="router.push('/select-test')" :label="$t('global.start')"
-          icon="pi pi-arrow-right" severity="warn">
+          class="mx-auto  focus:shadow-outline lg:mx-0 transform transition duration-300 ease hover:scale-105 my-6 py-4 px-8 rounded-full shadow-lg"
+          rounded  iconPos="right" @click="router.push('/select-test')" :label="t('global.start')"
+          icon="pi pi-arrow-right" severity="help" >
         </Button>
       </div>
-      <div class="w-full md:w-3/5 py-6 text-center">
-        <img class="w-full md:w-4/5 z-50" src="/img/psychometric_practice.webp" />
+      <div class="w-full flex-1  items-center flex justify-center py-6 text-center">
+        <img class=" max-h-30rem z-50" src="/img/hero.png" />
         <!-- <img hidden lg:block mt-20 w-160 src="/img/psychometric_practice.webp" /> -->
 
       </div>
