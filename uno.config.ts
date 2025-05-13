@@ -7,7 +7,7 @@ import {
 } from "unocss";
 export default defineConfig({
   presets: [
-    presetUno(),
+    presetUno({ dark: 'class' }),
     presetTypography(),
     presetAttributify(),
   ],

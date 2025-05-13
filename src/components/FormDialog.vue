@@ -9,10 +9,8 @@
             <div class="dialog-footer">
                 <Button type="button" :label="$t('global.cancel')" severity="secondary"
                     @click="visible = false"></Button>
-                <VButton w-8rem :disabled="isRequestLoading || isDataLoading" type="submit">
-                    <span v-if="!isRequestLoading || isDataLoading">{{ $t("global.save") }} </span>
-                    <VLoading v-else />
-                </VButton>
+                
+                <Button w-8rem type="submit" :loading="isRequestLoading || isDataLoading" :label="t('global.save')"/>
             </div>
         </Form>
     </Dialog>
@@ -25,7 +23,6 @@ import Dialog from 'primevue/dialog';
 import { Form } from 'vee-validate';
 import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
-import VButton from './VButton.vue';
 import handlePromise from '@/common/utils/handlePromise';
 
 const { t } = useI18n()

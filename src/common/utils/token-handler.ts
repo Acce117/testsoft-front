@@ -6,6 +6,8 @@ function storeToken (token: string){
     sessionStorage.setItem('token', token);
 }
 
+
+
 function getRefreshToken () {
     return localStorage.getItem('refreshToken');
 }

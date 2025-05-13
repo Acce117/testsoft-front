@@ -152,7 +152,7 @@ const visibleTimer = ref(true)
         @next-serie="executeTest.nextSerie(test)">
         <template #timer>
           <div h-10 flex gap-2 items-center w-fit>
-            <vue-countdown text-slate-600 text-xl :time="executeTest.timeCountdown.value" v-slot="{ minutes, seconds }"
+            <vue-countdown  text-xl :time="executeTest.timeCountdown.value" v-slot="{ minutes, seconds }"
               @end="executeTest.timeOver()">
               <div flex items-center gap-2 border-solid border-1 border-slate-200 rounded-xl p-1 min-w-12rem>
                 <Button :label="visibleTimer ? t('hide') : t('show')" @click="visibleTimer = !visibleTimer"

@@ -10,10 +10,9 @@
             <div class="dialog-footer">
                 <Button type="button" :label="$t('global.cancel')" severity="secondary"
                     @click="visible = false"></Button>
-                <VButton w-8rem :disabled="isPending || isFormDataLoading" type="submit">
-                    <span v-if="!isPending || isFormDataLoading">{{ $t("global.save") }} </span>
-                    <VLoading v-else />
-                </VButton>
+
+                <Button w-8rem type="submit" :loading="isPending || isFormDataLoading" :label="t('global.save')" />
+
             </div>
         </Form>
 
@@ -21,8 +20,7 @@
 </template>
 <script setup lang="ts">
 import { BaseModel } from '@/common/utils/BaseModel';
-import VButton from '@/components/VButton.vue';
-import VLoading from '@/components/VLoading.vue';
+
 import { useMutation, useQueryClient } from '@tanstack/vue-query';
 import { Button, Dialog, useToast } from 'primevue';
 import { Form } from 'vee-validate';

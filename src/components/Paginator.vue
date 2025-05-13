@@ -206,7 +206,7 @@ defineExpose({refetch})
 
             <template v-if="!isPending && !isRefetching">
                 <!--  -->
-                <section :class="'grid w-full gap-4 ' + gridClass">
+                <section :class="'grid w-full gap-4  overflow-auto    ' + gridClass">
 
                     <slot name="item-template" v-for="(item, index) in data.data" :key="index" :data="item">
                     </slot>
@@ -216,11 +216,11 @@ defineExpose({refetch})
                 <span v-if="data.data.length === 0" class="text-red-500 font-medium cursor-pointer text-base">{{ t('global.no-results') }}</span>
 
             </template>
-            <span v-else-if="isError" @click="refetch" class="text-red-500 font-medium cursor-pointer text-base">{{ t('global.error') }}
+            <span v-else-if="isError" @click="refetch" class="text-red-500 overflow-auto  font-medium cursor-pointer text-base">{{ t('global.error') }}
                 <Button @click="refetch" :label="t('global.retry')"></Button>
             </span>
             
-            <div :class="'grid w-full gap-4 ' + gridClass" v-else>
+            <div :class="'grid w-full overflow-auto  gap-4 ' + gridClass" v-else>
                 <Skeleton v-for="e in [1, 2, 3, 4]" height="8rem" :key="e" class=" w-full animate-pulse   " />
             </div>
 
@@ -233,6 +233,11 @@ defineExpose({refetch})
 .p-paginator {
     display: flex !important;
     padding: 0 !important;
+}
+
+.p-card-content{
+    display: flex;
+    flex-direction: column;
 }
 
 .p-paginator-content-end {

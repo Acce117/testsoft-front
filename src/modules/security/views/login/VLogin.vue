@@ -1,12 +1,14 @@
 <script setup lang="ts">
-import {  provide, ref } from "vue";
+import { provide, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { siteStore } from "@/common/site/siteStore";
-import VButton from "@/components/VButton.vue";
 import VInput from "@/components/VInput.vue";
 import { Form } from "vee-validate";
 import { loginSchema } from "./loginSchema";
-import { Card } from "primevue";
+import { Button, Card, Dialog } from "primevue";
+import useEvents from "@/common/utils/useEvents";
+import VSelect from "@/components/VSelect.vue";
+import { selectGroupSchema } from "./selectGroupSchema";
 const { t } = useI18n();
 
 const credentials = ref({
@@ -14,7 +16,30 @@ const credentials = ref({
   password: "",
 });
 
+const selectedGroup = ref()
+const temporalToken = ref()
+const visible = ref(false)
+const groups = ref([])
+
+
+
 const login = siteStore().useLogin();
+
+
+
+
+const onSubmitLogin = () => {
+  login.login(credentials.value)
+}
+const onSubmitSelectGroup = () => {
+  login.selectGroup(selectedGroup.value, temporalToken.value)
+}
+useEvents().addListener("login", (event: CustomEventInit) => {
+  visible.value = true
+  groups.value = event.detail.groups
+  temporalToken.value = event.detail.temporalToken
+});
+
 const canValidate = ref(false)
 provide("canValidate", canValidate)
 
@@ -24,11 +49,9 @@ window.scrollTo(0, 0);
 
 <template>
   <main centered class="gradient-background">
-    <!--<div fixed left-0.5rem top-0.5rem>
-      <VLanguageChanger />
-    </div>-->
 
-    <Card anim-slide-in-from-bottom-1 h-fit>
+
+    <Card anim-slide-in-from-bottom-1 >
       <template #content>
 
         <div overflow-hidden flex h-full flex-col anim-fade-in-1>
@@ -38,8 +61,7 @@ window.scrollTo(0, 0);
               {{ t("title") }}
             </h1>
           </div>
-          <Form @submit="login.login(credentials)" flex h-12rem justify-between flex-col
-            :validation-schema="loginSchema">
+          <Form @submit="onSubmitLogin" flex h-fit gap-8 justify-between flex-col :validation-schema="loginSchema">
 
             <div flex flex-col gap-8>
 
@@ -60,16 +82,29 @@ window.scrollTo(0, 0);
             </div>
 
 
-            <VButton w-full :disabled="login.loading" id="login-button" type="submit">
-              <span v-if="!login.loading">{{ t("login") }} <span class="pi pi-arrow-right"></span></span>
-              <VLoading v-else />
-            </VButton>
+
+            <Button w-full type="submit" id="login-button" :label="t('login')" :loading="login.loading" />
             <!-- <RouterLink  text-primary to="/sign-up">{{ $t('login.sign-up') }}</RouterLink> -->
           </Form>
         </div>
       </template>
 
     </Card>
+    <Dialog v-model:visible="visible" modal :header="'Seleccionar grupo'" class="w-4/5 max-w-50rem min-w-25rem">
+      <Form @submit="onSubmitSelectGroup" :validation-schema="selectGroupSchema">
+        <div class="dialog-form">
+          <VSelect w-full v-model="selectedGroup" optionId="id_group" name="group"
+            label="Seleccione el grupo donde desea trabajar" :options="groups" optionLabel="name_group" />
+
+        </div>
+
+        <div class="dialog-footer">
+          <Button type="button" :label="$t('global.cancel')" severity="secondary" @click="visible = false"></Button>
+
+          <Button w-8rem type="submit" :loading="login.loading" :label="t('global.select')" />
+        </div>
+      </Form>
+    </Dialog>
   </main>
 </template>
 

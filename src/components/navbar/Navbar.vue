@@ -1,8 +1,8 @@
 <template>
   <div class="home" absolute w-full z-50>
 
-    
-    
+
+
 
     <Menubar :model="items">
 
@@ -12,9 +12,9 @@
       </template>
       <template #end>
         <div flex items-center gap-2>
-          <Select w-fit v-model="$i18n.locale" :options="$i18n.availableLocales">
+          <SelectLanguage />
 
-          </Select>
+          <ToggleDarkMode />
           <UserAvatar />
         </div>
 
@@ -34,6 +34,8 @@ import { siteStore } from "@/common/site/siteStore";
 
 import UserAvatar from "./components/UserAvatar.vue";
 import Select from "primevue/select";
+import ToggleDarkMode from "./components/ToggleDarkMode.vue";
+import SelectLanguage from "./components/SelectLanguage.vue";
 const { t, locale } = useI18n();
 
 

@@ -25,6 +25,8 @@ import SelectFunctionalRoles from "@/modules/functional-roles/views/SelectFuncti
 import IncompatibilityLeadershipView from "@/modules/incompatibility-leadership/views/IncompatibilityLeadershipView.vue";
 import SelectCompatibility from "@/modules/incompatibility-leadership/views/SelectCompatibility.vue";
 import ExecutorLayout from "@/layouts/executor/ExecutorLayout.vue";
+import TestedInGroupView from "@/modules/reports/tested_in_group/TestedInGroupView.vue";
+import PreferredAvoidedRolesView from "@/modules/reports/preferred_avoided_roles/PreferredAvoidedRolesView.vue";
 
 const autorize = (roles: string[]) => {
   return function (to, from, next) {
@@ -103,6 +105,18 @@ const router = createRouter({
           path: "/incompatibility-leadership",
           name: "incompatibility-leadership",
           component: IncompatibilityLeadershipView,
+          meta: { requiresAuth: true },
+        },
+        {
+          path: "/tested-in-group",
+          name: "tested-in-group",
+          component: TestedInGroupView,
+          meta: { requiresAuth: true },
+        },
+        {
+          path: "/preferred-avoided-roles",
+          name: "preferred-avoided-roles",
+          component: PreferredAvoidedRolesView,
           meta: { requiresAuth: true },
         },
       ],

@@ -10,6 +10,7 @@ import { Range } from "../modules/range/range.model";
 import { userStore } from "@/modules/security/store/user-store";
 import { sendRequest } from "@/common/utils/sendRequest";
 import { Equation } from "../modules/equation/equation.model";
+import { useUserGroup } from "@/common/utils/useUserGroup";
 
 export class TestBuilder {
   test: Test;
@@ -35,7 +36,7 @@ export class TestBuilder {
       this.test.done = false;
       const clientGroupResponse = await sendRequest({
         url: `${import.meta.env.VITE_API_PATH}/groups/parents/${
-          userStore().assignments[0].group_id
+          useUserGroup()
         }`,
       });
       this.test.id_owner = clientGroupResponse[0].id_group;

@@ -4,7 +4,7 @@
         <h3 font-bold mt-14 mb-2 text-primary>{{ props.data.name }}</h3>
 
 
-        <h4 text-slate-600 font-bold mb-2>Series</h4>
+        <h4  font-bold mb-2>Series</h4>
         <div w-full max-h-20rem h-fit overflow-auto flex flex-wrap gap-2 p-2 border-solid rounded-xl mb-4
             border-slate-200 border-1>
             <article

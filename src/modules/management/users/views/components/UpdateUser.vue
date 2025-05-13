@@ -26,6 +26,7 @@ import { ref } from "vue";
 import VTreeSelect from "@/components/VTreeSelect.vue";
 import VRadioButton from "@/components/VRadioButton.vue";
 import { userStore } from "@/modules/security/store/user-store";
+import { useUserGroup } from "@/common/utils/useUserGroup";
 const { t } = useI18n();
 const userRole = userStore().assignments[0].item_id
 const user = defineModel()
@@ -43,7 +44,7 @@ let defaultValue = {}
 
 const { countries, isPending } = useCountries()
 const { groups } = useGroups()
-defaultValue[user.value.assignments[0].group_id] = true
+defaultValue[useUserGroup()] = true
 user.value.country_id = user.value.country.country_id
 user.value.group_id = user.value.assignments[0].group_id
 user.value.item_id = user.value.assignments[0].item_id

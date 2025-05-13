@@ -2,6 +2,7 @@
 @import url(./tree-select.css);
 @import url(./dialog.css);
 
+
 @layer reset, primevue;
 
 
@@ -49,7 +50,7 @@ body {
   justify-content: center;
   padding: 0;
   margin: 0;
-  color: var(--text-color);
+  
 }
 main {
   width: 100vw;
@@ -63,6 +64,14 @@ html {
   background: -webkit-linear-gradient(10deg,#9599e2 0%, #8bc6ec 100%,#f8fafc, #f8fafc,#f8fafc,#f8fafc);
   
   background: linear-gradient(80deg, #9599e2 , #9599e2,#8bc6ec,#f8fafc, #f8fafc,#f8fafc);
+ 
+}
+html.dark {
+  width: 100vw;
+  overflow-x: hidden;
+  background: -webkit-linear-gradient(#0f172a, #1e293b);
+  
+  background: linear-gradient(#0f172a, #1e293b);
  
 }
 
@@ -84,7 +93,6 @@ img {
 }
 
 h1 {
-  color: var(--high-contrast-text-color);
   font-family: inherit;
   font-weight: 600;
   line-height: 1.2;
@@ -96,4 +104,10 @@ h1 {
   background: -moz-linear-gradient(136deg, rgb(149, 153, 226) 0%, rgb(139, 198, 236) 100%);
   background: -webkit-linear-gradient(136deg, rgb(149, 153, 226) 0%, rgb(139, 198, 236) 100%);
   background: -ms-linear-gradient(136deg, rgb(149, 153, 226) 0%, rgb(139, 198, 236) 100%);
+}
+
+html.dark .gradient-background{
+  background: -moz-linear-gradient(136deg, #0f172a, #1e293b);
+  background: -webkit-linear-gradient(136deg, #0f172a, #1e293b);
+  background: -ms-linear-gradient(136deg, #0f172a, #1e293b);
 }

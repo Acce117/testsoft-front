@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import VNavbar from '@/components/navbar/VNavbar.vue';
+import VNavbar from '@/components/navbar/Navbar.vue';
 import AdminNavbar from './components/ExecutorNavbar.vue';
 import AdminSideBar from './components/ExecutorSideBar.vue';
 import { ref } from 'vue';

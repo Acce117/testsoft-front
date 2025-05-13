@@ -7,7 +7,7 @@
         <h3 text-lg text-justify md:text-xl w-full mb-0 text-center  mt-0 text-primary font-bold >
           {{ props.data?.series[serieIndex].name }}:
         </h3>
-        <p text-slate-800 my-1 >{{ props.data?.series[serieIndex].description }}</p>
+        <p  my-1 >{{ props.data?.series[serieIndex].description }}</p>
       </div>
 
 

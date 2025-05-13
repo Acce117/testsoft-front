@@ -4,8 +4,7 @@
     :model="user" :custom-get-all-function="getUsersByGroup">
     <template #header>
       <div w-full>
-        <TreeSelect @change="() => table.refetch()" :defaultValue :placeholder="$t('user.filtergroup')"
-          :options="groups" filter w-40 v-model="selectedGroup" />
+        <SelectGroup :refetch="()=>table.refetch()" ref="select" v-model="selectedGroup"/>
       </div>
     </template>
 
@@ -43,7 +42,6 @@
 </template>
 <script setup lang="ts">
 
-import { userStore } from "@/modules/security/store/user-store";
 import { provide, onUnmounted, ref } from "vue";
 import { useDialog } from "primevue/usedialog";
 import { useToast } from "primevue/usetoast";
@@ -51,11 +49,10 @@ import { useI18n } from "vue-i18n";
 import { TestAplication } from "../models/testApp.model";
 import VFinalResults from "./finalResults/VFinalResults.vue";
 import { TestResult } from "../models/testResult.model";
-import { Group } from "@/modules/management/group/models/group.model";
-import TreeSelect from "primevue/treeselect";
 import { User } from "@/modules/management/users/models/user.model";
-import { useGroups } from "@/modules/management/group/composables/useGroups";
 import TableServerPagination from "@/components/table/TableServerPagination.vue";
+import SelectGroup from "@/components/SelectGroup.vue";
+import { useUserGroup } from "@/common/utils/useUserGroup";
 const { t } = useI18n();
 const toast = useToast();
 const table = ref()
@@ -63,17 +60,16 @@ const dialog = useDialog();
 provide("dialogRef", dialog);
 
 const result = new TestAplication()
-const selectedGroup = ref({})
 let user = ref(new User())
-const { groups } = useGroups()
+const selectedGroup = ref({[useUserGroup()]:true})
+
 
 
 const getUsersByGroup = async () => {
   const id_group = Object.keys(selectedGroup.value)[0]
-  return await user.value.getUsersByGroup({}, id_group ? id_group : userStore().assignments[0].group_id)
+  return await user.value.getUsersByGroup({}, id_group ? id_group : useUserGroup())
 }
-let defaultValue = {}
-defaultValue[userStore().assignments[0].group_id] = true
+
 onUnmounted(() => {
   toast.removeAllGroups();
 });

@@ -2,7 +2,7 @@
     <StepPanel v-slot="{ activateCallback }" :value="`${props.value}`">
         {{ test }}
         <div flex gap-4 flex-col>
-            <h3 my-0 text-slate-600 font-bold>Inserta las categorías y sus elementos</h3>
+            <h3 my-0  font-bold>Inserta las categorías y sus elementos</h3>
             <h4 m-0 flex gap-4 items-center>
                 Categorías<Button w-fit @click="showCategoryDialog()" icon="pi pi-plus" />
 

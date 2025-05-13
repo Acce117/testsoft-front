@@ -30,7 +30,7 @@ const availabilityDate =moment(availabilityTime).format("DD/MM/YYYY");
 </script>
 
 <template>
-  <Card class="col-span-1">
+  <Card class="col-span-1 shadow-xl border-solid border-1 border-slate-300 dark:border-none dark:!bg-zinc-800">
     <template #content>
 
     <div

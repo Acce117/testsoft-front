@@ -16,7 +16,8 @@ const localMessages = {
       message: "¿Desea cerrar sesión?",
     },
     login: {
-      error: "Inicio de sesión inválido",
+      error: "Credenciales incorrectas",
+      something_wrong:"Algo ha salido mal"
     },
   },
   en: {
@@ -25,7 +26,8 @@ const localMessages = {
       message: "Do you want to log out?",
     },
     login: {
-      error: "Invalid login",
+      error: "Invalid credentials",
+      something_wrong:"Something went wrong"
     },
   },
 };
@@ -68,13 +70,7 @@ export const siteStore = defineStore("site", {
 
       const loginRequestHandler = (async () => {
         if (!request.error.value) {
-          TokenHandler.storeRefreshToken(request.result.value.refreshToken);
-          TokenHandler.storeToken(request.result.value.token);
-
-          const user = await this.loadUser();
-          userStore().$patch(user);
-
-          useEvents().dispatch("redirect", "/");
+          useEvents().dispatch("login", {temporalToken:request.result.value.token, groups:request.result.value.groups});
         } else {
           useEvents().dispatch("error", {
             severity: "error",
@@ -85,21 +81,48 @@ export const siteStore = defineStore("site", {
         }
       }).bind(this);
 
-      function login(credentials: any) {
-        if (credentials.username.trim() === "")
-          throw new Error("The user name must be provided");
-        if (credentials.password.trim() === "")
-          throw new Error("The password must be provided ");
+      const selectGroupRequestHandler = (async () => {
+        if (!request.error.value) {
+          //TokenHandler.storeRefreshToken(request.result.value.refreshToken);
+          TokenHandler.storeToken(request.result.value.token);
+          //TO DO change token storing
+          const user = await this.loadUser();
+          userStore().$patch(user);
 
-        request.sendRequest(
+          useEvents().dispatch("redirect", '/');
+        } else {
+          useEvents().dispatch("error", {
+            severity: "error",
+            summary: "Error",
+            detail: t("login.something_wrong"),
+            life: 3000,
+          });
+        }
+      }).bind(this);
+
+      function login(credentials: any) {
+        
+
+       request.sendRequest(
           `${import.meta.env.VITE_API_PATH}/login`,
           credentials,
           "POST",
           loginRequestHandler
         );
       }
+      function selectGroup(group: number, temporalToken:string) {
+        
 
-      return reactive({ loading: request.loading, login });
+       request.sendRequest(
+          `${import.meta.env.VITE_API_PATH}/select_group/${group}`,
+          {},
+          "GET",
+          selectGroupRequestHandler,
+          temporalToken
+        );
+      }
+
+      return reactive({ loading: request.loading, login , selectGroup});
     },
 
     logout() {

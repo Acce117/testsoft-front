@@ -1,13 +1,13 @@
 <template>
 
   <section class="pt-24 anim-opacity-0.5">
-    <div class=" gap-8 px-8 mx-auto flex flex-wrap flex-col md:flex-row items-center">
-      <div class="flex flex-col w-full md:w-2/5 justify-center items-start text-center md:text-left">
-        <p class="uppercase tracking-loose w-full">{{ t('overtitle') }}</p>
-        <h1 class="my-4 text-5xl font-bold leading-tight">
+    <div class=" gap-8 px-8 mx-auto flex flex-wrap flex-col lg:flex-row items-center">
+      <div class="flex flex-col w-full lg:w-2/5 justify-center items-start text-center lg:text-left">
+        <p class="uppercase  w-full">{{ t('overtitle') }}</p>
+        <h1 class="my-4 text-5xl w-full font-bold leading-tight">
           {{ t('title') }}
         </h1>
-        <p class="leading-normal text-2xl mb-8">
+        <p class="leading-normal w-full text-2xl mb-8">
           {{ t('subtitle') }}
         </p>
 
@@ -18,8 +18,8 @@
         </Button>
       </div>
       <div class="w-full flex-1  items-center flex justify-center py-6 text-center">
-        <img class=" max-h-30rem z-50" src="/img/hero.png" />
-        <!-- <img hidden lg:block mt-20 w-160 src="/img/psychometric_practice.webp" /> -->
+        <img class=" max-h-28rem z-50" src="/img/hero.png" />
+        
 
       </div>
     </div>
@@ -37,11 +37,11 @@ const { t } = useI18n();
 
 </script>
 <style>
-.home-background {
+/* .home-background {
   background: -webkit-linear-gradient(10deg, #3faee4, #ffffff, #ffffff, #ffffff, #ffffff);
 
   background: linear-gradient(10deg, #3faee4, #ffffff, #ffffff, #ffffff, #ffffff);
-}
+} */
 </style>
 <i18n lang="json">{
   "es": {

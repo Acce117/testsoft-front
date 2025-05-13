@@ -4,6 +4,7 @@ import { schema, updateSchema } from "../schemas/group.schema";
 import { sendRequest } from "@/common/utils/sendRequest";
 import { ID, NotSavable } from "@/common/utils/Decorators";
 import { userStore } from "@/modules/security/store/user-store";
+import { useUserGroup } from "@/common/utils/useUserGroup";
 
 const columns = [
   {
@@ -50,7 +51,7 @@ export class Group extends BaseModel {
   }
   public static async getUsersFromCurrentGroup( params = {}) {
     return await sendRequest({
-      url: `${import.meta.env.VITE_API_PATH}/groups/users_from_group/${userStore().assignments[0].group_id}`,
+      url: `${import.meta.env.VITE_API_PATH}/groups/users_from_group/${useUserGroup()}`,
       body: params,
     });
   }

@@ -1,7 +1,7 @@
 <template>
-  <section flex-col anim-scale-0.5 text-white centered gap-2rem mt-4rem>
-    <h2 text-slate-8 font-bold text-3xl>{{ t("developers") }}</h2>
-    <div flex-col anim-scale-0.5 text-white centered gap-5rem lg:flex-row lg:mt-2rem lg:gap-2rem>
+  <section flex-col anim-scale-0.5  centered gap-2rem mt-4rem>
+    <h2  font-bold text-3xl>{{ t("developers") }}</h2>
+    <div flex-col anim-scale-0.5  centered gap-5rem lg:flex-row lg:mt-2rem lg:gap-2rem>
       <VUserCard mr-2rem lg:mr-0 lg:mb-10rem lg:order-1 name="Tony García Álvarez"
         :role="t('roles.project_manager')" phone="+53 52972641" mail="tgarcia@gmail.com" img="/img/tony.jpg" />
       <VUserCard ml-2rem lg:ml-0 lg:order-2 :role="t('roles.developer')" name="Jesús Manuel Castellanos Reynaldo"

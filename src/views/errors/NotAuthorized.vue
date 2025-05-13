@@ -1,5 +1,5 @@
 <template>
-    <section anim-opacity-0.5 text-slate-8 h-full>
+    <section anim-opacity-0.5  h-full>
         <div flex flex-col items-center justify-center w-full h-full>
                 <i class="pi pi-lock" style="font-size: 4rem;"></i>
                 <h1 text-4xl mb-0  font-bold>{{ $t('errors.title') }}</h1>

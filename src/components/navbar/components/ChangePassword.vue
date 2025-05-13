@@ -19,10 +19,9 @@
             <div class="dialog-footer">
                 <Button type="button" :label="$t('global.cancel')" severity="secondary"
                     @click="visible = false"></Button>
-                <VButton w-8rem :disabled="isAddPending" type="submit">
-                    <span v-if="!isAddPending">{{ $t("global.save") }} </span>
-                    <VLoading v-else />
-                </VButton>
+                
+                                <Button w-8rem type="submit" :loading="isAddPending" :label="t('global.save')"/>
+
             </div>
         </Form>
 
@@ -30,9 +29,7 @@
 </template>
 <script setup lang="ts">
 import { sendRequest } from '@/common/utils/sendRequest';
-import VButton from '@/components/VButton.vue';
 import VInput from '@/components/VInput.vue';
-import VLoading from '@/components/VLoading.vue';
 import { useMutation } from '@tanstack/vue-query';
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';

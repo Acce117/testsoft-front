@@ -11,9 +11,9 @@
       </template>
       <template #end>
         <div flex items-center gap-2>
-          <Select w-19 v-model="$i18n.locale" :options="$i18n.availableLocales">
+          <SelectLanguage />
 
-          </Select>
+          <ToggleDarkMode />
           <UserAvatar />
         </div>
 
@@ -32,6 +32,8 @@ import { userStore } from "@/modules/security/store/user-store";
 import { siteStore } from "@/common/site/siteStore";
 import UserAvatar from "@/components/navbar/components/UserAvatar.vue";
 import Select from "primevue/select";
+import ToggleDarkMode from "@/components/navbar/components/ToggleDarkMode.vue";
+import SelectLanguage from "@/components/navbar/components/SelectLanguage.vue";
 const { t, locale } = useI18n();
 
 const router = useRouter();

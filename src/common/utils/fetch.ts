@@ -31,8 +31,10 @@ export function useSendRequest(
     function sendRequest(
         url: string,
         data?: Object,
+        
         method: 'GET' | 'POST' | 'DELETE' | 'PATCH' = 'GET',
-        cb = () => {}
+        cb = () => {},
+        token:string|null=TokenHandler.getToken(),
     ) {
 
         const config: AxiosRequestConfig = {
@@ -41,7 +43,6 @@ export function useSendRequest(
             url,
         }
         
-        const token = TokenHandler.getToken();
         if(token){
             if(config.headers) config.headers.Authorization = `Bearer ${token}`;
         }

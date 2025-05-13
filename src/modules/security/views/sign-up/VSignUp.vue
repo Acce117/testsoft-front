@@ -4,7 +4,6 @@ import VLanguageChanger from "@/components/VLanguageChanger.vue";
 import { useI18n } from "vue-i18n";
 import { siteStore } from "@/common/site/siteStore";
 import Button from "primevue/button";
-import VButton from "@/components/VButton.vue";
 import VInput from "@/components/VInput.vue";
 import { Form } from "vee-validate";
 import { signUpSchema } from "./signUpSchema";
@@ -92,10 +91,8 @@ window.scrollTo(0, 0);
 
           </div>
 
-          <VButton w-full :disabled="login.loading || isPending" type="submit">
-            <span v-if="!login.loading && !isPending">{{ $t("sign-up.sign-up") }} <span class="pi pi-arrow-right"></span></span>
-            <VLoading v-else />
-          </VButton>
+                          <Button w-full type="submit" :loading="login.loading || isPending" :label="t('sign-up.sign-up')"/>
+
         </Form>
       </div>
     </section>
