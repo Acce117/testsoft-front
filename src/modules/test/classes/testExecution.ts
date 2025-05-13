@@ -12,6 +12,8 @@ export class TestExecution {
   }
 
   public async sendTest(cb:()=>void) {
+    console.log(this.questions)
+    console.log(Object.values(this.questions))
     return useSendRequest(
       true,
       `${import.meta.env.VITE_API_PATH}/execute_test`,

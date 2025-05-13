@@ -17,30 +17,32 @@ const props = defineProps({
 </script>
 
 <template>
-  <VQuestion v-for="(question, index) in props.serie?.questions" :key="question.id_question"
-    :id_question="question.id_question" :question_index="index + 1" :title="question.statement">
-    <template #default="{ changeInvalid }">
-      
-      <VMultipleOptionQuestion v-if="question.type.id_type_question == 1" :changeInvalid
-        :id_question="question.id_question" :possible_answers="question.answers" />
+  <div pt-4 px-4 flex flex-col items-center>
+    <VQuestion v-for="(question, index) in props.serie?.questions" :key="question.id_question"
+      :id_question="question.id_question" :question_index="index + 1" :title="question.statement">
+      <template #default="{ changeInvalid }">
 
-      <VSingleOptionQuestion v-else-if="question.type.id_type_question == 2" :changeInvalid
-        :id_question="question.id_question" :possible_answers="question.answers" />
+        <VMultipleOptionQuestion v-if="question.type.id_type_question == 1" :changeInvalid
+          :id_question="question.id_question" :possible_answers="question.answers" />
 
-      <VWrittenResponseQuestion v-else-if="question.type.id_type_question == 3" :changeInvalid
-        :id_question="question.id_question" :possible_answers="question.answers.map(q=>q.id_answer)" />
+        <VSingleOptionQuestion v-else-if="question.type.id_type_question == 2" :changeInvalid
+          :id_question="question.id_question" :possible_answers="question.answers" />
 
-      <VMultipleOptionQuestion v-else-if="question.type.id_type_question == 4" :changeInvalid
-        :id_question="question.id_question" :possible_answers="question.answers" />
+        <VWrittenResponseQuestion v-else-if="question.type.id_type_question == 3" :changeInvalid
+          :id_question="question.id_question" :possible_answers="question.answers.map(q => q.id_answer)" />
 
-      <VMultipleOptionsValueSetted v-else-if="question.type.id_type_question == 5" :changeInvalid
-        :id_question="question.id_question" :possible_answers="question.answers" :question_index="index + 1"
-        :maxPoints="question.top_value.top_value" />
+        <VMultipleOptionQuestion v-else-if="question.type.id_type_question == 4" :changeInvalid
+          :id_question="question.id_question" :possible_answers="question.answers" />
 
-      <VWrittenResponseQuestion v-else-if="question.type.id_type_question == 6" :changeInvalid
-        :id_question="question.id_question" :possible_answers="question.answers.map(q=>q.id_answer)" />
-    </template>
+        <VMultipleOptionsValueSetted v-else-if="question.type.id_type_question == 5" :changeInvalid
+          :id_question="question.id_question" :possible_answers="question.answers" :question_index="index + 1"
+          :maxPoints="question.top_value.top_value" />
 
-  </VQuestion>
+        <VWrittenResponseQuestion v-else-if="question.type.id_type_question == 6" :changeInvalid
+          :id_question="question.id_question" :possible_answers="question.answers.map(q => q.id_answer)" />
+      </template>
+
+    </VQuestion>
+  </div>
 </template>
 <style></style>

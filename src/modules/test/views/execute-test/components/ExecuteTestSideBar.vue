@@ -1,18 +1,19 @@
 <template>
 
-    <div class="p-4 card flex  w-18rem h-full flex-col  border-solid border-slate-200 border-1">
+    <div
+        class="p-4 card flex bg-[var(--p-card-background)] w-18rem h-full flex-col  border-solid border-slate-200 dark:border-none border-1">
         <h3 font-bold mt-14 mb-2 text-primary>{{ props.data.name }}</h3>
 
 
-        <h4  font-bold mb-2>Series</h4>
-        <div w-full max-h-20rem h-fit overflow-auto flex flex-wrap gap-2 p-2 border-solid rounded-xl mb-4
-            border-slate-200 border-1>
-            <article
-                :class="`serie-button ${serieIndex == index ? 'selected' : data.navigable == 1 ? 'bg-sky-100' : 'disabled'}`"
-                v-for="(serie, index) in props.data.series" :key="serie.id_serie"
-                @click="() => { if (data.navigable == 1) executeTest.changeSerie(index) }">{{ index + 1
-                }}
-            </article>
+        <h4 font-bold mb-2>Series</h4>
+        <div w-full max-h-20rem h-fit overflow-auto grid grid-cols-4 gap-2 p-2 border-solid rounded-xl mb-4
+            border-slate-200 dark:border-none border-1>
+           
+            <Button class="w-full" :label="`${index + 1}`" v-for="(serie, index) in props.data.series"
+                :disabled="data.navigable != 1" :key="serie.id_serie"
+                :variant="serieIndex == index ? undefined : 'outlined'"
+                @click="() => { if (data.navigable == 1) executeTest.changeSerie(index) }" />
+
         </div>
         <Button @click="executeTest.validateTest(test)" id="finish-test-button" icon="pi pi-file-check"
             :label="t('save')" />

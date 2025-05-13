@@ -7,7 +7,6 @@
       v-model="model"
       :maxlength="props.max"
       :minlength="props.min"
-      bg-white
       @input="emit('focus-input', props.id)"
       :class="{ 'invalid-input': canValidate ? !validate() : false }"
       w-full
@@ -64,7 +63,7 @@ const validate = () => {
   transition: all ease 0.5s;
 }
 .custom-input-table input.invalid-input {
-  border: solid red 0.3rem;
+  border: solid rgb(255, 144, 144) 0.3rem;
   animation: border-input-invalid 2s infinite;
   box-shadow: none;
 }

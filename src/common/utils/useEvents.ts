@@ -2,6 +2,9 @@ function useEvents(){
     function addListener(name: string, cb: EventListener){
         window.addEventListener(name, cb);
     }
+    function removeListener(name: string, cb: EventListener){
+        window.removeEventListener(name, cb);
+    }
 
     function dispatch(name: string, data?: any){
         const event = new CustomEvent(name, {
@@ -12,7 +15,8 @@ function useEvents(){
 
     return {
         addListener,
-        dispatch
+        dispatch,
+        removeListener
     }
 }
 

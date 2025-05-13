@@ -8,6 +8,8 @@ import {
   ref,
   defineAsyncComponent,
   onUnmounted,
+  onMounted,
+
 } from "vue";
 import { TestExecution } from "../../classes/testExecution";
 import { useToast } from "primevue/usetoast";
@@ -101,9 +103,7 @@ const showResults = () => {
   }
 
 };
-useEvents().addListener("dialog-results", () => {
-  showResults()
-});
+
 
 
 
@@ -117,10 +117,15 @@ onBeforeRouteLeave((to) => {
   confirm.close();
 });
 
+onMounted(() => {
+  useEvents().addListener("dialog-results", showResults);
 
+})
 
 onUnmounted(() => {
   toast.removeAllGroups();
+  useEvents().removeListener("dialog-results", showResults);
+
 });
 
 const visible = ref(false)
@@ -137,7 +142,7 @@ const visibleTimer = ref(true)
       </div>
     </template>
   </ExecuteTestNavbar>
-  <main bg-white w-screen h-screen flex anim-fade-in-1>
+  <main w-screen h-screen flex anim-fade-in-1>
 
     <LoadingPanel centered :loading="isPending" :error="isError" :refetch="refetch" />
 
@@ -152,7 +157,7 @@ const visibleTimer = ref(true)
         @next-serie="executeTest.nextSerie(test)">
         <template #timer>
           <div h-10 flex gap-2 items-center w-fit>
-            <vue-countdown  text-xl :time="executeTest.timeCountdown.value" v-slot="{ minutes, seconds }"
+            <vue-countdown text-xl :time="executeTest.timeCountdown.value" v-slot="{ minutes, seconds }"
               @end="executeTest.timeOver()">
               <div flex items-center gap-2 border-solid border-1 border-slate-200 rounded-xl p-1 min-w-12rem>
                 <Button :label="visibleTimer ? t('hide') : t('show')" @click="visibleTimer = !visibleTimer"
@@ -169,11 +174,12 @@ const visibleTimer = ref(true)
       </VTestHeader>
 
 
-      <div class="test__container gradient-background" pt-4 px-4 flex flex-col items-center overflow-auto h-full>
+      <div class="test__container gradient-background" overflow-auto h-full>
         {{ test.questions }}
-
-        <VTestSerie v-if="isSuccess && router.currentRoute.value.params.id_test == data.id_test"
-          :serie="data.series[executeTest.serieIndex.value]" />
+        <template v-if="isSuccess && router.currentRoute.value.params.id_test == data.id_test">
+          <VTestSerie v-for="(serie, index) in data.series" :key="serie.id_serie" :serie="serie"
+            v-show="index == executeTest.serieIndex.value" />
+        </template>
 
 
       </div>

@@ -1,7 +1,7 @@
 <template>
 
   
-
+  {{ testResult }}
   <div  class="modal__long-message" min-w-20rem min-h-10rem>
     <LoadingPanel  relative :loading :error :refetch/>
 
@@ -61,6 +61,7 @@ const props = defineProps({
   refetch:Function
 });
 
+console.log(props)
 
 
 

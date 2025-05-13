@@ -1,5 +1,5 @@
 <template>
-  <section class="test__header" bg-white rounded-xl border border-solid px-4 pb-2 pt-20>
+  <section class="test__header bg-[var(--p-card-background)]" pt-20   px-4 pb-2 >
     <div justify-between h-fit flex p-2 w-full items-center>
 
 
@@ -62,15 +62,11 @@ watch(
   border: solid 1px rgb(226 232 240) !important;
 
 }
-
-.p-steps {
-  width: 100% !important;
-  margin: 0 !important;
+html.dark .test__header {
+  border: none !important;
 }
 
-.p-steps-item-link {
-  gap: 0rem !important;
-}
+
 </style>
 <i18n lang="json">{
   "es": {

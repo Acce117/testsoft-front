@@ -3,7 +3,7 @@
 
     <LoadingPanel centered :loading="isTestPending || loading || isRefetching" :error="isError || error"
       :refetch="refetch" />
-    <div bg-white mt-6rem mb-2rem flex flex-col gap-4 mx-6 rounded-xl pa-.8rem relative min-h-40rem>
+    <div  mt-6rem mb-2rem flex flex-col gap-4 mx-6 rounded-xl pa-.8rem relative min-h-40rem>
       <h2 my-0 text-slate-600 font-bold>Crea un test</h2>
       <Stepper pb-4    @update:value="(index) => reloadData(index)" value="1" h-full v-if="isSuccess">
         <StepList>
