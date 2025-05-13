@@ -39,21 +39,19 @@
 <script setup lang="ts">
 import Paginator from '@/components/Paginator.vue';
 import { FunctionalRole } from '@/modules/management/functional-roles/models/functional-role.model';
+import { useMutation } from '@tanstack/vue-query';
 import { Card } from 'primevue';
 
 
 
-const getRoles = () => [
-    { id_rol: 1, rol_name: 'Juan', rol_descrip: 'juidsa', preferred: true },
-    { id_rol: 2, rol_name: 'Ju2an', rol_descrip: 'juidsa' },
-    { id_rol: 3, rol_name: 'Juasan', rol_descrip: 'juidsa' },
-    { id_rol: 4, rol_name: 'Juanitasd', rol_descrip: 'juidsa', avoided: true },
-    { id_rol: 5, rol_name: 'Ju213an', rol_descrip: 'juidsa' },]
 
 
 
-//getBibliosForLoan(startIndex.value, paginationSize.value, searchTerm.value.trim() != '' ? searchTerm.value : null)
+// const {} = useMutation({
+//     mutationFn:()=>{
 
+//     }
+// })
 
 
 

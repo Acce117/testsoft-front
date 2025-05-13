@@ -60,6 +60,21 @@ const itemsManagement = [
 
                 command: () => navigateTo("/incompatibility-leadership"),
             },
+            {
+                label: " ",
+                i18n: "tested_in_group",
+                icon: 'pi pi-chart-bar',
+
+                command: () => navigateTo("/tested-in-group"),
+            },
+           
+            {
+                label: " ",
+                i18n: "preferred_avoided_roles",
+                icon: 'pi pi-thumbs-up',
+
+                command: () => navigateTo("/preferred-avoided-roles"),
+            },
         ],
     },
 ];
@@ -185,7 +200,9 @@ watch(locale, () => {
             },
             "reports": {
                 "name": "Reportes",
-                "sociometric": "Sociométrico"
+                "sociometric": "Sociométrico",
+                "tested_in_group": "Personas Testeadas",
+                "preferred_avoided_roles": "Preferencia de Roles"
             }
         }
     },
@@ -196,7 +213,9 @@ watch(locale, () => {
             },
             "reports": {
                 "name": "Reports",
-                "sociometric": "Sociometric"
+                "sociometric": "Sociometric",
+                "tested_in_group": "People Tested",
+                "preferred_avoided_roles": "Role Preference"
             }
         }
     }

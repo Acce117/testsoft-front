@@ -6,7 +6,7 @@
       severity="secondary" 
       variant="outlined" 
       @click="toggleDarkMode()"
-      v-tooltip="t(darkMode ? 'light' : 'dark')"
+      v-tooltip.left="t(darkMode ? 'light' : 'dark')"
     />
   </div>
 </template>
