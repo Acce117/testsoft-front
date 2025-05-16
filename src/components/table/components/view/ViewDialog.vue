@@ -1,5 +1,5 @@
 <template>
-    <Dialog v-model:visible="visible" modal :header="$t('table.information')"
+    <Dialog v-model:visible="visible" modal :header="$t('global.information')"
         class="w-4/5 max-w-50rem min-w-25rem min-h-15rem">
 
         <LoadingPanel v-if="isPendingOfOne || isRefetchingOfOne || isErrorOfOne" centered relative

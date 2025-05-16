@@ -42,10 +42,12 @@
     "inactive": "Desactivado",
     "next": "Siguiente",
     "prev": "Atrás",
-    "options": "Opciones"
+    "options": "Opciones",
+    "actions": "Acciones",
+    "information": "Información",
   },
   "table": {
-    "actions": "Acciones",
+    
     "element_ok_updated": "Elemento actualizado correctamente",
     "element_ok_deleted": "Elemento eliminado correctamente",
     "element_ok_added": "Elemento añadido correctamente",

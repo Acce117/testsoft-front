@@ -18,17 +18,16 @@ const { t, locale } = useI18n()
 
 const queryFunction = async (params) => {
 
-  const tests = await new Test().getAssignedTests(userStore().user_id, params)
+  const tests = await Test.getAssignedTests(params)
   user.assignedTests = [];
-
   const testsToReturn = []
-
   tests.data.forEach((test: any) => {
     let availableDate: Date = null;
     let canIncludeTest = true
     if (test.test_apps.length > 0) {
+      
       availableDate = new Date(test.test_apps[test.test_apps.length - 1].date);
-
+      
       if (availableDate < new Date()) {
         canIncludeTest = false
       }
@@ -49,9 +48,8 @@ const queryFunction = async (params) => {
 
     sessionStorage.setItem("user", JSON.stringify(user.$state));
   });
-
+  
   tests.data = testsToReturn
-
   return tests
 }
 

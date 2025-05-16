@@ -4,7 +4,8 @@ import { useQuery } from "@tanstack/vue-query";
 export const useQueryOfOne = (
   queryKey: string,
   model: BaseModel,
-  queryOptions?: object
+  queryOptions?: object, 
+  customFunction?:(id:number,queryOptions?: object)=>void
 ) => {
   const {
     data: dataOfOne,
@@ -16,7 +17,7 @@ export const useQueryOfOne = (
     refetch: refetchOfOne,
   } = useQuery({
     queryKey: [queryKey + "-one"],
-    queryFn: () => model.getOne(queryOptions),
+    queryFn: () => customFunction? customFunction(model.getID(),queryOptions):model.getOne(queryOptions),
     enabled: false,
   });
   return {

@@ -1,18 +1,17 @@
 <template>
 
   
-  {{ testResult }}
   <div  class="modal__long-message" min-w-20rem min-h-10rem>
     <LoadingPanel  relative :loading :error :refetch/>
 
-    <div v-if="!loading && !error" class="test-results" text-slate-600  id="test-results">
+    <div v-if="!loading && !error" class="test-results"  id="test-results">
       <div flex gap-4 > 
-        <h1 font-bold text-slate-800 text-left font-size-1.5rem my-0 >Test: {{ props.testName }}</h1><Button icon="pi pi-file-pdf" @click="confirmPDF"
+        <h1 font-bold text-left font-size-1.5rem my-0 >Test: {{ props.testName }}</h1><Button icon="pi pi-file-pdf" @click="confirmPDF"
           :label="$t('global.export.title')"></Button>
       </div>
 
       <h2 v-if="testResult.parameters.global_result == 1 && testType == 2">
-        {{ $t("results.global-result") }}:
+        {{ t("global-results") }}:
         <span v-for="(category, index) in Object.keys(testResult.categories) " :key="category">
           {{ `${index > 0 ? (index == Object.keys(testResult.categories).length - 1 ? ` ` + t("global.and") + ` ` : ",")
             : ''}${testResult.categories[category].items[0].name}` }}
@@ -162,3 +161,13 @@ strong {
 
 
 </style>
+<i18n lang="json">{
+  "es": {
+    "global-results": "Resultado global"
+    
+  },
+  "en": {
+    "global-results": "Global result"
+   
+  }
+}</i18n>

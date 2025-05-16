@@ -4,7 +4,6 @@ import { ID } from "@/common/utils/Decorators";
 import schema from "../schemas/functional-role.schema";
 import { columns } from "./functional-role.columns";
 
-
 export class FunctionalRole extends BaseModel {
   @ID
   id_rol: number | undefined;
@@ -24,4 +23,5 @@ export class FunctionalRole extends BaseModel {
     });
     return groups[0].functional_roles;
   }
+
 }

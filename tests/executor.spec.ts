@@ -16,7 +16,7 @@ test("Incomplete Belbin Test Execution ", async ({ page }) => {
   await page.goto(baseURL + "select-test");
 
   const responsePromise = page.waitForResponse(
-    "http://localhost:3000/user/1/tests"
+    "http://localhost:3000/user/tests"
   );
 
   const response = await responsePromise;
@@ -40,7 +40,7 @@ test("Correct Belbin Test Execution ", async ({ page }) => {
   await page.goto(baseURL + "select-test");
 
   const responsePromise = page.waitForResponse(
-    "http://localhost:3000/user/1/tests"
+    "http://localhost:3000/user/tests"
   );
 
   const response = await responsePromise;
@@ -86,7 +86,7 @@ test("Belbin Execution When There is a Test Application Already", async ({
   await page.goto(baseURL + "select-test");
 
   const responsePromise = page.waitForResponse(
-    "http://localhost:3000/user/1/tests"
+    "http://localhost:3000/user/tests"
   );
 
   const response = await responsePromise;
@@ -104,7 +104,7 @@ test("Incomplete MBTI Test Execution ", async ({ page }) => {
   await page.goto(baseURL + "select-test");
 
   const responsePromise = page.waitForResponse(
-    "http://localhost:3000/user/1/tests"
+    "http://localhost:3000/user/tests"
   );
 
   const response = await responsePromise;
@@ -129,7 +129,7 @@ test("Correct MBTI Test Execution ", async ({ page }) => {
   await page.goto(baseURL + "select-test");
 
   const responsePromise = page.waitForResponse(
-    "http://localhost:3000/user/1/tests"
+    "http://localhost:3000/user/tests"
   );
 
   const response = await responsePromise;
@@ -179,7 +179,7 @@ test("MBTI Execution When There is a Test Application Already", async ({
   await page.goto(baseURL + "select-test");
 
   const responsePromise = page.waitForResponse(
-    "http://localhost:3000/user/1/tests"
+    "http://localhost:3000/user/tests"
   );
 
   const response = await responsePromise;

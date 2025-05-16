@@ -7,7 +7,7 @@
       <span>
 
         <strong class='item'>{{ item.name }}</strong>, {{ t('3') }} <strong>{{
-          item.value }}</strong><span v-if="item.ranges.length > 0">,
+          item.value }}</strong><span v-if="item.ranges && item.ranges.length > 0">,
           {{ t('4') }} <strong>{{ item.ranges[0].indicator
           }}</strong></span>.<br />
       </span>

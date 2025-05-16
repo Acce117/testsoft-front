@@ -91,7 +91,7 @@
 
 
                     </Column>
-                    <Column v-else-if="visibleActions" :field="fieldAsID" :header="$t('table.actions')">
+                    <Column v-else-if="visibleActions" :field="fieldAsID" :header="$t('global.actions')">
 
                         <template #body=slotProps>
                             <Skeleton v-if="isRefetching || isPending" width="60%" borderRadius=".4rem"
@@ -341,7 +341,7 @@ const { data, isPending, isSuccess, isRefetching, isError, refetch } = useQuery(
 
 })
 
-const { dataOfOne, isPendingOfOne, isErrorOfOne, refetchOfOne } = useQueryOfOne(queryKey, props.model, props.queryOptions)
+const { dataOfOne, isPendingOfOne, isErrorOfOne, refetchOfOne } = useQueryOfOne(queryKey, props.model, props.queryOptions, props.customGetOneFunction)
 
 
 const isLogicErase = props.model.getFieldAsActive() != ''

@@ -59,9 +59,9 @@ export class Test extends BaseModel {
     this.equation?.setData(data.equation);
   }
 
-  public async getAssignedTests(user_id: string, body: object) {
+  public static async getAssignedTests( body: object) {
     return await sendRequest({
-      url: `${import.meta.env.VITE_API_PATH}/user/${user_id}/tests`,
+      url: `${import.meta.env.VITE_API_PATH}/user/tests`,
       body,
     });
   }

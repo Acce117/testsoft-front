@@ -102,7 +102,7 @@
 
 
                     </Column>
-                    <Column v-else-if="visibleActions" :field="fieldAsID" :header="$t('table.actions')">
+                    <Column v-else-if="visibleActions" :field="fieldAsID" :header="$t('global.actions')">
 
                         <template #body=slotProps>
                             <Skeleton v-if="isRefetching || isPending" width="60%" borderRadius=".4rem"
